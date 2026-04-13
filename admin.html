@@ -81,6 +81,7 @@ body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f1f5f9; colo
     <button class="tab" data-tab="comments">Komentáře</button>
     <button class="tab" data-tab="editor">Editor</button>
     <span style="margin-left:auto;font-size:.85rem;color:#94a3b8" id="admin-status"></span>
+    <button id="logout-btn" style="background:#ef4444;color:#fff;border:none;padding:6px 16px;border-radius:6px;font:inherit;font-weight:600;cursor:pointer;margin-left:12px">Odhlásit</button>
   </div>
   <div class="container">
 
@@ -169,6 +170,7 @@ body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f1f5f9; colo
   }
   $("#login-btn").addEventListener("click", tryLogin);
   $("#login-pass").addEventListener("keydown", function(e) { if(e.key==="Enter") tryLogin(); });
+  $("#logout-btn").addEventListener("click", function() { window.location.href = "index.html"; });
 
   /* ── Tabs ── */
   $$(".tab").forEach(function(btn) {
