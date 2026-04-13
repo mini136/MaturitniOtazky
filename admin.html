@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Maturitní otázky</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f1f5f9; color: #1e293b; }
+.top-bar { background: #1e293b; color: #fff; padding: 12px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 99; }
+.top-bar h1 { margin: 0; font-size: 1.15rem; }
+.top-bar .tab { background: none; border: none; color: #94a3b8; font: inherit; font-weight: 600; cursor: pointer; padding: 6px 14px; border-radius: 6px; }
+.top-bar .tab.active { background: #334155; color: #fff; }
+.login-wrap { max-width: 360px; margin: 80px auto; background: #fff; border-radius: 12px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+.login-wrap h2 { margin: 0 0 16px; }
+.login-wrap input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font: inherit; margin-bottom: 12px; }
+.login-wrap button { width: 100%; padding: 10px; background: #6366f1; color: #fff; border: none; border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer; }
+.login-wrap .err { color: #dc2626; font-size: .9rem; margin-bottom: 8px; display: none; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* stats */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.stat-card { background: #fff; border-radius: 10px; padding: 14px 18px; box-shadow: 0 1px 4px rgba(0,0,0,.06); cursor: pointer; transition: box-shadow .15s; }
+.stat-card:hover { box-shadow: 0 2px 10px rgba(99,102,241,.2); }
+.stat-card .path { font-weight: 600; font-size: .92rem; color: #4338ca; margin-bottom: 4px; word-break: break-all; }
+.stat-card .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.stat-card .badge { padding: 2px 8px; border-radius: 999px; font-size: .78rem; font-weight: 600; }
+.badge-total { background: #e0e7ff; color: #3730a3; }
+.badge-chyba { background: #fee2e2; color: #991b1b; }
+.badge-chybi { background: #fef9c3; color: #854d0e; }
+.badge-dotaz { background: #e0f2fe; color: #075985; }
+.no-comments { background: #dcfce7; color: #166534; padding: 14px; border-radius: 8px; font-weight: 600; text-align: center; }
+
+/* comments panel */
+.filter-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.filter-bar select, .filter-bar input { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font: inherit; }
+.filter-bar input { flex: 1; min-width: 200px; }
+.comment-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.comment-table th { background: #1e293b; color: #fff; text-align: left; padding: 10px 12px; font-size: .85rem; }
+.comment-table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-size: .9rem; vertical-align: top; }
+.comment-table tr:hover td { background: #f8fafc; }
+.kind-badge { padding: 2px 8px; border-radius: 999px; font-size: .78rem; font-weight: 600; }
+.kind-chyba { background: #fee2e2; color: #991b1b; }
+.kind-chybi { background: #fef9c3; color: #854d0e; }
+.kind-dotaz { background: #e0f2fe; color: #075985; }
+.kind-jine { background: #f1f5f9; color: #475569; }
+.del-btn { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; border-radius: 6px; cursor: pointer; padding: 4px 10px; font-size: .82rem; }
+.del-btn:hover { background: #fecaca; }
+
+/* editor */
+.editor-header { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+.editor-header select { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font: inherit; flex: 1; min-width: 250px; }
+.editor-header button { padding: 8px 18px; border: none; border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer; }
+.btn-load { background: #e0e7ff; color: #3730a3; }
+.btn-save { background: #6366f1; color: #fff; }
+.btn-save:hover { background: #4f46e5; }
+.editor-textarea { width: 100%; min-height: 500px; font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: .88rem; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; background: #fff; resize: vertical; tab-size: 4; }
+.editor-status { margin-top: 8px; font-size: .9rem; font-weight: 600; }
+.editor-status.ok { color: #16a34a; }
+.editor-status.err { color: #dc2626; }
+.preview-frame { width: 100%; border: 1px solid #e2e8f0; border-radius: 8px; margin-top: 12px; min-height: 400px; background: #fff; }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login-screen" class="login-wrap">
+  <h2>🔒 Admin přístup</h2>
+  <div class="err" id="login-err">Špatné heslo.</div>
+  <input type="password" id="login-pass" placeholder="Admin heslo" autofocus>
+  <button id="login-btn">Přihlásit</button>
+</div>
+
+<!-- Admin UI -->
+<div id="admin-ui" style="display:none">
+  <div class="top-bar">
+    <h1>🛠 Admin</h1>
+    <button class="tab active" data-tab="stats">Souhrn</button>
+    <button class="tab" data-tab="comments">Komentáře</button>
+    <button class="tab" data-tab="editor">Editor</button>
+    <span style="margin-left:auto;font-size:.85rem;color:#94a3b8" id="admin-status"></span>
+  </div>
+  <div class="container">
+
+    <!-- Stats panel -->
+    <div class="panel active" id="panel-stats">
+      <h2>Souhrn komentářů podle otázek</h2>
+      <p style="color:#64748b">Klikni na kartu → přepne na komentáře filtrované na tu otázku.</p>
+      <div id="stats-grid" class="stats-grid"></div>
+    </div>
+
+    <!-- Comments panel -->
+    <div class="panel" id="panel-comments">
+      <h2>Všechny komentáře</h2>
+      <div class="filter-bar">
+        <select id="filter-kind">
+          <option value="">Všechny typy</option>
+          <option value="chyba">Chyba</option>
+          <option value="chybi">Chybí</option>
+          <option value="dotaz">Dotaz</option>
+          <option value="jine">Jiné</option>
+        </select>
+        <select id="filter-question"><option value="">Všechny otázky</option></select>
+        <input type="text" id="filter-text" placeholder="Hledej v textu...">
+      </div>
+      <table class="comment-table">
+        <thead><tr><th>#</th><th>Otázka</th><th>Typ</th><th>Nick</th><th>Zpráva</th><th>Datum</th><th></th></tr></thead>
+        <tbody id="comments-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Editor panel -->
+    <div class="panel" id="panel-editor">
+      <h2>Editor otázek</h2>
+      <div class="editor-header">
+        <select id="editor-select"><option value="">Vyber stránku...</option></select>
+        <button class="btn-load" id="editor-load">Načíst</button>
+        <button class="btn-save" id="editor-save">💾 Uložit</button>
+      </div>
+      <textarea class="editor-textarea" id="editor-content" placeholder="Vyber stránku a klikni Načíst..."></textarea>
+      <div class="editor-status" id="editor-status"></div>
+      <h3>Náhled</h3>
+      <iframe class="preview-frame" id="editor-preview" sandbox="allow-same-origin"></iframe>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  var PASS = "";
+  var allComments = [];
+  var allPages = [];
+
+  var $ = function(s) { return document.querySelector(s); };
+  var $$ = function(s) { return document.querySelectorAll(s); };
+
+  function esc(v) { return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  function api(method, url, body) {
+    var opts = { method: method, headers: { "X-Admin-Password": PASS, "Accept": "application/json" } };
+    if (body !== undefined) {
+      if (typeof body === "string") {
+        opts.headers["Content-Type"] = "text/plain";
+        opts.body = body;
+      } else {
+        opts.headers["Content-Type"] = "application/json";
+        opts.body = JSON.stringify(body);
+      }
+    }
+    return fetch(url, opts).then(function(r) {
+      if (r.status === 401) throw new Error("unauthorized");
+      return r.json();
+    });
+  }
+
+  /* ── Login ── */
+  function tryLogin() {
+    PASS = $("#login-pass").value;
+    api("GET", "/api/admin/stats").then(function() {
+      $("#login-screen").style.display = "none";
+      $("#admin-ui").style.display = "";
+      loadAll();
+    }).catch(function() {
+      $("#login-err").style.display = "block";
+    });
+  }
+  $("#login-btn").addEventListener("click", tryLogin);
+  $("#login-pass").addEventListener("keydown", function(e) { if(e.key==="Enter") tryLogin(); });
+
+  /* ── Tabs ── */
+  $$(".tab").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      $$(".tab").forEach(function(b){ b.classList.remove("active"); });
+      $$(".panel").forEach(function(p){ p.classList.remove("active"); });
+      btn.classList.add("active");
+      $("#panel-" + btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  /* ── Load all data ── */
+  function loadAll() {
+    Promise.all([
+      api("GET", "/api/admin/stats"),
+      api("GET", "/api/admin/comments"),
+      api("GET", "/api/admin/pages")
+    ]).then(function(results) {
+      renderStats(results[0].stats || []);
+      allComments = results[1].comments || [];
+      allPages = results[2].pages || [];
+      renderComments();
+      populateEditorSelect();
+      populateQuestionFilter();
+      $("#admin-status").textContent = "Naposledy: " + new Date().toLocaleTimeString("cs");
+    });
+  }
+
+  /* ── Stats ── */
+  function renderStats(stats) {
+    var grid = $("#stats-grid");
+    if (!stats.length) { grid.innerHTML = '<div class="no-comments">Žádné komentáře zatím 🎉</div>'; return; }
+    grid.innerHTML = stats.map(function(s) {
+      return '<div class="stat-card" data-q="' + esc(s.questionPath) + '">' +
+        '<div class="path">' + esc(s.questionPath) + '</div>' +
+        '<div class="badges">' +
+          '<span class="badge badge-total">' + s.total + ' celkem</span>' +
+          (s.chyby > 0 ? '<span class="badge badge-chyba">' + s.chyby + ' chyb</span>' : '') +
+          (s.chybi > 0 ? '<span class="badge badge-chybi">' + s.chybi + ' chybí</span>' : '') +
+          (s.dotazy > 0 ? '<span class="badge badge-dotaz">' + s.dotazy + ' dotazů</span>' : '') +
+        '</div></div>';
+    }).join("");
+    grid.querySelectorAll(".stat-card").forEach(function(card) {
+      card.addEventListener("click", function() {
+        var q = card.dataset.q;
+        $("#filter-question").value = q;
+        $$(".tab").forEach(function(b){ b.classList.remove("active"); });
+        $$(".panel").forEach(function(p){ p.classList.remove("active"); });
+        $$('.tab[data-tab="comments"]').forEach(function(b){ b.classList.add("active"); });
+        $("#panel-comments").classList.add("active");
+        renderComments();
+      });
+    });
+  }
+
+  /* ── Comments ── */
+  function populateQuestionFilter() {
+    var sel = $("#filter-question");
+    var paths = {};
+    allComments.forEach(function(c) { paths[c.questionPath] = true; });
+    var current = sel.value;
+    sel.innerHTML = '<option value="">Všechny otázky</option>';
+    Object.keys(paths).sort().forEach(function(p) {
+      sel.innerHTML += '<option value="' + esc(p) + '">' + esc(p) + '</option>';
+    });
+    sel.value = current;
+  }
+
+  function renderComments() {
+    var kind = $("#filter-kind").value;
+    var question = $("#filter-question").value;
+    var text = ($("#filter-text").value || "").toLowerCase();
+    var filtered = allComments.filter(function(c) {
+      if (kind && c.kind !== kind) return false;
+      if (question && c.questionPath !== question) return false;
+      if (text && (c.message || "").toLowerCase().indexOf(text) < 0 && (c.nick || "").toLowerCase().indexOf(text) < 0) return false;
+      return true;
+    });
+    var tbody = $("#comments-body");
+    tbody.innerHTML = filtered.slice(0, 500).map(function(c, i) {
+      return '<tr>' +
+        '<td>' + (i+1) + '</td>' +
+        '<td style="max-width:180px;word-break:break-all;font-size:.82rem">' + esc(c.questionPath) + '</td>' +
+        '<td><span class="kind-badge kind-' + esc(c.kind) + '">' + esc(c.kind) + '</span></td>' +
+        '<td>' + esc(c.nick) + '</td>' +
+        '<td style="max-width:350px">' + esc(c.message) + '</td>' +
+        '<td style="white-space:nowrap;font-size:.82rem">' + esc(c.createdAt) + '</td>' +
+        '<td><button class="del-btn" data-id="' + c.id + '">Smazat</button></td>' +
+        '</tr>';
+    }).join("");
+    tbody.querySelectorAll(".del-btn").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        if (!confirm("Opravdu smazat komentář #" + btn.dataset.id + "?")) return;
+        api("DELETE", "/api/admin/comments/" + btn.dataset.id).then(function() {
+          allComments = allComments.filter(function(c) { return String(c.id) !== btn.dataset.id; });
+          renderComments();
+        });
+      });
+    });
+  }
+  $("#filter-kind").addEventListener("change", renderComments);
+  $("#filter-question").addEventListener("change", renderComments);
+  $("#filter-text").addEventListener("input", renderComments);
+
+  /* ── Editor ── */
+  function populateEditorSelect() {
+    var sel = $("#editor-select");
+    sel.innerHTML = '<option value="">Vyber stránku...</option>';
+    allPages.forEach(function(p) {
+      var label = (p.source === "pv" ? "[PV] " : "[SÍŤ] ") + p.name;
+      sel.innerHTML += '<option value="' + esc(p.path) + '">' + esc(label) + '</option>';
+    });
+  }
+
+  $("#editor-load").addEventListener("click", function() {
+    var p = $("#editor-select").value;
+    if (!p) return;
+    $("#editor-status").textContent = "Načítám...";
+    $("#editor-status").className = "editor-status";
+    api("GET", "/api/admin/page?path=" + encodeURIComponent(p)).then(function(data) {
+      $("#editor-content").value = data.content;
+      $("#editor-status").textContent = "Načteno: " + p;
+      $("#editor-status").className = "editor-status ok";
+      updatePreview(data.content);
+    }).catch(function(e) {
+      $("#editor-status").textContent = "Chyba: " + e.message;
+      $("#editor-status").className = "editor-status err";
+    });
+  });
+
+  $("#editor-save").addEventListener("click", function() {
+    var p = $("#editor-select").value;
+    if (!p) return alert("Vyber stránku!");
+    if (!confirm("Opravdu uložit změny do " + p + "?")) return;
+    var content = $("#editor-content").value;
+    api("PUT", "/api/admin/page?path=" + encodeURIComponent(p), content).then(function() {
+      $("#editor-status").textContent = "Uloženo! ✅ " + new Date().toLocaleTimeString("cs");
+      $("#editor-status").className = "editor-status ok";
+      updatePreview(content);
+    }).catch(function(e) {
+      $("#editor-status").textContent = "Chyba při ukládání: " + e.message;
+      $("#editor-status").className = "editor-status err";
+    });
+  });
+
+  function updatePreview(html) {
+    var iframe = $("#editor-preview");
+    var doc = iframe.contentDocument || iframe.contentWindow.document;
+    doc.open();
+    doc.write(html);
+    doc.close();
+  }
+
+  /* live preview on typing */
+  var previewTimer = null;
+  $("#editor-content").addEventListener("input", function() {
+    clearTimeout(previewTimer);
+    previewTimer = setTimeout(function() { updatePreview($("#editor-content").value); }, 400);
+  });
+})();
+</script>
+</body>
+</html>
