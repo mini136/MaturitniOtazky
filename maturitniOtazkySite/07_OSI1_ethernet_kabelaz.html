@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07 - OSI 1 - Ethernet, strukturovaná kabeláž, optika</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>07 – OSI 1 – Ethernet principy, standardy, strukturovaná kabeláž, optika, konektory</h1>
+
+    <h2>Ethernet – základní principy</h2>
+    <ul>
+        <li>Nejrozšířenější technologie pro LAN sítě</li>
+        <li>Definován standardem <strong>IEEE 802.3</strong></li>
+        <li>Pracuje na <strong>vrstvách 1 a 2</strong> OSI modelu</li>
+        <li>Používá <strong>CSMA/CD</strong> (Carrier Sense Multiple Access with Collision Detection) – dnes nepoužíváno díky full-duplex switchům</li>
+    </ul>
+
+    <h3>CSMA/CD – princip</h3>
+    <ol>
+        <li><strong>Carrier Sense</strong> – stanice naslouchá, zda je médium volné</li>
+        <li><strong>Multiple Access</strong> – více stanic sdílí médium</li>
+        <li><strong>Collision Detection</strong> – při kolizi se vysílání přeruší, odešle se JAM signál, stanice čeká náhodnou dobu (exponenciální backoff) a zkouší znovu</li>
+    </ol>
+    <div class="note">V moderních sítích s přepínači (switchi) ve full-duplexu ke kolizím nedochází → CSMA/CD není potřeba.</div>
+
+    <h2>Ethernet standardy</h2>
+    <table>
+        <tr><th>Standard</th><th>Rychlost</th><th>Médium</th><th>Max. vzdálenost</th></tr>
+        <tr><td>10BASE-T</td><td>10 Mbps</td><td>UTP Cat 3+</td><td>100 m</td></tr>
+        <tr><td>10BASE2 (Thinnet)</td><td>10 Mbps</td><td>Koaxiál</td><td>185 m</td></tr>
+        <tr><td>10BASE5 (Thicknet)</td><td>10 Mbps</td><td>Koaxiál</td><td>500 m</td></tr>
+        <tr><td><strong>100BASE-TX</strong></td><td>100 Mbps</td><td>UTP Cat 5+</td><td>100 m</td></tr>
+        <tr><td>100BASE-FX</td><td>100 Mbps</td><td>Optika (MM)</td><td>400 m / 2 km</td></tr>
+        <tr><td><strong>1000BASE-T</strong></td><td>1 Gbps</td><td>UTP Cat 5e+</td><td>100 m</td></tr>
+        <tr><td>1000BASE-SX</td><td>1 Gbps</td><td>Optika (MM)</td><td>550 m</td></tr>
+        <tr><td>1000BASE-LX</td><td>1 Gbps</td><td>Optika (SM)</td><td>5 km</td></tr>
+        <tr><td><strong>10GBASE-T</strong></td><td>10 Gbps</td><td>UTP Cat 6a</td><td>100 m</td></tr>
+        <tr><td>10GBASE-SR</td><td>10 Gbps</td><td>Optika (MM)</td><td>300 m</td></tr>
+        <tr><td>10GBASE-LR</td><td>10 Gbps</td><td>Optika (SM)</td><td>10 km</td></tr>
+        <tr><td>25GBASE-SR</td><td>25 Gbps</td><td>Optika (MM)</td><td>100 m</td></tr>
+        <tr><td>40GBASE-SR4</td><td>40 Gbps</td><td>Optika (MM)</td><td>150 m</td></tr>
+        <tr><td>100GBASE-SR10</td><td>100 Gbps</td><td>Optika (MM)</td><td>150 m</td></tr>
+    </table>
+
+    <h3>Pojmenování standardů</h3>
+    <pre><code>Formát: [rychlost]BASE-[typ média]
+Příklad: 1000BASE-T
+  1000 = 1000 Mbps (1 Gbps)
+  BASE = baseband (základní pásmo)
+  T    = twisted pair (kroucená dvojlinka)
+  SX/LX/SR/LR = optika (Short/Long Range)</code></pre>
+
+    <h2>Strukturovaná kabeláž</h2>
+    <h3>Subsystémy strukturované kabeláže</h3>
+    <ol>
+        <li><strong>Pracovní oblast (Work Area)</strong> – zásuvka → PC, patch kabel</li>
+        <li><strong>Horizontální kabeláž</strong> – od zásuvky k patch panelu v rozvaděči (max. 90 m)</li>
+        <li><strong>Rozvaděč (Telecommunication Room)</strong> – patch panely, switche</li>
+        <li><strong>Páteřní kabeláž (Backbone)</strong> – propojení mezi rozvaděči / budovami</li>
+        <li><strong>Vstupní bod budovy (Entrance Facility)</strong> – napojení na WAN / ISP</li>
+    </ol>
+
+    <h3>Pravidla</h3>
+    <ul>
+        <li>Max. délka horizontálního kabelu: <strong>90 m</strong></li>
+        <li>Max. celková délka (včetně patch kabelů): <strong>100 m</strong></li>
+        <li>Patch kabely na obou koncích: max. <strong>5 m + 5 m</strong></li>
+    </ul>
+
+    <h3>Zapojení konektorů RJ-45</h3>
+    <table>
+        <tr><th>Pin</th><th>T568A</th><th>T568B</th></tr>
+        <tr><td>1</td><td>bílo-zelená</td><td>bílo-oranžová</td></tr>
+        <tr><td>2</td><td>zelená</td><td>oranžová</td></tr>
+        <tr><td>3</td><td>bílo-oranžová</td><td>bílo-zelená</td></tr>
+        <tr><td>4</td><td>modrá</td><td>modrá</td></tr>
+        <tr><td>5</td><td>bílo-modrá</td><td>bílo-modrá</td></tr>
+        <tr><td>6</td><td>oranžová</td><td>zelená</td></tr>
+        <tr><td>7</td><td>bílo-hnědá</td><td>bílo-hnědá</td></tr>
+        <tr><td>8</td><td>hnědá</td><td>hnědá</td></tr>
+    </table>
+    <ul>
+        <li><strong>Přímý (straight-through) kabel</strong> – oba konce stejné zapojení (T568B–T568B) – PC↔Switch</li>
+        <li><strong>Křížený (crossover) kabel</strong> – různé zapojení (T568A–T568B) – PC↔PC, Switch↔Switch</li>
+        <li>Moderní zařízení s <strong>Auto-MDI/X</strong> detekují typ kabelu automaticky</li>
+    </ul>
+
+    <h2>Optické kabely</h2>
+    <h3>Singlemode vs. Multimode</h3>
+    <table>
+        <tr><th>Vlastnost</th><th>Singlemode (SMF)</th><th>Multimode (MMF)</th></tr>
+        <tr><td>Průměr jádra</td><td>8–10 µm</td><td>50/62.5 µm</td></tr>
+        <tr><td>Zdroj světla</td><td>Laser</td><td>LED / VCSEL</td></tr>
+        <tr><td>Vzdálenost</td><td>Desítky km</td><td>Stovky m – 2 km</td></tr>
+        <tr><td>Cena</td><td>Dražší (zdroj)</td><td>Levnější</td></tr>
+        <tr><td>Barva kabelu</td><td>Žlutá</td><td>Oranžová / Aqua</td></tr>
+        <tr><td>Modální disperze</td><td>Žádná</td><td>Ano (limituje vzdálenost)</td></tr>
+    </table>
+
+    <h3>Optické konektory</h3>
+    <table>
+        <tr><th>Konektor</th><th>Popis</th></tr>
+        <tr><td><strong>SC</strong></td><td>Square Connector – push-pull, běžný</td></tr>
+        <tr><td><strong>LC</strong></td><td>Little Connector – malý, nejpoužívanější v DC</td></tr>
+        <tr><td><strong>ST</strong></td><td>Straight Tip – bajonetový, starší</td></tr>
+        <tr><td><strong>FC</strong></td><td>Ferrule Connector – šroubovací, měřicí technika</td></tr>
+        <tr><td><strong>MPO/MTP</strong></td><td>Multi-fiber – hromadný konektor (12/24 vláken)</td></tr>
+    </table>
+
+    <h3>SFP moduly</h3>
+    <ul>
+        <li><strong>SFP</strong> – Small Form-factor Pluggable – 1 Gbps</li>
+        <li><strong>SFP+</strong> – 10 Gbps</li>
+        <li><strong>SFP28</strong> – 25 Gbps</li>
+        <li><strong>QSFP+</strong> – 40 Gbps</li>
+        <li><strong>QSFP28</strong> – 100 Gbps</li>
+    </ul>
+
+    <h2>Další konektory a média</h2>
+    <table>
+        <tr><th>Konektor</th><th>Použití</th></tr>
+        <tr><td><strong>RJ-45</strong></td><td>Ethernet (UTP/STP)</td></tr>
+        <tr><td><strong>RJ-11</strong></td><td>Telefon, DSL</td></tr>
+        <tr><td><strong>BNC</strong></td><td>Koaxiální kabel (starý Ethernet, video)</td></tr>
+        <tr><td><strong>F-type</strong></td><td>Koaxiál pro TV/kabelovku</td></tr>
+        <tr><td><strong>DB-9 (RS-232)</strong></td><td>Konzolový port (Cisco)</td></tr>
+        <tr><td><strong>USB-C / Console</strong></td><td>Moderní konzolový port</td></tr>
+    </table>
+
+    <h2>PoE (Power over Ethernet)</h2>
+    <p>Přenos napájení po Ethernet kabelu – pro IP kamery, AP, VoIP telefony.</p>
+    <table>
+        <tr><th>Standard</th><th>Výkon</th><th>Napětí</th></tr>
+        <tr><td>802.3af (PoE)</td><td>15.4 W</td><td>48 V</td></tr>
+        <tr><td>802.3at (PoE+)</td><td>30 W</td><td>48 V</td></tr>
+        <tr><td>802.3bt (PoE++)</td><td>60 / 100 W</td><td>48 V</td></tr>
+    </table>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

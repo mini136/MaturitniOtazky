@@ -1,0 +1,54 @@
+{
+  "title": "OSI 2 – Linková vrstva – Přepínače, rámce, MAC adresy",
+  "questions": [
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky, jak switch zpracuje rámec od neznámého odesílatele pro neznámého příjemce:",
+      "items": [
+        "Switch přijme rámec na portu",
+        "Zaznamená zdrojovou MAC adresu a port do CAM tabulky (Learning)",
+        "Hledá cílovou MAC adresu v tabulce – nenajde ji",
+        "Zaplavení (Flooding) – pošle rámec na všechny porty kromě zdrojového",
+        "Cílové zařízení odpoví – switch se naučí i jeho MAC a port"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď pole Ethernet II rámce k jeho velikosti a účelu:",
+      "pairs": [
+        ["Cílová MAC adresa", "6 bajtů – MAC adresa příjemce"],
+        ["Type/Length", "2 bajty – identifikace protokolu (0x0800=IPv4)"],
+        ["Payload (Data)", "46–1500 bajtů – přenášená data z vyšší vrstvy"],
+        ["FCS", "4 bajty – CRC-32 pro detekci chyb"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Switch typu Cut-Through je spolehlivější než Store-and-Forward, protože přeposílá rámce rychleji.",
+      "answer": false,
+      "explanation": "Cut-Through je rychlejší (nižší latence), ale méně spolehlivý – neprovádí kontrolu CRC, takže přeposílá i poškozené rámce. Store-and-Forward přijme celý rámec, zkontroluje CRC a teprve pak přepošle, čímž zajistí spolehlivost."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o MAC adresách:",
+      "text": "MAC adresa má délku {{48}} bitů a je zapsána hexadecimálně. Prvních 24 bitů je {{OUI}} identifikující výrobce. Broadcast MAC adresa je {{FF:FF:FF:FF:FF:FF}}. Záznamy v MAC tabulce switche stárnou po výchozí době {{300}} sekund.",
+      "answers": ["48", "OUI", "FF:FF:FF:FF:FF:FF", "300"]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi kolizní doménou a broadcast doménou. Jak je ovlivňují hub, switch a router?",
+      "keywords": ["kolizní doména", "broadcast doména", "hub", "switch", "router", "port", "odděluje"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď zařízení k jeho vlastnostem:",
+      "pairs": [
+        ["Hub", "L1, žádná adresace, posílá na všechny porty, half-duplex"],
+        ["Switch", "L2, MAC adresace, posílá na cílový port, full-duplex"],
+        ["Router", "L3, IP adresace, směrování mezi sítěmi"],
+        ["Bridge", "L2, odděluje kolizní domény, předchůdce switche"]
+      ]
+    }
+  ]
+}

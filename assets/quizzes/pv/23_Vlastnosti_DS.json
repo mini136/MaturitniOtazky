@@ -1,0 +1,61 @@
+{
+  "title": "Vlastnosti datových struktur, hashing, indexování",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď metodu řešení kolizí k jejímu popisu:",
+      "pairs": [
+        ["Chaining", "Každý bucket je linked list s páry klíč-hodnota"],
+        ["Open Addressing (linear probing)", "Hledá další volné místo v tabulce"],
+        ["Load factor λ", "Poměr n/m (prvky / velikost tabulky)"],
+        ["Rehash", "Zvětšení tabulky při překročení load factoru"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň složitosti operací různých datových struktur:",
+      "text": "Binární vyhledávání v seřazeném poli má složitost O({{log n}}). Vkládání do seřazeného pole je O({{n}}) kvůli udržení pořadí. Hash tabulka má průměrnou složitost vyhledání O({{1}}). Ideální load factor hash tabulky je menší než {{0.75}}.",
+      "answers": ["log n", "n", "1", "0.75"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Binární vyhledávání lze použít na jakémkoli poli, ať seřazeném nebo neseřazeném.",
+      "answer": false,
+      "explanation": "Binární vyhledávání vyžaduje seřazené pole. Princip spočívá v tom, že v každém kroku porovná hledaný prvek se středem a zahodí polovinu, kde prvek nemůže být. U neseřazeného pole by toto nefungovalo."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky binárního vyhledávání:",
+      "items": [
+        "Nastav levý a pravý index na začátek a konec pole",
+        "Vypočítej střed: stred = (levy + pravy) / 2",
+        "Porovnej hledaný prvek s prvkem na středu",
+        "Pokud je menší, hledej v levé polovině; pokud větší, v pravé",
+        "Opakuj, dokud nenajdeš prvek nebo levy > pravy"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, co je stabilní řadicí algoritmus a uveď příklad stabilního a nestabilního algoritmu.",
+      "keywords": ["zachování pořadí", "stejný klíč", "Merge sort", "Quick sort", "stabilní", "nestabilní"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď řadicí algoritmus ke kategorii stability:",
+      "pairs": [
+        ["Merge sort", "Stabilní"],
+        ["Quick sort", "Nestabilní"],
+        ["Insertion sort", "Stabilní"],
+        ["Heap sort", "Nestabilní"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Open Addressing má lepší cache locality než Chaining, protože data jsou uložena přímo v poli.",
+      "answer": true,
+      "explanation": "Při Open Addressing jsou prvky přímo v poli (za sebou v paměti), takže procesorová cache je může efektivně načíst. Chaining používá linked listy, které mají uzly rozptýlené po paměti — horší cache locality."
+    }
+  ]
+}

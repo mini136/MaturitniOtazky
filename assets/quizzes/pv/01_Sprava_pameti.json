@@ -1,0 +1,53 @@
+{
+  "title": "Správa paměti, alokace, garbage collector",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď paměťový segment k jeho popisu:",
+      "pairs": [
+        ["Stack", "Lokální proměnné, LIFO, automatická alokace"],
+        ["Heap", "Dynamicky alokovaná paměť, spravuje GC nebo programátor"],
+        ["Data segment", "Globální a statické proměnné"],
+        ["Code segment", "Strojový kód programu (read-only)"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "V C# při přiřazení struct proměnné do jiné proměnné se vytvoří nezávislá kopie hodnot.",
+      "answer": true,
+      "explanation": "Struct je hodnotový typ (value type) uložený na stacku. Při přiřazení b = a se zkopírují všechny hodnoty, takže změna b neovlivní a."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové pojmy o garbage collectoru:",
+      "text": "Algoritmus {{Mark & Sweep}} nejprve označí dosažitelné objekty a poté uvolní neoznačené. Python používá {{Reference Counting}}, který počítá počet referencí a při dosažení nuly objekt uvolní. Problémem tohoto přístupu jsou {{cyklické reference}}, které řeší speciální modul gc.",
+      "answers": ["Mark & Sweep", "Reference Counting", "cyklické reference"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď generace GC v .NET od nejčastěji kontrolované po nejméně:",
+      "items": ["Gen0 — nově vytvořené objekty", "Gen1 — přežily jednu kolekci", "Gen2 — dlouhodobé objekty"]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi operátory 'is' a '==' v Pythonu a uveď příklad, kdy dají různé výsledky.",
+      "keywords": ["identita", "reference", "hodnota", "id", "objekt"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď jazyk ke způsobu správy paměti:",
+      "pairs": [
+        ["C/C++", "Manuální správa (malloc/free, new/delete)"],
+        ["Java", "Generační GC v JVM"],
+        ["C#", "Generační GC v .NET CLR"],
+        ["Python", "Reference counting + cyklický GC"]
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Co je IDisposable vzor v C# a proč nestačí spoléhat jen na GC? Kdy je potřeba deterministické uvolnění?",
+      "keywords": ["using", "Dispose", "unmanaged", "prostředky", "soubor", "spojení"]
+    }
+  ]
+}

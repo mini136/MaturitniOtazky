@@ -1,0 +1,60 @@
+{
+  "title": "OS Linux – Charakteristika, struktura OS, start systému",
+  "questions": [
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky startu (boot) Linuxového systému od zapnutí po přihlášení:",
+      "items": [
+        "BIOS/UEFI provede POST a hledá bootloader",
+        "GRUB2 načte jádro a initramfs do RAM",
+        "Jádro inicializuje hardware a připojí root FS",
+        "initramfs poskytne dočasný FS pro načtení ovladačů",
+        "systemd (PID 1) spustí služby a targets",
+        "Zobrazí se login prompt (getty / display manager)"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď vrstvu OS k jejímu popisu:",
+      "pairs": [
+        ["Jádro (Kernel)", "Správa HW, procesů, paměti a I/O"],
+        ["Systémové knihovny", "glibc, libstdc++ – rozhraní mezi aplikacemi a jádrem"],
+        ["Systémové nástroje", "Shell (bash, zsh), coreutils, systemd"],
+        ["Uživatelské aplikace", "Textové editory, prohlížeče, servery"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Zombie proces je proces, který stále běží na CPU, ale jeho rodičovský proces již skončil.",
+      "answer": false,
+      "explanation": "Zombie je ukončený proces, jehož rodič si ještě nevyzvedl exit kód pomocí wait(). Proces, jehož rodič skončil, se nazývá orphan a je adoptován init procesem (PID 1)."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň příkazy pro správu služeb v systemd:",
+      "text": "Pro spuštění služby sshd použijeme {{systemctl start sshd}}. Aby se služba automaticky spouštěla při startu systému, zadáme {{systemctl enable sshd}}. Aktuální stav služby zjistíme příkazem {{systemctl status sshd}}.",
+      "answers": ["systemctl start sshd", "systemctl enable sshd", "systemctl status sshd"]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi monolitickým jádrem a mikrojádrem. Jaký typ jádra používá Linux a proč?",
+      "keywords": ["monolitické", "mikrojádro", "user space", "kernel space", "moduly", "výkon"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď stav procesu k jeho označení v příkazu ps:",
+      "pairs": [
+        ["R (Running)", "Proces se právě provádí na CPU"],
+        ["S (Sleeping)", "Čeká na událost, přerušitelný spánek"],
+        ["D (Disk Sleep)", "Nepřerušitelný spánek při I/O operaci"],
+        ["Z (Zombie)", "Ukončený proces čekající na wait() od rodiče"]
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Co je OOM Killer a za jakých okolností se aktivuje? Jak lze ovlivnit, který proces bude zabit?",
+      "keywords": ["Out-Of-Memory", "nedostatek paměti", "oom_score", "oom_score_adj", "jádro"]
+    }
+  ]
+}

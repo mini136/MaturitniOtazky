@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21 - Datové struktury</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>21 – Datové struktury</h1>
+
+    <h2>Přehled</h2>
+    <table>
+        <tr><th>Struktura</th><th>Typ</th><th>Přístup</th><th>Použití</th></tr>
+        <tr><td><strong>Array</strong></td><td>Lineární</td><td>O(1) index</td><td>Rychlý přístup podle indexu</td></tr>
+        <tr><td><strong>Linked List</strong></td><td>Lineární</td><td>O(n) vyhledání</td><td>Časté vkládání/mazání</td></tr>
+        <tr><td><strong>Stack</strong></td><td>LIFO</td><td>O(1) push/pop</td><td>Závorky, undo, rekurze</td></tr>
+        <tr><td><strong>Queue</strong></td><td>FIFO</td><td>O(1) enqueue/dequeue</td><td>Tisk, BFS, buffery</td></tr>
+        <tr><td><strong>BST</strong></td><td>Nelineární</td><td>O(log n) průměrně</td><td>Seřazená data, vyhledávání</td></tr>
+        <tr><td><strong>Heap</strong></td><td>Nelineární</td><td>O(1) min/max</td><td>Prioritní fronta</td></tr>
+        <tr><td><strong>Hash tabulka</strong></td><td>—</td><td>O(1) průměrně</td><td>Slovníky, cache</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Stack — kontrola závorek</strong>. Zásobník (LIFO) pro párování otevíracích a zavíracích závorek. Pokud na konci není stack prázdný, závorky nejsou správně spárované.</div>
+    <pre><code>class Stack:
+    """Zasobnik (LIFO)"""
+    def __init__(self):
+        self._data = []
+
+    def push(self, item):
+        self._data.append(item)
+
+    def pop(self):
+        if self.je_prazdny():
+            raise IndexError("Stack je prazdny!")
+        return self._data.pop()
+
+    def peek(self):
+        if self.je_prazdny():
+            raise IndexError("Stack je prazdny!")
+        return self._data[-1]
+
+    def je_prazdny(self):
+        return len(self._data) == 0
+
+    def __len__(self):
+        return len(self._data)
+
+def kontrola_zavorek(vyraz):
+    """Kontrola sparovani zavorek pomoci stacku"""
+    stack = Stack()
+    pary = {')': '(', ']': '[', '}': '{'}
+
+    for znak in vyraz:
+        if znak in '([{':
+            stack.push(znak)
+        elif znak in ')]}':
+            if stack.je_prazdny() or stack.pop() != pary[znak]:
+                return False
+    return stack.je_prazdny()
+
+testy = ["((1+2)*3)", "([{}])", "(()", "{[}]", ""]
+for vyraz in testy:
+    print(f"  '{vyraz}': {'OK' if kontrola_zavorek(vyraz) else 'CHYBA'}")</code></pre>
+
+    <div class="code-desc"><strong>Queue — simulace tiskárny</strong>. Fronta (FIFO) zpracovává tiskové úlohy v pořadí, v jakém přišly.</div>
+    <pre><code>from collections import deque
+
+class Queue:
+    """Fronta (FIFO)"""
+    def __init__(self):
+        self._data = deque()
+
+    def enqueue(self, item):
+        self._data.append(item)
+
+    def dequeue(self):
+        if self.je_prazdna():
+            raise IndexError("Queue je prazdna!")
+        return self._data.popleft()
+
+    def je_prazdna(self):
+        return len(self._data) == 0
+
+class Tiskarna:
+    def __init__(self):
+        self.fronta = Queue()
+
+    def pridej_ulohu(self, dokument):
+        self.fronta.enqueue(dokument)
+        print(f"  Pridano: {dokument}")
+
+    def tiskni(self):
+        while not self.fronta.je_prazdna():
+            dok = self.fronta.dequeue()
+            print(f"  Tisknu: {dok}")
+
+tiskarna = Tiskarna()
+for doc in ["zprava.pdf", "faktura.pdf", "smlouva.doc"]:
+    tiskarna.pridej_ulohu(doc)
+tiskarna.tiskni()</code></pre>
+
+    <div class="code-desc"><strong>Linked List</strong> — spojový seznam s operacemi <code>pridej</code>, <code>vloz</code>, <code>smaz</code>. Každý uzel (<code>Node</code>) obsahuje data a odkaz na další uzel.</div>
+    <pre><code>class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def pridej(self, data):
+        novy = Node(data)
+        novy.next = self.head
+        self.head = novy
+
+    def vloz_na_konec(self, data):
+        novy = Node(data)
+        if not self.head:
+            self.head = novy
+            return
+        aktualni = self.head
+        while aktualni.next:
+            aktualni = aktualni.next
+        aktualni.next = novy
+
+    def smaz(self, data):
+        if not self.head: return
+        if self.head.data == data:
+            self.head = self.head.next
+            return
+        aktualni = self.head
+        while aktualni.next:
+            if aktualni.next.data == data:
+                aktualni.next = aktualni.next.next
+                return
+            aktualni = aktualni.next
+
+    def __str__(self):
+        prvky = []
+        aktualni = self.head
+        while aktualni:
+            prvky.append(str(aktualni.data))
+            aktualni = aktualni.next
+        return " -&gt; ".join(prvky) + " -&gt; None"
+
+ll = LinkedList()
+for x in [3, 2, 1]:
+    ll.pridej(x)
+ll.vloz_na_konec(4)
+print(f"  {ll}")      # 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; None
+ll.smaz(2)
+print(f"  {ll}")      # 1 -&gt; 3 -&gt; 4 -&gt; None</code></pre>
+
+    <div class="code-desc"><strong>BST (Binary Search Tree)</strong> — binární vyhledávací strom. Levý podstrom &lt; kořen &lt; pravý podstrom. Metoda <code>inorder()</code> vrací seřazené prvky.</div>
+    <pre><code>class BSTNode:
+    def __init__(self, klic):
+        self.klic = klic
+        self.levy = None
+        self.pravy = None
+
+class BST:
+    def __init__(self):
+        self.koren = None
+
+    def vloz(self, klic):
+        self.koren = self._vloz(self.koren, klic)
+
+    def _vloz(self, uzel, klic):
+        if uzel is None:
+            return BSTNode(klic)
+        if klic &lt; uzel.klic:
+            uzel.levy = self._vloz(uzel.levy, klic)
+        elif klic &gt; uzel.klic:
+            uzel.pravy = self._vloz(uzel.pravy, klic)
+        return uzel
+
+    def hledej(self, klic):
+        return self._hledej(self.koren, klic)
+
+    def _hledej(self, uzel, klic):
+        if uzel is None: return False
+        if klic == uzel.klic: return True
+        if klic &lt; uzel.klic: return self._hledej(uzel.levy, klic)
+        return self._hledej(uzel.pravy, klic)
+
+    def inorder(self):
+        vysledek = []
+        self._inorder(self.koren, vysledek)
+        return vysledek
+
+    def _inorder(self, uzel, vysledek):
+        if uzel:
+            self._inorder(uzel.levy, vysledek)
+            vysledek.append(uzel.klic)
+            self._inorder(uzel.pravy, vysledek)
+
+bst = BST()
+for x in [5, 3, 7, 1, 4, 6, 8]:
+    bst.vloz(x)
+print(f"  Inorder: {bst.inorder()}")     # [1, 3, 4, 5, 6, 7, 8]
+print(f"  Hledam 4: {bst.hledej(4)}")    # True
+print(f"  Hledam 9: {bst.hledej(9)}")    # False</code></pre>
+
+    <div class="code-desc"><strong>MinHeap</strong> — binární halda s minimem na vrcholu. <code>push()</code> a <code>pop()</code> mají složitost O(log n). Používá se jako prioritní fronta.</div>
+    <pre><code>class MinHeap:
+    def __init__(self):
+        self.data = []
+
+    def push(self, val):
+        self.data.append(val)
+        self._bubble_up(len(self.data) - 1)
+
+    def pop(self):
+        if not self.data:
+            raise IndexError("Heap prazdny!")
+        min_val = self.data[0]
+        posledni = self.data.pop()
+        if self.data:
+            self.data[0] = posledni
+            self._sift_down(0)
+        return min_val
+
+    def _bubble_up(self, i):
+        while i &gt; 0:
+            rodic = (i - 1) // 2
+            if self.data[i] &lt; self.data[rodic]:
+                self.data[i], self.data[rodic] = self.data[rodic], self.data[i]
+                i = rodic
+            else:
+                break
+
+    def _sift_down(self, i):
+        n = len(self.data)
+        while True:
+            nejmensi = i
+            levy = 2*i + 1
+            pravy = 2*i + 2
+            if levy &lt; n and self.data[levy] &lt; self.data[nejmensi]:
+                nejmensi = levy
+            if pravy &lt; n and self.data[pravy] &lt; self.data[nejmensi]:
+                nejmensi = pravy
+            if nejmensi != i:
+                self.data[i], self.data[nejmensi] = self.data[nejmensi], self.data[i]
+                i = nejmensi
+            else:
+                break
+
+heap = MinHeap()
+for x in [5, 3, 7, 1, 4]:
+    heap.push(x)
+
+serazeno = []
+while heap.data:
+    serazeno.append(heap.pop())
+print(f"  Heap sort: {serazeno}")  # [1, 3, 4, 5, 7]</code></pre>
+
+    <div class="code-desc"><strong>Hash tabulka</strong> — implementace s řetězením (chaining) pro řešení kolizí. Každý bucket je seznam párů [klíč, hodnota].</div>
+    <pre><code>class HashTabulka:
+    """Hash tabulka s chainingem"""
+
+    def __init__(self, velikost=10):
+        self.velikost = velikost
+        self.tabulka = [[] for _ in range(velikost)]
+
+    def _hash(self, klic):
+        return hash(klic) % self.velikost
+
+    def vloz(self, klic, hodnota):
+        idx = self._hash(klic)
+        for par in self.tabulka[idx]:
+            if par[0] == klic:
+                par[1] = hodnota
+                return
+        self.tabulka[idx].append([klic, hodnota])
+
+    def najdi(self, klic):
+        idx = self._hash(klic)
+        for par in self.tabulka[idx]:
+            if par[0] == klic:
+                return par[1]
+        raise KeyError(f"Klic '{klic}' nenalezen")
+
+    def smaz(self, klic):
+        idx = self._hash(klic)
+        for i, par in enumerate(self.tabulka[idx]):
+            if par[0] == klic:
+                del self.tabulka[idx][i]
+                return
+        raise KeyError(f"Klic '{klic}' nenalezen")
+
+ht = HashTabulka()
+ht.vloz("alice", 95)
+ht.vloz("bob", 87)
+ht.vloz("charlie", 92)
+print(f"  alice: {ht.najdi('alice')}")    # 95
+ht.smaz("bob")
+print(f"  Tabulka: {[b for b in ht.tabulka if b]}")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,53 @@
+{
+  "title": "Dědičnost, overriding/overloading, interface",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď pojem k jeho popisu v kontextu OOP dědičnosti:",
+      "pairs": [
+        ["Overriding (přepisování)", "Potomek přepisuje metodu rodiče se stejnou signaturou — dynamický binding"],
+        ["Overloading (přetěžování)", "Více metod se stejným názvem ale různými parametry — statický binding"],
+        ["Abstraktní třída", "Může mít implementované metody i atributy, ale nelze vytvořit instanci"],
+        ["Interface", "Definuje kontrakt — pouze abstraktní metody, třída může implementovat více"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "V Javě může třída dědit z více tříd současně (vícenásobná dědičnost).",
+      "answer": false,
+      "explanation": "Java nepodporuje vícenásobnou dědičnost tříd (problém diamantu). Třída může dědit pouze z jedné třídy, ale může implementovat více rozhraní (interface). Vícenásobnou dědičnost tříd podporuje C++ a Python (s MRO)."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o dědičnosti:",
+      "text": "Když v Javě potomek přepisuje metodu rodiče, používá se anotace {{@Override}}. O tom, která implementace se zavolá, rozhoduje {{dynamický binding}} za běhu programu. Kontrola typu za běhu se provádí pomocí klíčového slova {{instanceof}}.",
+      "answers": ["@Override", "dynamický binding", "instanceof"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď úrovně dědičnosti od nejjednodušší po nejsložitější:",
+      "items": [
+        "Jednoduchá dědičnost — třída dědí z jedné třídy",
+        "Víceúrovňová dědičnost — A → B → C (řetězení)",
+        "Implementace rozhraní — třída implementuje více interfaces",
+        "Vícenásobná dědičnost — třída dědí z více tříd (C++, Python)"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaký je rozdíl mezi abstraktní třídou a rozhraním? Kdy použiješ jedno a kdy druhé?",
+      "keywords": ["atributy", "konstruktor", "implementace", "vícenásobná", "kontrakt", "společný kód"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď vlastnost k abstraktní třídě nebo interface:",
+      "pairs": [
+        ["Může mít instance variables (atributy)", "Abstraktní třída"],
+        ["Může mít konstruktor", "Abstraktní třída"],
+        ["Třída může implementovat více najednou", "Interface"],
+        ["Od Java 8+ může mít default implementaci metod", "Interface"]
+      ]
+    }
+  ]
+}

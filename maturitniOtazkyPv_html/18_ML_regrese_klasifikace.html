@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>18 - ML: Regrese a klasifikace</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>18 – ML: Regrese a klasifikace</h1>
+
+    <h2>Přehled algoritmů</h2>
+    <table>
+        <tr><th>Algoritmus</th><th>Typ</th><th>Použití</th></tr>
+        <tr><td><strong>Lineární regrese</strong></td><td>Regrese</td><td>Predikce spojité hodnoty (cena, teplota)</td></tr>
+        <tr><td><strong>Logistická regrese</strong></td><td>Klasifikace</td><td>Binární klasifikace (ano/ne)</td></tr>
+        <tr><td><strong>KNN</strong></td><td>Obojí</td><td>Klasifikace podle K nejbližších sousedů</td></tr>
+        <tr><td><strong>Decision Tree</strong></td><td>Obojí</td><td>Stromová rozhodovací pravidla</td></tr>
+        <tr><td><strong>Random Forest</strong></td><td>Obojí</td><td>Ensemble více stromů</td></tr>
+        <tr><td><strong>SVM</strong></td><td>Klasifikace</td><td>Hledání optimální dělicí roviny</td></tr>
+    </table>
+
+    <h2>Metriky</h2>
+    <table>
+        <tr><th>Metrika</th><th>Popis</th></tr>
+        <tr><td><strong>Accuracy</strong></td><td>(TP + TN) / celkem</td></tr>
+        <tr><td><strong>Precision</strong></td><td>TP / (TP + FP) — přesnost pozitivních predikcí</td></tr>
+        <tr><td><strong>Recall</strong></td><td>TP / (TP + FN) — úplnost</td></tr>
+        <tr><td><strong>F1 Score</strong></td><td>2 × (Precision × Recall) / (Precision + Recall)</td></tr>
+        <tr><td><strong>MSE</strong></td><td>Střední kvadratická chyba (regrese)</td></tr>
+        <tr><td><strong>R²</strong></td><td>Koeficient determinace (regrese)</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Lineární regrese</strong> — implementace gradientního sestupu. Iterativně optimalizuje parametry <code>w</code> (váha) a <code>b</code> (bias) minimalizací MSE.</div>
+    <pre><code>import math
+import random
+
+random.seed(42)
+
+class LinearniRegrese:
+    """Linearni regrese s gradientnim sestupem"""
+
+    def __init__(self, lr=0.01, iterace=1000):
+        self.lr = lr
+        self.iterace = iterace
+        self.w = 0
+        self.b = 0
+
+    def fit(self, X, y):
+        n = len(X)
+        for i in range(self.iterace):
+            # Predikce
+            y_pred = [self.w * x + self.b for x in X]
+
+            # Gradienty
+            dw = (-2/n) * sum((y[j] - y_pred[j]) * X[j] for j in range(n))
+            db = (-2/n) * sum(y[j] - y_pred[j] for j in range(n))
+
+            # Aktualizace
+            self.w -= self.lr * dw
+            self.b -= self.lr * db
+
+            if i % 200 == 0:
+                mse = sum((y[j] - y_pred[j])**2 for j in range(n)) / n
+                print(f"    Iterace {i}: MSE={mse:.4f}")
+
+    def predict(self, X):
+        return [self.w * x + self.b for x in X]
+
+# Data: hodiny studia → znamka
+X = [5, 10, 15, 20, 25, 30, 35]
+y = [4.5, 3.8, 3.2, 2.5, 2.0, 1.5, 1.2]
+
+model = LinearniRegrese(lr=0.001, iterace=1000)
+model.fit(X, y)
+print(f"  w={model.w:.3f}, b={model.b:.3f}")
+print(f"  Predikce pro 22h: {model.predict([22])[0]:.2f}")</code></pre>
+
+    <div class="code-desc"><strong>Logistická regrese</strong> — binární klasifikace pomocí sigmoidní funkce. Sigmoid mapuje libovolnou hodnotu do rozsahu (0, 1) jako pravděpodobnost.</div>
+    <pre><code>class LogistickaRegrese:
+    """Logisticka regrese - binarni klasifikace"""
+
+    def __init__(self, lr=0.1, iterace=1000):
+        self.lr = lr
+        self.iterace = iterace
+        self.w = [0, 0]
+        self.b = 0
+
+    def sigmoid(self, z):
+        z = max(-500, min(500, z))
+        return 1 / (1 + math.exp(-z))
+
+    def fit(self, X, y):
+        n = len(X)
+        for i in range(self.iterace):
+            for j in range(n):
+                z = sum(self.w[k] * X[j][k] for k in range(len(self.w))) + self.b
+                pred = self.sigmoid(z)
+                chyba = pred - y[j]
+                for k in range(len(self.w)):
+                    self.w[k] -= self.lr * chyba * X[j][k]
+                self.b -= self.lr * chyba
+
+    def predict(self, X):
+        vysledky = []
+        for x in X:
+            z = sum(self.w[k] * x[k] for k in range(len(self.w))) + self.b
+            vysledky.append(1 if self.sigmoid(z) &gt;= 0.5 else 0)
+        return vysledky
+
+# Data: [hodiny_studia, predchozi_znamka] → prosli (1) / neprosli (0)
+X_log = [[30, 1.5], [25, 2.0], [20, 2.5], [35, 1.2],
+         [5, 4.5], [10, 3.8], [8, 4.0], [15, 3.5]]
+y_log = [1, 1, 1, 1, 0, 0, 0, 0]
+
+log_model = LogistickaRegrese(lr=0.01, iterace=500)
+log_model.fit(X_log, y_log)
+predikce = log_model.predict([[22, 2.0], [7, 4.2]])
+print(f"  Predikce: {predikce}")  # [1, 0]</code></pre>
+
+    <div class="code-desc"><strong>KNN klasifikátor</strong> — klasifikuje ovoce podle váhy a sladkosti. Najde K nejbližších sousedů (euklidovská vzdálenost) a vrátí nejčastější třídu.</div>
+    <pre><code>class KNN:
+    """K-Nearest Neighbors"""
+
+    def __init__(self, k=3):
+        self.k = k
+        self.X_train = []
+        self.y_train = []
+
+    def fit(self, X, y):
+        self.X_train = X
+        self.y_train = y
+
+    def vzdalenost(self, a, b):
+        return math.sqrt(sum((a[i]-b[i])**2 for i in range(len(a))))
+
+    def predict_one(self, x):
+        # Vzdalenosti ke vsem treninkovym bodum
+        vzdalenosti = [(self.vzdalenost(x, self.X_train[i]), self.y_train[i])
+                       for i in range(len(self.X_train))]
+        vzdalenosti.sort(key=lambda v: v[0])
+
+        # K nejblizsich sousedu
+        k_sousedi = [v[1] for v in vzdalenosti[:self.k]]
+        # Nejcastejsi trida
+        return max(set(k_sousedi), key=k_sousedi.count)
+
+    def predict(self, X):
+        return [self.predict_one(x) for x in X]
+
+# Data: [vaha_g, sladkost] → ovoce
+X_ovoce = [[150, 7], [170, 8], [140, 6],   # jablko
+            [80, 3], [90, 4], [70, 2],       # citron
+            [200, 9], [180, 10], [220, 8]]   # mango
+y_ovoce = ["jablko"]*3 + ["citron"]*3 + ["mango"]*3
+
+knn = KNN(k=3)
+knn.fit(X_ovoce, y_ovoce)
+print(f"  KNN [160,7]: {knn.predict_one([160, 7])}")  # jablko
+print(f"  KNN [85,3]:  {knn.predict_one([85, 3])}")   # citron</code></pre>
+
+    <div class="code-desc"><strong>Confusion Matrix</strong> — výpočet TP, TN, FP, FN a odvozených metrik (accuracy, precision, recall, F1) z predikovaných a skutečných hodnot.</div>
+    <pre><code>def confusion_matrix(y_true, y_pred):
+    """Matice zameny + metriky"""
+    tp = sum(1 for t, p in zip(y_true, y_pred) if t == 1 and p == 1)
+    tn = sum(1 for t, p in zip(y_true, y_pred) if t == 0 and p == 0)
+    fp = sum(1 for t, p in zip(y_true, y_pred) if t == 0 and p == 1)
+    fn = sum(1 for t, p in zip(y_true, y_pred) if t == 1 and p == 0)
+
+    accuracy  = (tp + tn) / (tp + tn + fp + fn) if (tp+tn+fp+fn) else 0
+    precision = tp / (tp + fp) if (tp + fp) else 0
+    recall    = tp / (tp + fn) if (tp + fn) else 0
+    f1 = 2*precision*recall / (precision+recall) if (precision+recall) else 0
+
+    print(f"  TP={tp}, TN={tn}, FP={fp}, FN={fn}")
+    print(f"  Accuracy:  {accuracy:.3f}")
+    print(f"  Precision: {precision:.3f}")
+    print(f"  Recall:    {recall:.3f}")
+    print(f"  F1 Score:  {f1:.3f}")
+
+y_true = [1, 1, 0, 1, 0, 0, 1, 0, 1, 0]
+y_pred = [1, 1, 0, 0, 0, 1, 1, 0, 1, 0]
+confusion_matrix(y_true, y_pred)</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

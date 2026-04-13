@@ -1,0 +1,61 @@
+{
+  "title": "OSI 2 – ARP, vztah rámec/paket, zapouzdření",
+  "questions": [
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky ARP procesu, když stanice A chce komunikovat se stanicí B ve stejné síti:",
+      "items": [
+        "Stanice A zjistí, že nezná MAC adresu pro cílovou IP",
+        "A odešle ARP Request jako broadcast (FF:FF:FF:FF:FF:FF)",
+        "Všechny stanice v segmentu přijmou broadcast",
+        "Stanice B rozpozná svou IP a odpoví ARP Reply (unicast)",
+        "Stanice A uloží mapování IP→MAC do ARP cache"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Při průchodu paketu přes router se změní zdrojová a cílová IP adresa, ale MAC adresy zůstanou stejné.",
+      "answer": false,
+      "explanation": "Je to přesně naopak: IP adresy zůstávají stejné (end-to-end), zatímco MAC adresy se mění na každém hopu (hop-by-hop). Router odstraní starý L2 rámec a vytvoří nový s MAC adresami aktuálního a dalšího hopu."
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď PDU (Protocol Data Unit) k vrstvě OSI modelu:",
+      "pairs": [
+        ["Bity", "L1 – Fyzická vrstva"],
+        ["Rámec (Frame)", "L2 – Linková vrstva"],
+        ["Paket (Packet)", "L3 – Síťová vrstva"],
+        ["Segment / Datagram", "L4 – Transportní vrstva"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň proces zapouzdření dat:",
+      "text": "Na transportní vrstvě se k datům přidá TCP/UDP hlavička a vznikne {{segment}}. Na síťové vrstvě se přidá IP hlavička a vznikne {{paket}}. Na linkové vrstvě se přidá MAC hlavička a FCS a vznikne {{rámec}}. Na fyzické vrstvě se vše převede na {{bity}}.",
+      "answers": ["segment", "paket", "rámec", "bity"]
+    },
+    {
+      "type": "open",
+      "prompt": "Co je ARP Spoofing/Poisoning a jak se proti němu bránit na úrovni switche?",
+      "keywords": ["ARP Spoofing", "falešné ARP Reply", "Man-in-the-Middle", "Dynamic ARP Inspection", "DAI", "VLAN"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď speciální MAC adresu k jejímu typu:",
+      "pairs": [
+        ["FF:FF:FF:FF:FF:FF", "Broadcast – všechna zařízení v segmentu"],
+        ["01:00:5E:xx:xx:xx", "IPv4 Multicast"],
+        ["33:33:xx:xx:xx:xx", "IPv6 Multicast (NDP)"],
+        ["01:80:C2:00:00:00", "STP – Spanning Tree BPDU"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Gratuitous ARP je typ útoku, při kterém stanice odesílá ARP Request pro cizí IP adresu.",
+      "answer": false,
+      "explanation": "Gratuitous ARP je legitimní mechanismus, při kterém stanice odesílá ARP Request pro svou vlastní IP adresu. Slouží k oznámení MAC adresy sítí a k detekci duplicitních IP adres. Používá se např. při startu zařízení."
+    }
+  ]
+}

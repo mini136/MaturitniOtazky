@@ -1,0 +1,55 @@
+{
+  "title": "OS Linux – SSH, CRON, systémové logy, virtualizace",
+  "questions": [
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky nastavení SSH autentizace klíčem:",
+      "items": [
+        "ssh-keygen -t ed25519 – vygenerování páru klíčů",
+        "Privátní klíč zůstane v ~/.ssh/id_ed25519",
+        "ssh-copy-id user@server – zkopírování veřejného klíče na server",
+        "Veřejný klíč se zapíše do ~/.ssh/authorized_keys na serveru",
+        "PasswordAuthentication no v /etc/ssh/sshd_config – zakázání hesel",
+        "systemctl restart sshd – restart SSH služby"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň cron výrazy:",
+      "text": "Záznam v crontabu má formát: MIN HOUR DOM MON DOW COMMAND. Výraz {{0 2 * * *}} spustí příkaz každý den ve 2:00. Výraz {{*/15 * * * *}} spustí příkaz každých 15 minut. Výraz {{0 6 * * 1-5}} spustí příkaz v 6:00 od pondělí do pátku.",
+      "answers": ["0 2 * * *", "*/15 * * * *", "0 6 * * 1-5"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď soubor logů k jeho obsahu:",
+      "pairs": [
+        ["/var/log/syslog", "Hlavní systémový log (Debian/Ubuntu)"],
+        ["/var/log/auth.log", "Autentizační pokusy, sudo, SSH přihlášení"],
+        ["/var/log/kern.log", "Zprávy jádra (kernel)"],
+        ["/var/log/dmesg", "Boot a hardware zprávy"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Kontejnery (Docker) poskytují vyšší izolaci než virtuální stroje, protože sdílejí jádro hostitelského systému.",
+      "answer": false,
+      "explanation": "Kontejnery sdílejí jádro hostitelského systému, což znamená menší izolaci než VM. VM mají vlastní jádro a poskytují tak vyšší izolaci. Kontejnery ale mají menší overhead a rychlejší start."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi hypervisorem typu 1 (bare-metal) a typu 2 (hosted). Uveď příklady obou typů.",
+      "keywords": ["bare-metal", "hardware", "hosted", "operační systém", "ESXi", "KVM", "VirtualBox", "VMware"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď typ SSH tunelování k jeho popisu:",
+      "pairs": [
+        ["Local port forwarding (-L)", "Přesměrování lokálního portu na vzdálený server"],
+        ["Remote port forwarding (-R)", "Přesměrování portu vzdáleného serveru na lokální stroj"],
+        ["SOCKS proxy (-D)", "Dynamický tunel sloužící jako proxy"],
+        ["SCP", "Bezpečné kopírování souborů přes SSH"]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14 - OOP principy</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>14 – OOP principy, SOLID</h1>
+
+    <h2>4 pilíře OOP</h2>
+    <table>
+        <tr><th>Pilíř</th><th>Popis</th></tr>
+        <tr><td><strong>Zapouzdření (Encapsulation)</strong></td><td>Skrytí vnitřního stavu, přístup přes metody/property</td></tr>
+        <tr><td><strong>Dědičnost (Inheritance)</strong></td><td>Přebírání vlastností od rodičovské třídy</td></tr>
+        <tr><td><strong>Polymorfismus</strong></td><td>Stejné rozhraní, různé chování</td></tr>
+        <tr><td><strong>Abstrakce</strong></td><td>Skrytí implementačních detailů za rozhraní</td></tr>
+    </table>
+
+    <h2>Vztahy mezi třídami</h2>
+    <table>
+        <tr><th>Vztah</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><strong>Asociace</strong></td><td>Volný vztah, mohou existovat nezávisle</td><td>Učitel ↔ Student</td></tr>
+        <tr><td><strong>Agregace</strong></td><td>"has-a", celek vlastní části (mohou existovat samostatně)</td><td>Tým → Hráči</td></tr>
+        <tr><td><strong>Kompozice</strong></td><td>"has-a", silná — části neexistují bez celku</td><td>Dům → Místnosti</td></tr>
+    </table>
+
+    <h2>SOLID principy</h2>
+    <table>
+        <tr><th>Princip</th><th>Význam</th></tr>
+        <tr><td><strong>S</strong> — Single Responsibility</td><td>Třída má jednu zodpovědnost</td></tr>
+        <tr><td><strong>O</strong> — Open/Closed</td><td>Otevřeno pro rozšíření, uzavřeno pro modifikaci</td></tr>
+        <tr><td><strong>L</strong> — Liskov Substitution</td><td>Potomek musí být zaměnitelný za rodiče</td></tr>
+        <tr><td><strong>I</strong> — Interface Segregation</td><td>Více malých rozhraní místo jednoho velkého</td></tr>
+        <tr><td><strong>D</strong> — Dependency Inversion</td><td>Závisej na abstrakci, ne na implementaci</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Zapouzdření</strong> — <code>BankovniUcet</code> skrývá zůstatek (<code>__zustatek</code> = name mangling). Přístup jen přes metody <code>vloz()</code>, <code>vyber()</code> a property <code>zustatek</code>.</div>
+    <pre><code>class BankovniUcet:
+    """Zapouzdreni - skryti stavu"""
+    def __init__(self, majitel, zustatek=0):
+        self._majitel = majitel
+        self.__zustatek = zustatek   # name mangling
+
+    @property
+    def zustatek(self):
+        return self.__zustatek
+
+    def vloz(self, castka):
+        if castka &lt;= 0:
+            raise ValueError("Castka musi byt kladna!")
+        self.__zustatek += castka
+
+    def vyber(self, castka):
+        if castka &gt; self.__zustatek:
+            raise ValueError("Nedostatek prostredku!")
+        self.__zustatek -= castka
+
+ucet = BankovniUcet("Alice", 1000)
+ucet.vloz(500)
+ucet.vyber(200)
+print(f"Zustatek: {ucet.zustatek} Kc")  # 1300</code></pre>
+
+    <div class="code-desc"><strong>Polymorfismus</strong> — abstraktní třída <code>Zivocich</code> definuje <code>zvuk()</code>. Každý potomek ji implementuje jinak. Funkce <code>udelej_zvuk()</code> funguje s libovolným zvířetem.</div>
+    <pre><code>from abc import ABC, abstractmethod
+
+class Zivocich(ABC):
+    def __init__(self, jmeno):
+        self.jmeno = jmeno
+
+    @abstractmethod
+    def zvuk(self): pass
+
+    def __str__(self):
+        return f"{self.jmeno} rika: {self.zvuk()}"
+
+class Pes(Zivocich):
+    def zvuk(self): return "Haf haf!"
+
+class Kocka(Zivocich):
+    def zvuk(self): return "Mnau!"
+
+class Had(Zivocich):
+    def zvuk(self): return "Ssss!"
+
+# Polymorfismus - stejna funkce, ruzne chovani
+def udelej_zvuk(zivocich):
+    print(f"  {zivocich}")
+
+for z in [Pes("Rex"), Kocka("Micka"), Had("Ssisko")]:
+    udelej_zvuk(z)</code></pre>
+
+    <div class="code-desc"><strong>Agregace vs Kompozice</strong> — Motor (kompozice) je vytvořen uvnitř Auta a zanikne s ním. Řidič (agregace) existuje nezávisle na Autě.</div>
+    <pre><code>class Motor:
+    def __init__(self, typ): self.typ = typ
+    def nastartuj(self): print(f"    Motor {self.typ} nastartovan")
+
+class Ridic:
+    def __init__(self, jmeno): self.jmeno = jmeno
+
+class Auto:
+    def __init__(self, znacka, motor_typ, ridic=None):
+        self.znacka = znacka
+        self.motor = Motor(motor_typ)   # KOMPOZICE - motor vytvoren uvnitr
+        self.ridic = ridic              # AGREGACE - ridic existuje nezavisle
+
+ridic = Ridic("Alice")
+auto = Auto("Skoda", "1.6 TSI", ridic)
+auto.motor.nastartuj()
+print(f"  {auto.znacka} ridi {auto.ridic.jmeno}")
+# Kdyz auto zanikne, motor zanikne taky (kompozice)
+# Ridic ale existuje dal (agregace)</code></pre>
+
+    <div class="code-desc"><strong>SOLID — SRP + OCP + DIP</strong>. <code>Student</code> má jednu zodpovědnost (data), <code>StudentRepository</code> druhou (ukládání). <code>UkladaniStrategy</code> demonstruje Dependency Inversion — ukládáme přes abstrakci.</div>
+    <pre><code># SRP - kazda trida jednu zodpovednost
+class Student:
+    def __init__(self, jmeno, vek):
+        self.jmeno = jmeno
+        self.vek = vek
+
+class StudentRepository:
+    """Oddelena zodpovednost: uloziste"""
+    def __init__(self):
+        self._studenti = []
+
+    def pridej(self, student):
+        self._studenti.append(student)
+
+    def najdi(self, jmeno):
+        return next((s for s in self._studenti if s.jmeno == jmeno), None)
+
+# DIP - zavisej na abstrakci
+class UkladaniStrategy(ABC):
+    @abstractmethod
+    def uloz(self, data): pass
+
+class SouborUkladani(UkladaniStrategy):
+    def uloz(self, data):
+        print(f"  Ukladam do souboru: {data}")
+
+class DBUkladani(UkladaniStrategy):
+    def uloz(self, data):
+        print(f"  Ukladam do DB: {data}")
+
+class Aplikace:
+    def __init__(self, ukladani: UkladaniStrategy):
+        self.ukladani = ukladani   # zavisi na abstrakci, ne na implementaci
+
+    def zpracuj(self, data):
+        self.ukladani.uloz(data)
+
+# Snadno zamenitelne
+app = Aplikace(SouborUkladani())
+app.zpracuj("data1")
+app = Aplikace(DBUkladani())
+app.zpracuj("data2")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

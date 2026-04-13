@@ -1,0 +1,55 @@
+{
+  "title": "Rekurze, brute force, heuristiky",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď typ rekurze k jeho popisu:",
+      "pairs": [
+        ["Přímá rekurze", "Funkce volá přímo samu sebe"],
+        ["Nepřímá rekurze", "A volá B, B volá A"],
+        ["Tail rekurze", "Rekurzivní volání je poslední operací — možná optimalizace"],
+        ["Stromová rekurze", "Více rekurzivních volání v jednom kroku (např. Fibonacci)"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Greedy heuristika vždy najde globálně optimální řešení problému batohu.",
+      "answer": false,
+      "explanation": "Greedy heuristika v každém kroku vybere lokálně nejlepší volbu (nejlepší poměr hodnota/váha), ale to negarantuje globální optimum. Může vynechat kombinaci předmětů, která by celkově dala vyšší hodnotu."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky genetického algoritmu ve správném pořadí:",
+      "items": [
+        "Inicializace náhodné populace",
+        "Ohodnocení fitness každého jedince",
+        "Selekce nejlepších jedinců",
+        "Křížení (crossover) rodičů",
+        "Mutace potomků",
+        "Opakování přes generace"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové pojmy o rekurzi:",
+      "text": "Každá rekurzivní funkce musí mít {{bázový případ}}, který zabraňuje nekonečnému volání. Každé volání vytváří nový {{stack frame}} na zásobníku. Naivní rekurzivní Fibonacci má složitost {{O(2ⁿ)}}, ale s memoizací dosáhneme O(n).",
+      "answers": ["bázový případ", "stack frame", "O(2ⁿ)"]
+    },
+    {
+      "type": "open",
+      "prompt": "Porovnej brute force a greedy přístup k problému batohu. Jaké jsou výhody a nevýhody každého?",
+      "keywords": ["optimální", "exponenciální", "rychlost", "lokální", "všechny kombinace", "O(2ⁿ)"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď NP-kompletní problém k jeho brute force složitosti:",
+      "pairs": [
+        ["Problém batohu", "O(2ⁿ) — všechny podmnožiny"],
+        ["TSP (obchodní cestující)", "O(n!) — všechny permutace"],
+        ["SAT (splnitelnost)", "O(2ⁿ) — všechny kombinace pravdivostních hodnot"],
+        ["Hill Climbing", "Heuristika — uvízne v lokálním maximu"]
+      ]
+    }
+  ]
+}

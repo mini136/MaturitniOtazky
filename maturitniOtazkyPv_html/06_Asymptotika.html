@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06 - Asymptotická složitost</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>06 – Asymptotická složitost algoritmu</h1>
+
+    <h2>Notace</h2>
+    <table>
+        <tr><th>Notace</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><strong>O (Big-O)</strong></td><td>Horní mez (worst case)</td><td>O(n²) — "nejvýše"</td></tr>
+        <tr><td><strong>Ω (Omega)</strong></td><td>Dolní mez (best case)</td><td>Ω(n) — "alespoň"</td></tr>
+        <tr><td><strong>Θ (Theta)</strong></td><td>Přesná mez (tight bound)</td><td>Θ(n log n) — "přesně"</td></tr>
+    </table>
+
+    <h2>Přehled složitostí</h2>
+    <table>
+        <tr><th>Složitost</th><th>Název</th><th>n=1000</th><th>Příklad</th></tr>
+        <tr><td>O(1)</td><td>Konstantní</td><td>1</td><td>Přístup k poli indexem</td></tr>
+        <tr><td>O(log n)</td><td>Logaritmická</td><td>~10</td><td>Binární vyhledávání</td></tr>
+        <tr><td>O(n)</td><td>Lineární</td><td>1 000</td><td>Průchod polem</td></tr>
+        <tr><td>O(n log n)</td><td>Linearitmická</td><td>~10 000</td><td>Merge sort, Quick sort</td></tr>
+        <tr><td>O(n²)</td><td>Kvadratická</td><td>1 000 000</td><td>Bubble sort, dva vnořené cykly</td></tr>
+        <tr><td>O(2ⁿ)</td><td>Exponenciální</td><td>≈10³⁰¹</td><td>Brute force, Fibonacci (naivní)</td></tr>
+        <tr><td>O(n!)</td><td>Faktoriální</td><td>∞</td><td>Permutace, TSP</td></tr>
+    </table>
+
+    <h2>Pravidla</h2>
+    <ul>
+        <li><strong>Dominantní člen</strong>: O(3n² + 5n + 7) = O(n²)</li>
+        <li><strong>Konstanty se ignorují</strong>: O(5n) = O(n)</li>
+        <li><strong>Výběr nejhoršího</strong>: Sekvenční bloky — O(n) + O(n²) = O(n²)</li>
+        <li><strong>Vnořené cykly</strong>: O(n) × O(n) = O(n²)</li>
+    </ul>
+
+    <h2>Amortizovaná složitost</h2>
+    <div class="note">Průměrná složitost přes sérii operací. Například: <code>list.append()</code> v Pythonu je amortizovaně O(1), i když občas dochází k realokaci O(n).</div>
+
+    <h2>Ukázkový kód — Python (měření složitostí)</h2>
+
+    <div class="code-desc"><strong>O(1) — konstantní</strong>: Přístup k prvku pole indexem nezávisí na velikosti pole.</div>
+    <pre><code>import time
+
+def o_1(pole):
+    """O(1) - pristup k prvku indexem"""
+    return pole[0]
+
+pole = list(range(1000000))
+start = time.perf_counter()
+o_1(pole)
+cas = time.perf_counter() - start
+print(f"O(1): {cas:.8f}s")</code></pre>
+
+    <div class="code-desc"><strong>O(log n) — logaritmická</strong>: Binární vyhledávání půlí interval v každém kroku.</div>
+    <pre><code>def o_log_n(pole, hledany):
+    """O(log n) - binarni vyhledavani"""
+    levy, pravy = 0, len(pole) - 1
+    while levy &lt;= pravy:
+        stred = (levy + pravy) // 2
+        if pole[stred] == hledany:
+            return stred
+        elif pole[stred] &lt; hledany:
+            levy = stred + 1
+        else:
+            pravy = stred - 1
+    return -1
+
+index = o_log_n(pole, 999999)
+print(f"O(log n): nalezeno na indexu {index}")</code></pre>
+
+    <div class="code-desc"><strong>O(n) — lineární</strong>: Průchod celým polem, <strong>O(n²) — kvadratická</strong>: Dva vnořené cykly.</div>
+    <pre><code>def o_n(pole):
+    """O(n) - linearni pruchod"""
+    soucet = 0
+    for prvek in pole:
+        soucet += prvek
+    return soucet
+
+def o_n2(pole):
+    """O(n²) - dva vnorene cykly"""
+    pocet = 0
+    for i in range(len(pole)):
+        for j in range(len(pole)):
+            pocet += 1
+    return pocet
+
+# Mereni s ruznymi velikostmi
+for n in [100, 1000, 5000]:
+    data = list(range(n))
+    start = time.perf_counter()
+    o_n2(data)
+    cas = time.perf_counter() - start
+    print(f"O(n²) pro n={n}: {cas:.4f}s")</code></pre>
+
+    <div class="code-desc"><strong>O(2ⁿ) — exponenciální</strong>: Naivní rekurzivní Fibonacci — každé volání se větví na dvě podvolání.</div>
+    <pre><code>def o_2n(n):
+    """O(2^n) - rekurzivni fibonacci"""
+    if n &lt;= 1:
+        return n
+    return o_2n(n - 1) + o_2n(n - 2)
+
+for n in [10, 20, 30]:
+    start = time.perf_counter()
+    vysledek = o_2n(n)
+    cas = time.perf_counter() - start
+    print(f"O(2^n) pro n={n}: {cas:.4f}s (vysledek={vysledek})")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

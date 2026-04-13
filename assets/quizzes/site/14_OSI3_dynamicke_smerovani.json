@@ -1,0 +1,48 @@
+{
+  "title": "OSI 3 – Dynamické směrování (RIP, OSPF)",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď vlastnost ke správnému typu směrovacího protokolu:",
+      "pairs": [
+        ["Bellman-Ford algoritmus", "Distance Vector"],
+        ["Dijkstrův algoritmus (SPF)", "Link-State"],
+        ["Zná jen své sousedy", "Distance Vector"],
+        ["Kompletní mapa sítě", "Link-State"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové parametry RIP a OSPF:",
+      "text": "RIP používá jako metriku {{hop count}} s maximem {{15}} hopů. OSPF má administrativní vzdálenost {{110}} a metrika se nazývá {{cost}}.",
+      "answers": ["hop count", "15", "110", "cost"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď OSPF stavy sousedství od začátku po plnou synchronizaci:",
+      "items": ["Down", "Init", "2-Way", "ExStart", "Exchange", "Loading", "Full"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "OSPF posílá aktualizace směrovací tabulky periodicky každých 30 sekund, stejně jako RIP.",
+      "answer": false,
+      "explanation": "OSPF neposílá periodické aktualizace celé tabulky. Posílá aktualizace pouze při změně topologie (triggered updates), což je jeden z důvodů jeho rychlé konvergence. Periodické aktualizace každých 30 sekund jsou vlastností RIP."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, proč je u RIP potřeba mechanismus Split Horizon a jak funguje Route Poisoning při výpadku spoje.",
+      "keywords": ["smyčka", "zpět", "rozhraní", "metrika 16", "nedosažitelné"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď administrativní vzdálenost ke zdroji směrovací informace:",
+      "pairs": [
+        ["Connected (přímo připojená)", "0"],
+        ["Statická cesta", "1"],
+        ["OSPF", "110"],
+        ["RIP", "120"]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "title": "Architektonické vzory, komunikace klient-server",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď architektonický vzor ke způsobu komunikace mezi komponentami:",
+      "pairs": [
+        ["MVC", "Controller zprostředkovává mezi Model a View"],
+        ["MVP", "Presenter přímo řídí View"],
+        ["MVVM", "Data binding propojuje View a ViewModel"],
+        ["Vícevrstvá architektura", "Presentation → Business → Data Layer"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Mikroservisní architektura je vždy lepší volba než monolit, protože umožňuje nezávislé škálování služeb.",
+      "answer": false,
+      "explanation": "Mikroservisy přinášejí výhody (nezávislé škálování, různé technologie), ale také složitost (síťová komunikace, orchestrace, distributed debugging). Pro jednoduché projekty je monolit jednodušší a rychlejší na vývoj."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o MVC architektuře:",
+      "text": "V MVC {{Model}} spravuje data a business logiku, {{View}} zobrazuje uživatelské rozhraní a {{Controller}} zprostředkovává komunikaci mezi nimi a zpracovává uživatelské vstupy.",
+      "answers": ["Model", "View", "Controller"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky TCP komunikace klient-server ve správném pořadí:",
+      "items": [
+        "Server: socket() → bind() → listen()",
+        "Klient: socket() → connect()",
+        "Server: accept() — přijetí spojení",
+        "Výměna dat: send() / recv()",
+        "Uzavření: close()"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Porovnej klient-server a P2P architekturu. Uveď příklady použití každé z nich.",
+      "keywords": ["centralizovaná", "decentralizovaná", "BitTorrent", "blockchain", "server", "uzel"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď vlastnost k typu architektury (monolit vs mikroservisy):",
+      "pairs": [
+        ["Nasazení celé aplikace najednou", "Monolit"],
+        ["Nezávislé služby s různými jazyky/DB", "Mikroservisy"],
+        ["Na začátku jednodušší vývoj", "Monolit"],
+        ["Škálování jednotlivých služeb zvlášť", "Mikroservisy"]
+      ]
+    }
+  ]
+}

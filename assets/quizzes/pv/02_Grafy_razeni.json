@@ -1,0 +1,54 @@
+{
+  "title": "Grafy, průchody grafem, řadicí algoritmy",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď algoritmus průchodu grafem k datové struktuře, kterou používá:",
+      "pairs": [
+        ["BFS", "Fronta (FIFO)"],
+        ["DFS", "Zásobník (LIFO) / rekurze"],
+        ["Dijkstra", "Prioritní fronta (heap)"],
+        ["Topologické řazení", "DFS s post-order zpracováním"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Quick Sort je stabilní řadicí algoritmus s garantovanou složitostí O(n log n).",
+      "answer": false,
+      "explanation": "Quick Sort NENÍ stabilní (nemění pořadí stejných prvků) a jeho worst-case složitost je O(n²), nikoli O(n log n). Pouze průměrná složitost je O(n log n)."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky BFS algoritmu ve správném pořadí:",
+      "items": [
+        "Vlož startovní uzel do fronty a označ jako navštívený",
+        "Vyber první uzel z fronty (popleft/dequeue)",
+        "Zpracuj aktuální uzel",
+        "Přidej všechny nenavštívené sousedy do fronty",
+        "Opakuj dokud není fronta prázdná"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň vlastnosti řadicích algoritmů:",
+      "text": "Merge Sort má složitost {{O(n log n)}} ve všech případech a je {{stabilní}}, ale potřebuje O(n) extra paměti. Bubble Sort má nejhorší složitost {{O(n²)}}, ale v nejlepším případě (seřazené pole) je O(n).",
+      "answers": ["O(n log n)", "stabilní", "O(n²)"]
+    },
+    {
+      "type": "open",
+      "prompt": "Kdy je vhodné použít matici sousednosti a kdy seznam sousednosti pro reprezentaci grafu? Uveď příklady.",
+      "keywords": ["řídký", "hustý", "paměť", "O(V²)", "O(V+E)", "hrana"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď reprezentaci grafu k její paměťové složitosti:",
+      "pairs": [
+        ["Matice sousednosti", "O(V²)"],
+        ["Seznam sousednosti", "O(V+E)"],
+        ["Seznam hran", "O(E)"],
+        ["BFS/DFS průchod", "O(V+E) časová složitost"]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "title": "OSI 5, 6, 7 – Vyšší vrstvy",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď funkci ke správné OSI vrstvě (5, 6 nebo 7):",
+      "pairs": [
+        ["Řízení dialogu a správa relací", "Vrstva 5 (Relační)"],
+        ["Šifrování a komprese dat", "Vrstva 6 (Prezentační)"],
+        ["Rozhraní pro uživatele a síťové služby", "Vrstva 7 (Aplikační)"],
+        ["Převod formátů dat a kódování", "Vrstva 6 (Prezentační)"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky workflow TCP serveru v soketovém programování:",
+      "items": ["socket()", "bind()", "listen()", "accept()", "recv()/send()", "close()"]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o typech šifrování:",
+      "text": "U {{symetrického}} šifrování se použije stejný klíč pro šifrování i dešifrování (např. AES). U {{asymetrického}} šifrování se používá pár klíčů – veřejný a {{privátní}}.",
+      "answers": ["symetrického", "asymetrického", "privátní"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "V modelu AAA písmeno Authorization znamená ověření identity uživatele (kdo jsi?).",
+      "answer": false,
+      "explanation": "Authorization znamená oprávnění (co smíš dělat?). Ověření identity (kdo jsi?) je Authentication. Třetí A – Accounting – je logování činnosti (co jsi dělal?)."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi bezztrátovou a ztrátovou kompresí. Uveď příklady a kdy je která vhodná.",
+      "keywords": ["rekonstruovat", "původní", "ztráta", "JPEG", "ZIP", "kvalita", "multimedia"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď autentizační metodu k jejímu popisu:",
+      "pairs": [
+        ["Ticket-based autentizace v Active Directory", "Kerberos"],
+        ["Delegovaná autorizace přes Google/GitHub", "OAuth 2.0"],
+        ["Centralizovaná autentizace síťových zařízení", "RADIUS / TACACS+"],
+        ["Kombinace: co znám + co mám + co jsem", "2FA / MFA"]
+      ]
+    }
+  ]
+}

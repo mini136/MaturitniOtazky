@@ -1,0 +1,56 @@
+{
+  "title": "Asymptotická složitost algoritmu",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď asymptotickou notaci k jejímu významu:",
+      "pairs": [
+        ["O (Big-O)", "Horní mez — worst case (nejvýše)"],
+        ["Ω (Omega)", "Dolní mez — best case (alespoň)"],
+        ["Θ (Theta)", "Přesná mez — tight bound (přesně)"],
+        ["Amortizovaná složitost", "Průměr přes sérii operací"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Výraz O(3n² + 5n + 7) se zjednodušuje na O(n²), protože konstanty a nižší řády se ignorují.",
+      "answer": true,
+      "explanation": "Při Big-O analýze se ignorují konstanty (3 se zahodí) a dominuje nejvyšší řád (n² dominuje nad 5n a 7). Proto O(3n² + 5n + 7) = O(n²)."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď složitosti od nejrychlejší po nejpomalejší:",
+      "items": [
+        "O(1) — konstantní",
+        "O(log n) — logaritmická",
+        "O(n) — lineární",
+        "O(n log n) — linearitmická",
+        "O(n²) — kvadratická",
+        "O(2ⁿ) — exponenciální",
+        "O(n!) — faktoriální"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň typické složitosti algoritmů:",
+      "text": "Binární vyhledávání má složitost {{O(log n)}}, protože v každém kroku půlí prohledávaný interval. Dva vnořené cykly přes pole dávají {{O(n²)}}. Merge Sort má ve všech případech {{O(n log n)}}.",
+      "answers": ["O(log n)", "O(n²)", "O(n log n)"]
+    },
+    {
+      "type": "open",
+      "prompt": "Co je amortizovaná složitost? Vysvětli na příkladu list.append() v Pythonu.",
+      "keywords": ["průměr", "série operací", "realokace", "O(1)", "O(n)", "zdvojnásobení"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď operaci/algoritmus k její typické složitosti:",
+      "pairs": [
+        ["Přístup k prvku pole indexem", "O(1)"],
+        ["Binární vyhledávání", "O(log n)"],
+        ["Bubble Sort (worst case)", "O(n²)"],
+        ["Naivní rekurzivní Fibonacci", "O(2ⁿ)"]
+      ]
+    }
+  ]
+}

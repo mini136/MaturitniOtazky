@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01 - OS Linux - Charakteristika, struktura OS</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>01 – OS Linux – Charakteristika, struktura OS, start systému, služby, procesy, paměť, balíčkovací systém</h1>
+
+    <h2>Charakteristika Linuxu</h2>
+    <ul>
+        <li><strong>Open-source</strong> operační systém založený na UNIXu</li>
+        <li>Vytvořil <strong>Linus Torvalds</strong> v roce 1991 (jádro)</li>
+        <li><strong>Multiplatformní</strong> – běží na x86, ARM, MIPS, RISC-V…</li>
+        <li><strong>Multitasking</strong> – souběžné provádění více procesů</li>
+        <li><strong>Multiuser</strong> – více uživatelů současně</li>
+        <li>Licencován pod <strong>GPL (GNU General Public License)</strong></li>
+        <li>Distribuce: Ubuntu, Debian, Fedora, CentOS/RHEL, Arch Linux, openSUSE</li>
+    </ul>
+
+    <h2>Struktura operačního systému</h2>
+    <h3>Vrstvy OS</h3>
+    <table>
+        <tr><th>Vrstva</th><th>Popis</th></tr>
+        <tr><td><strong>Hardware</strong></td><td>Fyzické komponenty (CPU, RAM, disky, síťové karty)</td></tr>
+        <tr><td><strong>Jádro (Kernel)</strong></td><td>Správa HW, procesy, paměť, I/O, souborové systémy</td></tr>
+        <tr><td><strong>Systémové knihovny</strong></td><td>glibc, libstdc++ – rozhraní mezi aplikacemi a jádrem</td></tr>
+        <tr><td><strong>Systémové nástroje</strong></td><td>Shell (bash, zsh), coreutils, systemd</td></tr>
+        <tr><td><strong>Uživatelské aplikace</strong></td><td>Textové editory, prohlížeče, servery (Apache, Nginx)</td></tr>
+    </table>
+
+    <h3>Typy jádra</h3>
+    <ul>
+        <li><strong>Monolitické jádro</strong> – Linux – vše v jednom prostoru jádra (s modulární podporou)</li>
+        <li><strong>Mikrojádro</strong> – MINIX, QNX – minimální jádro, služby v user space</li>
+        <li><strong>Hybridní</strong> – Windows NT, macOS</li>
+    </ul>
+
+    <h3>Kernel moduly</h3>
+    <pre><code>lsmod              # seznam načtených modulů
+modprobe modul     # načtení modulu
+rmmod modul        # odebrání modulu
+modinfo modul      # informace o modulu</code></pre>
+
+    <h2>Start systému (Boot process)</h2>
+    <h3>Průběh startu</h3>
+    <ol>
+        <li><strong>BIOS/UEFI</strong> – POST (Power-On Self Test), inicializace HW, hledání bootloaderu</li>
+        <li><strong>Bootloader (GRUB2)</strong> – načte jádro a initramfs do RAM
+            <pre><code># Konfigurace: /etc/default/grub
+# Aktualizace: grub-mkconfig -o /boot/grub/grub.cfg
+# nebo: update-grub (Debian/Ubuntu)</code></pre>
+        </li>
+        <li><strong>Jádro (Kernel)</strong> – inicializace HW, připojení root FS, spuštění init procesu</li>
+        <li><strong>initramfs/initrd</strong> – dočasný souborový systém v RAM pro načtení ovladačů</li>
+        <li><strong>Init systém (systemd/SysVinit)</strong> – spuštění služeb a cílů (targets)</li>
+        <li><strong>Login prompt</strong> – přihlašovací obrazovka (getty / display manager)</li>
+    </ol>
+
+    <h3>Systemd targets (runlevels)</h3>
+    <table>
+        <tr><th>Target</th><th>SysVinit ekvivalent</th><th>Popis</th></tr>
+        <tr><td>poweroff.target</td><td>0</td><td>Vypnutí systému</td></tr>
+        <tr><td>rescue.target</td><td>1</td><td>Jednouživatelský režim</td></tr>
+        <tr><td>multi-user.target</td><td>3</td><td>Multiuser bez GUI</td></tr>
+        <tr><td>graphical.target</td><td>5</td><td>Multiuser s GUI</td></tr>
+        <tr><td>reboot.target</td><td>6</td><td>Restart</td></tr>
+    </table>
+    <pre><code>systemctl get-default                    # aktuální výchozí target
+systemctl set-default multi-user.target  # nastavení výchozího</code></pre>
+
+    <h2>Služby (Services)</h2>
+    <p>Spravovány přes <strong>systemd</strong> (aktuálně nejpoužívanější init systém).</p>
+    <pre><code>systemctl start sshd        # spuštění služby
+systemctl stop sshd         # zastavení
+systemctl restart sshd      # restart
+systemctl enable sshd       # automatický start při bootu
+systemctl disable sshd      # zakázání autostartu
+systemctl status sshd       # stav služby
+systemctl list-units --type=service  # seznam služeb</code></pre>
+
+    <h3>Unit soubory</h3>
+    <p>Umístění: <code>/etc/systemd/system/</code> nebo <code>/lib/systemd/system/</code></p>
+    <pre><code>[Unit]
+Description=Moje služba
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/muj-program
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+
+    <h2>Procesy</h2>
+    <h3>Základní pojmy</h3>
+    <ul>
+        <li><strong>PID</strong> – Process ID – unikátní identifikátor procesu</li>
+        <li><strong>PPID</strong> – Parent PID – ID rodičovského procesu</li>
+        <li><strong>Init (PID 1)</strong> – první proces (systemd)</li>
+        <li><strong>Zombie</strong> – ukončený proces, jehož rodič si nevyzvedl exit kód</li>
+        <li><strong>Orphan</strong> – proces, jehož rodič skončil → adoptován init procesem</li>
+        <li><strong>Daemon</strong> – služba běžící na pozadí</li>
+    </ul>
+
+    <h3>Stavy procesů</h3>
+    <table>
+        <tr><th>Stav</th><th>Označení</th><th>Popis</th></tr>
+        <tr><td>Running</td><td>R</td><td>Právě se provádí na CPU</td></tr>
+        <tr><td>Sleeping</td><td>S</td><td>Čeká na událost (přerušitelný)</td></tr>
+        <tr><td>Disk Sleep</td><td>D</td><td>Nepřerušitelný spánek (I/O)</td></tr>
+        <tr><td>Stopped</td><td>T</td><td>Pozastavený (SIGSTOP)</td></tr>
+        <tr><td>Zombie</td><td>Z</td><td>Ukončený, čeká na wait()</td></tr>
+    </table>
+
+    <h3>Práce s procesy</h3>
+    <pre><code>ps aux                  # výpis všech procesů
+ps -ef                  # výpis s hierarchií
+top / htop              # interaktivní monitor
+pstree                  # stromová struktura procesů
+kill PID                # SIGTERM (15) – požádá o ukončení
+kill -9 PID             # SIGKILL (9) – vynucené ukončení
+kill -STOP PID          # pozastavení
+kill -CONT PID          # obnovení
+nice -n 10 program      # spuštění s nižší prioritou
+renice -n 5 -p PID      # změna priority
+jobs                    # úlohy na pozadí
+bg / fg                 # pozadí / popředí
+nohup cmd &             # příkaz přežije odhlášení</code></pre>
+
+    <h2>Paměť</h2>
+    <h3>Typy paměti</h3>
+    <ul>
+        <li><strong>Fyzická paměť (RAM)</strong> – skutečná fyzická paměť</li>
+        <li><strong>Virtuální paměť</strong> – abstrakce nad fyzickou pamětí, pro každý proces zvlášť</li>
+        <li><strong>Swap</strong> – odkládací prostor na disku, když dochází RAM</li>
+        <li><strong>Cache/Buffer</strong> – kernel využívá volnou RAM pro cache diskových operací</li>
+    </ul>
+
+    <h3>Správa paměti</h3>
+    <pre><code>free -h                 # přehled paměti (human-readable)
+cat /proc/meminfo       # detailní info o paměti
+vmstat                  # statistika virtuální paměti
+swapon -s               # swap informace
+swapon /dev/sdXn        # zapnutí swapu
+swapoff /dev/sdXn       # vypnutí swapu</code></pre>
+
+    <h3>OOM Killer</h3>
+    <p><strong>Out-Of-Memory Killer</strong> – mechanismus jádra, který při nedostatku paměti zabije proces s nejvyšším „OOM score", aby systém přežil.</p>
+    <pre><code># Nastavení OOM score adjustmentu
+echo -1000 > /proc/PID/oom_score_adj   # ochrana procesu
+echo 1000 > /proc/PID/oom_score_adj    # priorita zabití</code></pre>
+
+    <h2>Balíčkovací systém</h2>
+    <h3>Debian/Ubuntu – APT (dpkg)</h3>
+    <pre><code>apt update              # aktualizace seznamu balíčků
+apt upgrade             # upgrade instalovaných balíčků
+apt install balicek     # instalace
+apt remove balicek      # odinstalace
+apt search balicek      # hledání
+dpkg -i balicek.deb     # ruční instalace .deb
+dpkg -l                 # seznam instalovaných</code></pre>
+
+    <h3>RHEL/CentOS/Fedora – DNF (rpm)</h3>
+    <pre><code>dnf update              # aktualizace
+dnf install balicek     # instalace
+dnf remove balicek      # odinstalace
+dnf search balicek      # hledání
+rpm -ivh balicek.rpm    # ruční instalace .rpm
+rpm -qa                 # seznam instalovaných</code></pre>
+
+    <h3>Arch Linux – pacman</h3>
+    <pre><code>pacman -Syu             # synchronizace + upgrade
+pacman -S balicek       # instalace
+pacman -R balicek       # odinstalace
+pacman -Ss balicek      # hledání</code></pre>
+
+    <h3>Srovnání balíčkovacích systémů</h3>
+    <table>
+        <tr><th>Distribuce</th><th>Nízkoúrovňový</th><th>Vysokoúrovňový</th><th>Formát</th></tr>
+        <tr><td>Debian/Ubuntu</td><td>dpkg</td><td>apt</td><td>.deb</td></tr>
+        <tr><td>RHEL/Fedora</td><td>rpm</td><td>dnf/yum</td><td>.rpm</td></tr>
+        <tr><td>Arch</td><td>–</td><td>pacman</td><td>.pkg.tar.zst</td></tr>
+        <tr><td>openSUSE</td><td>rpm</td><td>zypper</td><td>.rpm</td></tr>
+    </table>
+
+    <div class="note">
+        <strong>Poznámka:</strong> Repozitáře se konfigurují v <code>/etc/apt/sources.list</code> (Debian) resp. <code>/etc/yum.repos.d/</code> (RHEL).
+    </div>
+
+    <h3>Univerzální balíčkovací formáty</h3>
+    <ul>
+        <li><strong>Snap</strong> (Canonical) – sandboxed balíčky, <code>snap install balicek</code></li>
+        <li><strong>Flatpak</strong> – desktopové aplikace, <code>flatpak install balicek</code></li>
+        <li><strong>AppImage</strong> – jeden spustitelný soubor, žádná instalace</li>
+    </ul>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

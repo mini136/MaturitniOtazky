@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24 - Výjimky a debugování</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>24 – Výjimky a debugování</h1>
+
+    <h2>Hierarchie výjimek (Python)</h2>
+    <ul>
+        <li><code>BaseException</code>
+            <ul>
+                <li><code>Exception</code>
+                    <ul>
+                        <li><code>ValueError</code>, <code>TypeError</code>, <code>KeyError</code>, <code>IndexError</code></li>
+                        <li><code>IOError</code>, <code>FileNotFoundError</code></li>
+                        <li><code>ZeroDivisionError</code>, <code>AttributeError</code></li>
+                    </ul>
+                </li>
+                <li><code>KeyboardInterrupt</code>, <code>SystemExit</code></li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>Try-Except-Finally</h2>
+    <table>
+        <tr><th>Blok</th><th>Účel</th></tr>
+        <tr><td><code>try</code></td><td>Kód, který může vyhodit výjimku</td></tr>
+        <tr><td><code>except</code></td><td>Zachycení a ošetření výjimky</td></tr>
+        <tr><td><code>else</code></td><td>Provede se, pokud výjimka nenastala</td></tr>
+        <tr><td><code>finally</code></td><td>Provede se VŽDY (cleanup)</td></tr>
+    </table>
+
+    <h2>Assertions vs Exceptions</h2>
+    <table>
+        <tr><th></th><th>Assertion</th><th>Exception</th></tr>
+        <tr><td>Účel</td><td>Kontrola programátorských chyb</td><td>Ošetření běhových chyb</td></tr>
+        <tr><td>Produkce</td><td>Lze vypnout (<code>-O</code> flag)</td><td>Vždy aktivní</td></tr>
+        <tr><td>Použití</td><td>Invarianty, preconditions</td><td>Vstup uživatele, I/O</td></tr>
+    </table>
+
+    <h2>Logging vs Print</h2>
+    <table>
+        <tr><th></th><th>print()</th><th>logging</th></tr>
+        <tr><td>Úrovně</td><td>Žádné</td><td>DEBUG, INFO, WARNING, ERROR, CRITICAL</td></tr>
+        <tr><td>Výstup</td><td>Jen stdout</td><td>Soubor, konzole, síť</td></tr>
+        <tr><td>Produkce</td><td>Nutno ručně mazat</td><td>Konfigurovatelné úrovně</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Základní try-except-else-finally</strong> — kompletní ukázka: <code>else</code> se provede jen bez výjimky, <code>finally</code> vždy.</div>
+    <pre><code>def bezpecne_deleni(a, b):
+    try:
+        vysledek = a / b
+    except ZeroDivisionError:
+        print("  Deleni nulou!")
+        return None
+    except TypeError as e:
+        print(f"  Spatny typ: {e}")
+        return None
+    else:
+        print(f"  Vysledek: {vysledek}")
+        return vysledek
+    finally:
+        print("  Finally blok (vzdy se provede)")
+
+bezpecne_deleni(10, 3)
+bezpecne_deleni(10, 0)
+bezpecne_deleni("a", 2)</code></pre>
+
+    <div class="code-desc"><strong>Vlastní výjimky</strong> — hierarchie validačních chyb: <code>ValidacniChyba</code> jako základ, <code>VekChyba</code> a <code>JmenoChyba</code> jako specifické podtřídy.</div>
+    <pre><code>class ValidacniChyba(Exception):
+    """Zakladni validacni chyba"""
+    def __init__(self, zprava, pole=None):
+        super().__init__(zprava)
+        self.pole = pole
+
+class VekChyba(ValidacniChyba):
+    def __init__(self, vek):
+        super().__init__(f"Neplatny vek: {vek}", pole="vek")
+        self.vek = vek
+
+class JmenoChyba(ValidacniChyba):
+    def __init__(self, jmeno):
+        super().__init__(f"Neplatne jmeno: '{jmeno}'", pole="jmeno")
+
+def validuj_studenta(jmeno, vek):
+    if not jmeno or len(jmeno) &lt; 2:
+        raise JmenoChyba(jmeno)
+    if not isinstance(vek, int) or vek &lt; 15 or vek &gt; 99:
+        raise VekChyba(vek)
+    return {"jmeno": jmeno, "vek": vek}
+
+# Zachyceni
+for jmeno, vek in [("Alice", 20), ("", 20), ("Bob", 10)]:
+    try:
+        student = validuj_studenta(jmeno, vek)
+        print(f"  OK: {student}")
+    except JmenoChyba as e:
+        print(f"  Chyba jmena: {e} (pole: {e.pole})")
+    except VekChyba as e:
+        print(f"  Chyba veku: {e} (vek: {e.vek})")</code></pre>
+
+    <div class="code-desc"><strong>Exception chaining</strong> — <code>raise ... from e</code> zachovává původní výjimku jako příčinu. Umožňuje trasovat řetěz chyb při debugování.</div>
+    <pre><code>def nacti_konfiguraci(cesta):
+    try:
+        with open(cesta) as f:
+            return f.read()
+    except FileNotFoundError as e:
+        raise RuntimeError(f"Konfigurace '{cesta}' chybi!") from e
+
+try:
+    nacti_konfiguraci("neexistuje.conf")
+except RuntimeError as e:
+    print(f"  Chyba: {e}")
+    print(f"  Pricina: {e.__cause__}")</code></pre>
+
+    <div class="code-desc"><strong>Assertions</strong> — preconditions (vstupní podmínky), postconditions (výstupní podmínky) a invarianty (podmínky platné po celou dobu). Lze vypnout s <code>python -O</code>.</div>
+    <pre><code>def faktorial(n):
+    # Precondition
+    assert isinstance(n, int) and n &gt;= 0, f"n musi byt nezaporne cele cislo, dostali jsme {n}"
+
+    vysledek = 1
+    for i in range(2, n + 1):
+        vysledek *= i
+
+    # Postcondition
+    assert vysledek &gt; 0, "Faktorial musi byt kladny"
+    return vysledek
+
+print(f"  5! = {faktorial(5)}")   # 120
+
+# Invariant v datove strukture
+class SerazenyBuffer:
+    def __init__(self):
+        self._data = []
+
+    def vloz(self, hodnota):
+        self._data.append(hodnota)
+        self._data.sort()
+        # Invariant: data musi byt serazena
+        assert all(self._data[i] &lt;= self._data[i+1]
+                   for i in range(len(self._data)-1)), "Buffer neni serazeny!"
+
+    def __repr__(self):
+        return str(self._data)
+
+buf = SerazenyBuffer()
+for x in [5, 2, 8, 1]:
+    buf.vloz(x)
+print(f"  Buffer: {buf}")  # [1, 2, 5, 8]</code></pre>
+
+    <div class="code-desc"><strong>Logging</strong> — konfigurace loggeru s formatováním, úrovněmi a výstupem do konzole. Každý level má jiný účel (DEBUG pro vývoj, ERROR pro chyby).</div>
+    <pre><code>import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+    datefmt='%H:%M:%S'
+)
+logger = logging.getLogger("MojeApp")
+
+logger.debug("Detailni info pro vyvoj")
+logger.info("Bezna informace")
+logger.warning("Varovani - neco by mohlo byt spatne")
+logger.error("Chyba - neco selhalo")
+logger.critical("Kriticka chyba - aplikace konci")</code></pre>
+
+    <div class="code-desc"><strong>Context manager pro cleanup</strong> — třída <code>Databaze</code> implementuje <code>__enter__</code>/<code>__exit__</code>. Spojení se uzavře i při výjimce.</div>
+    <pre><code>class Databaze:
+    """Context manager pro automaticky cleanup"""
+    def __init__(self, nazev):
+        self.nazev = nazev
+        self.pripojeno = False
+
+    def __enter__(self):
+        print(f"  Pripojuji k DB '{self.nazev}'...")
+        self.pripojeno = True
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(f"  Odpojuji od DB '{self.nazev}'")
+        self.pripojeno = False
+        if exc_type:
+            print(f"  Chyba: {exc_val}")
+        return False  # nepotlacuje vyjimku
+
+# Pouziti
+with Databaze("studenti_db") as db:
+    print(f"  Pripojeno: {db.pripojeno}")
+    # db operace...</code></pre>
+
+    <div class="code-desc"><strong>Debugging tipy</strong> — f-string s <code>=</code> pro rychlý výpis proměnných, <code>traceback</code> modul pro detailní výpis zásobníku volání.</div>
+    <pre><code>import traceback
+
+# F-string debugging (Python 3.8+)
+x = 42
+y = "hello"
+print(f"  {x=}, {y=}")        # x=42, y='hello'
+
+# Traceback
+try:
+    1 / 0
+except:
+    print("  Traceback:")
+    traceback.print_exc()</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

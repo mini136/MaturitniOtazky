@@ -1,0 +1,48 @@
+{
+  "title": "IMAP a SMTP – Odesílání a přijímání e-mailů",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď e-mailový protokol k jeho funkci a portu (TLS):",
+      "pairs": [
+        ["Odesílání e-mailů (klient → server)", "SMTP – port 587/465"],
+        ["Synchronizace a příjem e-mailů na serveru", "IMAP – port 993"],
+        ["Stažení e-mailů do klienta a smazání ze serveru", "POP3 – port 995"],
+        ["Přenos e-mailů mezi servery (relay)", "SMTP – port 25"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď cestu e-mailu od odeslání po doručení:",
+      "items": ["Odesílatel (MUA) připraví e-mail", "MUA odešle e-mail přes SMTP (port 587) na Mail Server A (MTA)", "MTA A přepošle přes SMTP (port 25) na Mail Server B (MTA)", "MDA doručí e-mail do schránky příjemce", "Příjemce (MUA) stáhne e-mail přes IMAP (port 993)"]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o SMTP a IMAP:",
+      "text": "SMTP příkaz {{EHLO}} zahajuje komunikaci s oznámením schopností serveru. Příkaz {{DATA}} začíná tělo zprávy a končí se tečkou na samostatném řádku. IMAP příkaz {{IDLE}} umožňuje push notifikace o nových e-mailech.",
+      "answers": ["EHLO", "DATA", "IDLE"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "IMAP je výhodnější než POP3 pro uživatele, kteří přistupují ke své schránce z více zařízení, protože e-maily zůstávají na serveru a stav je synchronizován.",
+      "answer": true,
+      "explanation": "IMAP uchovává e-maily na serveru a synchronizuje stav (přečteno, označeno, složky) mezi všemi klienty. POP3 typicky stahuje e-maily do jednoho klienta a maže je ze serveru, takže ostatní zařízení je nevidí."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, jak SPF, DKIM a DMARC spolupracují při ochraně proti e-mailovému spoofingu.",
+      "keywords": ["DNS", "TXT", "podpis", "ověření", "politika", "doména", "odesílatel"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď bezpečnostní mechanismus e-mailu k jeho popisu:",
+      "pairs": [
+        ["DNS TXT záznam – které servery smí odesílat za doménu", "SPF"],
+        ["Digitální podpis hlaviček e-mailu", "DKIM"],
+        ["End-to-end šifrování e-mailů pomocí certifikátů", "S/MIME"],
+        ["Kombinace SPF + DKIM + politika (reject/quarantine)", "DMARC"]
+      ]
+    }
+  ]
+}

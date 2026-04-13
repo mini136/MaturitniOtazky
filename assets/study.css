@@ -1,0 +1,138 @@
+/* Shared study UI for question pages */
+.study-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4f9ff;
+    border: 1px solid #cfe3ff;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 16px 0 20px;
+}
+
+.study-toolbar .left,
+.study-toolbar .right {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.study-badge {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1d4ed8;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.study-btn {
+    border: 1px solid #93c5fd;
+    background: #ffffff;
+    color: #1e3a8a;
+    border-radius: 8px;
+    padding: 7px 11px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.study-btn:hover {
+    background: #eff6ff;
+}
+
+.study-note {
+    color: #334155;
+    font-size: 0.9rem;
+}
+
+.comment-section {
+    margin-top: 26px;
+    border: 1px solid #d9e8ff;
+    border-radius: 10px;
+    background: #f8fbff;
+    padding: 16px;
+}
+
+.comment-section h2 {
+    margin-top: 0;
+    color: #1e40af;
+    border-bottom: 1px solid #bfdbfe;
+    padding-bottom: 8px;
+}
+
+.comment-form {
+    display: grid;
+    gap: 10px;
+}
+
+.comment-form .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.comment-form label {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.92rem;
+}
+
+.comment-form input,
+.comment-form select,
+.comment-form textarea {
+    width: 100%;
+    margin-top: 4px;
+    border: 1px solid #bfdbfe;
+    border-radius: 7px;
+    padding: 8px 10px;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.comment-form textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.comment-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0 0;
+}
+
+.comment-item {
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+
+.comment-meta {
+    font-size: 0.84rem;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+@media (max-width: 680px) {
+    .comment-form .row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media print {
+    .study-toolbar,
+    .comment-section {
+        display: none !important;
+    }
+}

@@ -1,0 +1,51 @@
+{
+  "title": "Datové struktury",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď datovou strukturu k jejímu principu přístupu:",
+      "pairs": [
+        ["Stack (zásobník)", "LIFO — poslední dovnitř, první ven"],
+        ["Queue (fronta)", "FIFO — první dovnitř, první ven"],
+        ["BST (binární vyhledávací strom)", "Levý podstrom < kořen < pravý podstrom"],
+        ["Hash tabulka", "Klíč → hash funkce → index v poli"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň složitosti operací datových struktur:",
+      "text": "Přístup k prvku pole podle indexu má složitost O({{1}}). Vyhledání v linked listu má složitost O({{n}}). Vyhledání v BST má průměrnou složitost O({{log n}}). Push a pop na stacku mají složitost O({{1}}).",
+      "answers": ["1", "n", "log n", "1"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď operace vložení prvku do MinHeapu:",
+      "items": [
+        "Přidej prvek na konec pole (poslední pozice)",
+        "Porovnej s rodičem na pozici (i-1)/2",
+        "Pokud je menší než rodič, prohoď je",
+        "Opakuj porovnání s novým rodičem (bubble up)",
+        "Zastav, když je prvek větší než rodič nebo je v kořeni"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Linked List je vždy lepší volba než pole, protože vkládání prvků má složitost O(1).",
+      "answer": false,
+      "explanation": "Linked list má O(1) vkládání jen pokud máme referenci na uzel (např. na začátek). Přístup podle indexu je O(n), oproti O(1) u pole. Pole má také lepší cache locality. Volba závisí na operacích — pole je lepší pro náhodný přístup, linked list pro časté vkládání/mazání."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, jak funguje hash tabulka a jak se řeší kolize metodou chaining.",
+      "keywords": ["hash funkce", "bucket", "index", "linked list", "kolize", "chaining", "O(1)"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Stack se používá při kontrole správného párování závorek ve výrazu.",
+      "answer": true,
+      "explanation": "Při průchodu výrazem se otevírací závorky pushují na stack. Při uzavírací závorce se popne poslední otevírací a ověří, zda tvoří pár. Na konci musí být stack prázdný — jinak závorky nejsou správně spárované."
+    }
+  ]
+}

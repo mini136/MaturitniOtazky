@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>18 - DHCPv6</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>18 – DHCPv6 – Funkce, konfigurace, použití</h1>
+
+    <h2>Přehled metod konfigurace IPv6</h2>
+    <p>Na rozdíl od IPv4, kde je DHCP primární cestou, IPv6 nabízí <strong>více metod</strong> automatické konfigurace:</p>
+
+    <table>
+        <tr><th>Metoda</th><th>Adresa</th><th>DNS / ostatní</th><th>Řízení</th></tr>
+        <tr><td><strong>SLAAC</strong></td><td>Automaticky (prefix z RA + EUI-64/random)</td><td>Z RA (RDNSS) nebo ne</td><td>Router (RA)</td></tr>
+        <tr><td><strong>Stateless DHCPv6</strong></td><td>SLAAC</td><td>Z DHCPv6 serveru</td><td>Router (RA) + DHCPv6</td></tr>
+        <tr><td><strong>Stateful DHCPv6</strong></td><td>Z DHCPv6 serveru</td><td>Z DHCPv6 serveru</td><td>DHCPv6 server</td></tr>
+        <tr><td><strong>Statická</strong></td><td>Ruční</td><td>Ruční</td><td>Admin</td></tr>
+    </table>
+
+    <h3>Router Advertisement příznaky</h3>
+    <table>
+        <tr><th>Příznak</th><th>Hodnota</th><th>Výsledek</th></tr>
+        <tr><td><strong>A flag</strong> (Autonomous)</td><td>1 (default)</td><td>Klient si vytvoří adresu přes SLAAC</td></tr>
+        <tr><td><strong>O flag</strong> (Other Config)</td><td>1</td><td>Klient kontaktuje DHCPv6 pro <em>další info</em> (DNS atd.)</td></tr>
+        <tr><td><strong>M flag</strong> (Managed Config)</td><td>1</td><td>Klient získá <em>adresu</em> z DHCPv6 (stateful)</td></tr>
+    </table>
+
+    <pre><code>A=1, M=0, O=0 → Čisté SLAAC (žádný DHCPv6)
+A=1, M=0, O=1 → SLAAC + Stateless DHCPv6 (adresa SLAAC, DNS z DHCPv6)
+M=1, O=1      → Stateful DHCPv6 (adresa i DNS z DHCPv6)</code></pre>
+
+    <h2>SLAAC (Stateless Address Autoconfiguration)</h2>
+    <ol>
+        <li>Klient pošle <strong>Router Solicitation (RS)</strong> na <code>ff02::2</code></li>
+        <li>Router odpoví <strong>Router Advertisement (RA)</strong> s prefixem (typicky /64)</li>
+        <li>Klient vytvoří adresu: <strong>prefix + Interface ID</strong> (EUI-64 nebo random)</li>
+        <li>Klient provede <strong>DAD</strong> (Duplicate Address Detection)</li>
+        <li>Link-local adresa (<code>fe80::</code>) se vytvoří automaticky vždy</li>
+    </ol>
+
+    <h2>Stateless DHCPv6</h2>
+    <p>Adresa přes SLAAC, ale <strong>DNS, NTP a další parametry</strong> z DHCPv6 serveru.</p>
+
+    <h3>Konfigurace – Cisco router</h3>
+    <pre><code>! Router nastaví O flag
+interface GigabitEthernet0/0
+  ipv6 address 2001:db8:1::1/64
+  ipv6 nd other-config-flag              ! O=1 → kontaktuj DHCPv6 pro DNS
+  no shutdown
+
+! DHCPv6 pool (stateless – žádné adresy, jen parametry)
+ipv6 dhcp pool STATELESS_POOL
+  dns-server 2001:4860:4860::8888       ! Google DNS
+  domain-name firma.local
+
+interface GigabitEthernet0/0
+  ipv6 dhcp server STATELESS_POOL</code></pre>
+
+    <h2>Stateful DHCPv6</h2>
+    <p>Server přiděluje <strong>plnou IPv6 adresu</strong> i další parametry. Ekvivalent DHCPv4.</p>
+
+    <h3>Proces SARR (Stateful DHCPv6)</h3>
+    <pre><code>Klient                                 Server
+  |                                       |
+  |-- SOLICIT (multicast ff02::1:2) ----->|  1. "Hledám DHCPv6 server"
+  |                                       |     (UDP port 547)
+  |<-------------- ADVERTISE -------------|  2. "Jsem tu, nabízím..."
+  |                                       |
+  |-- REQUEST --------------------------->|  3. "Chci tuto adresu"
+  |                                       |
+  |<-------------- REPLY -----------------|  4. "OK, je tvoje"
+  |                                       |</code></pre>
+
+    <h3>DHCPv6 zprávy</h3>
+    <table>
+        <tr><th>Zpráva</th><th>Popis</th><th>Ekvivalent DHCPv4</th></tr>
+        <tr><td><strong>SOLICIT</strong></td><td>Hledání serveru</td><td>DISCOVER</td></tr>
+        <tr><td><strong>ADVERTISE</strong></td><td>Nabídka od serveru</td><td>OFFER</td></tr>
+        <tr><td><strong>REQUEST</strong></td><td>Žádost o parametry</td><td>REQUEST</td></tr>
+        <tr><td><strong>REPLY</strong></td><td>Odpověď serveru</td><td>ACK</td></tr>
+        <tr><td><strong>RENEW</strong></td><td>Obnova lease (unicast)</td><td>REQUEST (50% lease)</td></tr>
+        <tr><td><strong>REBIND</strong></td><td>Obnova lease (multicast)</td><td>REQUEST (87.5% lease)</td></tr>
+        <tr><td><strong>RELEASE</strong></td><td>Uvolnění adresy</td><td>RELEASE</td></tr>
+        <tr><td><strong>INFORMATION-REQUEST</strong></td><td>Jen parametry (stateless)</td><td>INFORM</td></tr>
+    </table>
+
+    <h3>Konfigurace – Cisco router (Stateful)</h3>
+    <pre><code>! Router nastaví M flag
+interface GigabitEthernet0/0
+  ipv6 address 2001:db8:1::1/64
+  ipv6 nd managed-config-flag            ! M=1 → adresa z DHCPv6
+  ipv6 nd prefix 2001:db8:1::/64 no-autoconfig  ! zakáže SLAAC
+  no shutdown
+
+! DHCPv6 pool (stateful – přiděluje adresy)
+ipv6 dhcp pool STATEFUL_POOL
+  address prefix 2001:db8:1::/64 lifetime 86400 43200
+  dns-server 2001:4860:4860::8888
+  domain-name firma.local
+
+interface GigabitEthernet0/0
+  ipv6 dhcp server STATEFUL_POOL</code></pre>
+
+    <h2>DHCPv6 Prefix Delegation (PD)</h2>
+    <p>ISP přidělí zákazníkovi <strong>celý prefix</strong> (např. /48 nebo /56), zákazníkův router si pak z něj vytváří podsítě /64.</p>
+    <pre><code>! ISP router (delegating router)
+ipv6 dhcp pool ISP_PD
+  prefix-delegation pool CUSTOMER_PREFIXES
+
+ipv6 local pool CUSTOMER_PREFIXES 2001:db8::/32 48
+
+! Zákaznický router (requesting router)
+interface GigabitEthernet0/0
+  ipv6 dhcp client pd MY_PREFIX         ! získej prefix od ISP
+
+interface GigabitEthernet0/1
+  ipv6 address MY_PREFIX ::1/64         ! použij přidělený prefix na LAN</code></pre>
+
+    <h2>DHCPv6 Relay</h2>
+    <pre><code>! Relay na routeru – přeposílání DHCPv6 zpráv
+interface GigabitEthernet0/0
+  ipv6 dhcp relay destination 2001:db8:10::5    ! DHCPv6 server</code></pre>
+
+    <h2>Srovnání DHCPv4 vs. DHCPv6</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>DHCPv4</th><th>DHCPv6</th></tr>
+        <tr><td>Proces</td><td>DORA</td><td>SARR</td></tr>
+        <tr><td>Transport</td><td>UDP 67/68</td><td>UDP 546/547</td></tr>
+        <tr><td>Discover/Solicit</td><td>Broadcast (255.255.255.255)</td><td>Multicast (ff02::1:2)</td></tr>
+        <tr><td>Alternativa</td><td>APIPA (169.254.x.x)</td><td>SLAAC</td></tr>
+        <tr><td>Gateway</td><td>Přidělí DHCP</td><td>Z Router Advertisement</td></tr>
+        <tr><td>Identifikace klienta</td><td>MAC / Client ID</td><td>DUID (DHCP Unique Identifier)</td></tr>
+        <tr><td>Prefix Delegation</td><td>Ne</td><td>Ano (PD)</td></tr>
+    </table>
+
+    <div class="important">
+        <strong>Klíčový rozdíl:</strong> DHCPv6 <strong>nepřiděluje výchozí bránu</strong> – klient ji vždy získá z <strong>Router Advertisement</strong>!
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

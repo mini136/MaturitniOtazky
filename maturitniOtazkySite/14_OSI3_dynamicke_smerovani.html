@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14 - OSI 3 - Dynamické směrování (RIP, OSPF)</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>14 – OSI 3 – Dynamické směrování (RIP, OSPF), konfigurace, metriky, AD</h1>
+
+    <h2>Dynamické směrovací protokoly</h2>
+    <p>Routery si <strong>automaticky vyměňují informace o sítích</strong> a hledají nejlepší cesty. Při výpadku spoje se automaticky přepočítají cesty (<strong>konvergence</strong>).</p>
+
+    <h3>Klasifikace</h3>
+    <table>
+        <tr><th>Kritérium</th><th>Typ</th><th>Protokoly</th></tr>
+        <tr><td rowspan="2"><strong>Algoritmus</strong></td><td>Distance Vector</td><td>RIP, EIGRP</td></tr>
+        <tr><td>Link-State</td><td>OSPF, IS-IS</td></tr>
+        <tr><td rowspan="2"><strong>Rozsah</strong></td><td>IGP (Interior Gateway)</td><td>RIP, OSPF, EIGRP, IS-IS</td></tr>
+        <tr><td>EGP (Exterior Gateway)</td><td>BGP</td></tr>
+        <tr><td rowspan="2"><strong>Podpora VLSM</strong></td><td>Classful</td><td>RIPv1</td></tr>
+        <tr><td>Classless</td><td>RIPv2, OSPF, EIGRP</td></tr>
+    </table>
+
+    <h3>Distance Vector vs. Link-State</h3>
+    <table>
+        <tr><th>Vlastnost</th><th>Distance Vector</th><th>Link-State</th></tr>
+        <tr><td>Princip</td><td>Posílá celou tabulku sousedům</td><td>Posílá stav svých linek všem</td></tr>
+        <tr><td>Algoritmus</td><td>Bellman-Ford</td><td>Dijkstra (SPF)</td></tr>
+        <tr><td>Znalost topologie</td><td>Zná jen sousedy</td><td>Kompletní mapa sítě</td></tr>
+        <tr><td>Konvergence</td><td>Pomalá</td><td>Rychlá</td></tr>
+        <tr><td>CPU/RAM</td><td>Nízké nároky</td><td>Vyšší nároky</td></tr>
+        <tr><td>Smyčky</td><td>Náchylné (řeší split horizon, hold-down)</td><td>Bez smyček (SPF)</td></tr>
+    </table>
+
+    <h2>RIP (Routing Information Protocol)</h2>
+    <h3>Vlastnosti</h3>
+    <ul>
+        <li><strong>Distance Vector</strong>, metrika = <strong>počet hopů</strong> (max 15, 16 = unreachable)</li>
+        <li>Aktualizace každých <strong>30 sekund</strong> (celá tabulka)</li>
+        <li>AD = <strong>120</strong></li>
+        <li>Pomalá konvergence</li>
+    </ul>
+
+    <h3>Verze</h3>
+    <table>
+        <tr><th>Vlastnost</th><th>RIPv1</th><th>RIPv2</th><th>RIPng</th></tr>
+        <tr><td>Třídní/Beztřídní</td><td>Classful</td><td>Classless (VLSM)</td><td>Classless</td></tr>
+        <tr><td>Aktualizace</td><td>Broadcast (255.255.255.255)</td><td>Multicast (224.0.0.9)</td><td>Multicast (ff02::9)</td></tr>
+        <tr><td>Autentizace</td><td>Ne</td><td>Ano (MD5)</td><td>IPSec</td></tr>
+        <tr><td>IP verze</td><td>IPv4</td><td>IPv4</td><td>IPv6</td></tr>
+    </table>
+
+    <h3>Ochrana proti smyčkám</h3>
+    <ul>
+        <li><strong>Split Horizon</strong> – nepřeposílej cestu zpět tím rozhraním, odkud jsi ji naučil</li>
+        <li><strong>Route Poisoning</strong> – při výpadku nastav metriku na 16 (nedosažitelné)</li>
+        <li><strong>Poison Reverse</strong> – oznam nedosažitelnost zpět odesílateli</li>
+        <li><strong>Hold-down Timer</strong> – po výpadku čekej, než přijmeš novou cestu (180s)</li>
+    </ul>
+
+    <h3>Konfigurace RIPv2 (Cisco)</h3>
+    <pre><code>router rip
+  version 2
+  network 192.168.1.0
+  network 10.0.0.0
+  no auto-summary           ! důležité pro VLSM
+  passive-interface Gi0/0   ! neodesílej aktualizace na LAN rozhraní
+
+! Ověření
+show ip rip database
+show ip route rip</code></pre>
+
+    <h2>OSPF (Open Shortest Path First)</h2>
+    <h3>Vlastnosti</h3>
+    <ul>
+        <li><strong>Link-State</strong> protokol, algoritmus <strong>Dijkstra (SPF)</strong></li>
+        <li>AD = <strong>110</strong></li>
+        <li>Metrika = <strong>cost</strong> (založena na šířce pásma: cost = 10⁸ / bandwidth v bps)</li>
+        <li>Rychlá konvergence, bez smyček</li>
+        <li>Hierarchický – používá <strong>oblasti (areas)</strong></li>
+        <li>Podporuje VLSM, autentizaci</li>
+    </ul>
+
+    <h3>OSPF metriky (cost)</h3>
+    <table>
+        <tr><th>Linka</th><th>Bandwidth</th><th>Cost (ref. 10⁸)</th></tr>
+        <tr><td>Serial (T1)</td><td>1.544 Mbps</td><td>64</td></tr>
+        <tr><td>Fast Ethernet</td><td>100 Mbps</td><td>1</td></tr>
+        <tr><td>Gigabit Ethernet</td><td>1000 Mbps</td><td>1</td></tr>
+    </table>
+    <div class="note">
+        <strong>Poznámka:</strong> Pro rozlišení FastEthernet a GigE je třeba zvýšit referenční bandwidth: <code>auto-cost reference-bandwidth 10000</code> (v Mbps).
+    </div>
+
+    <h3>OSPF oblasti (Areas)</h3>
+    <ul>
+        <li><strong>Area 0</strong> – backbone, všechny ostatní oblasti se musí připojit k area 0</li>
+        <li>Hierarchie snižuje velikost LSDB a zrychluje konvergenci</li>
+        <li><strong>ABR</strong> (Area Border Router) – router na hranici dvou oblastí</li>
+        <li><strong>ASBR</strong> (AS Boundary Router) – router na hranici OSPF a jiného AS</li>
+    </ul>
+
+    <h3>OSPF operace</h3>
+    <ol>
+        <li><strong>Navázání sousedství</strong> – Hello pakety (multicast 224.0.0.5/6)</li>
+        <li><strong>Výměna LSDB</strong> – LSA (Link-State Advertisements)</li>
+        <li><strong>Výpočet SPF</strong> – Dijkstrův algoritmus → nejkratší strom</li>
+        <li><strong>Naplnění směrovací tabulky</strong></li>
+    </ol>
+
+    <h3>OSPF stavy sousedství</h3>
+    <table>
+        <tr><th>Stav</th><th>Popis</th></tr>
+        <tr><td>Down</td><td>Žádný Hello přijat</td></tr>
+        <tr><td>Init</td><td>Hello přijat, ale nevidím sebe v něm</td></tr>
+        <tr><td>2-Way</td><td>Oboustrannné Hello (vidím sebe) → volba DR/BDR</td></tr>
+        <tr><td>ExStart</td><td>Určení Master/Slave pro výměnu DBD</td></tr>
+        <tr><td>Exchange</td><td>Výměna DBD (Database Description)</td></tr>
+        <tr><td>Loading</td><td>Stahování chybějících LSA (LSR/LSU)</td></tr>
+        <tr><td>Full</td><td>Kompletně synchronizované LSDB → plný soused</td></tr>
+    </table>
+
+    <h3>DR / BDR (Designated Router)</h3>
+    <p>Na multi-access sítích (Ethernet) se volí DR a BDR pro redukci LSA trafficu:</p>
+    <ul>
+        <li>Routery posílají LSA na <strong>224.0.0.6</strong> (All DR Routers)</li>
+        <li>DR distribuuje na <strong>224.0.0.5</strong> (All OSPF Routers)</li>
+        <li>Volba dle: 1. Nejvyšší <strong>priority</strong> (0 = nevolen), 2. Nejvyšší <strong>Router ID</strong></li>
+    </ul>
+
+    <h3>Konfigurace OSPF (Cisco)</h3>
+    <pre><code>router ospf 1                               ! process ID (lokální)
+  router-id 1.1.1.1                         ! manuální Router ID
+  network 192.168.1.0 0.0.0.255 area 0     ! wildcard maska!
+  network 10.0.0.0 0.0.0.3 area 1
+  passive-interface GigabitEthernet0/0      ! neodesílej Hello na LAN
+  auto-cost reference-bandwidth 10000       ! pro rozlišení GigE
+
+interface GigabitEthernet0/0
+  ip ospf priority 100                      ! ovlivnění volby DR
+  ip ospf cost 10                           ! ruční nastavení cost
+
+! Ověření
+show ip ospf neighbor
+show ip ospf interface brief
+show ip ospf database
+show ip route ospf</code></pre>
+
+    <h2>Srovnání RIP vs. OSPF</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>RIP</th><th>OSPF</th></tr>
+        <tr><td>Typ</td><td>Distance Vector</td><td>Link-State</td></tr>
+        <tr><td>Algoritmus</td><td>Bellman-Ford</td><td>Dijkstra (SPF)</td></tr>
+        <tr><td>Metrika</td><td>Hop count (max 15)</td><td>Cost (bandwidth)</td></tr>
+        <tr><td>AD</td><td>120</td><td>110</td></tr>
+        <tr><td>Konvergence</td><td>Pomalá (30s)</td><td>Rychlá</td></tr>
+        <tr><td>Škálovatelnost</td><td>Malé sítě</td><td>Velké sítě</td></tr>
+        <tr><td>VLSM</td><td>Jen RIPv2</td><td>Ano</td></tr>
+        <tr><td>Aktualizace</td><td>Periodické (30s)</td><td>Při změně (triggered)</td></tr>
+        <tr><td>Hierarchie</td><td>Ne (flat)</td><td>Ano (areas)</td></tr>
+    </table>
+
+    <h2>Administrativní vzdálenost – shrnutí</h2>
+    <div class="important">
+        <strong>Klíčové AD hodnoty pro maturitu:</strong> Connected = 0, Static = 1, EIGRP = 90, OSPF = 110, RIP = 120, Unknown = 255.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

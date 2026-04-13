@@ -1,0 +1,54 @@
+{
+  "title": "Integrita a bezpečnost dat, zpracování chyb",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď ACID vlastnost k jejímu popisu:",
+      "pairs": [
+        ["Atomicity", "Transakce je celá nebo vůbec"],
+        ["Consistency", "Data zůstanou v konzistentním stavu"],
+        ["Isolation", "Transakce se navzájem neovlivňují"],
+        ["Durability", "Potvrzená data přežijí výpadek systému"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Parametrizované SQL dotazy (prepared statements) chrání před SQL injection tím, že vstup uživatele se nikdy neinterpretuje jako SQL kód.",
+      "answer": true,
+      "explanation": "Parametrizované dotazy oddělují SQL příkaz od dat. Uživatelský vstup se předá jako parametr (placeholder ?), nikoli jako součást SQL řetězce, takže i škodlivý vstup jako \"admin' OR '1'='1\" se interpretuje jen jako textová hodnota."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň bezpečnostní pojmy:",
+      "text": "{{Autentizace}} ověřuje identitu uživatele (kdo jsi?), zatímco {{autorizace}} ověřuje oprávnění (co smíš?). Hesla by se měla ukládat jako hash s náhodným {{saltem}}, nikdy v plaintextu.",
+      "answers": ["Autentizace", "autorizace", "saltem"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď bezpečnostní útok k jeho obraně:",
+      "pairs": [
+        ["SQL Injection", "Parametrizované dotazy"],
+        ["XSS (Cross-Site Scripting)", "Escapování výstupu"],
+        ["CSRF (Cross-Site Request Forgery)", "CSRF tokeny"],
+        ["Brute Force útok na hesla", "Rate limiting a account lockout"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď úrovně logování od nejméně závažné po nejzávažnější:",
+      "items": [
+        "DEBUG — detailní vývojové informace",
+        "INFO — normální běh aplikace",
+        "WARNING — potenciální problém",
+        "ERROR — chyba, ale aplikace běží dál",
+        "CRITICAL — závažná chyba, aplikace může spadnout"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli strukturu try/except/else/finally v Pythonu. Kdy se provede blok 'else' a kdy 'finally'?",
+      "keywords": ["výjimka", "else", "finally", "bez chyby", "vždy", "cleanup"]
+    }
+  ]
+}

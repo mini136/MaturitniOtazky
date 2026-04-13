@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01 - Správa paměti</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>01 – Správa paměti, alokace paměti, garbage collector</h1>
+
+    <h2>Paměťové segmenty programu</h2>
+    <table>
+        <tr><th>Segment</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><strong>Stack (zásobník)</strong></td><td>Lokální proměnné, parametry, návratové adresy. LIFO, automaticky se alokuje/uvolňuje.</td><td><code>int x = 5;</code></td></tr>
+        <tr><td><strong>Heap (halda)</strong></td><td>Dynamicky alokovaná paměť. Programátor nebo GC ji spravuje.</td><td><code>new Object()</code></td></tr>
+        <tr><td><strong>Data segment</strong></td><td>Globální a statické proměnné.</td><td><code>static int count;</code></td></tr>
+        <tr><td><strong>Code segment</strong></td><td>Strojový kód programu (read-only).</td><td>Instrukce CPU</td></tr>
+    </table>
+
+    <h2>Pointery a reference</h2>
+    <table>
+        <tr><th></th><th>Pointer (C/C++)</th><th>Reference (C#, Java, Python)</th></tr>
+        <tr><td>Přímý přístup k paměti</td><td>Ano</td><td>Ne</td></tr>
+        <tr><td>Aritmetika</td><td>Ano (<code>ptr++</code>)</td><td>Ne</td></tr>
+        <tr><td>Null</td><td><code>NULL</code></td><td><code>null/None</code></td></tr>
+        <tr><td>Bezpečnost</td><td>Nízká</td><td>Vysoká</td></tr>
+    </table>
+
+    <h2>Garbage Collector (GC)</h2>
+
+    <h3>Algoritmy GC</h3>
+    <ul>
+        <li><strong>Mark &amp; Sweep</strong> — označí dosažitelné objekty, ostatní uvolní</li>
+        <li><strong>Generační GC</strong> — rozděluje objekty do generací (Gen0, Gen1, Gen2). Mladé objekty se kontrolují častěji.</li>
+        <li><strong>Reference Counting</strong> (Python) — počítá počet referencí na objekt, při 0 uvolní. Problém s cyklickými referencemi.</li>
+    </ul>
+
+    <h3>Memory Leaks (úniky paměti)</h3>
+    <ul>
+        <li>Zapomenuté event handlery / listenery</li>
+        <li>Statické kolekce rostoucí bez omezení</li>
+        <li>Cyklické reference (v jazycích s ref counting)</li>
+        <li>Neuzavřené streamy/connections</li>
+    </ul>
+
+    <h3>Srovnání jazyků</h3>
+    <table>
+        <tr><th>Jazyk</th><th>Správa paměti</th><th>GC</th></tr>
+        <tr><td>C/C++</td><td>Manuální (<code>malloc/free</code>, <code>new/delete</code>)</td><td>Ne</td></tr>
+        <tr><td>Java</td><td>Automatická</td><td>Generační GC (JVM)</td></tr>
+        <tr><td>C#</td><td>Automatická</td><td>Generační GC (.NET CLR)</td></tr>
+        <tr><td>Python</td><td>Automatická</td><td>Reference counting + cyklický GC</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — C# (hodnota vs reference, GC, IDisposable)</h2>
+
+    <div class="code-desc">Ukázka hodnotových vs referenčních typů v C#. Struct <code>Bod</code> je hodnotový typ (kopie), class <code>Osoba</code> je referenční typ (sdílí data).</div>
+    <pre><code>// === HODNOTOVE vs REFERENCNI TYPY ===
+struct Bod {
+    public int X, Y;
+    public Bod(int x, int y) { X = x; Y = y; }
+    public override string ToString() =&gt; $"({X}, {Y})";
+}
+
+class Osoba {
+    public string Jmeno;
+    public int Vek;
+}
+
+// Hodnotovy typ - kopie
+Bod b1 = new Bod(1, 2);
+Bod b2 = b1;        // KOPIE hodnot
+b2.X = 99;
+// b1.X je stale 1 — nezmenilo se!
+
+// Referencni typ - sdilena reference
+Osoba o1 = new Osoba { Jmeno = "Alice", Vek = 25 };
+Osoba o2 = o1;      // SDILENA reference
+o2.Vek = 30;
+// o1.Vek je ted 30 — zmena se projevila!</code></pre>
+
+    <div class="code-desc">Generace GC v C# — objekty se posouvají z Gen0 do Gen2. Metoda <code>GC.Collect()</code> vynutí GC.</div>
+    <pre><code>// Generace GC
+object obj = new object();
+Console.WriteLine($"Generace: {GC.GetGeneration(obj)}"); // 0
+
+GC.Collect();
+Console.WriteLine($"Po GC: {GC.GetGeneration(obj)}");    // 1
+
+GC.Collect();
+Console.WriteLine($"Po 2x GC: {GC.GetGeneration(obj)}"); // 2</code></pre>
+
+    <div class="code-desc">WeakReference umožňuje odkazovat na objekt, který může GC uvolnit. IDisposable vzor pro deterministické uvolnění prostředků.</div>
+    <pre><code>// WeakReference - slaba reference (GC muze uvolnit)
+var silna = new object();
+var slaba = new WeakReference(silna);
+silna = null;
+GC.Collect();
+Console.WriteLine($"Slaba reference zije: {slaba.IsAlive}"); // False
+
+// IDisposable vzor — using blok zajisti uvolneni
+class SpravceProstedku : IDisposable {
+    private bool disposed = false;
+    public void Dispose() {
+        if (!disposed) {
+            Console.WriteLine("  Uvolnuji prostredky...");
+            disposed = true;
+        }
+        GC.SuppressFinalize(this);
+    }
+    ~SpravceProstedku() { Dispose(); }
+}
+
+using (var sp = new SpravceProstedku()) {
+    Console.WriteLine("  Pouzivam prostredky...");
+} // Dispose() se zavola automaticky</code></pre>
+
+    <h2>Ukázkový kód — Python (reference counting, cyklické reference)</h2>
+
+    <div class="code-desc">Reference counting v Pythonu — <code>sys.getrefcount()</code> ukazuje počet referencí. Při dosažení 0 se objekt uvolní.</div>
+    <pre><code>import sys
+
+a = [1, 2, 3]
+print(f"Pocet referenci: {sys.getrefcount(a)}")  # 2 (a + argument getrefcount)
+
+b = a      # dalsi reference
+print(f"Po b = a: {sys.getrefcount(a)}")         # 3
+
+del b      # smazeme referenci
+print(f"Po del b: {sys.getrefcount(a)}")         # 2</code></pre>
+
+    <div class="code-desc">Identita objektu (<code>id()</code>) a rozdíl mezi mutable/immutable typy. Mutable objekty sdílejí identitu při přiřazení.</div>
+    <pre><code># Identita objektu
+x = [1, 2, 3]
+y = x            # stejna reference
+z = [1, 2, 3]   # novy objekt
+
+print(f"x is y: {x is y}")  # True  (stejna reference)
+print(f"x is z: {x is z}")  # False (jina reference, stejny obsah)
+print(f"x == z: {x == z}")  # True  (stejny obsah)
+
+# Mutable vs Immutable
+a = 42           # immutable (int)
+b = a
+b = 100          # vytvori NOVY objekt
+print(f"a = {a}")  # 42 — nezmeneno
+
+c = [1, 2, 3]   # mutable (list)
+d = c
+d.append(4)      # meni STEJNY objekt
+print(f"c = {c}")  # [1, 2, 3, 4] — zmeneno!</code></pre>
+
+    <div class="code-desc">Cyklické reference mezi objekty. Python <code>gc</code> modul dokáže detekovat a sbírat cyklické reference.</div>
+    <pre><code>import gc
+
+class Uzel:
+    def __init__(self, nazev):
+        self.nazev = nazev
+        self.soused = None
+
+# Cyklicka reference
+a = Uzel("A")
+b = Uzel("B")
+a.soused = b
+b.soused = a
+
+del a, b  # reference counting nestaci (cyklus)!
+gc.collect()  # cyklicky GC je sebere</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

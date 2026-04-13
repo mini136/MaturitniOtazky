@@ -1,0 +1,48 @@
+{
+  "title": "DHCPv6 – Funkce, konfigurace, použití",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď kombinaci RA příznaků ke správné metodě konfigurace IPv6:",
+      "pairs": [
+        ["A=1, M=0, O=0", "Čisté SLAAC"],
+        ["A=1, M=0, O=1", "SLAAC + Stateless DHCPv6"],
+        ["M=1, O=1", "Stateful DHCPv6"],
+        ["Klient si sám vytvoří adresu z prefixu + EUI-64", "SLAAC"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky procesu SARR u Stateful DHCPv6:",
+      "items": ["SOLICIT – klient hledá DHCPv6 server (multicast ff02::1:2)", "ADVERTISE – server se hlásí a nabízí", "REQUEST – klient žádá o adresu", "REPLY – server potvrzuje přidělení"]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o DHCPv6:",
+      "text": "DHCPv6 používá UDP porty {{546}} (klient) a {{547}} (server). Na rozdíl od DHCPv4, DHCPv6 {{nepřiděluje}} výchozí bránu – tu klient získá z {{Router Advertisement}}.",
+      "answers": ["546", "547", "nepřiděluje", "Router Advertisement"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Při SLAAC klient posílá Router Solicitation na broadcastovou adresu 255.255.255.255, stejně jako u DHCPv4 Discover.",
+      "answer": false,
+      "explanation": "IPv6 nepoužívá broadcast. Router Solicitation se posílá na multicastovou adresu ff02::2 (all routers). DHCPv4 Discover používá IPv4 broadcast 255.255.255.255, ale SLAAC je čistě IPv6 mechanismus využívající NDP (Neighbor Discovery Protocol)."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi Stateless a Stateful DHCPv6 – co každý režim přiděluje a jak se liší role routeru a DHCPv6 serveru.",
+      "keywords": ["SLAAC", "adresa", "DNS", "parametry", "O flag", "M flag", "prefix"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď DHCPv6 zprávu k jejímu ekvivalentu v DHCPv4:",
+      "pairs": [
+        ["SOLICIT", "DISCOVER"],
+        ["ADVERTISE", "OFFER"],
+        ["REPLY", "ACK"],
+        ["INFORMATION-REQUEST", "INFORM"]
+      ]
+    }
+  ]
+}

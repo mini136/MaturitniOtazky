@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>23 - SSL/TLS, RSA, šifrování</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>23 – Bezpečnost a šifrování: SSL/TLS, RSA</h1>
+
+    <h2>Symetrické šifrování</h2>
+    <h3>Princip</h3>
+    <p><strong>Stejný klíč</strong> pro šifrování i dešifrování. Rychlé, ale problém s distribucí klíče.</p>
+    <pre><code>Plaintext → [Šifrování, klíč K] → Ciphertext → [Dešifrování, klíč K] → Plaintext</code></pre>
+
+    <h3>Algoritmy</h3>
+    <table>
+        <tr><th>Algoritmus</th><th>Typ</th><th>Délka klíče</th><th>Stav</th></tr>
+        <tr><td><strong>AES</strong></td><td>Bloková (128b bloky)</td><td>128/192/256 bit</td><td>✅ Standard (doporučený)</td></tr>
+        <tr><td><strong>ChaCha20</strong></td><td>Proudová</td><td>256 bit</td><td>✅ Moderní (Google, TLS 1.3)</td></tr>
+        <tr><td>3DES</td><td>Bloková (64b bloky)</td><td>168 bit</td><td>⚠️ Zastaralý</td></tr>
+        <tr><td>DES</td><td>Bloková (64b bloky)</td><td>56 bit</td><td>❌ Prolomen</td></tr>
+        <tr><td>RC4</td><td>Proudová</td><td>40-2048 bit</td><td>❌ Prolomen</td></tr>
+    </table>
+
+    <h3>Režimy AES</h3>
+    <table>
+        <tr><th>Režim</th><th>Popis</th></tr>
+        <tr><td><strong>ECB</strong></td><td>Každý blok šifrován nezávisle – ❌ nebezpečný (viditelné vzory)</td></tr>
+        <tr><td><strong>CBC</strong></td><td>Každý blok XORován s předchozím ciphertextem – dobrý, ale sekvenční</td></tr>
+        <tr><td><strong>CTR</strong></td><td>Counter mode – paralelizovatelný, efektivní</td></tr>
+        <tr><td><strong>GCM</strong></td><td>CTR + autentizace (GHASH) – ✅ doporučený (TLS 1.3)</td></tr>
+    </table>
+
+    <h2>Asymetrické šifrování</h2>
+    <h3>Princip</h3>
+    <p>Dva klíče: <strong>veřejný</strong> (šifrování) a <strong>privátní</strong> (dešifrování). Řeší problém distribuce klíčů.</p>
+    <pre><code>Šifrování:    Plaintext → [Šifrování, veřejný klíč příjemce] → Ciphertext
+Dešifrování:  Ciphertext → [Dešifrování, privátní klíč příjemce] → Plaintext
+
+Digitální podpis:
+  Podpis:     Hash(data) → [Šifrování, privátní klíč odesílatele] → Podpis
+  Ověření:    Podpis → [Dešifrování, veřejný klíč odesílatele] → Hash → porovnání</code></pre>
+
+    <h3>RSA (Rivest–Shamir–Adleman)</h3>
+    <ul>
+        <li>Nejznámější asymetrický algoritmus</li>
+        <li>Bezpečnost založena na <strong>obtížnosti faktorizace velkých prvočísel</strong></li>
+        <li>Typicky <strong>2048 nebo 4096 bit</strong> klíč</li>
+        <li>Pomalejší než symetrické → používá se pro <strong>výměnu klíčů</strong> a <strong>digitální podpisy</strong></li>
+    </ul>
+
+    <h3>Princip RSA (zjednodušeně)</h3>
+    <pre><code>1. Zvol 2 velká prvočísla: p, q
+2. Vypočítej n = p × q (modulus)
+3. Vypočítej φ(n) = (p-1)(q-1)
+4. Zvol veřejný exponent e (typicky 65537)
+5. Vypočítej privátní exponent d: e × d ≡ 1 (mod φ(n))
+
+Veřejný klíč:  (n, e)
+Privátní klíč: (n, d)
+
+Šifrování:   C = M^e mod n
+Dešifrování: M = C^d mod n</code></pre>
+
+    <h3>Další asymetrické algoritmy</h3>
+    <table>
+        <tr><th>Algoritmus</th><th>Popis</th><th>Použití</th></tr>
+        <tr><td><strong>Diffie-Hellman (DH)</strong></td><td>Výměna sdíleného tajemství přes nezabezpečený kanál</td><td>Key exchange</td></tr>
+        <tr><td><strong>ECDH / ECDHE</strong></td><td>DH na eliptických křivkách (Ephemeral = dočasný klíč)</td><td>TLS key exchange</td></tr>
+        <tr><td><strong>ECDSA</strong></td><td>Digitální podpisy na eliptických křivkách</td><td>Podpisy, certifikáty</td></tr>
+        <tr><td><strong>Ed25519</strong></td><td>Moderní podpisový algoritmus (Curve25519)</td><td>SSH klíče, podpisy</td></tr>
+    </table>
+
+    <h2>Hash funkce</h2>
+    <p>Jednosměrná funkce → z dat vytvoří <strong>otisk fixní délky</strong>. Nelze zpětně rekonstruovat.</p>
+    <table>
+        <tr><th>Algoritmus</th><th>Výstup</th><th>Stav</th></tr>
+        <tr><td>MD5</td><td>128 bit</td><td>❌ Prolomen (kolize)</td></tr>
+        <tr><td>SHA-1</td><td>160 bit</td><td>❌ Prolomen</td></tr>
+        <tr><td><strong>SHA-256</strong></td><td>256 bit</td><td>✅ Standard</td></tr>
+        <tr><td><strong>SHA-3</strong></td><td>224–512 bit</td><td>✅ Nový standard</td></tr>
+    </table>
+
+    <h2>SSL/TLS</h2>
+    <h3>Přehled</h3>
+    <ul>
+        <li><strong>SSL</strong> (Secure Sockets Layer) – zastaralý, vytvořen Netscape (SSL 2.0, 3.0)</li>
+        <li><strong>TLS</strong> (Transport Layer Security) – nástupce SSL, aktuální verze <strong>TLS 1.3</strong></li>
+        <li>Zajišťuje: <strong>důvěrnost</strong> (šifrování), <strong>integritu</strong> (MAC/HMAC), <strong>autenticitu</strong> (certifikáty)</li>
+    </ul>
+
+    <h3>Verze</h3>
+    <table>
+        <tr><th>Verze</th><th>Rok</th><th>Stav</th></tr>
+        <tr><td>SSL 2.0 / 3.0</td><td>1995/1996</td><td>❌ Zastaralý, nebezpečný</td></tr>
+        <tr><td>TLS 1.0</td><td>1999</td><td>❌ Zastaralý</td></tr>
+        <tr><td>TLS 1.1</td><td>2006</td><td>❌ Zastaralý</td></tr>
+        <tr><td>TLS 1.2</td><td>2008</td><td>✅ Stále používaný</td></tr>
+        <tr><td><strong>TLS 1.3</strong></td><td>2018</td><td>✅ Doporučený (rychlejší, bezpečnější)</td></tr>
+    </table>
+
+    <h2>TLS Handshake (TLS 1.2)</h2>
+    <pre><code>Klient                                    Server
+  |                                          |
+  |-- ClientHello --------------------------->|  Verze, cipher suites, random
+  |                                          |
+  |<--- ServerHello + Certificate -----------|  Vybraný cipher, certifikát (veřejný klíč)
+  |<--- ServerKeyExchange (pokud DH) --------|
+  |<--- ServerHelloDone ---------------------|
+  |                                          |
+  |-- ClientKeyExchange --------------------->|  Pre-master secret (šifrovaný veřejným klíčem)
+  |-- ChangeCipherSpec ---------------------->|  "Přepínám na šifrování"
+  |-- Finished (šifrovaně) ----------------->|
+  |                                          |
+  |<--- ChangeCipherSpec --------------------|
+  |<--- Finished (šifrovaně) ----------------|
+  |                                          |
+  |===== ŠIFROVANÁ KOMUNIKACE ==============|
+
+2 RTT (round trips) pro TLS 1.2</code></pre>
+
+    <h3>TLS 1.3 Handshake (zrychlený)</h3>
+    <pre><code>Klient                                    Server
+  |                                          |
+  |-- ClientHello + KeyShare ---------------->|  1 RTT!
+  |                                          |
+  |<--- ServerHello + KeyShare --------------|
+  |<--- EncryptedExtensions + Certificate ---|
+  |<--- Finished ----------------------------|
+  |                                          |
+  |-- Finished ------------------------------>|
+  |                                          |
+  |===== ŠIFROVANÁ KOMUNIKACE ==============|
+
+Pouze 1 RTT! (+ 0-RTT resumption – volitelný)</code></pre>
+
+    <h3>Vylepšení TLS 1.3</h3>
+    <ul>
+        <li>Pouze bezpečné cipher suites (AEAD: AES-GCM, ChaCha20-Poly1305)</li>
+        <li>Odstraněny: RSA key exchange (bez forward secrecy), CBC režim, SHA-1, RC4, 3DES</li>
+        <li>Povinný ECDHE → <strong>Perfect Forward Secrecy</strong></li>
+        <li>1 RTT handshake (oproti 2 RTT v TLS 1.2)</li>
+    </ul>
+
+    <h2>Certifikační autority (CA)</h2>
+    <h3>Řetězec důvěry</h3>
+    <pre><code>Root CA (self-signed) → důvěřuje software (prohlížeč, OS)
+    ↓ podepíše
+Intermediate CA
+    ↓ podepíše
+Server certificate (www.example.com)</code></pre>
+
+    <h3>X.509 certifikát obsahuje</h3>
+    <ul>
+        <li>Doménové jméno (Subject / SAN)</li>
+        <li>Veřejný klíč serveru</li>
+        <li>Vydavatel (Issuer) – CA</li>
+        <li>Platnost (Not Before / Not After)</li>
+        <li>Digitální podpis CA</li>
+        <li>Sériové číslo</li>
+    </ul>
+
+    <h3>Let's Encrypt</h3>
+    <p>Bezplatná automatická CA – ACME protokol, DV (Domain Validation) certifikáty.</p>
+
+    <h2>Cipher Suite (příklad TLS 1.2)</h2>
+    <pre><code>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+
+TLS       – protokol
+ECDHE     – key exchange (Ephemeral Elliptic Curve Diffie-Hellman)
+RSA       – autentizace (podpis certifikátu)
+AES_256   – symetrické šifrování (256-bit)
+GCM       – režim šifrování (Galois/Counter Mode → AEAD)
+SHA384    – hash pro HMAC / PRF</code></pre>
+
+    <div class="important">
+        <strong>Pro maturitu:</strong> Symetrické = AES (rychlé, šifrování dat). Asymetrické = RSA/ECDH (výměna klíčů, podpisy). TLS = kombinace obou. TLS 1.3 = 1 RTT, povinný forward secrecy. Certifikát = veřejný klíč serveru podepsaný CA.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

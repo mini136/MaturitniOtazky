@@ -1,0 +1,48 @@
+{
+  "title": "Technologie, které přežily změny ICT",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď technologii k důvodu, proč nepřežila:",
+      "pairs": [
+        ["Token Ring", "Nákladný, proprietární (IBM), složitý – nahrazen Ethernetem"],
+        ["Telnet", "Nešifrovaný – nahrazen SSH"],
+        ["IPX/SPX", "Proprietární (Novell) – nahrazen TCP/IP"],
+        ["WEP", "Prolomen – nahrazen WPA2/WPA3"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o klíčových technologiích:",
+      "text": "Ethernet vznikl v roce {{1973}} a dnes dosahuje rychlosti {{400 Gbps}}. TCP/IP navrhl {{Vint Cerf}} a Bob Kahn na základě projektu ARPANET. BGP propojuje přes {{70 000}} autonomních systémů po celém internetu.",
+      "answers": ["1973", "400 Gbps", "Vint Cerf", "70 000"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď evoluce HTTP protokolu od nejstarší po nejnovější verzi:",
+      "items": ["HTTP/1.0 (jedno spojení na požadavek)", "HTTP/1.1 (keep-alive, pipelining)", "HTTP/2 (multiplexing, binární, header compression)", "HTTP/3 (QUIC přes UDP, 0-RTT)"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Hlavní důvod přežití TCP/IP je to, že jde o proprietární technologii jedné firmy, která ji neustále vyvíjí.",
+      "answer": false,
+      "explanation": "TCP/IP přežil právě díky tomu, že jde o otevřený standard. Otevřenost umožnila širokou adopci, nezávislost na jednom dodavateli a komunitní vývoj. Proprietární protokoly jako IPX/SPX naopak zanikly."
+    },
+    {
+      "type": "open",
+      "prompt": "Uveď obecné principy, díky kterým technologie přežijí desítky let vývoje ICT. Popiš alespoň tři konkrétní principy s příklady.",
+      "keywords": ["otevřené standardy", "zpětná kompatibilita", "škálovatelnost", "adaptabilita", "síťový efekt", "jednoduchost"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď technologii k roku jejího vzniku:",
+      "pairs": [
+        ["Ethernet (Robert Metcalfe, Xerox PARC)", "1973"],
+        ["DNS (Paul Mockapetris)", "1983"],
+        ["SSH (Tatu Ylönen)", "1995"],
+        ["HTTP/WWW (Tim Berners-Lee, CERN)", "1991"]
+      ]
+    }
+  ]
+}

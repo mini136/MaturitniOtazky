@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11 - OSI 3 - IPv4, maska, podsíťování, fragmentace</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>11 – OSI 3 – IPv4, maska, podsíťování, porovnání s IPv6, fragmentace</h1>
+
+    <h2>IPv4 adresa</h2>
+    <h3>Základní vlastnosti</h3>
+    <ul>
+        <li><strong>32 bitů</strong> (4 bajty), zapsáno v tečkové desítkové notaci: <code>192.168.1.10</code></li>
+        <li>Adresní prostor: 2³² = ~4,3 miliardy adres</li>
+        <li>Skládá se z <strong>síťové části</strong> a <strong>hostitelské části</strong></li>
+    </ul>
+
+    <h3>IPv4 hlavička</h3>
+    <table>
+        <tr><th>Pole</th><th>Bity</th><th>Popis</th></tr>
+        <tr><td>Version</td><td>4</td><td>Verze IP (4)</td></tr>
+        <tr><td>IHL</td><td>4</td><td>Délka hlavičky (v 32b slovech)</td></tr>
+        <tr><td>ToS/DSCP</td><td>8</td><td>Typ služby (QoS)</td></tr>
+        <tr><td>Total Length</td><td>16</td><td>Celková délka paketu (max 65535 B)</td></tr>
+        <tr><td>Identification</td><td>16</td><td>ID fragmentu</td></tr>
+        <tr><td>Flags</td><td>3</td><td>DF (Don't Fragment), MF (More Fragments)</td></tr>
+        <tr><td>Fragment Offset</td><td>13</td><td>Pozice fragmentu v původním paketu</td></tr>
+        <tr><td>TTL</td><td>8</td><td>Time to Live – max. počet hopů</td></tr>
+        <tr><td>Protocol</td><td>8</td><td>Protokol vyšší vrstvy (6=TCP, 17=UDP, 1=ICMP)</td></tr>
+        <tr><td>Header Checksum</td><td>16</td><td>Kontrolní součet hlavičky</td></tr>
+        <tr><td>Source IP</td><td>32</td><td>Zdrojová IP adresa</td></tr>
+        <tr><td>Destination IP</td><td>32</td><td>Cílová IP adresa</td></tr>
+    </table>
+
+    <h3>Třídy IP adres (historické)</h3>
+    <table>
+        <tr><th>Třída</th><th>Rozsah</th><th>Výchozí maska</th><th>Sítí / Hostů</th></tr>
+        <tr><td>A</td><td>1.0.0.0 – 126.255.255.255</td><td>/8</td><td>126 sítí / 16M hostů</td></tr>
+        <tr><td>B</td><td>128.0.0.0 – 191.255.255.255</td><td>/16</td><td>16384 sítí / 65534 hostů</td></tr>
+        <tr><td>C</td><td>192.0.0.0 – 223.255.255.255</td><td>/24</td><td>2M sítí / 254 hostů</td></tr>
+        <tr><td>D</td><td>224.0.0.0 – 239.255.255.255</td><td>–</td><td>Multicast</td></tr>
+        <tr><td>E</td><td>240.0.0.0 – 255.255.255.255</td><td>–</td><td>Rezervováno</td></tr>
+    </table>
+
+    <h3>Privátní adresy (RFC 1918)</h3>
+    <table>
+        <tr><th>Rozsah</th><th>CIDR</th><th>Třída</th></tr>
+        <tr><td>10.0.0.0 – 10.255.255.255</td><td>10.0.0.0/8</td><td>A</td></tr>
+        <tr><td>172.16.0.0 – 172.31.255.255</td><td>172.16.0.0/12</td><td>B</td></tr>
+        <tr><td>192.168.0.0 – 192.168.255.255</td><td>192.168.0.0/16</td><td>C</td></tr>
+    </table>
+
+    <h3>Speciální adresy</h3>
+    <ul>
+        <li><code>127.0.0.0/8</code> – loopback (localhost)</li>
+        <li><code>169.254.0.0/16</code> – APIPA (automatická při selhání DHCP)</li>
+        <li><code>0.0.0.0</code> – výchozí cesta / nespecifikovaná adresa</li>
+        <li><code>255.255.255.255</code> – omezený broadcast</li>
+    </ul>
+
+    <h2>Maska podsítě</h2>
+    <p>Maska odděluje <strong>síťovou část</strong> od <strong>hostitelské části</strong> IP adresy.</p>
+
+    <h3>CIDR notace</h3>
+    <table>
+        <tr><th>CIDR</th><th>Maska</th><th>Hostů</th><th>Použitelných</th></tr>
+        <tr><td>/24</td><td>255.255.255.0</td><td>256</td><td>254</td></tr>
+        <tr><td>/25</td><td>255.255.255.128</td><td>128</td><td>126</td></tr>
+        <tr><td>/26</td><td>255.255.255.192</td><td>64</td><td>62</td></tr>
+        <tr><td>/27</td><td>255.255.255.224</td><td>32</td><td>30</td></tr>
+        <tr><td>/28</td><td>255.255.255.240</td><td>16</td><td>14</td></tr>
+        <tr><td>/29</td><td>255.255.255.248</td><td>8</td><td>6</td></tr>
+        <tr><td>/30</td><td>255.255.255.252</td><td>4</td><td>2</td></tr>
+        <tr><td>/32</td><td>255.255.255.255</td><td>1</td><td>1 (host route)</td></tr>
+    </table>
+    <p>Počet hostů = 2^(32 - prefix) - 2 (síťová adresa + broadcast)</p>
+
+    <h2>Podsíťování (Subnetting)</h2>
+    <h3>Příklad: Rozděl 192.168.1.0/24 na 4 podsítě</h3>
+    <pre><code>Potřebujeme 4 podsítě → 2² = 4 → potřeba 2 bity navíc → /26
+
+Podsíť 1: 192.168.1.0/26    (0–63)     Rozsah hostů: .1 – .62,   Broadcast: .63
+Podsíť 2: 192.168.1.64/26   (64–127)   Rozsah hostů: .65 – .126, Broadcast: .127
+Podsíť 3: 192.168.1.128/26  (128–191)  Rozsah hostů: .129 – .190, Broadcast: .191
+Podsíť 4: 192.168.1.192/26  (192–255)  Rozsah hostů: .193 – .254, Broadcast: .255
+
+Každá podsíť má 62 použitelných adres.</code></pre>
+
+    <h3>Postup podsíťování</h3>
+    <ol>
+        <li>Zjistit kolik podsítí/hostů potřebujeme</li>
+        <li>Vypočítat nový prefix: pro N podsítí potřebujeme ⌈log₂(N)⌉ bitů navíc</li>
+        <li>Nebo pro H hostů: prefix = 32 - ⌈log₂(H+2)⌉</li>
+        <li>Spočítat rozsahy: velikost bloku = 2^(32-prefix)</li>
+    </ol>
+
+    <h3>VLSM (Variable Length Subnet Masking)</h3>
+    <p>Umožňuje používat <strong>různé velikosti podsítí</strong> z jednoho adresního bloku. Přiřazujeme od největší podsítě po nejmenší.</p>
+
+    <h2>Porovnání IPv4 vs. IPv6</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>IPv4</th><th>IPv6</th></tr>
+        <tr><td>Délka adresy</td><td>32 bitů</td><td>128 bitů</td></tr>
+        <tr><td>Zápis</td><td>Desítkový (192.168.1.1)</td><td>Hexadecimální (2001:db8::1)</td></tr>
+        <tr><td>Adresní prostor</td><td>~4,3 miliardy</td><td>~3,4 × 10³⁸</td></tr>
+        <tr><td>Hlavička</td><td>Variabilní (20–60 B)</td><td>Fixní (40 B)</td></tr>
+        <tr><td>Broadcast</td><td>Ano</td><td>Ne (nahrazeno multicastem)</td></tr>
+        <tr><td>ARP</td><td>Ano</td><td>Ne (NDP – Neighbor Discovery)</td></tr>
+        <tr><td>DHCP</td><td>Nutný / APIPA</td><td>SLAAC / DHCPv6</td></tr>
+        <tr><td>NAT</td><td>Běžný</td><td>Zpravidla nepotřeba</td></tr>
+        <tr><td>Fragmentace</td><td>Routery i odesílatel</td><td>Pouze odesílatel</td></tr>
+        <tr><td>IPSec</td><td>Volitelný</td><td>Integrovaný (původně povinný)</td></tr>
+        <tr><td>Checksum v hlavičce</td><td>Ano</td><td>Ne (řeší vyšší vrstvy)</td></tr>
+    </table>
+
+    <h2>Fragmentace (IPv4)</h2>
+    <h3>Proč fragmentace</h3>
+    <p>Když je paket větší než <strong>MTU</strong> (Maximum Transmission Unit) odchozího spoje (typicky 1500 B Ethernet), musí být rozdělen na menší fragmenty.</p>
+
+    <h3>Fragmentační pole v hlavičce</h3>
+    <ul>
+        <li><strong>Identification</strong> – společné ID pro všechny fragmenty jednoho paketu</li>
+        <li><strong>MF (More Fragments)</strong> – 1 = následují další fragmenty, 0 = poslední fragment</li>
+        <li><strong>DF (Don't Fragment)</strong> – 1 = nefragmentovat (při překročení MTU vrátí ICMP „Fragmentation Needed")</li>
+        <li><strong>Fragment Offset</strong> – pozice fragmentu (v 8B jednotkách)</li>
+    </ul>
+
+    <h3>Příklad fragmentace</h3>
+    <pre><code>Paket: 4000 B dat, MTU = 1500 B
+
+Fragment 1: Offset=0,    MF=1, Data=1480 B
+Fragment 2: Offset=185,  MF=1, Data=1480 B    (185 × 8 = 1480)
+Fragment 3: Offset=370,  MF=0, Data=1040 B    (370 × 8 = 2960)
+
+Celkem: 1480 + 1480 + 1040 = 4000 B</code></pre>
+
+    <h3>Path MTU Discovery</h3>
+    <p>Mechanismus pro zjištění nejmenšího MTU na cestě. Odesílatel nastaví DF=1, pokud router nemůže přeposlat vrátí ICMP Type 3 Code 4 (Destination Unreachable, Fragmentation Needed) s MTU. Odesílatel zmenší pakety.</p>
+
+    <div class="note">
+        <strong>Poznámka:</strong> Fragmentace snižuje výkon (režie na přeskládání) a zvyšuje riziko ztráty dat (ztráta jednoho fragmentu = ztráta celého paketu). Proto je preferováno Path MTU Discovery.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

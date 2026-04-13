@@ -1,0 +1,54 @@
+{
+  "title": "Programovací jazyky, kompilace, interpretace",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď jazyk ke způsobu překladu:",
+      "pairs": [
+        ["C, C++, Rust", "Kompilace — celý kód přeložen do strojového kódu"],
+        ["Python, Ruby", "Interpretace — řádek po řádku"],
+        ["Java (JVM)", "JIT — bytecode kompilován za běhu"],
+        ["C# (CLR)", "JIT — IL code kompilován za běhu"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o typování a runtime prostředích:",
+      "text": "Python má {{dynamické}} typování — typ proměnné se určuje za běhu. Java má {{statické}} typování — typ se určuje při kompilaci. V CPythonu omezuje paralelní provádění vláken mechanismus zvaný {{GIL}}.",
+      "answers": ["dynamické", "statické", "GIL"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Duck typing v Pythonu znamená, že funkce může pracovat s jakýmkoli objektem, který má požadované metody, bez ohledu na jeho typ.",
+      "answer": true,
+      "explanation": "Duck typing říká: 'If it walks like a duck and quacks like a duck, it's a duck.' Funkce volá metodu na objektu a nezáleží na tom, jaké třídy je — stačí, že metodu má."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď fáze překladu a spuštění Java programu:",
+      "items": [
+        "Napsání zdrojového kódu (.java)",
+        "Kompilace do bytecodu (.class)",
+        "Spuštění JVM",
+        "JIT kompilace hotspotů do strojového kódu",
+        "Provedení optimalizovaného kódu"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, jak fungují generátory v Pythonu a jakou výhodu mají oproti seznamům.",
+      "keywords": ["yield", "líné vyhodnocování", "paměť", "nekonečná sekvence", "generator"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď koncept k jeho popisu:",
+      "pairs": [
+        ["Dekorátor", "Funkce obalující jinou funkci, přidává chování"],
+        ["Generator expression", "Líné vyhodnocování, nezabírá paměť předem"],
+        ["String pool (Java)", "Sdílení stejných řetězců v paměti JVM"],
+        ["Bytecode", "Mezikód mezi zdrojovým a strojovým kódem"]
+      ]
+    }
+  ]
+}

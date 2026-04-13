@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16 - Soubory a serializace</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>16 – Soubory a serializace</h1>
+
+    <h2>Formáty serializace</h2>
+    <table>
+        <tr><th>Formát</th><th>Typ</th><th>Použití</th></tr>
+        <tr><td><strong>JSON</strong></td><td>Textový</td><td>API, konfigurace</td></tr>
+        <tr><td><strong>XML</strong></td><td>Textový</td><td>Konfigurace, SOAP</td></tr>
+        <tr><td><strong>CSV</strong></td><td>Textový</td><td>Tabulková data</td></tr>
+        <tr><td><strong>YAML</strong></td><td>Textový</td><td>Konfigurace (Docker, K8s)</td></tr>
+        <tr><td><strong>Pickle</strong></td><td>Binární</td><td>Python objekty (interní)</td></tr>
+        <tr><td><strong>Binary (struct)</strong></td><td>Binární</td><td>Nízkoúrovňová data, protokoly</td></tr>
+    </table>
+
+    <div class="important"><strong>Bezpečnost:</strong> Nikdy nedealujte <code>pickle.load()</code> z nedůvěryhodného zdroje — může spustit libovolný kód!</div>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Textové soubory</strong> — zápis (<code>'w'</code>) a čtení (<code>'r'</code>) pomocí <code>with</code> (automatické zavření). Mode <code>'a'</code> pro přidání na konec.</div>
+    <pre><code>import os
+
+# Zapis do souboru
+with open("test.txt", "w", encoding="utf-8") as f:
+    f.write("Prvni radek\n")
+    f.write("Druhy radek\n")
+    f.writelines(["Treti\n", "Ctvrty\n"])
+
+# Cteni celeho souboru
+with open("test.txt", "r", encoding="utf-8") as f:
+    obsah = f.read()
+    print(obsah)
+
+# Cteni po radcich (setrne k pameti)
+with open("test.txt", "r", encoding="utf-8") as f:
+    for radek in f:
+        print(f"  Radek: {radek.strip()}")
+
+os.remove("test.txt")</code></pre>
+
+    <div class="code-desc"><strong>JSON</strong> — serializace slovníku do JSON stringu a zpět. <code>json.dumps()</code> pro řetězec, <code>json.dump()</code> pro soubor. Parametr <code>ensure_ascii=False</code> pro české znaky.</div>
+    <pre><code>import json
+
+data = {
+    "jmeno": "Alice",
+    "vek": 20,
+    "predmety": ["PV", "DS", "WA"],
+    "aktivni": True
+}
+
+# Do souboru
+with open("student.json", "w", encoding="utf-8") as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
+
+# Ze souboru
+with open("student.json", "r", encoding="utf-8") as f:
+    nacteno = json.load(f)
+    print(f"  JSON: {nacteno}")
+
+# Do/z retezce
+json_str = json.dumps(data, ensure_ascii=False)
+zpet = json.loads(json_str)
+
+os.remove("student.json")</code></pre>
+
+    <div class="code-desc"><strong>CSV</strong> — čtení a zápis tabulkových dat. <code>DictWriter</code> zapisuje slovníky s hlavičkou, <code>DictReader</code> čte řádky jako slovníky.</div>
+    <pre><code>import csv
+
+# Zapis CSV
+studenti = [
+    {"jmeno": "Alice", "vek": 20, "prumer": 1.5},
+    {"jmeno": "Bob", "vek": 22, "prumer": 2.1}
+]
+
+with open("studenti.csv", "w", newline="", encoding="utf-8") as f:
+    writer = csv.DictWriter(f, fieldnames=["jmeno", "vek", "prumer"])
+    writer.writeheader()
+    writer.writerows(studenti)
+
+# Cteni CSV
+with open("studenti.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        print(f"  {row['jmeno']}: vek={row['vek']}, prumer={row['prumer']}")
+
+os.remove("studenti.csv")</code></pre>
+
+    <div class="code-desc"><strong>XML</strong> — vytvoření XML stromu pomocí <code>ElementTree</code>, zápis do souboru a zpětné parsování s procházením elementů.</div>
+    <pre><code>import xml.etree.ElementTree as ET
+
+# Vytvoreni XML
+root = ET.Element("studenti")
+for jmeno, vek in [("Alice", "20"), ("Bob", "22")]:
+    student = ET.SubElement(root, "student")
+    ET.SubElement(student, "jmeno").text = jmeno
+    ET.SubElement(student, "vek").text = vek
+
+tree = ET.ElementTree(root)
+tree.write("studenti.xml", encoding="utf-8", xml_declaration=True)
+
+# Parsovani XML
+tree = ET.parse("studenti.xml")
+for student in tree.findall("student"):
+    jmeno = student.find("jmeno").text
+    vek = student.find("vek").text
+    print(f"  XML: {jmeno}, vek: {vek}")
+
+os.remove("studenti.xml")</code></pre>
+
+    <div class="code-desc"><strong>Pickle</strong> — binární serializace Python objektů. <strong>POZOR:</strong> nebezpečné pro nedůvěryhodná data! A <strong>struct</strong> — nízkoúrovňové binární pakování (big-endian integer + float).</div>
+    <pre><code>import pickle
+import struct
+
+# Pickle - Python objekty (NEBEZPECNE pro neduveryhodna data!)
+data = {"klice": [1, 2, 3], "vnorene": {"a": True}}
+with open("data.pkl", "wb") as f:
+    pickle.dump(data, f)
+
+with open("data.pkl", "rb") as f:
+    nacteno = pickle.load(f)
+    print(f"  Pickle: {nacteno}")
+os.remove("data.pkl")
+
+# Struct - binarni data
+# &gt;if = big-endian int + float
+packed = struct.pack("&gt;if", 42, 3.14)
+print(f"  Packed: {packed.hex()}")
+
+unpacked = struct.unpack("&gt;if", packed)
+print(f"  Unpacked: {unpacked}")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

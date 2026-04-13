@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19 - ML: Neuronové sítě</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>19 – ML: Neuronové sítě</h1>
+
+    <h2>Aktivační funkce</h2>
+    <table>
+        <tr><th>Funkce</th><th>Vzorec</th><th>Použití</th></tr>
+        <tr><td><strong>Sigmoid</strong></td><td>1 / (1 + e⁻ˣ)</td><td>Výstupní vrstva (binární)</td></tr>
+        <tr><td><strong>ReLU</strong></td><td>max(0, x)</td><td>Skryté vrstvy (nejčastější)</td></tr>
+        <tr><td><strong>Tanh</strong></td><td>(eˣ − e⁻ˣ) / (eˣ + e⁻ˣ)</td><td>Skryté vrstvy</td></tr>
+        <tr><td><strong>Softmax</strong></td><td>eˣⁱ / Σeˣʲ</td><td>Výstupní vrstva (multi-class)</td></tr>
+    </table>
+
+    <h2>Architektura sítě</h2>
+    <ul>
+        <li><strong>Input layer</strong> — počet neuronů = počet příznaků</li>
+        <li><strong>Hidden layers</strong> — extrakce příznaků</li>
+        <li><strong>Output layer</strong> — predikce (1 neuron = regrese/binární, N = multi-class)</li>
+    </ul>
+
+    <h2>Forward &amp; Backpropagation</h2>
+    <ol>
+        <li><strong>Forward pass</strong> — vstup → váhy × vstupy + bias → aktivace → výstup</li>
+        <li><strong>Loss</strong> — porovnání predikce vs skutečnost (MSE, Cross-Entropy)</li>
+        <li><strong>Backward pass</strong> — gradientní sestup po řetězovém pravidle</li>
+        <li><strong>Update</strong> — w = w − lr × gradient</li>
+    </ol>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Perceptron</strong> — nejjednodušší neuronová síť, jeden neuron s sigmoid aktivací. Učí se logický AND gate pomocí gradientního sestupu.</div>
+    <pre><code>import math
+import random
+
+random.seed(42)
+
+class Perceptron:
+    """Jednoduchy perceptron se sigmoid aktivaci"""
+
+    def __init__(self, pocet_vstupu):
+        self.vahy = [random.uniform(-1, 1) for _ in range(pocet_vstupu)]
+        self.bias = random.uniform(-1, 1)
+
+    def sigmoid(self, x):
+        x = max(-500, min(500, x))
+        return 1 / (1 + math.exp(-x))
+
+    def forward(self, vstupy):
+        suma = sum(v * w for v, w in zip(vstupy, self.vahy)) + self.bias
+        return self.sigmoid(suma)
+
+    def train(self, X, y, lr=0.5, epochy=1000):
+        for epocha in range(epochy):
+            celkova_chyba = 0
+            for vstupy, target in zip(X, y):
+                vystup = self.forward(vstupy)
+                chyba = target - vystup
+                celkova_chyba += chyba ** 2
+
+                # Gradient descent
+                for i in range(len(self.vahy)):
+                    self.vahy[i] += lr * chyba * vystup * (1-vystup) * vstupy[i]
+                self.bias += lr * chyba * vystup * (1-vystup)
+
+            if epocha % 200 == 0:
+                print(f"    Epocha {epocha}: chyba={celkova_chyba:.4f}")
+
+# AND gate
+X_and = [[0,0], [0,1], [1,0], [1,1]]
+y_and = [0, 0, 0, 1]
+
+p = Perceptron(2)
+p.train(X_and, y_and, lr=5, epochy=1000)
+for x in X_and:
+    print(f"  AND{x} = {p.forward(x):.3f}")</code></pre>
+
+    <div class="code-desc"><strong>Neuronová síť (XOR)</strong> — dvouvrstvá síť s 4 skrytými neurony řeší nelineární problém XOR. Implementuje kompletní backpropagation se sigmoid aktivací.</div>
+    <pre><code>class NeuralNetwork:
+    """Neuronova sit pro XOR (2-4-1)"""
+
+    def __init__(self):
+        # Skryta vrstva: 4 neurony, 2 vstupy
+        self.w_hidden = [[random.uniform(-1,1) for _ in range(2)] for _ in range(4)]
+        self.b_hidden = [random.uniform(-1,1) for _ in range(4)]
+        # Vystupni vrstva: 1 neuron, 4 vstupy
+        self.w_output = [random.uniform(-1,1) for _ in range(4)]
+        self.b_output = random.uniform(-1,1)
+
+    def sigmoid(self, x):
+        x = max(-500, min(500, x))
+        return 1 / (1 + math.exp(-x))
+
+    def forward(self, vstupy):
+        # Skryta vrstva
+        self.hidden = []
+        for i in range(4):
+            z = sum(vstupy[j]*self.w_hidden[i][j] for j in range(2)) + self.b_hidden[i]
+            self.hidden.append(self.sigmoid(z))
+
+        # Vystupni vrstva
+        z = sum(self.hidden[i]*self.w_output[i] for i in range(4)) + self.b_output
+        self.output = self.sigmoid(z)
+        return self.output
+
+    def train(self, X, y, lr=2, epochy=5000):
+        for epocha in range(epochy):
+            total_loss = 0
+            for vstupy, target in zip(X, y):
+                # Forward
+                pred = self.forward(vstupy)
+                error = target - pred
+                total_loss += error ** 2
+
+                # Backprop - vystupni vrstva
+                d_output = error * pred * (1 - pred)
+                for i in range(4):
+                    self.w_output[i] += lr * d_output * self.hidden[i]
+                self.b_output += lr * d_output
+
+                # Backprop - skryta vrstva
+                for i in range(4):
+                    d_hidden = d_output * self.w_output[i] * self.hidden[i] * (1-self.hidden[i])
+                    for j in range(2):
+                        self.w_hidden[i][j] += lr * d_hidden * vstupy[j]
+                    self.b_hidden[i] += lr * d_hidden
+
+            if epocha % 1000 == 0:
+                print(f"    Epocha {epocha}: loss={total_loss:.4f}")
+
+# XOR - nelinearni problem
+X_xor = [[0,0], [0,1], [1,0], [1,1]]
+y_xor = [0, 1, 1, 0]
+
+nn = NeuralNetwork()
+nn.train(X_xor, y_xor, lr=2, epochy=5000)
+for x in X_xor:
+    print(f"  XOR{x} = {nn.forward(x):.3f}")</code></pre>
+
+    <div class="code-desc"><strong>Softmax klasifikátor</strong> — rozpoznává ručně definované 3×3 cifry (0, 1, 2). Softmax vrstva na výstupu produkuje pravděpodobnostní rozložení přes třídy.</div>
+    <pre><code>class SimpleClassifier:
+    """Klasifikator cislic 3x3 se softmax"""
+
+    def __init__(self, vstup_dim, vystup_dim):
+        self.vahy = [[random.uniform(-0.5, 0.5) for _ in range(vstup_dim)]
+                     for _ in range(vystup_dim)]
+        self.bias = [0.0] * vystup_dim
+
+    def softmax(self, x):
+        max_x = max(x)
+        exp_x = [math.exp(xi - max_x) for xi in x]
+        suma = sum(exp_x)
+        return [e / suma for e in exp_x]
+
+    def forward(self, vstup):
+        logits = []
+        for i in range(len(self.vahy)):
+            z = sum(vstup[j]*self.vahy[i][j] for j in range(len(vstup))) + self.bias[i]
+            logits.append(z)
+        return self.softmax(logits)
+
+    def train(self, X, y_labels, lr=0.1, epochy=500):
+        num_classes = len(self.vahy)
+        for ep in range(epochy):
+            for vstup, label in zip(X, y_labels):
+                probs = self.forward(vstup)
+                # One-hot target
+                target = [1.0 if i == label else 0.0 for i in range(num_classes)]
+                # Gradient
+                for i in range(num_classes):
+                    err = probs[i] - target[i]
+                    for j in range(len(vstup)):
+                        self.vahy[i][j] -= lr * err * vstup[j]
+                    self.bias[i] -= lr * err
+
+# 3x3 cifry: 0, 1, 2
+cifry = {
+    0: [1,1,1, 1,0,1, 1,1,1],  # ramecek
+    1: [0,1,0, 0,1,0, 0,1,0],  # svisla cara
+    2: [1,1,1, 0,1,0, 1,1,1],  # Z-shape
+}
+
+X_digits = list(cifry.values())
+y_digits = list(cifry.keys())
+
+clf = SimpleClassifier(9, 3)
+clf.train(X_digits, y_digits, lr=0.5, epochy=500)
+for cifra, vstup in cifry.items():
+    probs = clf.forward(vstup)
+    pred = probs.index(max(probs))
+    print(f"  Cifra {cifra}: predikce={pred}, pravdepodobnosti={[f'{p:.2f}' for p in probs]}")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

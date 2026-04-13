@@ -1,0 +1,54 @@
+{
+  "title": "Lambda výrazy, delegáty, speciální metody",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď generický delegát v C# k jeho chování:",
+      "pairs": [
+        ["Func<T, TResult>", "Přijímá vstup a vrací hodnotu"],
+        ["Action<T>", "Přijímá vstup, nic nevrací (void)"],
+        ["Predicate<T>", "Přijímá vstup a vrací bool (true/false)"],
+        ["EventHandler<T>", "Delegát pro zpracování událostí (eventů)"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "V Pythonu metoda __str__ a __repr__ slouží ke stejnému účelu a jsou zaměnitelné.",
+      "answer": false,
+      "explanation": "__str__ vrací čitelný řetězec pro uživatele (volá se přes str()/print()), zatímco __repr__ vrací jednoznačnou reprezentaci pro vývojáře a debugger (volá se přes repr()). __repr__ by měl ideálně vracet řetězec, z něhož lze objekt znovu vytvořit."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň syntaxi lambda výrazů v různých jazycích:",
+      "text": "V Pythonu se lambda zapisuje jako {{lambda x, y: x + y}}, v C# jako {{(x, y) => x + y}} a v Javě jako {{(x, y) -> x + y}}.",
+      "answers": ["lambda x, y: x + y", "(x, y) => x + y", "(x, y) -> x + y"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď Python magic methods podle operace, kterou přetěžují (od vytvoření po zrušení):",
+      "items": [
+        "__init__ — konstruktor (inicializace objektu)",
+        "__str__ — řetězcová reprezentace pro uživatele",
+        "__add__ — operátor sčítání (+)",
+        "__eq__ — operátor rovnosti (==)",
+        "__del__ — destruktor (uvolnění objektu)"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi @staticmethod a @classmethod v Pythonu. Kdy použiješ který?",
+      "keywords": ["cls", "self", "třída", "instance", "statický", "class method"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď Python magic method k operaci/funkci, kterou přetěžuje:",
+      "pairs": [
+        ["__len__", "len(obj)"],
+        ["__add__", "obj + other"],
+        ["__enter__ / __exit__", "with blok (context manager)"],
+        ["__eq__", "obj == other"]
+      ]
+    }
+  ]
+}

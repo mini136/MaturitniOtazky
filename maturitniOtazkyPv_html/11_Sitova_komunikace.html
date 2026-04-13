@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11 - Síťová komunikace</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>11 – Síťová komunikace, sockety</h1>
+
+    <h2>TCP vs UDP</h2>
+    <table>
+        <tr><th></th><th>TCP</th><th>UDP</th></tr>
+        <tr><td>Spojení</td><td>Spojované (3-way handshake)</td><td>Bez spojení</td></tr>
+        <tr><td>Spolehlivost</td><td>Garantované doručení, pořadí</td><td>Bez garance</td></tr>
+        <tr><td>Rychlost</td><td>Pomalejší (overhead)</td><td>Rychlejší</td></tr>
+        <tr><td>Použití</td><td>HTTP, SSH, email</td><td>DNS, video streaming, hry</td></tr>
+    </table>
+
+    <h2>Berkeley Socket API</h2>
+    <h3>Životní cyklus soketu</h3>
+    <ol>
+        <li><code>socket()</code> — vytvoření soketu</li>
+        <li><code>bind()</code> — přiřazení adresy a portu (server)</li>
+        <li><code>listen()</code> — naslouchání (server)</li>
+        <li><code>accept()</code> — přijetí spojení (server)</li>
+        <li><code>connect()</code> — připojení k serveru (klient)</li>
+        <li><code>send()/recv()</code> — výměna dat</li>
+        <li><code>close()</code> — uzavření</li>
+    </ol>
+
+    <h2>Ukázkový kód — Python (TCP server/klient, UDP, HTTP)</h2>
+
+    <div class="code-desc"><strong>TCP Echo server</strong> — naslouchá na portu, každé připojení obsluhuje v samostatném vlákně. Přijatá data odešle zpět velkými písmeny (echo).</div>
+    <pre><code>import socket
+import threading
+
+def tcp_server():
+    """TCP echo server s vlakny"""
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind(('localhost', 65432))
+    server.listen(5)
+    print("Server posloucha na localhost:65432")
+
+    def obsluha_klienta(conn, addr):
+        print(f"Pripojeni od {addr}")
+        with conn:
+            while True:
+                data = conn.recv(1024)
+                if not data:
+                    break
+                odpoved = data.decode().upper()
+                conn.sendall(odpoved.encode())
+        print(f"Odpojeni {addr}")
+
+    try:
+        while True:
+            conn, addr = server.accept()
+            vlakno = threading.Thread(target=obsluha_klienta, args=(conn, addr))
+            vlakno.daemon = True
+            vlakno.start()
+    finally:
+        server.close()</code></pre>
+
+    <div class="code-desc"><strong>TCP klient</strong> — připojí se k serveru, odešle zprávu, přijme odpověď. Používá <code>with</code> pro bezpečné uzavření soketu.</div>
+    <pre><code>def tcp_klient():
+    """TCP klient"""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect(('localhost', 65432))
+
+        zpravy = ["Ahoj servere!", "Jak se mas?", "Nashledanou"]
+        for zprava in zpravy:
+            s.sendall(zprava.encode())
+            data = s.recv(1024)
+            print(f"Odeslano: '{zprava}' -&gt; Prijato: '{data.decode()}'")</code></pre>
+
+    <div class="code-desc"><strong>UDP server a klient</strong> — bezspojový protokol. <code>recvfrom()</code> vrací data i adresu odesílatele, <code>sendto()</code> odesílá na konkrétní adresu.</div>
+    <pre><code>def udp_server():
+    """UDP datagram server"""
+    server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server.bind(('localhost', 65433))
+    print("UDP server na portu 65433")
+
+    while True:
+        data, addr = server.recvfrom(1024)   # bez accept!
+        print(f"UDP od {addr}: {data.decode()}")
+        server.sendto(data.upper(), addr)     # odpoved na adresu odesilatele
+
+def udp_klient():
+    """UDP klient"""
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        s.sendto(b"Hello UDP!", ('localhost', 65433))
+        data, addr = s.recvfrom(1024)
+        print(f"UDP odpoved: {data.decode()}")</code></pre>
+
+    <div class="code-desc"><strong>Raw HTTP GET</strong> — nízkoúrovňový HTTP požadavek přes TCP soket. Ručně sestavíme HTTP hlavičku a zpracujeme odpověď.</div>
+    <pre><code>def http_get(host, cesta="/"):
+    """HTTP GET pozadavek pomoci raw soketu"""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((host, 80))
+
+        pozadavek = f"GET {cesta} HTTP/1.1\r\nHost: {host}\r\nConnection: close\r\n\r\n"
+        s.sendall(pozadavek.encode())
+
+        odpoved = b""
+        while True:
+            cast = s.recv(4096)
+            if not cast:
+                break
+            odpoved += cast
+
+        text = odpoved.decode('utf-8', errors='ignore')
+        hlavicka, _, telo = text.partition('\r\n\r\n')
+        print(f"Status: {hlavicka.split(chr(10))[0]}")
+        print(f"Telo (prvnich 200 znaku): {telo[:200]}")
+
+# http_get("example.com")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

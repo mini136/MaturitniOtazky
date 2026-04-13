@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15 - Programovací jazyky</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>15 – Programovací jazyky, kompilace, interpretace</h1>
+
+    <h2>Klasifikace jazyků</h2>
+    <table>
+        <tr><th>Kritérium</th><th>Typy</th><th>Příklady</th></tr>
+        <tr><td>Úroveň</td><td>Nízko / vysokoúrovňový</td><td>Assembly / Python</td></tr>
+        <tr><td>Typování</td><td>Statické / dynamické</td><td>Java, C# / Python, JS</td></tr>
+        <tr><td>Paradigma</td><td>OOP / funkcionální / procedurální</td><td>Java / Haskell / C</td></tr>
+        <tr><td>Překlad</td><td>Kompilovaný / interpretovaný / JIT</td><td>C / Python / Java (JVM)</td></tr>
+    </table>
+
+    <h2>Kompilace vs Interpretace vs JIT</h2>
+    <table>
+        <tr><th></th><th>Kompilace</th><th>Interpretace</th><th>JIT</th></tr>
+        <tr><td>Princip</td><td>Celý kód → strojový kód</td><td>Řádek po řádku</td><td>Bytecode → za běhu kompilace hotspotů</td></tr>
+        <tr><td>Rychlost</td><td>Rychlý běh</td><td>Pomalejší</td><td>Postupně se zrychluje</td></tr>
+        <tr><td>Příklady</td><td>C, C++, Go, Rust</td><td>Python, Ruby</td><td>Java (JVM), C# (CLR)</td></tr>
+    </table>
+
+    <h2>Runtime prostředí</h2>
+    <ul>
+        <li><strong>JVM</strong> (Java Virtual Machine) — bytecode (.class), GC, JIT, platformní nezávislost</li>
+        <li><strong>CLR</strong> (.NET Common Language Runtime) — IL code, multi-language (C#, F#, VB.NET)</li>
+        <li><strong>CPython</strong> — referenční implementace Pythonu, bytecode (.pyc), GIL</li>
+    </ul>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Dynamické typování</strong> — proměnná <code>x</code> mění typ za běhu. <code>type()</code> vrací aktuální typ. Python je silně typovaný (nelze sčítat int + str bez konverze).</div>
+    <pre><code># Dynamicke typovani - typ se urcuje za behu
+x = 42
+print(f"x = {x}, typ: {type(x)}")  # &lt;class 'int'&gt;
+
+x = "ahoj"
+print(f"x = {x}, typ: {type(x)}")  # &lt;class 'str'&gt;
+
+x = [1, 2, 3]
+print(f"x = {x}, typ: {type(x)}")  # &lt;class 'list'&gt;</code></pre>
+
+    <div class="code-desc"><strong>Duck typing</strong> — "If it walks like a duck..." Funkce <code>spust()</code> volá <code>start()</code> na čemkoli, co tuto metodu má — nezáleží na typu.</div>
+    <pre><code>class Auto:
+    def start(self): return "Motor nastartovan"
+
+class Pocitac:
+    def start(self): return "System spusten"
+
+class Mikrovlnka:
+    def start(self): return "Ohrivam..."
+
+def spust(vec):
+    """Nezalezi na typu - staci mit metodu start()"""
+    print(f"  {type(vec).__name__}: {vec.start()}")
+
+for obj in [Auto(), Pocitac(), Mikrovlnka()]:
+    spust(obj)</code></pre>
+
+    <div class="code-desc"><strong>Generátory</strong> — líné vyhodnocování pomocí <code>yield</code>. Generují hodnoty jen na požádání, šetří paměť. <code>fibonacci()</code> produkuje nekonečnou sekvenci.</div>
+    <pre><code>def fibonacci():
+    """Generator - line vyhodnocovani"""
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+# Generujeme jen prvnich 10
+fib = fibonacci()
+prvnich_10 = [next(fib) for _ in range(10)]
+print(f"Fibonacci: {prvnich_10}")
+
+# Generator expression vs list comprehension
+gen = (x**2 for x in range(1000000))  # ZADNA pamet
+lst = [x**2 for x in range(10)]       # cele v pameti
+print(f"Generator: {type(gen)}")
+print(f"List:      {type(lst)}")</code></pre>
+
+    <div class="code-desc"><strong>Dekorátory</strong> — funkce, která obaluje jinou funkci a přidává chování (logování, měření času). <code>@timer</code> automaticky měří dobu běhu funkce.</div>
+    <pre><code>import time
+
+def timer(func):
+    """Dekorator - meri cas"""
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        vysledek = func(*args, **kwargs)
+        konec = time.time()
+        print(f"  {func.__name__}: {konec - start:.4f}s")
+        return vysledek
+    return wrapper
+
+@timer
+def pomala_funkce():
+    total = sum(range(1_000_000))
+    return total
+
+vysledek = pomala_funkce()</code></pre>
+
+    <div class="code-desc"><strong>Bytecode</strong> — modul <code>dis</code> ukazuje, jak CPython interně kompiluje Python kód do bytecodu před interpretací.</div>
+    <pre><code>import dis
+
+def secti(a, b):
+    return a + b
+
+print("Bytecode funkce secti():")
+dis.dis(secti)
+# LOAD_FAST 0 (a)
+# LOAD_FAST 1 (b)
+# BINARY_ADD
+# RETURN_VALUE</code></pre>
+
+    <h2>Ukázkový kód — Java</h2>
+
+    <div class="code-desc"><strong>Java — statické typování</strong>, generika, String pool. Java vyžaduje deklaraci typů při kompilaci. <code>String.intern()</code> demonstruje String pool v JVM.</div>
+    <pre><code>public class JavaUkazka {
+    // Staticke typovani - typ se urcuje pri kompilaci
+    public static void main(String[] args) {
+        int cislo = 42;                        // primitivni typ
+        String text = "Ahoj";                  // referencni typ
+        double[] pole = {1.1, 2.2, 3.3};       // pole
+
+        // Generika - typova bezpecnost
+        java.util.List&lt;String&gt; jmena = new java.util.ArrayList&lt;&gt;();
+        jmena.add("Alice");
+        jmena.add("Bob");
+        // jmena.add(42);  // CHYBA pri kompilaci!
+
+        // String pool
+        String s1 = "hello";
+        String s2 = "hello";
+        String s3 = new String("hello");
+        System.out.println(s1 == s2);              // true  (stejny objekt z poolu)
+        System.out.println(s1 == s3);              // false (novy objekt na heapu)
+        System.out.println(s1.equals(s3));         // true  (porovnani obsahu)
+    }
+}</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>17 - DHCPv4</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>17 – DHCPv4 – Funkce, konfigurace rozsahů, přidělování dle MAC</h1>
+
+    <h2>Co je DHCP</h2>
+    <p><strong>Dynamic Host Configuration Protocol</strong> – automaticky přiděluje IP adresu a síťové parametry klientům. Pracuje na <strong>aplikační vrstvě</strong>, používá <strong>UDP porty 67 (server) a 68 (klient)</strong>.</p>
+
+    <h3>Co DHCP přiděluje</h3>
+    <ul>
+        <li><strong>IP adresu</strong></li>
+        <li><strong>Masku podsítě</strong></li>
+        <li><strong>Výchozí bránu</strong> (default gateway)</li>
+        <li><strong>DNS server(y)</strong></li>
+        <li>Volitelně: doménové jméno, NTP server, TFTP server, lease time atd.</li>
+    </ul>
+
+    <h2>DORA – Proces přidělení adresy</h2>
+    <pre><code>Klient                                 Server
+  |                                       |
+  |-- DISCOVER (broadcast) -------------->|  1. "Je tu DHCP server?"
+  |   src: 0.0.0.0:68                    |     dst: 255.255.255.255:67
+  |                                       |
+  |<-------------- OFFER (unicast/bc) ----|  2. "Nabízím ti 192.168.1.10"
+  |                                       |
+  |-- REQUEST (broadcast) --------------->|  3. "Chci tu adresu 192.168.1.10"
+  |                                       |     (broadcast – aby ostatní servery věděly)
+  |                                       |
+  |<-------------- ACK (unicast/bc) ------|  4. "OK, 192.168.1.10 je tvoje"
+  |                                       |
+  |===== KONFIGURACE DOKONČENA ==========|</code></pre>
+
+    <h3>DHCP zprávy</h3>
+    <table>
+        <tr><th>Zpráva</th><th>Směr</th><th>Popis</th></tr>
+        <tr><td><strong>DISCOVER</strong></td><td>Klient → Broadcast</td><td>Hledání DHCP serveru</td></tr>
+        <tr><td><strong>OFFER</strong></td><td>Server → Klient</td><td>Nabídka IP adresy</td></tr>
+        <tr><td><strong>REQUEST</strong></td><td>Klient → Broadcast</td><td>Žádost o konkrétní nabídku</td></tr>
+        <tr><td><strong>ACK</strong></td><td>Server → Klient</td><td>Potvrzení přidělení</td></tr>
+        <tr><td><strong>NAK</strong></td><td>Server → Klient</td><td>Zamítnutí (adresa již obsazena)</td></tr>
+        <tr><td><strong>RELEASE</strong></td><td>Klient → Server</td><td>Uvolnění adresy</td></tr>
+        <tr><td><strong>DECLINE</strong></td><td>Klient → Server</td><td>Odmítnutí (např. IP konflikt)</td></tr>
+        <tr><td><strong>INFORM</strong></td><td>Klient → Server</td><td>Žádost o parametry (IP mám)</td></tr>
+    </table>
+
+    <h2>Lease (zápůjčka)</h2>
+    <ul>
+        <li>IP adresa je přidělena na <strong>omezenou dobu</strong> (lease time)</li>
+        <li>Při <strong>50 %</strong> lease → klient pošle REQUEST pro obnovu (unicast na server)</li>
+        <li>Při <strong>87,5 %</strong> lease → klient pošle REQUEST broadcast (jakýkoli DHCP server)</li>
+        <li>Po vypršení → adresa se vrátí do poolu</li>
+    </ul>
+
+    <h2>Konfigurace DHCP serveru</h2>
+    <h3>Cisco router jako DHCP server</h3>
+    <pre><code>! Vyloučení adres (gateway, servery)
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+
+! Definice poolu
+ip dhcp pool LAN_POOL
+  network 192.168.1.0 255.255.255.0       ! rozsah sítě
+  default-router 192.168.1.1              ! výchozí brána
+  dns-server 8.8.8.8 8.8.4.4             ! DNS servery
+  domain-name firma.local                  ! doménové jméno
+  lease 7                                  ! lease 7 dní (default: 1 den)
+
+! Ověření
+show ip dhcp binding                       ! přidělené adresy
+show ip dhcp pool                          ! statistiky poolu
+show ip dhcp conflict                      ! konflikty</code></pre>
+
+    <h3>Rezervace dle MAC adresy</h3>
+    <pre><code>! Statická vazba MAC → IP
+ip dhcp pool TISKARNA
+  host 192.168.1.100 255.255.255.0        ! konkrétní IP
+  client-identifier 01aa.bbcc.ddee.ff      ! MAC adresa (01 = Ethernet)
+  ! nebo:
+  hardware-address aabb.ccdd.eeff          ! alternativní zápis
+  default-router 192.168.1.1</code></pre>
+
+    <h3>Linux (ISC DHCP Server – dhcpd)</h3>
+    <pre><code># /etc/dhcp/dhcpd.conf
+
+subnet 192.168.1.0 netmask 255.255.255.0 {
+    range 192.168.1.20 192.168.1.200;     # rozsah přidělovaných adres
+    option routers 192.168.1.1;            # výchozí brána
+    option domain-name-servers 8.8.8.8, 8.8.4.4;
+    option domain-name "firma.local";
+    default-lease-time 600;                # 10 minut
+    max-lease-time 7200;                   # 2 hodiny
+}
+
+# Rezervace dle MAC
+host tiskarna {
+    hardware ethernet AA:BB:CC:DD:EE:FF;
+    fixed-address 192.168.1.100;
+}</code></pre>
+
+    <h2>DHCP Relay (ip helper-address)</h2>
+    <p>DHCP Discover je broadcast → neprojde přes router. <strong>DHCP Relay</strong> přeposílá DHCP zprávy z jedné podsítě na DHCP server v jiné podsíti.</p>
+    <pre><code>! Na rozhraní routeru směrem ke klientské síti
+interface GigabitEthernet0/0
+  ip helper-address 10.0.0.5              ! IP adresa DHCP serveru v jiné síti</code></pre>
+
+    <h2>DHCP Snooping (bezpečnost)</h2>
+    <p>Ochrana proti <strong>podvrženým DHCP serverům</strong> (DHCP Spoofing).</p>
+    <pre><code>ip dhcp snooping
+ip dhcp snooping vlan 10,20
+
+! Důvěryhodný port (kde je skutečný DHCP server)
+interface GigabitEthernet0/1
+  ip dhcp snooping trust
+
+! Nedůvěryhodné porty (klienti) – defaultně untrusted
+! Omezení rychlosti DHCP zpráv
+interface range FastEthernet0/1-24
+  ip dhcp snooping limit rate 10          ! max 10 DHCP paketů/s</code></pre>
+
+    <h2>Statická vs. dynamická konfigurace</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Statická IP</th><th>DHCP</th></tr>
+        <tr><td>Konfigurace</td><td>Ruční na každém zařízení</td><td>Automatická ze serveru</td></tr>
+        <tr><td>Správa</td><td>Pracná u velkého počtu</td><td>Centralizovaná</td></tr>
+        <tr><td>Chyby</td><td>Možnost duplikátů a překlepů</td><td>Minimální</td></tr>
+        <tr><td>Použití</td><td>Servery, tiskárny, síťová zařízení</td><td>Klientské stanice, telefony</td></tr>
+    </table>
+
+    <div class="note">
+        <strong>APIPA:</strong> Pokud klient nedostane odpověď od DHCP serveru, přidělí si adresu z rozsahu <code>169.254.0.0/16</code> (Automatic Private IP Addressing). Komunikace pouze v lokálním segmentu.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

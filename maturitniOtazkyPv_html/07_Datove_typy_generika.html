@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07 - Datové typy a generika</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>07 – Datové typy, generika, výčtové typy</h1>
+
+    <h2>Hodnotové vs Referenční typy</h2>
+    <table>
+        <tr><th></th><th>Hodnotové (Value)</th><th>Referenční (Reference)</th></tr>
+        <tr><td>Uložení</td><td>Stack</td><td>Heap (reference na stacku)</td></tr>
+        <tr><td>Přiřazení</td><td>Kopie hodnoty</td><td>Kopie reference</td></tr>
+        <tr><td>Příklady (C#)</td><td><code>int, bool, double, struct, enum</code></td><td><code>class, string, array, interface</code></td></tr>
+        <tr><td>Default</td><td>0, false</td><td>null</td></tr>
+    </table>
+
+    <h2>Generika</h2>
+    <ul>
+        <li>Parametrizované typy — kód funguje s různými typy</li>
+        <li>Zajišťují <strong>typovou bezpečnost</strong> při kompilaci (bez castování)</li>
+        <li><strong>C#:</strong> <code>List&lt;T&gt;</code>, <code>Dictionary&lt;K,V&gt;</code></li>
+        <li><strong>Java:</strong> <code>List&lt;T&gt;</code> (type erasure)</li>
+        <li><strong>Python:</strong> <code>list[int]</code> (type hints, nevalidováno za běhu)</li>
+    </ul>
+
+    <h3>Omezení (Constraints) v C#</h3>
+    <table>
+        <tr><th>Constraint</th><th>Popis</th></tr>
+        <tr><td><code>where T : class</code></td><td>Referenční typ</td></tr>
+        <tr><td><code>where T : struct</code></td><td>Hodnotový typ</td></tr>
+        <tr><td><code>where T : new()</code></td><td>Bezparametrický konstruktor</td></tr>
+        <tr><td><code>where T : IComparable</code></td><td>Implementuje rozhraní</td></tr>
+    </table>
+
+    <h2>Enum a Struct</h2>
+    <ul>
+        <li><strong>Enum</strong> — pojmenované konstanty, v C# mohou mít <code>[Flags]</code> pro bitové kombinace</li>
+        <li><strong>Struct</strong> — lehký hodnotový typ, uložen na stacku, vhodný pro malá data</li>
+    </ul>
+
+    <h2>Ukázkový kód — C# (Enum, Struct, Generika)</h2>
+
+    <div class="code-desc"><strong>[Flags] Enum</strong> — bitové příznaky, umožňuje kombinovat více hodnot pomocí <code>|</code> operátoru.</div>
+    <pre><code>[Flags]
+enum Opravneni {
+    Zadne   = 0,
+    Cteni   = 1,
+    Zapis   = 2,
+    Mazani  = 4,
+    Admin   = Cteni | Zapis | Mazani  // kombinace = 7
+}
+
+var prava = Opravneni.Cteni | Opravneni.Zapis;
+Console.WriteLine($"Prava: {prava}");          // Cteni, Zapis
+Console.WriteLine($"Ma zapis? {prava.HasFlag(Opravneni.Zapis)}"); // True</code></pre>
+
+    <div class="code-desc"><strong>Struct s přetížením operátorů</strong> — hodnotový typ <code>Bod</code>, operátor <code>+</code> sčítá souřadnice, <code>==</code> porovnává složky.</div>
+    <pre><code>struct Bod {
+    public double X { get; }
+    public double Y { get; }
+
+    public Bod(double x, double y) { X = x; Y = y; }
+
+    public static Bod operator +(Bod a, Bod b) =&gt; new Bod(a.X + b.X, a.Y + b.Y);
+    public static bool operator ==(Bod a, Bod b) =&gt; a.X == b.X &amp;&amp; a.Y == b.Y;
+    public static bool operator !=(Bod a, Bod b) =&gt; !(a == b);
+    public override string ToString() =&gt; $"({X}, {Y})";
+}
+
+var p1 = new Bod(1, 2);
+var p2 = new Bod(3, 4);
+Console.WriteLine($"{p1} + {p2} = {p1 + p2}"); // (4, 6)</code></pre>
+
+    <div class="code-desc"><strong>Generický Stack&lt;T&gt;</strong> — typově bezpečný zásobník. Constraint <code>where T : IComparable&lt;T&gt;</code> vyžaduje porovnatelnost prvků pro metodu <code>Min()</code>.</div>
+    <pre><code>class MujStack&lt;T&gt; {
+    private T[] prvky;
+    private int vrchol = -1;
+
+    public MujStack(int kapacita = 10) {
+        prvky = new T[kapacita];
+    }
+
+    public void Push(T hodnota) {
+        prvky[++vrchol] = hodnota;
+    }
+
+    public T Pop() {
+        return prvky[vrchol--];
+    }
+
+    public T Peek() =&gt; prvky[vrchol];
+    public bool JePrazdny() =&gt; vrchol == -1;
+}
+
+// Genericke omezeni
+static T NajdiMin&lt;T&gt;(T[] pole) where T : IComparable&lt;T&gt; {
+    T min = pole[0];
+    foreach (var prvek in pole) {
+        if (prvek.CompareTo(min) &lt; 0)
+            min = prvek;
+    }
+    return min;
+}
+
+var stack = new MujStack&lt;int&gt;();
+stack.Push(10);
+stack.Push(20);
+Console.WriteLine($"Pop: {stack.Pop()}");  // 20
+
+int[] cisla = { 5, 3, 8, 1, 9 };
+Console.WriteLine($"Min: {NajdiMin(cisla)}"); // 1</code></pre>
+
+    <div class="code-desc"><strong>Nullable hodnotové typy</strong> — <code>int?</code> umožňuje <code>null</code> pro hodnotové typy. Null-coalescing (<code>??</code>) a null-conditional (<code>?.</code>) operátory.</div>
+    <pre><code>int? moznaNull = null;
+int hodnota = moznaNull ?? 42;  // null-coalescing
+Console.WriteLine($"Hodnota: {hodnota}");  // 42
+
+string? text = null;
+int? delka = text?.Length;  // null-conditional
+Console.WriteLine($"Delka: {delka ?? 0}"); // 0</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

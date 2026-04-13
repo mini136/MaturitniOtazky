@@ -1,0 +1,54 @@
+{
+  "title": "Soubory a serializace",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď formát serializace k jeho typickému použití:",
+      "pairs": [
+        ["JSON", "API komunikace a konfigurace"],
+        ["CSV", "Tabulková data (export/import)"],
+        ["YAML", "Konfigurace Docker a Kubernetes"],
+        ["Pickle", "Binární serializace Python objektů (interní)"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň správné funkce a parametry pro práci se soubory v Pythonu:",
+      "text": "Pro zápis JSON do souboru použijeme {{json.dump}}, pro načtení ze souboru {{json.load}}. Parametr {{ensure_ascii=False}} zajistí správný zápis českých znaků. Pro čtení CSV jako slovníků použijeme třídu {{DictReader}}.",
+      "answers": ["json.dump", "json.load", "ensure_ascii=False", "DictReader"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Použití pickle.load() na data z nedůvěryhodného zdroje je bezpečné, protože pickle pouze deserializuje data.",
+      "answer": false,
+      "explanation": "Pickle je NEBEZPEČNÝ pro nedůvěryhodná data — může spustit libovolný kód během deserializace. Útočník může vytvořit pickle soubor, který při načtení vykoná škodlivé příkazy."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky při čtení a zpracování XML souboru pomocí ElementTree:",
+      "items": [
+        "Importovat xml.etree.ElementTree",
+        "Parsovat XML soubor pomocí ET.parse()",
+        "Získat kořenový element",
+        "Procházet potomky pomocí findall()",
+        "Číst text elementů pomocí .text"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Proč je důležité používat 'with' statement při práci se soubory? Co se stane bez něj?",
+      "keywords": ["automatické zavření", "context manager", "výjimka", "únik prostředků", "finally"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď režim otevření souboru k jeho funkci:",
+      "pairs": [
+        ["'w'", "Zápis — přepíše existující obsah"],
+        ["'r'", "Čtení — výchozí režim"],
+        ["'a'", "Přidání na konec souboru"],
+        ["'wb'", "Binární zápis"]
+      ]
+    }
+  ]
+}

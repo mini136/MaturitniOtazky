@@ -1,0 +1,54 @@
+{
+  "title": "OS Linux – Souborový systém, formátování, připojování FS",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď adresář k jeho účelu podle FHS standardu:",
+      "pairs": [
+        ["/etc", "Konfigurační soubory systému a služeb"],
+        ["/var", "Proměnlivá data – logy, cache, databáze"],
+        ["/proc", "Virtuální FS s informacemi o procesech a jádru"],
+        ["/dev", "Souborová reprezentace zařízení"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Hard link může ukazovat na soubor na jiném souborovém systému, protože odkazuje přímo na inode.",
+      "answer": false,
+      "explanation": "Hard link odkazuje na inode, a protože každý souborový systém má svou vlastní tabulku inodů, hard link funguje pouze v rámci jednoho FS. Přes souborové systémy funguje pouze symbolický (soft) link."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň údaje o tabulkách oddílů:",
+      "text": "Tabulka oddílů MBR podporuje maximálně {{2 TB}} velké disky a má limit {{4}} primárních oddílů. Modernější tabulka {{GPT}} podporuje výchozně 128 oddílů a vyžaduje {{UEFI}} firmware.",
+      "answers": ["2 TB", "4", "GPT", "UEFI"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky vytvoření a připojení LVM logického svazku:",
+      "items": [
+        "pvcreate /dev/sdb1 – vytvoření Physical Volume",
+        "vgcreate moje_vg /dev/sdb1 – vytvoření Volume Group",
+        "lvcreate -L 10G -n moje_lv moje_vg – vytvoření Logical Volume",
+        "mkfs.ext4 /dev/moje_vg/moje_lv – formátování",
+        "mount /dev/moje_vg/moje_lv /mnt/data – připojení"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, co je žurnálování (journaling) u souborových systémů a proč je důležité pro obnovu po havárii.",
+      "keywords": ["žurnál", "log", "změny", "havárie", "obnova", "ext4", "konzistence"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď typ souboru k jeho označení ve výpisu ls -l:",
+      "pairs": [
+        ["d", "Adresář (složka)"],
+        ["l", "Symbolický link"],
+        ["b", "Blokové zařízení (disk)"],
+        ["c", "Znakové zařízení (terminál, /dev/null)"]
+      ]
+    }
+  ]
+}

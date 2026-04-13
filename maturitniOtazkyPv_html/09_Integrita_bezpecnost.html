@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>09 - Integrita a bezpečnost dat</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>09 – Integrita a bezpečnost dat, zpracování chyb</h1>
+
+    <h2>Datová integrita — ACID</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Popis</th></tr>
+        <tr><td><strong>Atomicity</strong></td><td>Transakce je celá nebo vůbec</td></tr>
+        <tr><td><strong>Consistency</strong></td><td>Data zůstanou v konzistentním stavu</td></tr>
+        <tr><td><strong>Isolation</strong></td><td>Transakce se navzájem neovlivňují</td></tr>
+        <tr><td><strong>Durability</strong></td><td>Potvrzená data přežijí výpadek</td></tr>
+    </table>
+
+    <h2>Autentizace vs Autorizace</h2>
+    <ul>
+        <li><strong>Autentizace</strong> — ověření identity (kdo jsi?): heslo, token, biometrie, 2FA</li>
+        <li><strong>Autorizace</strong> — ověření oprávnění (co smíš?): RBAC, ACL</li>
+    </ul>
+
+    <h2>Bezpečnostní hrozby</h2>
+    <table>
+        <tr><th>Útok</th><th>Popis</th><th>Obrana</th></tr>
+        <tr><td><strong>SQL Injection</strong></td><td>Vložení SQL kódu do vstupu</td><td>Parametrizované dotazy</td></tr>
+        <tr><td><strong>XSS</strong></td><td>Vložení skriptu do stránky</td><td>Escapování výstupu</td></tr>
+        <tr><td><strong>CSRF</strong></td><td>Zneužití přihlášení uživatele</td><td>CSRF tokeny</td></tr>
+        <tr><td><strong>Brute Force</strong></td><td>Zkoušení všech kombinací</td><td>Rate limiting, lockout</td></tr>
+    </table>
+
+    <h2>Logování</h2>
+    <table>
+        <tr><th>Úroveň</th><th>Použití</th></tr>
+        <tr><td>DEBUG</td><td>Detailní vývojové informace</td></tr>
+        <tr><td>INFO</td><td>Normální běh aplikace</td></tr>
+        <tr><td>WARNING</td><td>Potenciální problém</td></tr>
+        <tr><td>ERROR</td><td>Chyba, ale aplikace běží dál</td></tr>
+        <tr><td>CRITICAL</td><td>Závažná chyba, aplikace může spadnout</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python (validace, hashování, SQL injection prevence)</h2>
+
+    <div class="code-desc"><strong>Logování</strong> — konfigurace úrovní a formátu logů. Různé úrovně závažnosti pro různé situace.</div>
+    <pre><code>import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger("Bezpecnost")
+
+logger.debug("Detailni info pro vyvoj")
+logger.info("Uzivatel se prihlasil")
+logger.warning("Pokus o pristup bez opravneni")
+logger.error("Chyba pri cteni souboru")
+logger.critical("Databaze neni dostupna!")</code></pre>
+
+    <div class="code-desc"><strong>Validace vstupů</strong> — regex pro email, kontrola rozsahu věku, validace síly hesla (délka, velká/malá písmena, čísla, speciální znaky).</div>
+    <pre><code>import re
+
+def validuj_email(email):
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if not re.match(pattern, email):
+        raise ValueError(f"Neplatny email: {email}")
+    return True
+
+def validuj_vek(vek):
+    if not isinstance(vek, int) or vek &lt; 0 or vek &gt; 150:
+        raise ValueError(f"Neplatny vek: {vek}")
+    return True
+
+def validuj_heslo(heslo):
+    chyby = []
+    if len(heslo) &lt; 8: chyby.append("min 8 znaku")
+    if not re.search(r'[A-Z]', heslo): chyby.append("velke pismeno")
+    if not re.search(r'[a-z]', heslo): chyby.append("male pismeno")
+    if not re.search(r'\d', heslo): chyby.append("cislo")
+    if not re.search(r'[!@#$%^&amp;*]', heslo): chyby.append("specialni znak")
+    if chyby:
+        raise ValueError(f"Slabe heslo - chybi: {', '.join(chyby)}")
+    return True
+
+# Test
+for email in ["alice@example.com", "neplatny", "test@x.cz"]:
+    try:
+        validuj_email(email)
+        print(f"  Email '{email}': OK")
+    except ValueError as e:
+        print(f"  {e}")</code></pre>
+
+    <div class="code-desc"><strong>Hashování hesel</strong> — PBKDF2 s náhodným saltem. Nikdy neukládáme hesla v plaintextu! Ověření probíhá porovnáním hashů.</div>
+    <pre><code>import hashlib
+import os
+
+def hash_hesla(heslo):
+    """Bezpecne hashovani s nahodnym saltem (PBKDF2)"""
+    salt = os.urandom(32)
+    klic = hashlib.pbkdf2_hmac('sha256', heslo.encode(), salt, 100000)
+    return salt + klic  # ulozime salt + hash dohromady
+
+def over_heslo(heslo, ulozeny_hash):
+    """Overeni hesla proti ulozenemu hashi"""
+    salt = ulozeny_hash[:32]
+    klic = ulozeny_hash[32:]
+    novy_klic = hashlib.pbkdf2_hmac('sha256', heslo.encode(), salt, 100000)
+    return klic == novy_klic
+
+# Pouziti
+ulozeny = hash_hesla("MojeHeslo123!")
+print(f"  Overeni spravneho hesla: {over_heslo('MojeHeslo123!', ulozeny)}")
+print(f"  Overeni spatneho hesla: {over_heslo('SpatneHeslo', ulozeny)}")</code></pre>
+
+    <div class="code-desc"><strong>Prevence SQL Injection</strong> — porovnání nebezpečného a bezpečného přístupu. Parametrizované dotazy (<code>?</code> placeholder) zabraňují vložení SQL kódu.</div>
+    <pre><code>import sqlite3
+
+conn = sqlite3.connect(':memory:')
+cursor = conn.cursor()
+cursor.execute('CREATE TABLE uzivatele (id INTEGER PRIMARY KEY, jmeno TEXT, heslo TEXT)')
+
+# NEBEZPECNE — SQL injection mozna!
+uzivatel = "admin' OR '1'='1"
+# query = f"SELECT * FROM uzivatele WHERE jmeno = '{uzivatel}'"  # NIKDY!
+
+# BEZPECNE — parametrizovany dotaz
+cursor.execute("SELECT * FROM uzivatele WHERE jmeno = ?", (uzivatel,))
+vysledek = cursor.fetchall()
+print(f"  Bezpecny dotaz: {vysledek}")  # prazdny - sql injection nefunguje
+
+conn.close()</code></pre>
+
+    <div class="code-desc"><strong>Try/except/else/finally</strong> — ukázka zpracování chyb při vytváření uživatele s validací.</div>
+    <pre><code>def vytvor_uzivatele(jmeno, email, heslo, vek):
+    """Bezpecne vytvoreni uzivatele s kompletni validaci"""
+    try:
+        validuj_email(email)
+        validuj_heslo(heslo)
+        validuj_vek(vek)
+    except ValueError as e:
+        logger.error(f"Validace selhala: {e}")
+        return None
+    except Exception as e:
+        logger.critical(f"Neocekavana chyba: {e}")
+        return None
+    else:
+        heslo_hash = hash_hesla(heslo)
+        uzivatel = {"jmeno": jmeno, "email": email, "heslo_hash": heslo_hash, "vek": vek}
+        logger.info(f"Uzivatel {jmeno} vytvoren")
+        return uzivatel
+    finally:
+        logger.debug("Operace vytvoreni uzivatele dokoncena")
+
+vytvor_uzivatele("Alice", "alice@example.com", "Heslo123!", 25)</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

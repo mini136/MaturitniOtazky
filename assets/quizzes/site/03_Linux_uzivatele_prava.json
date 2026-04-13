@@ -1,0 +1,54 @@
+{
+  "title": "OS Linux – Správa uživatelů, skupin, práva, SUDO",
+  "questions": [
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o systému práv v Linuxu:",
+      "text": "Právo čtení (r) má číselnou hodnotu {{4}}, zápis (w) má hodnotu {{2}} a spuštění (x) má hodnotu {{1}}. Práva rwxr-xr-- odpovídají oktálové hodnotě {{754}}.",
+      "answers": ["4", "2", "1", "754"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď speciální bit k jeho funkci:",
+      "pairs": [
+        ["SUID", "Soubor se spustí s právy vlastníka (např. /usr/bin/passwd)"],
+        ["SGID na adresáři", "Nové soubory v adresáři dědí skupinu adresáře"],
+        ["Sticky bit", "Soubor v adresáři může smazat jen jeho vlastník (např. /tmp)"],
+        ["umask 0022", "Výchozí práva souborů budou 644, adresářů 755"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Příkaz usermod -G docker novyuser bezpečně přidá uživatele do skupiny docker bez ovlivnění jeho ostatních skupin.",
+      "answer": false,
+      "explanation": "Bez přepínače -a (append) příkaz usermod -G přepíše všechny doplňkové skupiny uživatele. Správně je usermod -aG docker novyuser, kde -a zajistí přidání ke stávajícím skupinám."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi soubory /etc/passwd a /etc/shadow. Proč jsou hesla uložena odděleně?",
+      "keywords": ["passwd", "shadow", "hash", "heslo", "bezpečnost", "root", "čitelný"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky pro bezpečné nastavení SUDO přístupu novému uživateli:",
+      "items": [
+        "useradd -m -s /bin/bash novyuser – vytvoření uživatele",
+        "passwd novyuser – nastavení hesla",
+        "visudo – bezpečná editace /etc/sudoers",
+        "Přidání pravidla s minimálními oprávněními (konkrétní příkazy)",
+        "Ověření nastavení pomocí sudo -l"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď soubor k jeho obsahu:",
+      "pairs": [
+        ["/etc/passwd", "Seznam uživatelů – username:x:UID:GID:info:home:shell"],
+        ["/etc/group", "Skupiny – groupname:x:GID:členové"],
+        ["/etc/skel", "Šablona domovského adresáře nového uživatele"],
+        ["/etc/sudoers", "Konfigurace oprávnění pro příkaz sudo"]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19 - DNS</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>19 – DNS – Funkce, hierarchie, konfigurace</h1>
+
+    <h2>Co je DNS</h2>
+    <p><strong>Domain Name System</strong> – hierarchický distribuovaný systém pro překlad <strong>doménových jmen na IP adresy</strong> (a naopak). Funguje na <strong>portu 53</strong> (UDP pro dotazy, TCP pro zónové přenosy a velké odpovědi).</p>
+
+    <h2>Hierarchie překladu – od lokálního po globální</h2>
+    <h3>1. Lokální soubor hosts</h3>
+    <pre><code># Windows: C:\Windows\System32\drivers\etc\hosts
+# Linux:   /etc/hosts
+
+127.0.0.1       localhost
+192.168.1.10    server.firma.local    server
+10.0.0.5        db.firma.local</code></pre>
+    <p>Kontrolován <strong>před DNS</strong>. Ruční mapování, vhodné pro malý počet záznamů.</p>
+
+    <h3>2. DNS cache (lokální)</h3>
+    <p>OS si pamatuje nedávné DNS odpovědi dle <strong>TTL</strong> (Time to Live).</p>
+    <pre><code># Windows
+ipconfig /displaydns          # zobrazit cache
+ipconfig /flushdns            # vymazat cache
+
+# Linux
+systemd-resolve --statistics  # statistiky
+systemd-resolve --flush-caches</code></pre>
+
+    <h3>3. Rekurzivní DNS resolver</h3>
+    <p>Server, který provádí celý překlad za klienta. Typicky DNS server ISP nebo veřejný (8.8.8.8, 1.1.1.1).</p>
+
+    <h3>4. Root DNS servery</h3>
+    <ul>
+        <li><strong>13 logických serverů</strong> (A–M root), distribuovaných pomocí anycast</li>
+        <li>Odkazují na <strong>TLD servery</strong></li>
+    </ul>
+
+    <h3>5. TLD (Top-Level Domain) servery</h3>
+    <ul>
+        <li>Správa domén nejvyšší úrovně: <code>.com</code>, <code>.cz</code>, <code>.org</code>, <code>.net</code></li>
+        <li>Odkazují na <strong>autoritativní servery</strong> konkrétní domény</li>
+    </ul>
+
+    <h3>6. Autoritativní DNS server</h3>
+    <p>Obsahuje skutečné záznamy pro doménu. Poskytuje <strong>konečnou odpověď</strong>.</p>
+
+    <h2>Proces DNS překladu</h2>
+    <pre><code>Uživatel zadá: www.example.com
+
+1. Klient → lokální hosts soubor         (nenalezeno)
+2. Klient → DNS cache                    (nenalezeno)
+3. Klient → Rekurzivní resolver (8.8.8.8)
+4.          Resolver → Root server        "Kdo spravuje .com?"
+5.          Resolver ← Root server        "Zeptej se .com TLD na 192.5.6.30"
+6.          Resolver → TLD server (.com)  "Kdo spravuje example.com?"
+7.          Resolver ← TLD server         "Zeptej se ns1.example.com (93.184.216.34)"
+8.          Resolver → Autoritativní NS    "Jaká je IP www.example.com?"
+9.          Resolver ← Autoritativní NS    "A záznam: 93.184.216.34"
+10. Klient ← Resolver                     "IP je 93.184.216.34" (+ uloží do cache)</code></pre>
+
+    <h3>Iterativní vs. Rekurzivní dotaz</h3>
+    <table>
+        <tr><th>Typ</th><th>Popis</th></tr>
+        <tr><td><strong>Rekurzivní</strong></td><td>Klient → resolver: „Zjisti to za mě celé"</td></tr>
+        <tr><td><strong>Iterativní</strong></td><td>Resolver → server: „Nevím, ale zeptej se tam →" (referral)</td></tr>
+    </table>
+
+    <h2>DNS záznamy (Resource Records)</h2>
+    <table>
+        <tr><th>Typ</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><strong>A</strong></td><td>Jméno → IPv4</td><td><code>www IN A 93.184.216.34</code></td></tr>
+        <tr><td><strong>AAAA</strong></td><td>Jméno → IPv6</td><td><code>www IN AAAA 2606:2800:220:1::248</code></td></tr>
+        <tr><td><strong>CNAME</strong></td><td>Alias (kanonické jméno)</td><td><code>blog IN CNAME www.example.com.</code></td></tr>
+        <tr><td><strong>MX</strong></td><td>Mail server (s prioritou)</td><td><code>@ IN MX 10 mail.example.com.</code></td></tr>
+        <tr><td><strong>NS</strong></td><td>Autoritativní name server</td><td><code>@ IN NS ns1.example.com.</code></td></tr>
+        <tr><td><strong>PTR</strong></td><td>Reverzní záznam (IP → jméno)</td><td><code>34 IN PTR www.example.com.</code></td></tr>
+        <tr><td><strong>SOA</strong></td><td>Start of Authority – info o zóně</td><td>Sériové číslo, refresh, retry, expire</td></tr>
+        <tr><td><strong>TXT</strong></td><td>Textový záznam</td><td>SPF, DKIM, ownership verification</td></tr>
+        <tr><td><strong>SRV</strong></td><td>Service record (služba + port)</td><td><code>_sip._tcp IN SRV 10 5 5060 sip.example.com.</code></td></tr>
+    </table>
+
+    <h2>DNS zóny</h2>
+    <table>
+        <tr><th>Typ zóny</th><th>Popis</th></tr>
+        <tr><td><strong>Forward lookup</strong></td><td>Jméno → IP (A, AAAA záznamy)</td></tr>
+        <tr><td><strong>Reverse lookup</strong></td><td>IP → jméno (PTR záznamy, in-addr.arpa)</td></tr>
+        <tr><td><strong>Primary (Master)</strong></td><td>R/W kopie zóny</td></tr>
+        <tr><td><strong>Secondary (Slave)</strong></td><td>R/O kopie, synchronizace z primary (zone transfer)</td></tr>
+    </table>
+
+    <h2>Konfigurace DNS serveru (BIND na Linuxu)</h2>
+    <h3>named.conf</h3>
+    <pre><code>// /etc/bind/named.conf.local
+
+zone "firma.local" {
+    type master;
+    file "/etc/bind/db.firma.local";
+};
+
+zone "1.168.192.in-addr.arpa" {          // reverzní zóna
+    type master;
+    file "/etc/bind/db.192.168.1";
+};</code></pre>
+
+    <h3>Zónový soubor</h3>
+    <pre><code>; /etc/bind/db.firma.local
+$TTL 86400
+@   IN  SOA ns1.firma.local. admin.firma.local. (
+            2024010101  ; Serial
+            3600        ; Refresh (1h)
+            900         ; Retry (15min)
+            604800      ; Expire (7 dní)
+            86400       ; Minimum TTL (1 den)
+        )
+
+; Name servery
+@       IN  NS      ns1.firma.local.
+@       IN  NS      ns2.firma.local.
+
+; A záznamy
+ns1     IN  A       192.168.1.2
+ns2     IN  A       192.168.1.3
+www     IN  A       192.168.1.10
+mail    IN  A       192.168.1.20
+ftp     IN  CNAME   www.firma.local.
+
+; MX záznam
+@       IN  MX  10  mail.firma.local.</code></pre>
+
+    <h2>DNS nástroje</h2>
+    <pre><code># nslookup – základní dotazy
+nslookup www.google.com
+nslookup -type=MX google.com
+nslookup www.google.com 8.8.8.8         # dotaz na konkrétní server
+
+# dig – detailní dotazy (Linux)
+dig www.google.com
+dig @8.8.8.8 www.google.com A
+dig google.com MX +short
+dig -x 93.184.216.34                    # reverzní lookup
+
+# host (Linux)
+host www.google.com
+host -t MX google.com</code></pre>
+
+    <h2>DNS bezpečnost</h2>
+    <table>
+        <tr><th>Hrozba</th><th>Popis</th><th>Ochrana</th></tr>
+        <tr><td><strong>DNS Spoofing / Cache Poisoning</strong></td><td>Podvržená DNS odpověď</td><td>DNSSEC</td></tr>
+        <tr><td><strong>DNS Amplification (DDoS)</strong></td><td>Zneužití open resolverů</td><td>Omezení rekurze, rate limiting</td></tr>
+        <tr><td><strong>DNS Tunneling</strong></td><td>Exfiltrace dat přes DNS</td><td>Monitoring, filtrování</td></tr>
+    </table>
+
+    <h3>DNSSEC</h3>
+    <p>Podepisuje DNS záznamy digitálním podpisem → ověřitelná autenticita a integrita odpovědí. Neposkytuje šifrování (to řeší DoH / DoT).</p>
+
+    <div class="note">
+        <strong>DoH (DNS over HTTPS)</strong> na portu 443 a <strong>DoT (DNS over TLS)</strong> na portu 853 šifrují DNS dotazy – ochrana soukromí.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,55 @@
+{
+  "title": "Metodiky vývoje software, SDLC, Agile, Scrum",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď Scrum roli k její odpovědnosti:",
+      "pairs": [
+        ["Product Owner", "Definuje priority a spravuje Product Backlog"],
+        ["Scrum Master", "Odstraňuje překážky a facilituje procesy"],
+        ["Dev Team", "Implementace — tým 3–9 lidí"],
+        ["Stakeholder", "Zadavatel požadavků, účastní se Sprint Review"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Waterfall metodika je vhodná pro projekty s často se měnícími požadavky.",
+      "answer": false,
+      "explanation": "Waterfall je sekvenční — fáze jdou za sebou a změny jsou těžko proveditelné. Pro měnící se požadavky je vhodný Agile přístup (Scrum, Kanban), kde se pracuje v iteracích a změny jsou vítány."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď fáze SDLC (Software Development Life Cycle) ve správném pořadí:",
+      "items": [
+        "Analýza požadavků — co má systém dělat",
+        "Návrh (Design) — architektura, UML",
+        "Implementace — kódování",
+        "Testování — unit, integrace, systémové, UAT",
+        "Nasazení (Deployment)",
+        "Údržba"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o Kanban a CI/CD:",
+      "text": "Kanban používá vizuální tabuli a omezuje rozpracované úkoly pomocí {{WIP limitu}}. CI znamená {{Continuous Integration}} — automatický build a testy při každém commitu. CD znamená {{Continuous Delivery}} — automatické nasazení do produkce.",
+      "answers": ["WIP limitu", "Continuous Integration", "Continuous Delivery"]
+    },
+    {
+      "type": "open",
+      "prompt": "Porovnej Scrum a Kanban. Jaké jsou hlavní rozdíly v přístupu k práci?",
+      "keywords": ["sprint", "iterace", "WIP limit", "continuous flow", "role", "ceremonie"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď Scrum ceremonii k jejímu účelu:",
+      "pairs": [
+        ["Sprint Planning", "Výběr úkolů z backlogu do aktuálního sprintu"],
+        ["Daily Standup", "15min denní synchronizace týmu"],
+        ["Sprint Review", "Prezentace (demo) výsledků sprintu"],
+        ["Sprint Retrospective", "Reflexe — co zlepšit v dalším sprintu"]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "title": "Databáze, ORM, CRUD operace",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď CRUD operaci k odpovídajícímu SQL příkazu a HTTP metodě:",
+      "pairs": [
+        ["Create", "INSERT INTO / POST"],
+        ["Read", "SELECT / GET"],
+        ["Update", "UPDATE / PUT nebo PATCH"],
+        ["Delete", "DELETE / DELETE"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "ORM (Object-Relational Mapping) automaticky řeší N+1 problém díky lazy loading.",
+      "answer": false,
+      "explanation": "Lazy loading je naopak častou PŘÍČINOU N+1 problému — pro každý řádek se provede další dotaz na související data. Řeší se to eager loading (JOIN), explicit loading nebo batch loading."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o ORM:",
+      "text": "V ORM vzoru se {{třída}} mapuje na tabulku v databázi, {{instance}} objektu odpovídá jednomu řádku a {{atribut}} odpovídá sloupci. ORM automaticky zabraňuje {{SQL injection}} díky parametrizovaným dotazům.",
+      "answers": ["třída", "instance", "atribut", "SQL injection"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky databázové transakce s rollback ochranou:",
+      "items": [
+        "Začátek transakce (BEGIN)",
+        "Provedení prvního SQL příkazu",
+        "Provedení druhého SQL příkazu",
+        "Kontrola, zda všechny kroky uspěly",
+        "COMMIT (potvrzení) nebo ROLLBACK (vrácení) celé transakce"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou výhody a nevýhody použití ORM oproti přímému psaní SQL dotazů?",
+      "keywords": ["typová bezpečnost", "přenositelnost", "abstrakce", "N+1", "výkon", "složité dotazy"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď přístup k databázi k jeho popisu:",
+      "pairs": [
+        ["Přímé SQL", "Ruční psaní dotazů — plná kontrola"],
+        ["ORM", "Mapování objektů na tabulky — typové bezpečnost"],
+        ["Query Builder", "Programatické sestavení dotazů"],
+        ["Repository pattern", "Zapouzdřuje databázové operace do třídy"]
+      ]
+    }
+  ]
+}

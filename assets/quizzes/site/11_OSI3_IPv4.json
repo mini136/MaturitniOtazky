@@ -1,0 +1,53 @@
+{
+  "title": "OSI 3 – IPv4, maska, podsíťování, fragmentace",
+  "questions": [
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o podsíťování IPv4:",
+      "text": "IPv4 adresa má délku {{32}} bitů. Maska /26 odpovídá {{255.255.255.192}} a poskytuje {{62}} použitelných host adres. Počet použitelných hostů se vypočítá jako 2^(32-prefix) - {{2}} (síťová adresa + broadcast).",
+      "answers": ["32", "255.255.255.192", "62", "2"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď rozsah privátních adres (RFC 1918) k příslušné třídě:",
+      "pairs": [
+        ["10.0.0.0/8", "Třída A – 16 milionů adres"],
+        ["172.16.0.0/12", "Třída B – 1 milion adres"],
+        ["192.168.0.0/16", "Třída C – 65 tisíc adres"],
+        ["169.254.0.0/16", "APIPA – automatická při selhání DHCP"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Při fragmentaci IPv4 paketu může fragmenty znovu složit jakýkoli router na cestě k cíli.",
+      "answer": false,
+      "explanation": "Fragmenty skládá pouze cílový host, nikoli routery na cestě. Routery mohou pakety dále fragmentovat, ale nikdy je neskládají. Proto ztráta jednoho fragmentu znamená ztrátu celého paketu."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď podsítě vzniklé rozdělením 192.168.1.0/24 na 4 podsítě (/26):",
+      "items": [
+        "192.168.1.0/26 – rozsah hostů .1–.62, broadcast .63",
+        "192.168.1.64/26 – rozsah hostů .65–.126, broadcast .127",
+        "192.168.1.128/26 – rozsah hostů .129–.190, broadcast .191",
+        "192.168.1.192/26 – rozsah hostů .193–.254, broadcast .255"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, co je Path MTU Discovery a proč je preferován před fragmentací. Jakou roli hraje příznak DF?",
+      "keywords": ["MTU", "DF", "Don't Fragment", "ICMP", "Fragmentation Needed", "výkon", "velikost paketu"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď pole IPv4 hlavičky k jeho funkci:",
+      "pairs": [
+        ["TTL", "Maximální počet hopů – prevence směrovacích smyček"],
+        ["Protocol", "Identifikace protokolu vyšší vrstvy (6=TCP, 17=UDP)"],
+        ["Fragment Offset", "Pozice fragmentu v původním paketu"],
+        ["Header Checksum", "Kontrolní součet pro ověření integrity hlavičky"]
+      ]
+    }
+  ]
+}

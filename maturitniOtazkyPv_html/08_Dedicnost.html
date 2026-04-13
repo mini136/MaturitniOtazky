@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>08 - Dědičnost</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>08 – Dědičnost, method overriding/overloading, interface</h1>
+
+    <h2>Typy dědičnosti</h2>
+    <table>
+        <tr><th>Typ</th><th>Popis</th><th>Podpora</th></tr>
+        <tr><td>Jednoduchá</td><td>Třída dědí z jedné třídy</td><td>Všechny OOP jazyky</td></tr>
+        <tr><td>Víceúrovňová</td><td>A → B → C (řetězení)</td><td>Všechny OOP jazyky</td></tr>
+        <tr><td>Vícenásobná</td><td>Třída dědí z více tříd</td><td>C++, Python (MRO)</td></tr>
+    </table>
+
+    <h2>Overriding vs Overloading</h2>
+    <table>
+        <tr><th></th><th>Overriding (přepisování)</th><th>Overloading (přetěžování)</th></tr>
+        <tr><td>Kde</td><td>Potomek přepisuje metodu rodiče</td><td>Více metod se stejným názvem</td></tr>
+        <tr><td>Parametry</td><td>Stejná signatura</td><td>Různé parametry</td></tr>
+        <tr><td>Binding</td><td>Dynamický (runtime)</td><td>Statický (compile-time)</td></tr>
+        <tr><td>Java</td><td><code>@Override</code></td><td>Různé typy/počty parametrů</td></tr>
+    </table>
+
+    <h2>Abstraktní třídy vs Rozhraní</h2>
+    <table>
+        <tr><th></th><th>Abstraktní třída</th><th>Interface</th></tr>
+        <tr><td>Atributy</td><td>Ano (instance variables)</td><td>Jen konstanty</td></tr>
+        <tr><td>Konstruktor</td><td>Ano</td><td>Ne</td></tr>
+        <tr><td>Metody</td><td>Abstraktní + implementované</td><td>Abstraktní (+ default v Java 8+)</td></tr>
+        <tr><td>Dědičnost</td><td>Jen jedna (Java/C#)</td><td>Více rozhraní</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Java (dědičnost, overriding, interface)</h2>
+
+    <div class="code-desc"><strong>Abstraktní třída <code>Tvar</code></strong> — definuje společný kontrakt (barva, abstraktní <code>obsah()</code> a <code>obvod()</code>). Potomci <code>Kruh</code> a <code>Obdelnik</code> implementují výpočty.</div>
+    <pre><code>abstract class Tvar {
+    protected String barva;
+
+    public Tvar(String barva) {
+        this.barva = barva;
+    }
+
+    abstract double obsah();
+    abstract double obvod();
+
+    public void info() {
+        System.out.printf("  %s [%s]: obsah=%.2f, obvod=%.2f%n",
+            getClass().getSimpleName(), barva, obsah(), obvod());
+    }
+}
+
+class Kruh extends Tvar {
+    private double polomer;
+
+    public Kruh(double polomer, String barva) {
+        super(barva);
+        this.polomer = polomer;
+    }
+
+    @Override
+    double obsah() { return Math.PI * polomer * polomer; }
+
+    @Override
+    double obvod() { return 2 * Math.PI * polomer; }
+}
+
+class Obdelnik extends Tvar {
+    protected double sirka, vyska;
+
+    public Obdelnik(double sirka, double vyska, String barva) {
+        super(barva);
+        this.sirka = sirka;
+        this.vyska = vyska;
+    }
+
+    @Override
+    double obsah() { return sirka * vyska; }
+
+    @Override
+    double obvod() { return 2 * (sirka + vyska); }
+}</code></pre>
+
+    <div class="code-desc"><strong>Víceúrovňová dědičnost</strong> — <code>Ctverec</code> dědí z <code>Obdelnik</code> (šířka = výška). Přepisuje <code>toString()</code>.</div>
+    <pre><code>class Ctverec extends Obdelnik {
+    public Ctverec(double strana, String barva) {
+        super(strana, strana, barva);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Ctverec(strana=%.1f, %s)", sirka, barva);
+    }
+}
+
+// Polymorfismus - pole rodičovského typu
+Tvar[] tvary = {
+    new Kruh(5, "cervena"),
+    new Obdelnik(4, 6, "modra"),
+    new Ctverec(3, "zelena")
+};
+for (Tvar t : tvary) {
+    t.info();  // volá správnou implementaci díky overriding
+}</code></pre>
+
+    <div class="code-desc"><strong>Interface</strong> — <code>Kreslitelny</code> a <code>Zmensitelny</code>. Třída může implementovat <strong>více rozhraní</strong> (na rozdíl od jedné rodičovské třídy).</div>
+    <pre><code>interface Kreslitelny {
+    void nakresli();
+}
+
+interface Zmensitelny {
+    void zmensNa(double procento);
+}
+
+// Trida implementujici vice interfacu
+class KreslitelnyKruh extends Kruh implements Kreslitelny, Zmensitelny {
+    private double polomer;
+
+    public KreslitelnyKruh(double polomer, String barva) {
+        super(polomer, barva);
+        this.polomer = polomer;
+    }
+
+    @Override
+    public void nakresli() {
+        System.out.println("  Kreslim kruh s polomerem " + polomer);
+    }
+
+    @Override
+    public void zmensNa(double procento) {
+        polomer *= (procento / 100.0);
+        System.out.println("  Zmenseno na " + procento + "%, novy polomer=" + polomer);
+    }
+}</code></pre>
+
+    <div class="code-desc"><strong>Overloading (přetěžování)</strong> — stejný název metody <code>secti</code>, ale různé typy/počty parametrů. Rozhoduje se při kompilaci.</div>
+    <pre><code>class Kalkulacka {
+    static int secti(int a, int b) { return a + b; }
+    static double secti(double a, double b) { return a + b; }
+    static int secti(int a, int b, int c) { return a + b + c; }
+    static String secti(String a, String b) { return a + b; }
+}
+
+System.out.println("int:    " + Kalkulacka.secti(3, 5));          // 8
+System.out.println("double: " + Kalkulacka.secti(3.5, 2.1));     // 5.6
+System.out.println("3 args: " + Kalkulacka.secti(1, 2, 3));      // 6
+System.out.println("String: " + Kalkulacka.secti("Ahoj ", "!")); // Ahoj !</code></pre>
+
+    <div class="code-desc"><strong>instanceof</strong> — kontrola typu za běhu. Umožňuje bezpečné přetypování (downcasting).</div>
+    <pre><code>Tvar tvar = new Kruh(5, "modra");
+if (tvar instanceof Kruh) {
+    Kruh k = (Kruh) tvar;
+    System.out.println("Je to kruh s polomerem");
+}
+
+// Java 16+ pattern matching
+if (tvar instanceof Kruh k) {
+    System.out.println("Pattern matching: " + k.obsah());
+}</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

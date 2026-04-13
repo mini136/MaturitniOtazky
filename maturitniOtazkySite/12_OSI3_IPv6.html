@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12 - OSI 3 - IPv6, maska, podsíťování</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>12 – OSI 3 – IPv6, maska, podsíťování, porovnání s IPv4, fragmentace</h1>
+
+    <h2>IPv6 adresa</h2>
+    <h3>Základní vlastnosti</h3>
+    <ul>
+        <li><strong>128 bitů</strong> – hexadecimální zápis, 8 skupin po 4 hex znacích oddělených dvojtečkou</li>
+        <li>Příklad: <code>2001:0db8:0000:0000:0000:0000:0000:0001</code></li>
+        <li>Adresní prostor: 2¹²⁸ ≈ 3,4 × 10³⁸ adres</li>
+    </ul>
+
+    <h3>Zkrácení zápisu</h3>
+    <ol>
+        <li>Vedoucí nuly v každé skupině lze vynechat: <code>2001:db8:0:0:0:0:0:1</code></li>
+        <li>Jednou (!) lze nahradit skupinu samých nul <code>::</code>: <code>2001:db8::1</code></li>
+    </ol>
+    <pre><code>Plný tvar:     2001:0db8:0000:0000:0000:0000:0000:0001
+Zkrácený:      2001:db8::1
+
+Plný tvar:     fe80:0000:0000:0000:0210:a4ff:fe01:0234
+Zkrácený:      fe80::210:a4ff:fe01:234</code></pre>
+
+    <h3>IPv6 hlavička (40 B, fixní)</h3>
+    <table>
+        <tr><th>Pole</th><th>Bity</th><th>Popis</th></tr>
+        <tr><td>Version</td><td>4</td><td>Verze (6)</td></tr>
+        <tr><td>Traffic Class</td><td>8</td><td>QoS (DSCP)</td></tr>
+        <tr><td>Flow Label</td><td>20</td><td>Identifikace toku (QoS)</td></tr>
+        <tr><td>Payload Length</td><td>16</td><td>Délka dat (bez hlavičky)</td></tr>
+        <tr><td>Next Header</td><td>8</td><td>Další hlavička / protokol (6=TCP, 17=UDP, 58=ICMPv6)</td></tr>
+        <tr><td>Hop Limit</td><td>8</td><td>Ekvivalent TTL</td></tr>
+        <tr><td>Source Address</td><td>128</td><td>Zdrojová IPv6</td></tr>
+        <tr><td>Destination Address</td><td>128</td><td>Cílová IPv6</td></tr>
+    </table>
+    <p>Oproti IPv4: žádný checksum, žádná fragmentace v hlavičce, extension headers místo Options.</p>
+
+    <h2>Typy IPv6 adres</h2>
+    <table>
+        <tr><th>Typ</th><th>Prefix</th><th>Popis</th></tr>
+        <tr><td><strong>Global Unicast (GUA)</strong></td><td><code>2000::/3</code></td><td>Veřejná, routovatelná (ekvivalent veřejné IPv4)</td></tr>
+        <tr><td><strong>Link-Local</strong></td><td><code>fe80::/10</code></td><td>Automaticky na každém rozhraní, jen v lokálním segmentu</td></tr>
+        <tr><td><strong>Unique Local (ULA)</strong></td><td><code>fc00::/7</code> (fd00::/8)</td><td>Privátní adresy (ekvivalent RFC 1918)</td></tr>
+        <tr><td><strong>Multicast</strong></td><td><code>ff00::/8</code></td><td>Více příjemců (nahrazuje broadcast)</td></tr>
+        <tr><td><strong>Loopback</strong></td><td><code>::1</code></td><td>Ekvivalent 127.0.0.1</td></tr>
+        <tr><td><strong>Unspecified</strong></td><td><code>::</code></td><td>Ekvivalent 0.0.0.0</td></tr>
+    </table>
+
+    <h3>Struktura Global Unicast adresy</h3>
+    <pre><code>|  48 bitů   | 16 bitů |       64 bitů        |
+| Global      | Subnet  | Interface ID         |
+| Routing     | ID      | (EUI-64 / náhodné)  |
+| Prefix      |         |                      |
+|--- /48 -----|-- /64 --|</code></pre>
+
+    <h3>Důležité multicast adresy</h3>
+    <table>
+        <tr><th>Adresa</th><th>Popis</th></tr>
+        <tr><td><code>ff02::1</code></td><td>All Nodes (ekvivalent broadcast)</td></tr>
+        <tr><td><code>ff02::2</code></td><td>All Routers</td></tr>
+        <tr><td><code>ff02::1:ffXX:XXXX</code></td><td>Solicited-Node Multicast (pro NDP)</td></tr>
+    </table>
+
+    <h2>Automatická konfigurace</h2>
+    <h3>SLAAC (Stateless Address Autoconfiguration)</h3>
+    <ol>
+        <li>Zařízení pošle <strong>Router Solicitation (RS)</strong> na ff02::2</li>
+        <li>Router odpoví <strong>Router Advertisement (RA)</strong> s prefixem a výchozí bránou</li>
+        <li>Zařízení si vytvoří adresu: prefix + Interface ID (EUI-64 nebo náhodné)</li>
+        <li><strong>DAD (Duplicate Address Detection)</strong> – ověření unikátnosti adresy</li>
+    </ol>
+
+    <h3>EUI-64 (Extended Unique Identifier)</h3>
+    <pre><code>MAC adresa:   AA:BB:CC:DD:EE:FF
+1. Rozděl:    AA:BB:CC | DD:EE:FF
+2. Vlož FFFE: AA:BB:CC:FF:FE:DD:EE:FF
+3. Flip 7. bit prvního bajtu (Universal/Local bit)
+Výsledek:     A8BB:CCFF:FEDD:EEFF
+→ Interface ID: a8bb:ccff:fedd:eeff</code></pre>
+
+    <h3>DHCPv6</h3>
+    <ul>
+        <li><strong>Stateful DHCPv6</strong> – server přidělí adresu + DNS + další volby</li>
+        <li><strong>Stateless DHCPv6</strong> – adresa přes SLAAC, DHCPv6 jen pro DNS a další info</li>
+        <li>Řízeno příznakem v RA: <strong>M flag</strong> (managed) = stateful, <strong>O flag</strong> (other) = stateless</li>
+    </ul>
+
+    <h2>NDP (Neighbor Discovery Protocol) – ICMPv6</h2>
+    <p>Nahrazuje ARP, DHCP discover a další funkce z IPv4.</p>
+    <table>
+        <tr><th>Zpráva</th><th>Typ</th><th>Funkce</th></tr>
+        <tr><td>Router Solicitation (RS)</td><td>133</td><td>Žádost o RA (hledání routeru)</td></tr>
+        <tr><td>Router Advertisement (RA)</td><td>134</td><td>Prefix, brána, příznaky</td></tr>
+        <tr><td>Neighbor Solicitation (NS)</td><td>135</td><td>Ekvivalent ARP Request + DAD</td></tr>
+        <tr><td>Neighbor Advertisement (NA)</td><td>136</td><td>Ekvivalent ARP Reply</td></tr>
+        <tr><td>Redirect</td><td>137</td><td>Lepší next-hop pro cíl</td></tr>
+    </table>
+
+    <h2>Podsíťování IPv6</h2>
+    <h3>Standardní přidělení</h3>
+    <ul>
+        <li>ISP dostane <strong>/32</strong> nebo <strong>/48</strong></li>
+        <li>Zákazník dostane <strong>/48</strong></li>
+        <li>Standardní podsíť: <strong>/64</strong> (vždy – kvůli SLAAC)</li>
+        <li>Ze /48 na /64 = 16 bitů pro subnetting = <strong>65536 podsítí</strong></li>
+    </ul>
+
+    <h3>Příklad podsíťování</h3>
+    <pre><code>Přiděleno: 2001:db8:abcd::/48
+Potřebujeme 4 podsítě:
+
+Podsíť 0: 2001:db8:abcd:0000::/64
+Podsíť 1: 2001:db8:abcd:0001::/64
+Podsíť 2: 2001:db8:abcd:0002::/64
+Podsíť 3: 2001:db8:abcd:0003::/64
+...
+Podsíť 65535: 2001:db8:abcd:ffff::/64</code></pre>
+
+    <h2>Fragmentace v IPv6</h2>
+    <div class="important">
+        <strong>Klíčový rozdíl:</strong> V IPv6 <strong>routery nefragmentují</strong>! Fragmentaci provádí pouze <strong>odesílatel</strong>.
+    </div>
+    <ul>
+        <li>Pokud je paket větší než MTU na cestě, router vrátí <strong>ICMPv6 Packet Too Big</strong> (Type 2)</li>
+        <li>Odesílatel zmenší pakety nebo použije fragmentační extension header</li>
+        <li>Minimální MTU v IPv6: <strong>1280 bajtů</strong></li>
+        <li>Path MTU Discovery je v IPv6 povinný</li>
+    </ul>
+
+    <h2>Konfigurace IPv6 (Cisco)</h2>
+    <pre><code>ipv6 unicast-routing                    ! zapnutí IPv6 směrování
+
+interface GigabitEthernet0/0
+  ipv6 address 2001:db8:1::1/64         ! statická adresa
+  ipv6 address fe80::1 link-local       ! link-local adresa
+  ipv6 enable                            ! zapnutí IPv6 na rozhraní
+  no shutdown
+
+! Ověření
+show ipv6 interface brief
+show ipv6 neighbors                      ! NDP tabulka (ekvivalent ARP)
+show ipv6 route</code></pre>
+
+    <h2>Přechodové mechanismy IPv4 → IPv6</h2>
+    <table>
+        <tr><th>Mechanismus</th><th>Popis</th></tr>
+        <tr><td><strong>Dual-Stack</strong></td><td>Zařízení běží současně IPv4 i IPv6</td></tr>
+        <tr><td><strong>Tunneling (6to4, Teredo)</strong></td><td>IPv6 pakety zapouzdřeny v IPv4</td></tr>
+        <tr><td><strong>NAT64</strong></td><td>Překlad mezi IPv6 a IPv4</td></tr>
+    </table>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

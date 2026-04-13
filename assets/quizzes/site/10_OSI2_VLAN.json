@@ -1,0 +1,54 @@
+{
+  "title": "OSI 2 – VLAN, trunk/access porty, DTP, 802.1Q",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď typ VLAN k jeho popisu:",
+      "pairs": [
+        ["Datová VLAN", "Běžná VLAN pro uživatelský provoz"],
+        ["Native VLAN", "VLAN pro netagované rámce na trunku"],
+        ["Management VLAN", "Pro správu switche (SSH, SNMP)"],
+        ["Voice VLAN", "Speciální VLAN pro VoIP telefony s QoS"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň údaje o 802.1Q tagu:",
+      "text": "802.1Q tag má velikost {{4}} bajty a vkládá se do Ethernet rámce. Pole TPID má hodnotu {{0x8100}}. Pole VID (VLAN ID) má {{12}} bitů, což umožňuje adresovat VLAN {{1}} až {{4094}}.",
+      "answers": ["4", "0x8100", "12", "1", "4094"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Pokud jsou dva switche propojeny trunkem a mají nastavenou různou native VLAN, provoz bude fungovat bez problémů.",
+      "answer": false,
+      "explanation": "Native VLAN musí být stejná na obou koncích trunku. Různá native VLAN způsobí, že netagované rámce budou zařazeny do špatné VLAN, což vede k bezpečnostnímu riziku (VLAN hopping) a nefunkčnímu provozu."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi access portem a trunk portem. Proč je důležité vypnout DTP (switchport nonegotiate) z bezpečnostních důvodů?",
+      "keywords": ["access", "trunk", "jedna VLAN", "více VLAN", "tag", "DTP", "vyjednávání", "útočník", "nonegotiate"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď DTP režim k jeho chování:",
+      "pairs": [
+        ["dynamic auto", "Pasivně čeká na vyjednávání trunku"],
+        ["dynamic desirable", "Aktivně se pokouší vyjednat trunk"],
+        ["trunk", "Vždy trunk, i bez vyjednávání"],
+        ["access + nonegotiate", "Vždy access, DTP se neposílá"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky konfigurace Inter-VLAN routingu metodou Router-on-a-stick:",
+      "items": [
+        "Na switchi vytvořit VLAN a přiřadit access porty",
+        "Nastavit trunk port směrem k routeru",
+        "Na routeru vytvořit subinterfaces (např. Gi0/0.10, Gi0/0.20)",
+        "Na každém subinterface nastavit encapsulation dot1Q a IP adresu",
+        "Zapnout fyzické rozhraní příkazem no shutdown"
+      ]
+    }
+  ]
+}

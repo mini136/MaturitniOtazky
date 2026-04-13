@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>09 - OSI 2 - ARP, MAC, rámec a paket, zapouzdření</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>09 – OSI 2 – ARP, MAC, vztah mezi rámcem a paketem, zapouzdření</h1>
+
+    <h2>ARP (Address Resolution Protocol)</h2>
+    <h3>Účel</h3>
+    <p>ARP překládá <strong>IP adresy (L3)</strong> na <strong>MAC adresy (L2)</strong> v rámci jedné lokální sítě. Bez ARP by stanice nevěděla, na jakou MAC adresu poslat Ethernet rámec.</p>
+
+    <h3>Princip ARP</h3>
+    <ol>
+        <li>Stanice A chce komunikovat s IP 192.168.1.10, ale nezná jeho MAC adresu</li>
+        <li>A pošle <strong>ARP Request</strong> (broadcast <code>FF:FF:FF:FF:FF:FF</code>): „Kdo má IP 192.168.1.10? Řekněte to MAC adrese AA:BB:CC:DD:EE:01"</li>
+        <li>Všechny stanice v segmentu přijmou broadcast, ale odpovídá jen ta s danou IP</li>
+        <li>Stanice B s IP 192.168.1.10 odpoví <strong>ARP Reply</strong> (unicast): „192.168.1.10 jsem já, moje MAC je AA:BB:CC:DD:EE:02"</li>
+        <li>Stanice A uloží záznam do <strong>ARP cache</strong></li>
+    </ol>
+
+    <h3>ARP tabulka (ARP Cache)</h3>
+    <pre><code># Zobrazení ARP tabulky
+arp -a                   # Windows i Linux
+ip neigh show            # Linux (moderní)
+
+# Příklad výstupu:
+# 192.168.1.1    00:1a:2b:3c:4d:5e    dynamic
+# 192.168.1.10   aa:bb:cc:dd:ee:02    dynamic
+
+# Smazání záznamu
+arp -d 192.168.1.10      # smazání konkrétního záznamu
+ip neigh flush all        # vymazání všech (Linux)</code></pre>
+
+    <h3>Typy záznamů</h3>
+    <ul>
+        <li><strong>Dynamic</strong> – naučený přes ARP, vypršení obvykle po 1–5 minutách</li>
+        <li><strong>Static</strong> – ručně zadaný, nevyprší</li>
+    </ul>
+
+    <h3>ARP útoky</h3>
+    <ul>
+        <li><strong>ARP Spoofing/Poisoning</strong> – útočník posílá falešné ARP Reply → otrávení ARP cache obětí → Man-in-the-Middle</li>
+        <li>Obrana: <strong>Dynamic ARP Inspection (DAI)</strong> na switchi, statické ARP záznamy, VLAN segmentace</li>
+    </ul>
+
+    <h3>Gratuitous ARP</h3>
+    <p>Stanice posílá ARP Request pro svou vlastní IP adresu. Účel: oznámení své MAC adresy sítě, detekce duplicitní IP adresy. Používá se při startu zařízení nebo po změně MAC (např. HSRP failover).</p>
+
+    <h3>Proxy ARP</h3>
+    <p>Router odpovídá na ARP Request za stanice v jiné síti, pokud zná cestu. Umožňuje komunikaci bez výchozí brány (nedoporučuje se).</p>
+
+    <h2>MAC adresa – detaily</h2>
+    <h3>Struktura</h3>
+    <pre><code>AA:BB:CC:DD:EE:FF
+└──┬──┘ └──┬──┘
+  OUI    Device ID
+(výrobce) (unikátní)</code></pre>
+
+    <h3>Speciální MAC adresy</h3>
+    <table>
+        <tr><th>Adresa</th><th>Typ</th><th>Popis</th></tr>
+        <tr><td><code>FF:FF:FF:FF:FF:FF</code></td><td>Broadcast</td><td>Všechna zařízení v segmentu</td></tr>
+        <tr><td><code>01:00:5E:xx:xx:xx</code></td><td>IPv4 Multicast</td><td>Multicastové skupiny</td></tr>
+        <tr><td><code>33:33:xx:xx:xx:xx</code></td><td>IPv6 Multicast</td><td>IPv6 multicast (NDP apod.)</td></tr>
+        <tr><td><code>01:80:C2:00:00:00</code></td><td>STP</td><td>Spanning Tree BPDU</td></tr>
+    </table>
+
+    <h2>Vztah mezi rámcem a paketem</h2>
+    <h3>Rámec obsahuje paket</h3>
+    <p>Paket (L3) je <strong>zapouzdřen</strong> (encapsulován) uvnitř rámce (L2) jako jeho datová část (payload).</p>
+    <pre><code>┌─────────────────── ETHERNET RÁMEC (L2) ──────────────────┐
+│ Preambule │ Dest MAC │ Src MAC │ Type │  PAYLOAD  │ FCS  │
+│                                        │           │      │
+│                              ┌─────── IP PAKET (L3) ─────┐│
+│                              │ IP Header │   DATA        ││
+│                              │           │               ││
+│                              │     ┌── TCP SEGMENT (L4) ─┤│
+│                              │     │ TCP Hdr │ App Data  ││
+│                              └─────┴─────────┴───────────┘│
+└───────────────────────────────────────────────────────────┘</code></pre>
+
+    <h3>Rozdíl rámec vs. paket</h3>
+    <table>
+        <tr><th>Vlastnost</th><th>Rámec (Frame)</th><th>Paket (Packet)</th></tr>
+        <tr><td>Vrstva</td><td>L2 (linková)</td><td>L3 (síťová)</td></tr>
+        <tr><td>Adresace</td><td>MAC adresy</td><td>IP adresy</td></tr>
+        <tr><td>Dosah</td><td>Lokální segment (hop-by-hop)</td><td>End-to-end (přes sítě)</td></tr>
+        <tr><td>Mění se po cestě?</td><td><strong>ANO</strong> – MAC adresy se mění na každém hopu</td><td><strong>NE</strong> – IP adresy zůstávají stejné (bez NAT)</td></tr>
+    </table>
+
+    <h2>Zapouzdření (Encapsulation)</h2>
+    <h3>Proces zapouzdření</h3>
+    <ol>
+        <li><strong>Aplikační vrstva (L7/6/5)</strong> – data aplikace</li>
+        <li><strong>Transportní vrstva (L4)</strong> – přidá TCP/UDP hlavičku → <strong>Segment</strong></li>
+        <li><strong>Síťová vrstva (L3)</strong> – přidá IP hlavičku → <strong>Paket</strong></li>
+        <li><strong>Linková vrstva (L2)</strong> – přidá MAC hlavičku + FCS → <strong>Rámec</strong></li>
+        <li><strong>Fyzická vrstva (L1)</strong> – převod na bity → elektrické/optické signály</li>
+    </ol>
+
+    <h3>Proces de-zapouzdření</h3>
+    <p>Na přijímající straně probíhá <strong>opačný proces</strong> – každá vrstva odstraní svou hlavičku a předá data vyšší vrstvě.</p>
+
+    <h3>Příklad: PC A (192.168.1.2) → Router → PC B (10.0.0.5)</h3>
+    <table>
+        <tr><th>Hop</th><th>Zdrojová MAC</th><th>Cílová MAC</th><th>Zdrojová IP</th><th>Cílová IP</th></tr>
+        <tr><td>PC A → Router</td><td>MAC_A</td><td>MAC_Router_in</td><td>192.168.1.2</td><td>10.0.0.5</td></tr>
+        <tr><td>Router → PC B</td><td>MAC_Router_out</td><td>MAC_B</td><td>192.168.1.2</td><td>10.0.0.5</td></tr>
+    </table>
+
+    <div class="important">
+        <strong>Klíčový koncept:</strong> IP adresy se po cestě <strong>nemění</strong> (end-to-end), ale MAC adresy se mění na <strong>každém hopu</strong> (hop-by-hop). Router odstraní starý L2 rámec a vytvoří nový s novými MAC adresami.
+    </div>
+
+    <h2>PDU (Protocol Data Units) – shrnutí</h2>
+    <table>
+        <tr><th>Vrstva</th><th>PDU</th><th>Adresace</th></tr>
+        <tr><td>L7-5 (Aplikační)</td><td>Data</td><td>–</td></tr>
+        <tr><td>L4 (Transportní)</td><td>Segment (TCP) / Datagram (UDP)</td><td>Porty</td></tr>
+        <tr><td>L3 (Síťová)</td><td>Paket</td><td>IP adresy</td></tr>
+        <tr><td>L2 (Linková)</td><td>Rámec (Frame)</td><td>MAC adresy</td></tr>
+        <tr><td>L1 (Fyzická)</td><td>Bity</td><td>–</td></tr>
+    </table>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

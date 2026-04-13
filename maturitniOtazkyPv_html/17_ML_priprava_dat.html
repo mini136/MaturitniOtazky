@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>17 - ML: Příprava dat</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>17 – ML: Příprava dat</h1>
+
+    <h2>Typy strojového učení</h2>
+    <table>
+        <tr><th>Typ</th><th>Popis</th><th>Příklady</th></tr>
+        <tr><td><strong>Supervised</strong></td><td>Data s labely (X → y)</td><td>Klasifikace, regrese</td></tr>
+        <tr><td><strong>Unsupervised</strong></td><td>Data bez labelů</td><td>Clustering, redukce dimenzí</td></tr>
+        <tr><td><strong>Reinforcement</strong></td><td>Agent se učí z odměn</td><td>Hry, robotika</td></tr>
+    </table>
+
+    <h2>Data Pipeline</h2>
+    <ol>
+        <li><strong>Sběr dat</strong> — API, scraping, databáze</li>
+        <li><strong>Čištění</strong> — chybějící hodnoty, duplikáty, outliers</li>
+        <li><strong>Transformace</strong> — normalizace, encoding</li>
+        <li><strong>Feature engineering</strong> — výběr/tvorba příznaků</li>
+        <li><strong>Rozdělení</strong> — train/test split</li>
+    </ol>
+
+    <h2>Normalizace</h2>
+    <table>
+        <tr><th>Metoda</th><th>Vzorec</th><th>Rozsah</th></tr>
+        <tr><td>Min-Max</td><td>(x − min) / (max − min)</td><td>[0, 1]</td></tr>
+        <tr><td>Z-score</td><td>(x − μ) / σ</td><td>střed 0, σ=1</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Syntetický dataset</strong> — vytvoření náhodných dat studentů s chybějícími hodnotami (None) pro demonstraci čištění dat.</div>
+    <pre><code>import random
+import math
+
+random.seed(42)
+
+# 1. Synteticky dataset
+def generuj_studenty(n=100):
+    jmena = ["Alice", "Bob", "Charlie", "Diana", "Eva",
+             "Filip", "Gita", "Hana", "Ivan", "Jana"]
+    data = []
+    for i in range(n):
+        student = {
+            "id": i+1,
+            "jmeno": random.choice(jmena),
+            "vek": random.randint(18, 30),
+            "hodiny_studia": round(random.uniform(0, 40), 1),
+            "predchozi_znamka": round(random.uniform(1, 5), 1),
+            "znamka": None  # target
+        }
+        # Simulace vztahu: vice studia = lepsi znamka
+        student["znamka"] = round(
+            5 - (student["hodiny_studia"]/40) * 3
+            + random.uniform(-0.5, 0.5), 1)
+        student["znamka"] = max(1, min(5, student["znamka"]))
+
+        # Simulace chybejicich hodnot (~10%)
+        if random.random() &lt; 0.1:
+            student["hodiny_studia"] = None
+        if random.random() &lt; 0.05:
+            student["vek"] = None
+        data.append(student)
+    return data
+
+studenti = generuj_studenty(100)
+print(f"Pocet studentu: {len(studenti)}")
+print(f"Prvni: {studenti[0]}")</code></pre>
+
+    <div class="code-desc"><strong>Imputace chybějících hodnot</strong> — nahrazení <code>None</code> průměrem (mean), mediánem nebo nejčastější hodnotou (modem). Funkce <code>imputuj()</code> detekuje a nahradí chybějící data.</div>
+    <pre><code># 2. Imputace - nahrazeni chybejicich hodnot
+def imputuj(data, sloupec, metoda="mean"):
+    """Nahradi None hodnotou podle zvolene metody"""
+    hodnoty = [d[sloupec] for d in data if d[sloupec] is not None]
+    chybejici = sum(1 for d in data if d[sloupec] is None)
+
+    if metoda == "mean":
+        nahrada = sum(hodnoty) / len(hodnoty)
+    elif metoda == "median":
+        s = sorted(hodnoty)
+        n = len(s)
+        nahrada = s[n//2] if n % 2 else (s[n//2-1] + s[n//2]) / 2
+    elif metoda == "mode":
+        nahrada = max(set(hodnoty), key=hodnoty.count)
+
+    for d in data:
+        if d[sloupec] is None:
+            d[sloupec] = round(nahrada, 1)
+
+    print(f"  {sloupec}: {chybejici} chybejicich → nahrazeno ({metoda}: {nahrada:.1f})")
+
+imputuj(studenti, "hodiny_studia", "mean")
+imputuj(studenti, "vek", "median")</code></pre>
+
+    <div class="code-desc"><strong>Detekce outlierů</strong> pomocí IQR (interkvartilový rozsah). Hodnoty mimo [Q1 − 1.5×IQR, Q3 + 1.5×IQR] jsou považovány za odlehlé.</div>
+    <pre><code># 3. Detekce outlieru (IQR metoda)
+def detekuj_outliery(data, sloupec):
+    hodnoty = sorted(d[sloupec] for d in data)
+    n = len(hodnoty)
+    q1 = hodnoty[n // 4]
+    q3 = hodnoty[3 * n // 4]
+    iqr = q3 - q1
+    dolni = q1 - 1.5 * iqr
+    horni = q3 + 1.5 * iqr
+
+    outliery = [d for d in data if d[sloupec] &lt; dolni or d[sloupec] &gt; horni]
+    print(f"  {sloupec}: IQR={iqr:.1f}, rozsah=[{dolni:.1f}, {horni:.1f}], outlieru: {len(outliery)}")
+    return outliery
+
+detekuj_outliery(studenti, "hodiny_studia")</code></pre>
+
+    <div class="code-desc"><strong>Min-Max a Z-score normalizace</strong> — přeškálování hodnot do rozsahu [0,1] resp. standardizace na střed 0 a směrodatnou odchylku 1.</div>
+    <pre><code># 4. Normalizace
+def min_max(data, sloupec):
+    hodnoty = [d[sloupec] for d in data]
+    min_v, max_v = min(hodnoty), max(hodnoty)
+    for d in data:
+        d[f"{sloupec}_norm"] = round((d[sloupec] - min_v) / (max_v - min_v), 3)
+
+def z_score(data, sloupec):
+    hodnoty = [d[sloupec] for d in data]
+    prumer = sum(hodnoty) / len(hodnoty)
+    odchylka = math.sqrt(sum((x - prumer)**2 for x in hodnoty) / len(hodnoty))
+    for d in data:
+        d[f"{sloupec}_zscore"] = round((d[sloupec] - prumer) / odchylka, 3) if odchylka else 0
+
+min_max(studenti, "hodiny_studia")
+z_score(studenti, "predchozi_znamka")
+print(f"  Ukazka: norm={studenti[0].get('hodiny_studia_norm')}, "
+      f"z={studenti[0].get('predchozi_znamka_zscore')}")</code></pre>
+
+    <div class="code-desc"><strong>One-hot encoding</strong> — převod kategorické proměnné (jméno) na binární sloupce. Každá kategorie dostane vlastní sloupec (0/1).</div>
+    <pre><code># 5. One-hot encoding
+def one_hot(data, sloupec):
+    unikatni = sorted(set(d[sloupec] for d in data))
+    print(f"  One-hot '{sloupec}': {len(unikatni)} kategorii")
+    for d in data:
+        for kat in unikatni:
+            d[f"{sloupec}_{kat}"] = 1 if d[sloupec] == kat else 0
+
+one_hot(studenti, "jmeno")
+print(f"  Ukazka sloupcu: {[k for k in studenti[0] if k.startswith('jmeno_')]}")</code></pre>
+
+    <div class="code-desc"><strong>Korelace</strong> — Pearsonův korelační koeficient měří lineární závislost dvou proměnných. Hodnota blízká −1 nebo +1 znamená silnou korelaci.</div>
+    <pre><code># 6. Korelace
+def korelace(data, sl1, sl2):
+    x = [d[sl1] for d in data]
+    y = [d[sl2] for d in data]
+    n = len(x)
+    mx, my = sum(x)/n, sum(y)/n
+    cov = sum((x[i]-mx)*(y[i]-my) for i in range(n)) / n
+    sx = math.sqrt(sum((xi-mx)**2 for xi in x) / n)
+    sy = math.sqrt(sum((yi-my)**2 for yi in y) / n)
+    r = cov / (sx * sy) if sx and sy else 0
+    print(f"  Korelace({sl1}, {sl2}) = {r:.3f}")
+    return r
+
+korelace(studenti, "hodiny_studia", "znamka")
+korelace(studenti, "predchozi_znamka", "znamka")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

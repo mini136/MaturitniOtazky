@@ -1,0 +1,55 @@
+{
+  "title": "Síťová komunikace, sockety",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď vlastnost ke správnému protokolu (TCP vs UDP):",
+      "pairs": [
+        ["Spojované, 3-way handshake", "TCP"],
+        ["Bez spojení, bez garance doručení", "UDP"],
+        ["HTTP, SSH, email", "TCP (typické použití)"],
+        ["DNS, video streaming, online hry", "UDP (typické použití)"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "UDP je vždy horší volba než TCP, protože negarantuje doručení paketů.",
+      "answer": false,
+      "explanation": "UDP je vhodnější pro aplikace, kde je důležitější rychlost než spolehlivost — video streaming, online hry, DNS dotazy. Overhead TCP (handshake, potvrzení, řazení) by zde zbytečně zpomaloval komunikaci."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď životní cyklus TCP serveru pomocí Berkeley Socket API:",
+      "items": [
+        "socket() — vytvoření soketu",
+        "bind() — přiřazení adresy a portu",
+        "listen() — naslouchání na portu",
+        "accept() — přijetí klientského spojení",
+        "send()/recv() — výměna dat",
+        "close() — uzavření soketu"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň rozdíly mezi TCP a UDP sokety:",
+      "text": "TCP soket se vytváří s typem {{SOCK_STREAM}} a používá connect/accept. UDP soket používá typ {{SOCK_DGRAM}} a místo send/recv používá {{sendto/recvfrom}}, kde se předává adresa příjemce.",
+      "answers": ["SOCK_STREAM", "SOCK_DGRAM", "sendto/recvfrom"]
+    },
+    {
+      "type": "open",
+      "prompt": "Jak funguje HTTP GET požadavek na nízké úrovni přes TCP soket? Jaké části má HTTP hlavička?",
+      "keywords": ["TCP", "soket", "GET", "Host", "hlavička", "tělo", "Connection"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď funkci Berkeley Socket API k její roli:",
+      "pairs": [
+        ["bind()", "Přiřazení IP adresy a portu soketu (server)"],
+        ["listen()", "Přepnutí soketu do režimu naslouchání (server)"],
+        ["connect()", "Navázání spojení se serverem (klient)"],
+        ["accept()", "Přijetí příchozího spojení (server)"]
+      ]
+    }
+  ]
+}

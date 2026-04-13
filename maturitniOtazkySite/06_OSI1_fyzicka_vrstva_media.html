@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06 - OSI 1 - Fyzická vrstva - přenosová média, signály, topologie</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>06 – OSI 1 – Fyzická vrstva – přenosová média, signály, topologie, kódování, detekce chyb</h1>
+
+    <h2>Fyzická vrstva v OSI modelu</h2>
+    <p>Nejnižší vrstva OSI modelu. Zajišťuje <strong>přenos bitů</strong> po fyzickém médiu. Definuje elektrické, optické a mechanické vlastnosti – napěťové úrovně, konektory, rychlosti, kódování signálů.</p>
+
+    <h2>Přenosová média</h2>
+    <h3>Metalická (měděná) média</h3>
+    <table>
+        <tr><th>Typ</th><th>Popis</th><th>Použití</th></tr>
+        <tr><td><strong>UTP (Unshielded Twisted Pair)</strong></td><td>Nestíněná kroucená dvojlinka, párové vodiče zkroucené proti rušení</td><td>LAN, Ethernet, nejrozšířenější</td></tr>
+        <tr><td><strong>STP (Shielded Twisted Pair)</strong></td><td>Stíněná kroucená dvojlinka</td><td>Průmyslové prostředí, EMI prostředí</td></tr>
+        <tr><td><strong>Koaxiální kabel</strong></td><td>Centrální vodič + stínění + plášť</td><td>TV rozvody, staré sítě (10BASE2, 10BASE5)</td></tr>
+    </table>
+
+    <h3>Kategorie UTP kabelů</h3>
+    <table>
+        <tr><th>Kategorie</th><th>Max. rychlost</th><th>Max. frekvence</th><th>Použití</th></tr>
+        <tr><td>Cat 5</td><td>100 Mbps</td><td>100 MHz</td><td>Fast Ethernet (zastaralé)</td></tr>
+        <tr><td>Cat 5e</td><td>1 Gbps</td><td>100 MHz</td><td>Gigabit Ethernet</td></tr>
+        <tr><td>Cat 6</td><td>1 Gbps (10G do 55m)</td><td>250 MHz</td><td>Gigabit / 10G krátké vzdálenosti</td></tr>
+        <tr><td>Cat 6a</td><td>10 Gbps</td><td>500 MHz</td><td>10 Gigabit Ethernet (100m)</td></tr>
+        <tr><td>Cat 7</td><td>10 Gbps</td><td>600 MHz</td><td>Datová centra</td></tr>
+        <tr><td>Cat 8</td><td>25/40 Gbps</td><td>2000 MHz</td><td>Datová centra, krátké spoje</td></tr>
+    </table>
+    <p>Max. délka segmentu UTP: <strong>100 m</strong> (90 m kabeláž + 10 m patch kabely).</p>
+
+    <h3>Optická média</h3>
+    <table>
+        <tr><th>Typ</th><th>Jádro</th><th>Vzdálenost</th><th>Použití</th></tr>
+        <tr><td><strong>Singlemode (SMF)</strong></td><td>8-10 µm</td><td>Desítky km</td><td>WAN, páteřní spoje</td></tr>
+        <tr><td><strong>Multimode (MMF)</strong></td><td>50/62.5 µm</td><td>Stovky m – 2 km</td><td>LAN, datová centra</td></tr>
+    </table>
+    <p>Výhody optiky: imunita vůči EMI, vysoká rychlost, velká vzdálenost, bezpečnost (nelze snadno odposlouchávat).</p>
+
+    <h3>Bezdrátová média</h3>
+    <p>Elektromagnetické vlny – Wi-Fi, Bluetooth, mikrovlny, satelit, IR.</p>
+
+    <h2>Přenos bitů a signály</h2>
+    <h3>Typy signálů</h3>
+    <ul>
+        <li><strong>Analogový signál</strong> – spojitý průběh (sinusovka), charakterizován amplitudou, frekvencí, fází</li>
+        <li><strong>Digitální signál</strong> – diskrétní hodnoty (0 a 1), obdélníkový průběh</li>
+    </ul>
+
+    <h3>Šířka pásma (Bandwidth)</h3>
+    <ul>
+        <li><strong>Analogová</strong> – rozsah frekvencí [Hz], například 100 MHz</li>
+        <li><strong>Digitální</strong> – přenosová rychlost [bps], například 1 Gbps</li>
+    </ul>
+
+    <h3>Přenosové režimy</h3>
+    <table>
+        <tr><th>Režim</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><strong>Simplex</strong></td><td>Jednosměrný přenos</td><td>TV vysílání, klávesnice</td></tr>
+        <tr><td><strong>Half-duplex</strong></td><td>Obousměrný, ale ne současně</td><td>Vysílačka, hub Ethernet</td></tr>
+        <tr><td><strong>Full-duplex</strong></td><td>Obousměrný současně</td><td>Telefon, switch Ethernet</td></tr>
+    </table>
+
+    <h2>Topologie sítí</h2>
+    <h3>Fyzické topologie</h3>
+    <table>
+        <tr><th>Topologie</th><th>Popis</th><th>Výhody / Nevýhody</th></tr>
+        <tr><td><strong>Sběrnice (Bus)</strong></td><td>Všechny stanice na jednom kabelu</td><td>Jednoduché, ale porucha kabelu = celá síť nefunguje</td></tr>
+        <tr><td><strong>Hvězda (Star)</strong></td><td>Centrální prvek (switch/hub)</td><td>Nejběžnější, snadná údržba, single point of failure = centrum</td></tr>
+        <tr><td><strong>Kruh (Ring)</strong></td><td>Uzavřený okruh, data kolují jedním směrem</td><td>Token Ring, FDDI; porucha jednoho uzlu může narušit síť</td></tr>
+        <tr><td><strong>Strom (Tree)</strong></td><td>Hierarchická hvězda</td><td>Rozšiřitelné, ale závislé na páteřním spoji</td></tr>
+        <tr><td><strong>Mesh</strong></td><td>Každý s každým (plný) nebo částečný</td><td>Vysoká redundance, složitá kabeláž</td></tr>
+    </table>
+
+    <h3>Logická vs. fyzická topologie</h3>
+    <ul>
+        <li><strong>Fyzická</strong> – jak jsou reálně zapojeny kabely</li>
+        <li><strong>Logická</strong> – jak data proudí sítí (např. fyzicky hvězda, logicky sběrnice u starého hubu)</li>
+    </ul>
+
+    <h2>Kódování dat</h2>
+    <h3>Linkové kódování</h3>
+    <table>
+        <tr><th>Kódování</th><th>Popis</th><th>Použití</th></tr>
+        <tr><td><strong>NRZ (Non-Return to Zero)</strong></td><td>1 = vysoká úroveň, 0 = nízká</td><td>Jednoduché, problém synchronizace</td></tr>
+        <tr><td><strong>NRZI</strong></td><td>Změna = 1, beze změny = 0</td><td>USB</td></tr>
+        <tr><td><strong>Manchester</strong></td><td>Přechod uprostřed bitu (↑=1, ↓=0)</td><td>10BASE-T Ethernet</td></tr>
+        <tr><td><strong>4B/5B</strong></td><td>4 datové bity → 5 symbolů</td><td>Fast Ethernet (100BASE-TX)</td></tr>
+        <tr><td><strong>8B/10B</strong></td><td>8 datových bitů → 10 symbolů</td><td>Gigabit Ethernet</td></tr>
+        <tr><td><strong>PAM-5</strong></td><td>5 napěťových úrovní</td><td>1000BASE-T (Gigabit po UTP)</td></tr>
+    </table>
+
+    <div class="note">
+        <strong>Proč kódujeme?</strong> Zajištění synchronizace hodin, dostatek přechodů v signálu, DC balance (stejný počet 0 a 1), detekce chyb.
+    </div>
+
+    <h2>Přenosová rychlost</h2>
+    <ul>
+        <li><strong>Bitrate (bitová rychlost)</strong> – počet přenesených bitů za sekundu [bps]</li>
+        <li><strong>Baudrate (symbolová rychlost)</strong> – počet změn signálu za sekundu [Bd]</li>
+        <li>Vztah: <code>bitrate = baudrate × log₂(počet stavů)</code></li>
+        <li>Příklad: 1000 Bd s 16 stavy (QAM-16) = 1000 × 4 = 4000 bps</li>
+    </ul>
+
+    <h3>Nyquistův a Shannonův teorém</h3>
+    <ul>
+        <li><strong>Nyquist</strong> (bez šumu): <code>C = 2B × log₂(L)</code> – B = šířka pásma, L = počet úrovní</li>
+        <li><strong>Shannon</strong> (se šumem): <code>C = B × log₂(1 + SNR)</code> – SNR = poměr signál/šum</li>
+    </ul>
+
+    <h2>Detekce chyb na fyzické vrstvě</h2>
+    <ul>
+        <li><strong>Paritní bit</strong> – sudá/lichá parita, detekce 1bitové chyby</li>
+        <li><strong>CRC (Cyclic Redundancy Check)</strong> – polynomiální dělení, detekuje burst chyby</li>
+        <li><strong>Kontrolní součet (Checksum)</strong> – součet datových bloků</li>
+        <li><strong>FEC (Forward Error Correction)</strong> – korekce chyb bez opakování přenosu (Hamming, Reed-Solomon)</li>
+    </ul>
+
+    <h3>Paritní bit – příklad</h3>
+    <pre><code>Data: 1011001
+Sudá parita: 1011001 + 0 = 10110010 (sudý počet jedniček)
+Lichá parita: 1011001 + 1 = 10110011 (lichý počet jedniček)
+
+→ Detekce jedné chyby, ale ne oprava ani detekce dvou chyb</code></pre>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20 - Firewall, NAT, DMZ, VPN</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>20 – Firewall – Principy, typy, konfigurace pravidel, NAT, DMZ, VPN</h1>
+
+    <h2>Co je Firewall</h2>
+    <p>Síťové bezpečnostní zařízení (HW nebo SW), které <strong>filtruje síťový provoz</strong> na základě definovaných pravidel. Chrání síť před neoprávněným přístupem.</p>
+
+    <h2>Typy firewallů</h2>
+    <h3>1. Stateless (Packet Filtering) Firewall</h3>
+    <ul>
+        <li>Filtruje <strong>každý paket nezávisle</strong> na základě hlaviček (L3/L4)</li>
+        <li>Kontroluje: zdrojová/cílová IP, zdrojový/cílový port, protokol</li>
+        <li><strong>Nesleduje stav spojení</strong></li>
+        <li>Rychlý, ale snadno obcházen (fragmentace, podvržené ACK)</li>
+        <li>Příklad: <strong>ACL na Cisco routeru</strong></li>
+    </ul>
+
+    <h3>2. Stateful Firewall</h3>
+    <ul>
+        <li>Udržuje <strong>tabulku stavů spojení</strong> (state table)</li>
+        <li>Sleduje celé spojení (SYN → SYN+ACK → ACK...)</li>
+        <li>Automaticky povolí odpovědi na povolené odchozí spojení</li>
+        <li>Bezpečnější – rozpozná nelegitimní pakety</li>
+        <li>Příklad: <strong>iptables/nftables s conntrack, Cisco ASA, pfSense</strong></li>
+    </ul>
+
+    <h3>3. Aplikační (Proxy / Application Layer) Firewall</h3>
+    <ul>
+        <li>Pracuje na <strong>vrstvě 7</strong> – rozumí obsahu (HTTP, DNS, FTP...)</li>
+        <li>Může filtrovat URL, blokovat malware, inspekce SSL</li>
+        <li><strong>WAF</strong> (Web Application Firewall) – ochrana webových aplikací (SQL injection, XSS)</li>
+        <li>Příklad: <strong>ModSecurity, Cloudflare WAF, F5</strong></li>
+    </ul>
+
+    <h3>4. Next-Generation Firewall (NGFW)</h3>
+    <ul>
+        <li>Kombinace stateful + aplikační inspekce + IPS + DPI</li>
+        <li>Identifikace aplikací (i na nestandardních portech)</li>
+        <li>Příklad: <strong>Palo Alto, Fortinet FortiGate, Cisco Firepower</strong></li>
+    </ul>
+
+    <h3>Srovnání</h3>
+    <table>
+        <tr><th>Vlastnost</th><th>Stateless</th><th>Stateful</th><th>Aplikační</th></tr>
+        <tr><td>OSI vrstva</td><td>3–4</td><td>3–4</td><td>7</td></tr>
+        <tr><td>Stav spojení</td><td>Ne</td><td>Ano</td><td>Ano</td></tr>
+        <tr><td>Obsah paketů</td><td>Ne</td><td>Ne</td><td>Ano (DPI)</td></tr>
+        <tr><td>Výkon</td><td>Vysoký</td><td>Střední</td><td>Nižší</td></tr>
+        <tr><td>Bezpečnost</td><td>Základní</td><td>Dobrá</td><td>Nejvyšší</td></tr>
+    </table>
+
+    <h2>Konfigurace pravidel</h2>
+    <h3>ACL na Cisco (stateless)</h3>
+    <pre><code>! Standard ACL (filtruje jen podle zdrojové IP)
+access-list 10 permit 192.168.1.0 0.0.0.255
+access-list 10 deny any
+
+! Extended ACL (src/dst IP, port, protokol)
+access-list 100 permit tcp 192.168.1.0 0.0.0.255 any eq 80     ! povolí HTTP
+access-list 100 permit tcp 192.168.1.0 0.0.0.255 any eq 443    ! povolí HTTPS
+access-list 100 permit udp any any eq 53                         ! DNS
+access-list 100 deny ip any any                                  ! zamítni zbytek
+
+! Aplikace na rozhraní
+interface GigabitEthernet0/0
+  ip access-group 100 in        ! in = příchozí provoz na rozhraní
+
+! Named ACL
+ip access-list extended WEB_ACL
+  permit tcp 192.168.1.0 0.0.0.255 any eq 80
+  permit tcp 192.168.1.0 0.0.0.255 any eq 443
+  deny ip any any log</code></pre>
+
+    <h3>iptables (Linux – stateful)</h3>
+    <pre><code># Výchozí politika – zamítni vše
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT ACCEPT
+
+# Povol established/related spojení (stateful)
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Povol SSH z konkrétní sítě
+iptables -A INPUT -p tcp -s 192.168.1.0/24 --dport 22 -j ACCEPT
+
+# Povol HTTP a HTTPS
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+# Povol ICMP (ping)
+iptables -A INPUT -p icmp -j ACCEPT
+
+# Loguj zamítnuté
+iptables -A INPUT -j LOG --log-prefix "FIREWALL DROP: "</code></pre>
+
+    <h2>NAT (Network Address Translation)</h2>
+    <p>Překlad privátních IP adres na veřejné → umožňuje komunikaci vnitřní sítě s internetem.</p>
+
+    <h3>Typy NAT</h3>
+    <table>
+        <tr><th>Typ</th><th>Popis</th></tr>
+        <tr><td><strong>Static NAT</strong></td><td>1:1 mapování (privátní ↔ veřejná). Pro servery.</td></tr>
+        <tr><td><strong>Dynamic NAT</strong></td><td>Pool veřejných adres, přiděluje se dynamicky.</td></tr>
+        <tr><td><strong>PAT / NAT Overload</strong></td><td>Více privátních → 1 veřejná (rozlišení přes porty). Nejběžnější.</td></tr>
+    </table>
+
+    <h3>Konfigurace NAT (Cisco)</h3>
+    <pre><code>! PAT (NAT Overload) – nejběžnější
+access-list 1 permit 192.168.1.0 0.0.0.255
+
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+
+interface GigabitEthernet0/0
+  ip nat inside                          ! vnitřní rozhraní
+
+interface GigabitEthernet0/1
+  ip nat outside                         ! vnější rozhraní (internet)
+
+! Static NAT – mapování serveru
+ip nat inside source static 192.168.1.10 203.0.113.10
+
+! Port forwarding (server za NAT)
+ip nat inside source static tcp 192.168.1.10 80 203.0.113.1 80
+
+! Ověření
+show ip nat translations
+show ip nat statistics</code></pre>
+
+    <h2>DMZ (Demilitarized Zone)</h2>
+    <p>Oddělená síťová zóna mezi <strong>vnitřní sítí</strong> a <strong>internetem</strong>. Obsahuje veřejně přístupné servery (web, mail, DNS).</p>
+    <pre><code>  Internet
+     |
+  [Firewall]
+   /     \
+  DMZ    LAN
+  |       |
+ Web   Klienti
+ Mail  Databáze</code></pre>
+    <h3>Pravidla DMZ</h3>
+    <ul>
+        <li>Internet → DMZ: <strong>povoleny</strong> specifické služby (HTTP, SMTP)</li>
+        <li>DMZ → LAN: <strong>zakázáno</strong> (nebo jen konkrétní porty, např. DB)</li>
+        <li>LAN → DMZ: <strong>povoleno</strong></li>
+        <li>LAN → Internet: <strong>povoleno</strong> (přes NAT)</li>
+        <li>DMZ → Internet: <strong>omezeno</strong> (jen nutné aktualizace)</li>
+    </ul>
+
+    <h2>VPN (Virtual Private Network)</h2>
+    <p>Šifrovaný tunel přes veřejnou síť (internet) → bezpečná komunikace jako na privátní síti.</p>
+
+    <h3>Typy VPN</h3>
+    <table>
+        <tr><th>Typ</th><th>Popis</th><th>Použití</th></tr>
+        <tr><td><strong>Site-to-Site</strong></td><td>Propojení dvou sítí (router-router)</td><td>Pobočky firmy</td></tr>
+        <tr><td><strong>Remote Access</strong></td><td>Klient se připojuje k firemní síti</td><td>Práce z domova</td></tr>
+    </table>
+
+    <h3>VPN protokoly</h3>
+    <table>
+        <tr><th>Protokol</th><th>Popis</th></tr>
+        <tr><td><strong>IPSec</strong></td><td>L3 tunel, AH (integrita) + ESP (šifrování), IKE pro výměnu klíčů</td></tr>
+        <tr><td><strong>SSL/TLS VPN</strong></td><td>Přes HTTPS (port 443), klient nepotřebuje speciální SW</td></tr>
+        <tr><td><strong>OpenVPN</strong></td><td>Open-source, SSL/TLS, UDP/TCP</td></tr>
+        <tr><td><strong>WireGuard</strong></td><td>Moderní, rychlý, jednoduchý, UDP</td></tr>
+        <tr><td><strong>PPTP</strong></td><td>Zastaralý, nebezpečný – nepoužívat</td></tr>
+        <tr><td><strong>L2TP/IPSec</strong></td><td>L2 tunel + IPSec šifrování</td></tr>
+        <tr><td><strong>GRE</strong></td><td>Generic Routing Encapsulation – tunelování (bez šifrování)</td></tr>
+    </table>
+
+    <h3>IPSec režimy</h3>
+    <ul>
+        <li><strong>Transport mode</strong> – šifruje jen data (payload), IP hlavička zůstává → host-to-host</li>
+        <li><strong>Tunnel mode</strong> – šifruje celý původní paket, nová IP hlavička → site-to-site</li>
+    </ul>
+
+    <div class="important">
+        <strong>Shrnutí pro maturitu:</strong> Stateless = ACL (L3/L4), Stateful = sleduje spojení, Aplikační = L7 inspekce. NAT Overload (PAT) = nejběžnější. DMZ = zóna pro veřejné servery. VPN = šifrovaný tunel přes internet.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,48 @@
+{
+  "title": "Bezdrátové sítě – Wi-Fi, antény, zabezpečení",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď Wi-Fi standard k jeho hlavní vlastnosti:",
+      "pairs": [
+        ["Wi-Fi 4 (802.11n)", "MIMO, 2,4 + 5 GHz, až 600 Mbps"],
+        ["Wi-Fi 5 (802.11ac)", "MU-MIMO, jen 5 GHz, až 6,9 Gbps"],
+        ["Wi-Fi 6 (802.11ax)", "OFDMA, 2,4 + 5 + 6 GHz, až 9,6 Gbps"],
+        ["Wi-Fi 7 (802.11be)", "4096-QAM, MLO, až 46 Gbps"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o frekvenčních pásmech Wi-Fi:",
+      "text": "V pásmu 2,4 GHz existují pouze {{3}} nepřekrývající se kanály ({{1, 6, 11}}). Pásmo {{5 GHz}} nabízí více kanálů a méně rušení, ale má {{kratší}} dosah.",
+      "answers": ["3", "1, 6, 11", "5 GHz", "kratší"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď zabezpečení Wi-Fi od nejslabšího po nejsilnější:",
+      "items": ["WEP (RC4, prolomen)", "WPA (TKIP, zastaralý)", "WPA2 (AES-CCMP)", "WPA3 (AES-GCMP + SAE)"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Wi-Fi používá přístupovou metodu CSMA/CD, stejně jako kabelový Ethernet.",
+      "answer": false,
+      "explanation": "Wi-Fi používá CSMA/CA (Collision Avoidance), protože v bezdrátovém prostředí nelze spolehlivě detekovat kolize během vysílání. Kabelový Ethernet historicky používal CSMA/CD (Collision Detection), ale moderní full-duplex přepínané sítě kolize nemají."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, co je OFDMA a proč je výhodný oproti běžnému OFDM v prostředí s mnoha klienty.",
+      "keywords": ["subkanály", "více klientů", "současně", "efektivita", "paralelní", "Wi-Fi 6"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď typ antény k jejímu typickému použití:",
+      "pairs": [
+        ["360° horizontálně, nízký zisk", "Omnidirekční"],
+        ["Úzký paprsek, vysoký zisk, point-to-point", "Směrová (Directional)"],
+        ["Výseč 60°–120°, venkovní pokrytí", "Sektorová"],
+        ["Polokruhový vzor, nástěnná montáž", "Patch / Panel"]
+      ]
+    }
+  ]
+}

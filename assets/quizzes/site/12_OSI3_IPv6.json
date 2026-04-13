@@ -1,0 +1,54 @@
+{
+  "title": "OSI 3 – IPv6, adresace, SLAAC, NDP",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď typ IPv6 adresy k jejímu prefixu a účelu:",
+      "pairs": [
+        ["Global Unicast (2000::/3)", "Veřejná routovatelná adresa, ekvivalent veřejné IPv4"],
+        ["Link-Local (fe80::/10)", "Automatická adresa jen pro lokální segment"],
+        ["Unique Local (fc00::/7)", "Privátní adresa, ekvivalent RFC 1918"],
+        ["Multicast (ff00::/8)", "Adresa pro více příjemců, nahrazuje broadcast"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň info o IPv6:",
+      "text": "IPv6 adresa má délku {{128}} bitů. Minimální MTU v IPv6 je {{1280}} bajtů. V IPv6 fragmentaci provádí pouze {{odesílatel}}, routery nefragmentují. Broadcast v IPv6 neexistuje – nahrazuje ho {{multicast}}.",
+      "answers": ["128", "1280", "odesílatel", "multicast"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky automatické konfigurace adresy pomocí SLAAC:",
+      "items": [
+        "Zařízení odešle Router Solicitation (RS) na adresu ff02::2",
+        "Router odpoví Router Advertisement (RA) s prefixem a bránou",
+        "Zařízení vytvoří adresu: prefix + Interface ID (EUI-64 nebo náhodné)",
+        "DAD (Duplicate Address Detection) – ověření unikátnosti adresy",
+        "Zařízení začne používat nakonfigurovanou adresu"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "IPv6 hlavička obsahuje kontrolní součet (checksum) stejně jako IPv4, protože je důležitý pro integritu dat.",
+      "answer": false,
+      "explanation": "IPv6 hlavička záměrně neobsahuje checksum – kontrolu integrity zajišťují vyšší vrstvy (TCP, UDP). Odstraněním checksumu z hlavičky se zrychlí zpracování paketu routery, protože nemusí přepočítávat checksum po každé změně TTL (Hop Limit)."
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď NDP zprávu k její funkci:",
+      "pairs": [
+        ["Router Solicitation (RS)", "Žádost o informace od routeru (hledání routeru)"],
+        ["Router Advertisement (RA)", "Router oznamuje prefix, bránu a příznaky"],
+        ["Neighbor Solicitation (NS)", "Ekvivalent ARP Request + DAD"],
+        ["Neighbor Advertisement (NA)", "Ekvivalent ARP Reply"]
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli proces EUI-64 pro generování Interface ID z MAC adresy. Proč se překlápí 7. bit?",
+      "keywords": ["MAC", "FFFE", "vložení", "Universal/Local bit", "7. bit", "48 bitů", "64 bitů"]
+    }
+  ]
+}

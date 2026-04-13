@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25 - Textové zpracování a regulární výrazy</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>25 – Textové zpracování a regulární výrazy</h1>
+
+    <h2>Kódování textu</h2>
+    <table>
+        <tr><th>Kódování</th><th>Rozsah</th><th>Velikost znaku</th></tr>
+        <tr><td><strong>ASCII</strong></td><td>128 znaků (0-127)</td><td>1 byte</td></tr>
+        <tr><td><strong>UTF-8</strong></td><td>1 112 064 znaků (Unicode)</td><td>1–4 byty</td></tr>
+        <tr><td><strong>UTF-16</strong></td><td>1 112 064 znaků (Unicode)</td><td>2 nebo 4 byty</td></tr>
+    </table>
+
+    <h2>Regex metaznaky</h2>
+    <table>
+        <tr><th>Metaznak</th><th>Význam</th><th>Příklad</th></tr>
+        <tr><td><code>.</code></td><td>Jakýkoliv znak (kromě \n)</td><td><code>a.c</code> → abc, a1c</td></tr>
+        <tr><td><code>^</code>, <code>$</code></td><td>Začátek / konec řetězce</td><td><code>^Ahoj</code></td></tr>
+        <tr><td><code>*</code>, <code>+</code>, <code>?</code></td><td>0+, 1+, 0 nebo 1</td><td><code>ab*c</code> → ac, abc, abbc</td></tr>
+        <tr><td><code>{n,m}</code></td><td>n až m opakování</td><td><code>a{2,4}</code> → aa, aaa, aaaa</td></tr>
+        <tr><td><code>[abc]</code></td><td>Třída znaků</td><td><code>[aeiou]</code></td></tr>
+        <tr><td><code>|</code></td><td>Alternace (OR)</td><td><code>cat|dog</code></td></tr>
+        <tr><td><code>()</code></td><td>Skupina (capture group)</td><td><code>(ab)+</code></td></tr>
+    </table>
+
+    <h2>Zkratkové třídy</h2>
+    <table>
+        <tr><th>Zkratka</th><th>Ekvivalent</th><th>Význam</th></tr>
+        <tr><td><code>\d</code></td><td><code>[0-9]</code></td><td>Číslice</td></tr>
+        <tr><td><code>\w</code></td><td><code>[a-zA-Z0-9_]</code></td><td>Slovní znak</td></tr>
+        <tr><td><code>\s</code></td><td><code>[ \t\n\r]</code></td><td>Bílý znak</td></tr>
+        <tr><td><code>\b</code></td><td>—</td><td>Hranice slova</td></tr>
+    </table>
+
+    <h2>Greedy vs Lazy</h2>
+    <table>
+        <tr><th>Typ</th><th>Zápis</th><th>Chování</th></tr>
+        <tr><td>Greedy</td><td><code>.*</code></td><td>Matchne co nejvíc</td></tr>
+        <tr><td>Lazy</td><td><code>.*?</code></td><td>Matchne co nejméně</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Základní řetězcové operace</strong> — split, join, strip, replace, startswith/endswith, formátování. Základ pro zpracování textu bez regexu.</div>
+    <pre><code>text = "  Hello, World! Python je super.  "
+
+print(f"  strip:      '{text.strip()}'")
+print(f"  split:      {text.split()}")
+print(f"  replace:    {text.replace('Python', 'Java')}")
+print(f"  upper:      {text.upper()}")
+print(f"  startswith: {text.strip().startswith('Hello')}")
+print(f"  find:       index={text.find('World')}")
+print(f"  join:       {'|'.join(['a','b','c'])}")</code></pre>
+
+    <div class="code-desc"><strong>Regex — search, findall, match</strong>. <code>search()</code> najde první výskyt, <code>findall()</code> vrátí seznam všech, <code>match()</code> matchuje jen od začátku řetězce.</div>
+    <pre><code>import re
+
+text = "Muj email je alice@example.com a cislo 123-456-789"
+
+# search - najde prvni vyskyt
+email = re.search(r'[\w.]+@[\w.]+', text)
+print(f"  Email: {email.group()}")
+
+# findall - vsechny vyskyty
+cisla = re.findall(r'\d+', text)
+print(f"  Cisla: {cisla}")
+
+# match - od zacatku retezce
+m = re.match(r'Muj', text)
+print(f"  Match: {m.group() if m else 'nenalezeno'}")</code></pre>
+
+    <div class="code-desc"><strong>Regex substituce</strong> — <code>re.sub()</code> pro nahrazování: cenzura slov, převod formátu datumu, odstranění HTML tagů.</div>
+    <pre><code># Cenzura
+text = "To je sakra blby a pitomy"
+cenzurovano = re.sub(r'sakra|blby|pitomy', '***', text)
+print(f"  Cenzura: {cenzurovano}")
+
+# Zmena formatu datumu
+datum = "2024-01-15"
+cz_datum = re.sub(r'(\d{4})-(\d{2})-(\d{2})', r'\3.\2.\1', datum)
+print(f"  Datum: {cz_datum}")  # 15.01.2024
+
+# Strip HTML
+html = "&lt;p&gt;Ahoj &lt;b&gt;svete&lt;/b&gt;!&lt;/p&gt;"
+cisty = re.sub(r'&lt;[^&gt;]+&gt;', '', html)
+print(f"  Bez HTML: {cisty}")  # Ahoj svete!</code></pre>
+
+    <div class="code-desc"><strong>Pojmenované skupiny a validace</strong> — <code>(?P&lt;name&gt;...)</code> pojmenuje capture group. Příklad validace emailu, telefonu a hesla pomocí regexů.</div>
+    <pre><code># Pojmenovane skupiny
+pattern = r'(?P&lt;rok&gt;\d{4})-(?P&lt;mesic&gt;\d{2})-(?P&lt;den&gt;\d{2})'
+m = re.match(pattern, "2024-03-15")
+if m:
+    print(f"  Rok: {m.group('rok')}, Mesic: {m.group('mesic')}, Den: {m.group('den')}")
+
+# Validace
+def validuj_email(email):
+    return bool(re.match(r'^[\w.+-]+@[\w-]+\.[\w.]+$', email))
+
+def validuj_telefon(tel):
+    return bool(re.match(r'^(\+420)?\s?\d{3}\s?\d{3}\s?\d{3}$', tel))
+
+def validuj_heslo(heslo):
+    """Min 8 znaku, velke, male pismeno, cislo"""
+    return bool(re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$', heslo))
+
+# Test
+for email in ["test@mail.com", "spatny@", "ok@a.b.cz"]:
+    print(f"  Email '{email}': {validuj_email(email)}")
+
+for heslo in ["Abc12345", "slabe", "SilneHeslo1"]:
+    print(f"  Heslo '{heslo}': {validuj_heslo(heslo)}")</code></pre>
+
+    <div class="code-desc"><strong>Greedy vs Lazy</strong> — <code>.*</code> matchne co nejvíc (celý obsah mezi prvním a posledním tagem), <code>.*?</code> matchne co nejméně (jen obsah prvního tagu).</div>
+    <pre><code>html = "&lt;b&gt;tucne&lt;/b&gt; a &lt;i&gt;kurziva&lt;/i&gt;"
+
+# Greedy - matchne co nejvic
+greedy = re.findall(r'&lt;.+&gt;', html)
+print(f"  Greedy: {greedy}")
+
+# Lazy - matchne co nejmene
+lazy = re.findall(r'&lt;.+?&gt;', html)
+print(f"  Lazy:   {lazy}")</code></pre>
+
+    <div class="code-desc"><strong>Tokenizer</strong> — aritmetický tokenizer pomocí <code>re.findall()</code>. Rozpozná čísla, operátory a závorky jako tokeny.</div>
+    <pre><code>def tokenize(vyraz):
+    """Tokenizer aritmetickych vyrazu"""
+    token_pattern = r'\d+\.?\d*|[+\-*/()]'
+    tokeny = re.findall(token_pattern, vyraz)
+    vysledek = []
+    for t in tokeny:
+        try:
+            vysledek.append(('CISLO', float(t)))
+        except ValueError:
+            vysledek.append(('OP', t))
+    return vysledek
+
+vyraz = "3.14 + (2 * 10) - 5"
+tokeny = tokenize(vyraz)
+print(f"  Vyraz: {vyraz}")
+for typ, hodnota in tokeny:
+    print(f"    {typ}: {hodnota}")</code></pre>
+
+    <div class="code-desc"><strong>Log parsing</strong> — extrakce IP adres z logového souboru a počítání výskytů. Práce s <code>re.findall()</code> a <code>Counter</code>.</div>
+    <pre><code>from collections import Counter
+
+log = """
+192.168.1.1 - GET /index.html 200
+10.0.0.5 - POST /api/login 401
+192.168.1.1 - GET /style.css 200
+10.0.0.5 - GET /dashboard 200
+172.16.0.1 - GET /index.html 200
+192.168.1.1 - POST /api/data 201
+"""
+
+# Extrakce IP adres
+ip_adresy = re.findall(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', log)
+pocty = Counter(ip_adresy)
+print("  Nejcastejsi IP adresy:")
+for ip, pocet in pocty.most_common():
+    print(f"    {ip}: {pocet}x")
+
+# Extrakce HTTP metod a statusu
+requesty = re.findall(r'(\w+)\s+(/\S+)\s+(\d{3})', log)
+print("  Requesty:")
+for metoda, cesta, status in requesty:
+    print(f"    {metoda} {cesta} -&gt; {status}")</code></pre>
+
+    <div class="code-desc"><strong>Lookahead a lookbehind</strong> — <code>(?=...)</code> pozitivní lookahead, <code>(?&lt;=...)</code> pozitivní lookbehind. Matchují pozici, ale nekonzumují text.</div>
+    <pre><code># Lookahead: cisla nasledovana "kg"
+text = "5kg jablka, 3kg hrusky, 10 bananu"
+kg = re.findall(r'\d+(?=kg)', text)
+print(f"  V kilogramech: {kg}")      # ['5', '3']
+
+# Lookbehind: cisla za znakem $
+text = "Cena: $100, sleva $25, zbytek 50"
+ceny = re.findall(r'(?&lt;=\$)\d+', text)
+print(f"  Ceny v $: {ceny}")         # ['100', '25']</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

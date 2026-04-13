@@ -1,0 +1,45 @@
+{
+  "title": "STP, EtherChannel a HSRP",
+  "questions": [
+    {
+      "type": "order",
+      "prompt": "Seřaď stavy STP portu od zablokovaného po plně funkční:",
+      "items": ["Blocking (20s max age)", "Listening (15s forward delay)", "Learning (15s forward delay)", "Forwarding"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď roli STP portu k jejímu popisu:",
+      "pairs": [
+        ["Nejlepší cesta k Root Bridge na non-root switchi", "Root Port"],
+        ["Nejlepší port na segmentu směrem od Root", "Designated Port"],
+        ["Redundantní port – logicky zablokován", "Blocked/Alternate Port"],
+        ["Přepínač s nejnižším Bridge ID", "Root Bridge"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o EtherChannel a HSRP:",
+      "text": "EtherChannel protokol {{LACP}} je otevřený standard IEEE 802.3ad, zatímco {{PAgP}} je proprietární Cisco. U HSRP router s {{vyšší}} prioritou se stává Active a virtuální MAC adresa má formát 0000.0c07.ac{{XX}}, kde XX je číslo skupiny.",
+      "answers": ["LACP", "PAgP", "vyšší", "XX"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Dva přepínače s LACP režimem Passive na obou stranách úspěšně vytvoří EtherChannel.",
+      "answer": false,
+      "explanation": "Passive/Passive nevytvoří EtherChannel, protože oba přepínače čekají na iniciaci od druhé strany. Alespoň jedna strana musí být v režimu Active, aby vyjednávání začalo. Fungující kombinace jsou Active/Active nebo Active/Passive."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, co je broadcastová bouře (broadcast storm) a jak STP tento problém řeší pomocí BPDU a blokování portů.",
+      "keywords": ["smyčka", "redundantní", "zablokuje", "BPDU", "Root Bridge", "stromová topologie"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "HSRP preempt zajistí, že router s vyšší prioritou automaticky převezme roli Active, i když se vrátí po výpadku.",
+      "answer": true,
+      "explanation": "Funkce preempt umožňuje routeru s vyšší prioritou převzít zpět roli Active poté, co se zotaví z výpadku. Bez preempt by zůstal jako Standby, i když má vyšší prioritu než aktuální Active router."
+    }
+  ]
+}

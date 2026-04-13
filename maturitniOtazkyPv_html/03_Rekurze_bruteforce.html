@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03 - Rekurze a brute force</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>03 – Rekurze, brute force, heuristiky</h1>
+
+    <h2>Rekurze</h2>
+    <h3>Princip</h3>
+    <ul>
+        <li>Funkce volá sama sebe (přímo nebo nepřímo)</li>
+        <li><strong>Bázový případ</strong> — podmínka ukončení (zabraňuje nekonečné rekurzi)</li>
+        <li><strong>Rekurzivní krok</strong> — zmenšení problému a volání sebe sama</li>
+        <li>Každé volání vytváří nový rámec na zásobníku (stack frame)</li>
+    </ul>
+
+    <h3>Typy rekurze</h3>
+    <table>
+        <tr><th>Typ</th><th>Popis</th></tr>
+        <tr><td>Přímá</td><td>Funkce volá přímo samu sebe</td></tr>
+        <tr><td>Nepřímá</td><td>A volá B, B volá A</td></tr>
+        <tr><td>Tail rekurze</td><td>Rekurzivní volání je poslední operací — možná optimalizace</td></tr>
+        <tr><td>Stromová</td><td>Více rekurzivních volání (Fibonacci)</td></tr>
+    </table>
+
+    <h2>Brute Force</h2>
+    <ul>
+        <li>Systematické prohledání <strong>všech</strong> možných řešení</li>
+        <li>Vždy najde optimální řešení (pokud existuje)</li>
+        <li>Složitost typicky exponenciální: O(2ⁿ), O(n!)</li>
+        <li>Použitelný pouze pro malé vstupy</li>
+    </ul>
+
+    <h2>Heuristiky</h2>
+    <ul>
+        <li><strong>Greedy</strong> — v každém kroku vybere lokálně nejlepší volbu (negarantuje globální optimum)</li>
+        <li><strong>Hill Climbing</strong> — vylepšuje řešení lokálními změnami, může uvíznout v lokálním maximu</li>
+        <li><strong>Monte Carlo</strong> — náhodné vzorkování pro odhad řešení</li>
+        <li><strong>Genetické algoritmy</strong> — evoluční přístup (populace, selekce, křížení, mutace)</li>
+    </ul>
+
+    <h2>NP-kompletní problémy</h2>
+    <table>
+        <tr><th>Problém</th><th>Popis</th><th>Brute force</th></tr>
+        <tr><td>Problém batohu</td><td>Maximalizace hodnoty s omezenou kapacitou</td><td>O(2ⁿ)</td></tr>
+        <tr><td>TSP</td><td>Nejkratší okruh přes všechna města</td><td>O(n!)</td></tr>
+        <tr><td>SAT</td><td>Splnitelnost logické formule</td><td>O(2ⁿ)</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Faktoriál</strong> — klasický příklad přímé rekurze. Bázový případ: n ≤ 1.</div>
+    <pre><code>def faktorial(n):
+    if n &lt;= 1:
+        return 1
+    return n * faktorial(n - 1)
+
+print(f"5! = {faktorial(5)}")  # 120</code></pre>
+
+    <div class="code-desc"><strong>Fibonacci</strong> s memoizací — naivní rekurze má O(2ⁿ), s cache (memoizací) dosáhneme O(n).</div>
+    <pre><code>def fibonacci(n, cache={}):
+    """S memoizaci - O(n)"""
+    if n in cache:
+        return cache[n]
+    if n &lt;= 1:
+        return n
+    cache[n] = fibonacci(n-1, cache) + fibonacci(n-2, cache)
+    return cache[n]
+
+print(f"fib(10) = {fibonacci(10)}")  # 55</code></pre>
+
+    <div class="code-desc"><strong>Hanojské věže</strong> — rekurzivní přesun n disků mezi třemi kolíky. Důkaz O(2ⁿ - 1) tahů.</div>
+    <pre><code>def hanoi(n, zdroj='A', cil='C', pomocny='B'):
+    """Hanojske veze - O(2^n - 1)"""
+    if n == 1:
+        print(f"  Presun disk 1: {zdroj} -&gt; {cil}")
+        return
+    hanoi(n-1, zdroj, pomocny, cil)
+    print(f"  Presun disk {n}: {zdroj} -&gt; {cil}")
+    hanoi(n-1, pomocny, cil, zdroj)
+
+hanoi(3)</code></pre>
+
+    <div class="code-desc"><strong>Problém batohu</strong> — brute force přístup vyzkouší všech 2ⁿ kombinací a vybere nejhodnotnější sadu, co se vejde do kapacity.</div>
+    <pre><code>from itertools import combinations
+
+def batoh_bruteforce(predmety, kapacita):
+    """Brute force batoh - O(2^n)"""
+    nejlepsi_hodnota = 0
+    nejlepsi_sada = []
+
+    for r in range(len(predmety) + 1):
+        for sada in combinations(predmety, r):
+            vaha = sum(p['vaha'] for p in sada)
+            hodnota = sum(p['hodnota'] for p in sada)
+            if vaha &lt;= kapacita and hodnota &gt; nejlepsi_hodnota:
+                nejlepsi_hodnota = hodnota
+                nejlepsi_sada = list(sada)
+
+    return nejlepsi_sada, nejlepsi_hodnota
+
+predmety = [
+    {'nazev': 'Notebook', 'vaha': 3, 'hodnota': 10},
+    {'nazev': 'Tablet',   'vaha': 1, 'hodnota': 6},
+    {'nazev': 'Kamera',   'vaha': 2, 'hodnota': 7},
+    {'nazev': 'Kniha',    'vaha': 1, 'hodnota': 3}
+]
+sada, hodnota = batoh_bruteforce(predmety, 4)
+print(f"Nejlepsi sada (hodnota={hodnota}): {[p['nazev'] for p in sada]}")</code></pre>
+
+    <div class="code-desc"><strong>Greedy heuristika</strong> — seřadí předměty podle poměru hodnota/váha a vybírá postupně. Nezaručuje optimální řešení, ale je rychlá O(n log n).</div>
+    <pre><code>def batoh_greedy(predmety, kapacita):
+    """Greedy - razeni podle pomeru hodnota/vaha"""
+    serazene = sorted(predmety, key=lambda p: p['hodnota']/p['vaha'], reverse=True)
+    sada = []
+    zbyvajici = kapacita
+    for p in serazene:
+        if p['vaha'] &lt;= zbyvajici:
+            sada.append(p)
+            zbyvajici -= p['vaha']
+    return sada, sum(p['hodnota'] for p in sada)
+
+sada_g, hodnota_g = batoh_greedy(predmety, 4)
+print(f"Greedy (hodnota={hodnota_g}): {[p['nazev'] for p in sada_g]}")</code></pre>
+
+    <div class="code-desc"><strong>Genetický algoritmus</strong> — evoluční přístup: vytvoří populaci náhodných řešení, provádí selekci, křížení a mutaci přes generace.</div>
+    <pre><code>import random
+
+def geneticky_algoritmus(predmety, kapacita, velikost_populace=20, generace=50):
+    n = len(predmety)
+
+    def fitness(jedinec):
+        vaha = sum(p['vaha'] for p, bit in zip(predmety, jedinec) if bit)
+        hodnota = sum(p['hodnota'] for p, bit in zip(predmety, jedinec) if bit)
+        return hodnota if vaha &lt;= kapacita else 0
+
+    # Inicializace populace
+    populace = [[random.randint(0,1) for _ in range(n)]
+                for _ in range(velikost_populace)]
+
+    for gen in range(generace):
+        populace.sort(key=fitness, reverse=True)
+        nova = populace[:4]  # elitismus - nejlepsi preziji
+        while len(nova) &lt; velikost_populace:
+            rodic1, rodic2 = random.choices(populace[:10], k=2)
+            bod = random.randint(1, n-1)
+            dite = rodic1[:bod] + rodic2[bod:]
+            # Mutace
+            if random.random() &lt; 0.1:
+                i = random.randint(0, n-1)
+                dite[i] = 1 - dite[i]
+            nova.append(dite)
+        populace = nova
+
+    nejlepsi = max(populace, key=fitness)
+    return [p for p, bit in zip(predmety, nejlepsi) if bit], fitness(nejlepsi)
+
+sada_ga, hod_ga = geneticky_algoritmus(predmety, 4)
+print(f"Geneticky (hodnota={hod_ga}): {[p['nazev'] for p in sada_ga]}")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

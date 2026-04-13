@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12 - Metodiky vývoje software</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>12 – Metodiky vývoje software, SDLC, Agile, Scrum</h1>
+
+    <h2>SDLC fáze</h2>
+    <ol>
+        <li><strong>Analýza požadavků</strong> — co má systém dělat</li>
+        <li><strong>Návrh (Design)</strong> — architektura, UML</li>
+        <li><strong>Implementace</strong> — kódování</li>
+        <li><strong>Testování</strong> — unit, integrace, systémové, UAT</li>
+        <li><strong>Nasazení (Deployment)</strong></li>
+        <li><strong>Údržba</strong></li>
+    </ol>
+
+    <h2>Waterfall vs Agile</h2>
+    <table>
+        <tr><th></th><th>Waterfall</th><th>Agile</th></tr>
+        <tr><td>Přístup</td><td>Sekvenční fáze</td><td>Iterativní (sprinty)</td></tr>
+        <tr><td>Změny</td><td>Těžko proveditelné</td><td>Vítané kdykoli</td></tr>
+        <tr><td>Dokumentace</td><td>Rozsáhlá</td><td>Minimální nutná</td></tr>
+        <tr><td>Dodávka</td><td>Na konci projektu</td><td>Po každé iteraci</td></tr>
+        <tr><td>Použití</td><td>Stabilní požadavky</td><td>Měnící se požadavky</td></tr>
+    </table>
+
+    <h2>Scrum</h2>
+    <h3>Role</h3>
+    <ul>
+        <li><strong>Product Owner</strong> — definuje priority, backlog</li>
+        <li><strong>Scrum Master</strong> — odstraňuje překážky, facilituje</li>
+        <li><strong>Dev Team</strong> — implementace (3–9 lidí)</li>
+    </ul>
+    <h3>Artefakty</h3>
+    <ul>
+        <li><strong>Product Backlog</strong> — prioritizovaný seznam požadavků</li>
+        <li><strong>Sprint Backlog</strong> — úkoly pro aktuální sprint</li>
+        <li><strong>Increment</strong> — fungující přírůstek produktu</li>
+    </ul>
+    <h3>Ceremonie</h3>
+    <ul>
+        <li><strong>Sprint Planning</strong> — výběr úkolů do sprintu</li>
+        <li><strong>Daily Standup</strong> — 15min denní sync</li>
+        <li><strong>Sprint Review</strong> — demo výsledků</li>
+        <li><strong>Sprint Retrospective</strong> — co zlepšit</li>
+    </ul>
+
+    <h2>Kanban</h2>
+    <ul>
+        <li>Vizuální tabule: <strong>To Do → In Progress → Done</strong></li>
+        <li><strong>WIP limit</strong> — omezení počtu rozpracovaných úkolů</li>
+        <li>Continuous flow — bez pevných sprintů</li>
+    </ul>
+
+    <h2>DevOps &amp; CI/CD</h2>
+    <ul>
+        <li><strong>CI</strong> (Continuous Integration) — automatický build + testy při každém commitu</li>
+        <li><strong>CD</strong> (Continuous Delivery/Deployment) — automatické nasazení</li>
+        <li>Nástroje: Jenkins, GitHub Actions, GitLab CI</li>
+    </ul>
+
+    <h2>Ukázkový kód — Python (Kanban, Scrum simulace)</h2>
+
+    <div class="code-desc"><strong>Kanban tabule</strong> s WIP limitem — omezuje počet úkolů současně rozpracovaných. Pokud je limit překročen, úkol nelze přesunout do "In Progress".</div>
+    <pre><code>class KanbanTabule:
+    """Kanban tabule s WIP limitem"""
+
+    def __init__(self, wip_limit=3):
+        self.sloupce = {
+            "Backlog":     [],
+            "In Progress": [],
+            "Review":      [],
+            "Done":        []
+        }
+        self.wip_limit = wip_limit
+
+    def pridej_ukol(self, ukol):
+        self.sloupce["Backlog"].append(ukol)
+
+    def presun(self, ukol, odkud, kam):
+        if ukol not in self.sloupce[odkud]:
+            print(f"  Ukol '{ukol}' neni v '{odkud}'")
+            return False
+
+        # WIP limit pro In Progress a Review
+        if kam in ("In Progress", "Review"):
+            if len(self.sloupce[kam]) &gt;= self.wip_limit:
+                print(f"  WIP limit ({self.wip_limit}) dosazeny pro '{kam}'!")
+                return False
+
+        self.sloupce[odkud].remove(ukol)
+        self.sloupce[kam].append(ukol)
+        return True
+
+    def zobraz(self):
+        print("  Kanban tabule:")
+        for sloupec, ukoly in self.sloupce.items():
+            print(f"    {sloupec:15s}: {ukoly}")
+
+# Pouziti
+tabule = KanbanTabule(wip_limit=2)
+for ukol in ["Login page", "API endpoint", "Databaze", "Testy"]:
+    tabule.pridej_ukol(ukol)
+
+tabule.presun("Login page", "Backlog", "In Progress")
+tabule.presun("API endpoint", "Backlog", "In Progress")
+tabule.presun("Databaze", "Backlog", "In Progress")  # WIP limit!
+tabule.presun("Login page", "In Progress", "Done")
+tabule.zobraz()</code></pre>
+
+    <div class="code-desc"><strong>Scrum Sprint simulace</strong> — UserStory s body, sprint s kapacitou (velocity). Sprint automaticky doplňuje úkoly z backlogu podle dostupné kapacity.</div>
+    <pre><code>from dataclasses import dataclass
+
+@dataclass
+class UserStory:
+    nazev: str
+    body: int       # story points
+    stav: str = "backlog"
+
+class Sprint:
+    def __init__(self, cislo, velocity=20):
+        self.cislo = cislo
+        self.velocity = velocity  # kapacita v bodech
+        self.stories = []
+
+    def pridej_story(self, story):
+        aktualni = sum(s.body for s in self.stories)
+        if aktualni + story.body &lt;= self.velocity:
+            story.stav = "sprint"
+            self.stories.append(story)
+            return True
+        print(f"    Nelze pridat '{story.nazev}' ({story.body}b) - kapacita!")
+        return False
+
+    def dokonci(self):
+        for s in self.stories:
+            s.stav = "done"
+        hotove = sum(s.body for s in self.stories)
+        print(f"  Sprint {self.cislo}: dokonceno {hotove}/{self.velocity} bodu")
+
+# Simulace
+backlog = [
+    UserStory("Login", 5), UserStory("Registrace", 8),
+    UserStory("Profil", 3), UserStory("Dashboard", 13),
+    UserStory("Export", 5)
+]
+
+sprint = Sprint(1, velocity=20)
+print("  Sprint Planning:")
+for story in backlog:
+    vysledek = sprint.pridej_story(story)
+    status = "PRIDANO" if vysledek else "NEZARAZENO"
+    print(f"    {story.nazev} ({story.body}b): {status}")
+
+sprint.dokonci()</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

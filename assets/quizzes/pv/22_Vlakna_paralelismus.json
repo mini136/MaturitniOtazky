@@ -1,0 +1,54 @@
+{
+  "title": "Vlákna a paralelismus",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď synchronizační primitivum k jeho účelu:",
+      "pairs": [
+        ["Lock (Mutex)", "Vzájemné vyloučení — jen jedno vlákno v kritické sekci"],
+        ["Semaphore", "Omezení počtu souběžných přístupů na N"],
+        ["Event", "Signalizace mezi vlákny"],
+        ["Queue (thread-safe)", "Bezpečná výměna dat mezi producentem a konzumentem"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o vláknech a procesech:",
+      "text": "Vlákna sdílejí {{paměť}} procesu, zatímco procesy mají vlastní adresní prostor. V CPythonu brání skutečnému paralelismu vláken mechanismus {{GIL}}. Pro CPU-bound úlohy je proto vhodné použít modul {{multiprocessing}}. Vzor, kde jedno vlákno vytváří data a druhé je zpracovává, se nazývá {{Producer-Consumer}}.",
+      "answers": ["paměť", "GIL", "multiprocessing", "Producer-Consumer"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Race condition nastane, když dvě vlákna současně čtou a zapisují sdílenou proměnnou bez synchronizace.",
+      "answer": true,
+      "explanation": "Bez zámku (Lock) mohou vlákna číst starou hodnotu proměnné a zapsat nekonzistentní výsledek. Příklad: obě vlákna přečtou counter=5, obě zapíšou 6 místo 7. Řešením je použití Lock/Mutex."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky použití ThreadPoolExecutor:",
+      "items": [
+        "Import concurrent.futures.ThreadPoolExecutor",
+        "Vytvoření executoru s max_workers parametrem",
+        "Odeslání úloh pomocí executor.map() nebo submit()",
+        "Vlákna z poolu zpracovávají úlohy paralelně",
+        "Automatický cleanup při opuštění with bloku"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi concurrency a parallelism. Kdy použiješ vlákna a kdy procesy?",
+      "keywords": ["souběžnost", "střídání", "více jader", "I/O-bound", "CPU-bound", "GIL", "threading", "multiprocessing"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď vlastnost k procesu nebo vláknu:",
+      "pairs": [
+        ["Vlastní adresní prostor", "Proces"],
+        ["Sdílí paměť", "Vlákno"],
+        ["Pád neovlivní ostatní", "Proces"],
+        ["Levné na vytvoření", "Vlákno"]
+      ]
+    }
+  ]
+}

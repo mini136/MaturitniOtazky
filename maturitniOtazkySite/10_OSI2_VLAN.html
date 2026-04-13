@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 - OSI 2 - VLAN, trunk, access, DTP, 802.1q</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>10 – OSI 2 – VLAN – princip, použití, trunk/access porty, DTP, 802.1q</h1>
+
+    <h2>VLAN (Virtual LAN)</h2>
+    <h3>Co je VLAN</h3>
+    <p>VLAN je <strong>logické rozdělení switche</strong> na více nezávislých broadcast domén. Fyzicky jeden switch, logicky několik oddělených sítí.</p>
+
+    <h3>Proč používat VLAN</h3>
+    <ul>
+        <li><strong>Segmentace</strong> – oddělení provozu (IT, účetnictví, management, hosté)</li>
+        <li><strong>Bezpečnost</strong> – oddělení citlivých data bez fyzického oddělení</li>
+        <li><strong>Omezení broadcastů</strong> – broadcast se šíří jen v rámci jedné VLAN</li>
+        <li><strong>Flexibilita</strong> – přesunutí uživatele do jiné VLAN bez přepojování kabelů</li>
+        <li><strong>Výkon</strong> – menší broadcast domény = menší zatížení sítě</li>
+    </ul>
+
+    <h3>Typy VLAN</h3>
+    <table>
+        <tr><th>Typ</th><th>Popis</th></tr>
+        <tr><td><strong>Datová VLAN</strong></td><td>Běžná VLAN pro uživatelský provoz</td></tr>
+        <tr><td><strong>Native VLAN</strong></td><td>VLAN pro netagované rámce na trunku (výchozí: VLAN 1)</td></tr>
+        <tr><td><strong>Management VLAN</strong></td><td>Pro správu switche (SSH, SNMP) – z bezpečnostních důvodů ne VLAN 1</td></tr>
+        <tr><td><strong>Voice VLAN</strong></td><td>Speciální VLAN pro VoIP telefony (QoS)</td></tr>
+        <tr><td><strong>VLAN 1</strong></td><td>Výchozí VLAN – všechny porty jsou v ní defaultně; nelze smazat</td></tr>
+    </table>
+
+    <h2>Access a Trunk porty</h2>
+    <h3>Access port</h3>
+    <ul>
+        <li>Patří do <strong>jedné VLAN</strong></li>
+        <li>Rámce <strong>nejsou tagované</strong> (koncové zařízení neví o VLAN)</li>
+        <li>Typicky připojení: PC, tiskárna, server</li>
+    </ul>
+
+    <h3>Trunk port</h3>
+    <ul>
+        <li>Přenáší provoz <strong>více VLAN</strong> na jednom spoji</li>
+        <li>Rámce jsou <strong>tagované</strong> identifikátorem VLAN (802.1q)</li>
+        <li>Typicky: propojení switch–switch, switch–router</li>
+    </ul>
+
+    <h3>Konfigurace (Cisco)</h3>
+    <pre><code>! Vytvoření VLAN
+vlan 10
+  name IT
+vlan 20
+  name Ucetnictvi
+vlan 30
+  name Hoste
+
+! Access port
+interface FastEthernet0/1
+  switchport mode access
+  switchport access vlan 10
+  no shutdown
+
+! Voice VLAN (IP telefon + PC za ním)
+interface FastEthernet0/5
+  switchport mode access
+  switchport access vlan 10
+  switchport voice vlan 50
+  no shutdown
+
+! Trunk port
+interface GigabitEthernet0/1
+  switchport mode trunk
+  switchport trunk encapsulation dot1q    ! u starších switchů
+  switchport trunk allowed vlan 10,20,30
+  switchport trunk native vlan 99
+  no shutdown
+
+! Ověření
+show vlan brief
+show interfaces trunk
+show interfaces FastEthernet0/1 switchport</code></pre>
+
+    <h2>IEEE 802.1Q</h2>
+    <h3>Princip tagování</h3>
+    <p>802.1Q vkládá <strong>4bajtový tag</strong> do Ethernet rámce mezi zdrojovou MAC adresu a Type pole.</p>
+
+    <h3>Struktura 802.1Q tagu</h3>
+    <table>
+        <tr><th>Pole</th><th>Bity</th><th>Popis</th></tr>
+        <tr><td><strong>TPID</strong> (Tag Protocol ID)</td><td>16</td><td>Hodnota 0x8100 – identifikace 802.1Q tagu</td></tr>
+        <tr><td><strong>PCP</strong> (Priority Code Point)</td><td>3</td><td>Priorita rámce (0–7) pro QoS (802.1p)</td></tr>
+        <tr><td><strong>DEI</strong> (Drop Eligible Indicator)</td><td>1</td><td>Indikátor, že rámec může být zahozen</td></tr>
+        <tr><td><strong>VID</strong> (VLAN ID)</td><td>12</td><td>Číslo VLAN (0–4095, použitelné 1–4094)</td></tr>
+    </table>
+
+    <h3>Tagovaný vs. netagovaný rámec</h3>
+    <pre><code>Normální Ethernet rámec:
+[Dest MAC][Src MAC][Type][Data][FCS]
+
+802.1Q tagovaný rámec:
+[Dest MAC][Src MAC][0x8100][TCI (PCP+DEI+VID)][Type][Data][FCS]
+                   └────── 802.1Q tag (4 B) ──────┘</code></pre>
+
+    <h3>Native VLAN</h3>
+    <ul>
+        <li>Rámce v native VLAN se na trunku posílají <strong>bez tagu</strong></li>
+        <li>Native VLAN musí být <strong>stejná na obou koncích trunku</strong></li>
+        <li>Výchozí: VLAN 1 – doporučuje se změnit (bezpečnost)</li>
+    </ul>
+
+    <div class="important">
+        <strong>VLAN Hopping útok:</strong> Útočník zneužije výchozí native VLAN 1 k přeskočení do jiné VLAN. Obrana: změnit native VLAN, nepoužívat VLAN 1, nastavit <code>switchport trunk native vlan 999</code>.
+    </div>
+
+    <h2>DTP (Dynamic Trunking Protocol)</h2>
+    <h3>Co je DTP</h3>
+    <p>Cisco proprietární protokol pro <strong>automatické vyjednávání trunk/access režimu</strong> portů.</p>
+
+    <h3>Režimy DTP</h3>
+    <table>
+        <tr><th>Režim</th><th>Popis</th></tr>
+        <tr><td><strong>dynamic auto</strong></td><td>Pasivně čeká na vyjednávání trunku (výchozí na většině switchů)</td></tr>
+        <tr><td><strong>dynamic desirable</strong></td><td>Aktivně se pokouší vyjednat trunk</td></tr>
+        <tr><td><strong>trunk</strong></td><td>Vždy trunk – i odešle DTP, ale i bez vyjednávání</td></tr>
+        <tr><td><strong>access</strong></td><td>Vždy access – DTP se stále posílá!</td></tr>
+    </table>
+
+    <h3>Matice výsledků</h3>
+    <table>
+        <tr><th></th><th>auto</th><th>desirable</th><th>trunk</th><th>access</th></tr>
+        <tr><td><strong>auto</strong></td><td>access</td><td>trunk</td><td>trunk</td><td>access</td></tr>
+        <tr><td><strong>desirable</strong></td><td>trunk</td><td>trunk</td><td>trunk</td><td>access</td></tr>
+        <tr><td><strong>trunk</strong></td><td>trunk</td><td>trunk</td><td>trunk</td><td>—</td></tr>
+        <tr><td><strong>access</strong></td><td>access</td><td>access</td><td>—</td><td>access</td></tr>
+    </table>
+
+    <h3>Vypnutí DTP (doporučeno z bezpečnostních důvodů)</h3>
+    <pre><code>interface FastEthernet0/1
+  switchport mode access
+  switchport nonegotiate        ! vypnutí DTP
+
+interface GigabitEthernet0/1
+  switchport mode trunk
+  switchport nonegotiate        ! vypnutí DTP i na trunku</code></pre>
+
+    <div class="important">
+        <strong>Bezpečnost:</strong> Vždy vypínejte DTP (<code>switchport nonegotiate</code>)! Útočník může pomocí DTP se switchem vyjednat trunk a získat přístup ke všem VLAN.
+    </div>
+
+    <h2>Inter-VLAN Routing</h2>
+    <p>Komunikace mezi VLAN vyžaduje <strong>L3 zařízení (router)</strong>.</p>
+
+    <h3>Router-on-a-stick</h3>
+    <pre><code>! Router – subinterfaces
+interface GigabitEthernet0/0.10
+  encapsulation dot1Q 10
+  ip address 192.168.10.1 255.255.255.0
+
+interface GigabitEthernet0/0.20
+  encapsulation dot1Q 20
+  ip address 192.168.20.1 255.255.255.0
+
+interface GigabitEthernet0/0
+  no shutdown</code></pre>
+
+    <h3>L3 Switch (SVI – Switch Virtual Interface)</h3>
+    <pre><code>ip routing                    ! zapnutí směrování
+
+interface vlan 10
+  ip address 192.168.10.1 255.255.255.0
+  no shutdown
+
+interface vlan 20
+  ip address 192.168.20.1 255.255.255.0
+  no shutdown</code></pre>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

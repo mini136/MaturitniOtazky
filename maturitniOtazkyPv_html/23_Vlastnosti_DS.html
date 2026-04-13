@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>23 - Vlastnosti datových struktur</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>23 – Vlastnosti datových struktur, hashing, indexování</h1>
+
+    <h2>Porovnání složitostí</h2>
+    <table>
+        <tr><th>Operace</th><th>Array</th><th>LinkedList</th><th>BST (avg)</th><th>Hash Table</th></tr>
+        <tr><td>Přístup (index)</td><td>O(1)</td><td>O(n)</td><td>O(log n)</td><td>—</td></tr>
+        <tr><td>Vyhledání</td><td>O(n)</td><td>O(n)</td><td>O(log n)</td><td>O(1)</td></tr>
+        <tr><td>Vložení</td><td>O(n)</td><td>O(1)*</td><td>O(log n)</td><td>O(1)</td></tr>
+        <tr><td>Smazání</td><td>O(n)</td><td>O(1)*</td><td>O(log n)</td><td>O(1)</td></tr>
+    </table>
+    <p><small>* O(1) pokud máme referenci na uzel, jinak O(n) pro nalezení</small></p>
+
+    <h2>Hashing</h2>
+    <h3>Řešení kolizí</h3>
+    <table>
+        <tr><th>Metoda</th><th>Popis</th><th>Výhoda</th></tr>
+        <tr><td><strong>Chaining</strong></td><td>Každý bucket je linked list</td><td>Jednoduchá, neomezený počet prvků</td></tr>
+        <tr><td><strong>Open Addressing</strong></td><td>Hledá další volné místo (linear probing)</td><td>Lepší cache locality</td></tr>
+    </table>
+
+    <h3>Load factor</h3>
+    <ul>
+        <li><strong>λ = n / m</strong> (prvky / velikost tabulky)</li>
+        <li>Ideálně λ &lt; 0.75 → při překročení se tabulka zvětší (rehash)</li>
+    </ul>
+
+    <h2>Seřazené vs neseřazené</h2>
+    <table>
+        <tr><th></th><th>Seřazené</th><th>Neseřazené</th></tr>
+        <tr><td>Vyhledávání</td><td>O(log n) — binární hledání</td><td>O(n)</td></tr>
+        <tr><td>Vkládání</td><td>O(n) — udržení pořadí</td><td>O(1)</td></tr>
+        <tr><td>Min/Max</td><td>O(1)</td><td>O(n)</td></tr>
+    </table>
+
+    <h2>Stabilita řazení</h2>
+    <table>
+        <tr><th>Stabilní</th><th>Nestabilní</th></tr>
+        <tr><td>Merge sort, Insertion sort, Bubble sort, TimSort</td><td>Quick sort, Heap sort, Selection sort</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Benchmark — Array vs Linked List</strong>. Porovnává výkon přístupu podle indexu (array vyhrává) a vkládání na začátek (linked list vyhrává).</div>
+    <pre><code>import time
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def pridej_zacatek(self, data):
+        novy = Node(data)
+        novy.next = self.head
+        self.head = novy
+
+# Benchmark: vlozeni na zacatek
+n = 10000
+start = time.perf_counter()
+pole = []
+for i in range(n):
+    pole.insert(0, i)           # O(n) — posuny
+cas_pole = time.perf_counter() - start
+
+start = time.perf_counter()
+ll = LinkedList()
+for i in range(n):
+    ll.pridej_zacatek(i)        # O(1) — zmena pointeru
+cas_ll = time.perf_counter() - start
+
+print(f"  Vlozeni na zacatek ({n}x):")
+print(f"    Array:      {cas_pole:.4f}s")
+print(f"    LinkedList: {cas_ll:.4f}s")</code></pre>
+
+    <div class="code-desc"><strong>Hash funkce</strong> — různé metody hashování (dělení, násobení, FNV-1a). Každá metoda ukazuje jiný přístup k distribuci klíčů do bucketů.</div>
+    <pre><code>def hash_deleni(klic, velikost):
+    """Metoda deleni: h(k) = k mod m"""
+    if isinstance(klic, str):
+        klic = sum(ord(c) for c in klic)
+    return klic % velikost
+
+def hash_nasobeni(klic, velikost):
+    """Metoda nasobeni: h(k) = floor(m * (k*A mod 1))"""
+    import math
+    A = 0.6180339887  # (sqrt(5) - 1) / 2
+    if isinstance(klic, str):
+        klic = sum(ord(c) * (31 ** i) for i, c in enumerate(klic))
+    return int(velikost * ((klic * A) % 1))
+
+def hash_fnv1a(klic, velikost):
+    """FNV-1a hash"""
+    h = 2166136261
+    for byte in klic.encode():
+        h ^= byte
+        h = (h * 16777619) &amp; 0xFFFFFFFF
+    return h % velikost
+
+# Test distribuce
+for klic in ["alice", "bob", "charlie"]:
+    print(f"  '{klic}':")
+    print(f"    deleni:   {hash_deleni(klic, 10)}")
+    print(f"    nasobeni: {hash_nasobeni(klic, 10)}")
+    print(f"    FNV-1a:   {hash_fnv1a(klic, 10)}")</code></pre>
+
+    <div class="code-desc"><strong>Hash tabulka — Chaining vs Open Addressing</strong>. Dvě implementace řešení kolizí: chaining (linked list v bucketu) a open addressing (linear probing).</div>
+    <pre><code>class HashChaining:
+    def __init__(self, vel=7):
+        self.vel = vel
+        self.tabulka = [[] for _ in range(vel)]
+        self.pocet = 0
+
+    def _hash(self, klic):
+        return hash(klic) % self.vel
+
+    def vloz(self, klic, hodnota):
+        idx = self._hash(klic)
+        for par in self.tabulka[idx]:
+            if par[0] == klic:
+                par[1] = hodnota
+                return
+        self.tabulka[idx].append([klic, hodnota])
+        self.pocet += 1
+
+    def load_factor(self):
+        return self.pocet / self.vel
+
+class HashOpenAddressing:
+    def __init__(self, vel=7):
+        self.vel = vel
+        self.tabulka = [None] * vel
+        self.pocet = 0
+
+    def _hash(self, klic):
+        return hash(klic) % self.vel
+
+    def vloz(self, klic, hodnota):
+        idx = self._hash(klic)
+        for i in range(self.vel):
+            pos = (idx + i) % self.vel     # linear probing
+            if self.tabulka[pos] is None or self.tabulka[pos][0] == klic:
+                self.tabulka[pos] = (klic, hodnota)
+                self.pocet += 1
+                return
+        raise OverflowError("Tabulka plna!")
+
+# Porovnani
+ch = HashChaining(7)
+oa = HashOpenAddressing(7)
+for k, v in [("a", 1), ("b", 2), ("c", 3), ("d", 4)]:
+    ch.vloz(k, v)
+    oa.vloz(k, v)
+
+print(f"  Chaining LF: {ch.load_factor():.2f}")
+print(f"  Chaining:    {[b for b in ch.tabulka if b]}")
+print(f"  OpenAddr:    {[x for x in oa.tabulka if x]}")</code></pre>
+
+    <div class="code-desc"><strong>Binární vyhledávání</strong> — funguje jen na seřazených datech. Složitost O(log n) — v každém kroku zmenší prohledávaný rozsah na polovinu.</div>
+    <pre><code>def binarni_hledani(pole, hledany):
+    """O(log n) - vyzaduje serazene pole"""
+    levy, pravy = 0, len(pole) - 1
+    kroky = 0
+    while levy &lt;= pravy:
+        kroky += 1
+        stred = (levy + pravy) // 2
+        if pole[stred] == hledany:
+            return stred, kroky
+        elif pole[stred] &lt; hledany:
+            levy = stred + 1
+        else:
+            pravy = stred - 1
+    return -1, kroky
+
+data = list(range(0, 1000, 2))  # [0, 2, 4, ..., 998]
+idx, kroky = binarni_hledani(data, 742)
+print(f"  Hledam 742 v {len(data)} prvcich: index={idx}, kroky={kroky}")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

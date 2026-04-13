@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22 - Vlákna a paralelismus</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>22 – Vlákna a paralelismus</h1>
+
+    <h2>Proces vs Vlákno</h2>
+    <table>
+        <tr><th></th><th>Proces</th><th>Vlákno</th></tr>
+        <tr><td>Paměť</td><td>Vlastní adresní prostor</td><td>Sdílí paměť procesu</td></tr>
+        <tr><td>Vytvoření</td><td>Drahé</td><td>Levné</td></tr>
+        <tr><td>Komunikace</td><td>IPC (pipe, socket, shared mem)</td><td>Sdílené proměnné</td></tr>
+        <tr><td>Izolace</td><td>Pád jednoho neovlivní ostatní</td><td>Pád vlákna = pád procesu</td></tr>
+    </table>
+
+    <h2>Concurrency vs Parallelism</h2>
+    <ul>
+        <li><strong>Concurrency</strong> — střídání úloh (i na 1 jádru), I/O-bound</li>
+        <li><strong>Parallelism</strong> — skutečně současný běh na více jádrech, CPU-bound</li>
+    </ul>
+
+    <h2>Synchronizační primitiva</h2>
+    <table>
+        <tr><th>Primitivum</th><th>Účel</th></tr>
+        <tr><td><strong>Lock (Mutex)</strong></td><td>Vzájemné vyloučení — jen jedno vlákno v kritické sekci</td></tr>
+        <tr><td><strong>Semaphore</strong></td><td>Omezení počtu souběžných přístupů (N)</td></tr>
+        <tr><td><strong>Event</strong></td><td>Signalizace mezi vlákny</td></tr>
+        <tr><td><strong>Condition</strong></td><td>Čekání na splnění podmínky</td></tr>
+    </table>
+
+    <div class="important"><strong>GIL (Global Interpreter Lock):</strong> V CPythonu jen jedno vlákno najednou provádí Python bytecode. Pro CPU-bound úlohy použij <code>multiprocessing</code>!</div>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Race condition</strong> — bez zámku dvě vlákna špatně aktualizují sdílenou proměnnou. S <code>Lock</code> je výsledek správný (200000).</div>
+    <pre><code>import threading
+
+# Race condition demo
+pocitadlo_spatne = 0
+pocitadlo_spravne = 0
+zamek = threading.Lock()
+
+def inkrementuj_spatne():
+    global pocitadlo_spatne
+    for _ in range(100_000):
+        pocitadlo_spatne += 1   # RACE CONDITION!
+
+def inkrementuj_spravne():
+    global pocitadlo_spravne
+    for _ in range(100_000):
+        with zamek:             # MUTEX
+            pocitadlo_spravne += 1
+
+# Bez zamku
+t1 = threading.Thread(target=inkrementuj_spatne)
+t2 = threading.Thread(target=inkrementuj_spatne)
+t1.start(); t2.start()
+t1.join(); t2.join()
+print(f"  Bez zamku: {pocitadlo_spatne} (ocekavano 200000)")
+
+# Se zamkem
+t1 = threading.Thread(target=inkrementuj_spravne)
+t2 = threading.Thread(target=inkrementuj_spravne)
+t1.start(); t2.start()
+t1.join(); t2.join()
+print(f"  Se zamkem: {pocitadlo_spravne}")</code></pre>
+
+    <div class="code-desc"><strong>Semaphore</strong> — omezuje počet současně běžících vláken (zde max 3). Simuluje omezenou kapacitu zdroje (např. databázový connection pool).</div>
+    <pre><code>import time
+
+semafor = threading.Semaphore(3)  # max 3 soucasne
+
+def pristup_k_db(id):
+    print(f"  Vlakno {id}: ceka na pristup...")
+    with semafor:
+        print(f"  Vlakno {id}: pristup k DB")
+        time.sleep(0.1)  # simulace prace
+        print(f"  Vlakno {id}: hotovo")
+
+vlakna = [threading.Thread(target=pristup_k_db, args=(i,)) for i in range(6)]
+for v in vlakna: v.start()
+for v in vlakna: v.join()</code></pre>
+
+    <div class="code-desc"><strong>Producer-Consumer</strong> — klasický vzor s frontou (<code>queue.Queue</code>). Producent vyrábí úlohy, konzument je zpracovává. Fronta je thread-safe.</div>
+    <pre><code>import queue
+
+def producer(q, pocet):
+    for i in range(pocet):
+        item = f"uloha_{i}"
+        q.put(item)
+        print(f"  Produced: {item}")
+    q.put(None)  # signal k ukonceni
+
+def consumer(q):
+    while True:
+        item = q.get()
+        if item is None:
+            break
+        print(f"  Consumed: {item}")
+        q.task_done()
+
+q = queue.Queue(maxsize=5)
+prod = threading.Thread(target=producer, args=(q, 5))
+cons = threading.Thread(target=consumer, args=(q,))
+prod.start(); cons.start()
+prod.join(); cons.join()</code></pre>
+
+    <div class="code-desc"><strong>ThreadPoolExecutor</strong> — vysokoúrovňové API pro správu poolu vláken. <code>map()</code> paralelně zpracuje všechny vstupy a vrátí výsledky v pořadí.</div>
+    <pre><code>from concurrent.futures import ThreadPoolExecutor
+
+def zpracuj(cislo):
+    """Simulace I/O operace"""
+    time.sleep(0.05)
+    return cislo ** 2
+
+# ThreadPool - jednoduche pouziti
+with ThreadPoolExecutor(max_workers=4) as executor:
+    vysledky = list(executor.map(zpracuj, range(10)))
+    print(f"  Vysledky: {vysledky}")</code></pre>
+
+    <div class="code-desc"><strong>Multiprocessing</strong> — obchází GIL, každý worker běží v samostatném procesu. Vhodné pro CPU-bound úlohy (výpočty).</div>
+    <pre><code>from multiprocessing import Pool
+
+def cpu_narocna(n):
+    """CPU-bound uloha"""
+    return sum(i*i for i in range(n))
+
+# Multiprocessing - obchazi GIL
+if __name__ == "__main__":
+    with Pool(processes=4) as pool:
+        vstupy = [100_000, 200_000, 300_000, 400_000]
+        vysledky = pool.map(cpu_narocna, vstupy)
+        print(f"  Multiprocessing: {vysledky}")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

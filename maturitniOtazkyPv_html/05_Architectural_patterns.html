@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05 - Architektonické vzory</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>05 – Architektonické vzory, komunikace klient-server</h1>
+
+    <h2>MVC / MVP / MVVM</h2>
+    <table>
+        <tr><th>Vzor</th><th>Komponenty</th><th>Komunikace</th><th>Použití</th></tr>
+        <tr><td><strong>MVC</strong></td><td>Model, View, Controller</td><td>Controller zprostředkovává</td><td>Web (Django, Rails, ASP.NET)</td></tr>
+        <tr><td><strong>MVP</strong></td><td>Model, View, Presenter</td><td>Presenter řídí View</td><td>Android, WinForms</td></tr>
+        <tr><td><strong>MVVM</strong></td><td>Model, View, ViewModel</td><td>Data binding</td><td>WPF, Vue.js, Angular</td></tr>
+    </table>
+
+    <h2>Vícevrstvá architektura</h2>
+    <ul>
+        <li><strong>Presentation Layer</strong> — uživatelské rozhraní</li>
+        <li><strong>Business Layer</strong> — aplikační logika</li>
+        <li><strong>Data Layer</strong> — přístup k datům</li>
+    </ul>
+
+    <h2>Monolitická vs Mikroservisní architektura</h2>
+    <table>
+        <tr><th></th><th>Monolit</th><th>Mikroservisy</th></tr>
+        <tr><td>Nasazení</td><td>Celá aplikace najednou</td><td>Nezávislé služby</td></tr>
+        <tr><td>Škálování</td><td>Celá aplikace</td><td>Jednotlivé služby</td></tr>
+        <tr><td>Technologie</td><td>Jeden stack</td><td>Různé jazyky/DB</td></tr>
+        <tr><td>Složitost</td><td>Na začátku jednodušší</td><td>Síťová komunikace, orchestrace</td></tr>
+    </table>
+
+    <h2>Klient-Server, P2P</h2>
+    <ul>
+        <li><strong>Klient-Server</strong> — klient (požadavky) ↔ server (odpovědi), centralizovaná správa</li>
+        <li><strong>P2P (Peer-to-Peer)</strong> — každý uzel je klient i server (BitTorrent, blockchain)</li>
+    </ul>
+
+    <h2>Ukázkový kód — MVC (Python)</h2>
+
+    <div class="code-desc"><strong>Model</strong> — datová vrstva spravuje seznam studentů. Obsahuje logiku pro přidání, odebrání a získání dat.</div>
+    <pre><code># === MODEL ===
+class StudentModel:
+    """Datova vrstva - spravuje data"""
+    def __init__(self):
+        self._studenti = []
+
+    def pridej(self, jmeno, vek):
+        student = {"id": len(self._studenti) + 1, "jmeno": jmeno, "vek": vek}
+        self._studenti.append(student)
+        return student
+
+    def vsichni(self):
+        return list(self._studenti)
+
+    def odeber(self, id):
+        self._studenti = [s for s in self._studenti if s["id"] != id]</code></pre>
+
+    <div class="code-desc"><strong>View</strong> — prezentační vrstva. Pouze zobrazuje data, nemá logiku. <strong>Controller</strong> — zprostředkovává mezi modelem a view.</div>
+    <pre><code># === VIEW ===
+class StudentView:
+    """Prezentacni vrstva - zobrazuje data"""
+    def zobraz_studenty(self, studenti):
+        print("  Seznam studentu:")
+        for s in studenti:
+            print(f"    [{s['id']}] {s['jmeno']}, {s['vek']} let")
+
+    def zobraz_zpravu(self, zprava):
+        print(f"  &gt; {zprava}")
+
+# === CONTROLLER ===
+class StudentController:
+    """Ridici vrstva - zprostredkovava Model a View"""
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
+
+    def pridej_studenta(self, jmeno, vek):
+        student = self.model.pridej(jmeno, vek)
+        self.view.zobraz_zpravu(f"Pridan: {student['jmeno']}")
+
+    def zobraz_vsechny(self):
+        studenti = self.model.vsichni()
+        self.view.zobraz_studenty(studenti)
+
+# Pouziti MVC
+model = StudentModel()
+view = StudentView()
+controller = StudentController(model, view)
+controller.pridej_studenta("Alice", 20)
+controller.pridej_studenta("Bob", 22)
+controller.zobraz_vsechny()</code></pre>
+
+    <h2>Ukázkový kód — TCP klient-server</h2>
+
+    <div class="code-desc"><strong>TCP server</strong> s vlákny — každé připojení obsluhuje samostatné vlákno. Přijímá data a odesílá je zpět velkými písmeny (echo server).</div>
+    <pre><code>import socket
+import threading
+
+def tcp_server():
+    """Jednoduchy TCP echo server s vlakny"""
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind(('localhost', 65432))
+    server.listen(5)
+    print("  Server posloucha na localhost:65432")
+
+    def obsluha_klienta(conn, addr):
+        print(f"  Pripojeni od {addr}")
+        while True:
+            data = conn.recv(1024)
+            if not data:
+                break
+            odpoved = data.decode().upper()
+            conn.sendall(odpoved.encode())
+        conn.close()
+        print(f"  Odpojeni {addr}")
+
+    while True:
+        conn, addr = server.accept()
+        vlakno = threading.Thread(target=obsluha_klienta, args=(conn, addr))
+        vlakno.daemon = True
+        vlakno.start()</code></pre>
+
+    <div class="code-desc"><strong>TCP klient</strong> — připojí se k serveru, odešle zprávu, přijme odpověď a uzavře spojení.</div>
+    <pre><code>def tcp_klient():
+    """TCP klient"""
+    klient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    klient.connect(('localhost', 65432))
+    klient.sendall(b"Ahoj servere!")
+    odpoved = klient.recv(1024)
+    print(f"  Odpoved: {odpoved.decode()}")
+    klient.close()</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

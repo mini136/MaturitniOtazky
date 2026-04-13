@@ -1,0 +1,61 @@
+{
+  "title": "Textové zpracování a regulární výrazy",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď regex metaznak k jeho významu:",
+      "pairs": [
+        ["\\d", "Číslice [0-9]"],
+        ["\\w", "Slovní znak [a-zA-Z0-9_]"],
+        ["\\s", "Bílý znak (mezera, tab, newline)"],
+        ["\\b", "Hranice slova"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o kódování a regexech:",
+      "text": "{{ASCII}} kódování pokrývá 128 znaků (1 byte). {{UTF-8}} kóduje Unicode znaky pomocí 1–4 bytů. Greedy regex .* matchne co {{nejvíc}}, zatímco lazy .*? matchne co {{nejméně}}. Funkce re.{{findall}} vrátí seznam všech nalezených výskytů.",
+      "answers": ["ASCII", "UTF-8", "nejvíc", "nejméně", "findall"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Lookahead (?=...) a lookbehind (?<=...) v regexu konzumují (spotřebují) text, který matchují.",
+      "answer": false,
+      "explanation": "Lookahead a lookbehind matchují pozici, ale nekonzumují text. Proto se nazývají 'zero-width assertions'. Pouze ověří, že se za/před aktuální pozicí nachází daný vzor, ale nezahrnou ho do výsledného matche."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky parsování logu pomocí regexu:",
+      "items": [
+        "Načtení textového logu do řetězce",
+        "Sestavení regex patternu pro požadovaná data",
+        "Použití re.findall() pro extrakci všech výskytů",
+        "Zpracování nalezených skupin (capture groups)",
+        "Agregace výsledků (např. Counter pro počítání)"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi re.search(), re.match() a re.findall(). Kdy použiješ kterou?",
+      "keywords": ["search", "první výskyt", "match", "začátek", "findall", "seznam", "všechny"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď regex funkci k jejímu účelu:",
+      "pairs": [
+        ["re.search()", "Najde první výskyt patternu kdekoli v řetězci"],
+        ["re.match()", "Matchuje pattern jen od začátku řetězce"],
+        ["re.sub()", "Nahrazení textu podle patternu"],
+        ["re.findall()", "Vrátí seznam všech výskytů"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Regulární výraz ^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$ validuje heslo s minimálně 8 znaky, malým písmenem, velkým písmenem a číslicí.",
+      "answer": true,
+      "explanation": "Regex používá lookahead (?=...) pro kontrolu přítomnosti znaků bez konzumace textu. (?=.*[a-z]) ověří malé písmeno, (?=.*[A-Z]) velké písmeno, (?=.*\\d) číslici. .{8,} poté matchne min. 8 jakýchkoli znaků."
+    }
+  ]
+}

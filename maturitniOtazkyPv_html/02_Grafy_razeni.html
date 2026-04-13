@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02 - Grafy a řazení</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>02 – Grafy, průchody grafem, řadicí algoritmy</h1>
+
+    <h2>Reprezentace grafů</h2>
+    <table>
+        <tr><th>Reprezentace</th><th>Paměť</th><th>Výhody</th></tr>
+        <tr><td><strong>Matice sousednosti</strong></td><td>O(V²)</td><td>Rychlá kontrola hrany O(1)</td></tr>
+        <tr><td><strong>Seznam sousednosti</strong></td><td>O(V+E)</td><td>Úsporné pro řídké grafy</td></tr>
+        <tr><td><strong>Seznam hran</strong></td><td>O(E)</td><td>Jednoduché na implementaci</td></tr>
+    </table>
+
+    <h2>Typy grafů</h2>
+    <ul>
+        <li><strong>Orientovaný / Neorientovaný</strong></li>
+        <li><strong>Ohodnocený / Neohodnocený</strong></li>
+        <li><strong>Cyklický / Acyklický</strong></li>
+        <li><strong>Strom</strong> — souvislý acyklický graf</li>
+    </ul>
+
+    <h2>Průchody grafem</h2>
+    <table>
+        <tr><th>Algoritmus</th><th>Datová struktura</th><th>Použití</th><th>Složitost</th></tr>
+        <tr><td><strong>BFS</strong></td><td>Fronta (FIFO)</td><td>Nejkratší cesta (neohodnocený)</td><td>O(V+E)</td></tr>
+        <tr><td><strong>DFS</strong></td><td>Zásobník (LIFO) / rekurze</td><td>Detekce cyklů, topologické řazení</td><td>O(V+E)</td></tr>
+        <tr><td><strong>Dijkstra</strong></td><td>Prioritní fronta</td><td>Nejkratší cesta (nezáporné váhy)</td><td>O((V+E) log V)</td></tr>
+    </table>
+
+    <h2>Řadicí algoritmy</h2>
+    <table>
+        <tr><th>Algoritmus</th><th>Best</th><th>Average</th><th>Worst</th><th>Paměť</th><th>Stabilní</th></tr>
+        <tr><td>Bubble Sort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Ano</td></tr>
+        <tr><td>Merge Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>Ano</td></tr>
+        <tr><td>Quick Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>Ne</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python (BFS, DFS, Dijkstra)</h2>
+
+    <div class="code-desc">Reprezentace grafu seznamem sousednosti a průchod <strong>BFS</strong> (do šířky) pomocí fronty <code>deque</code>. Vrací seznam navštívených uzlů v pořadí procházení.</div>
+    <pre><code>from collections import deque
+
+# Reprezentace grafu - seznam sousednosti
+graf = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
+}
+
+def bfs(graf, start):
+    """Pruchod do sirky (Breadth-First Search)"""
+    navstivene = set()
+    fronta = deque([start])
+    navstivene.add(start)
+    poradi = []
+
+    while fronta:
+        uzel = fronta.popleft()  # FIFO
+        poradi.append(uzel)
+        for soused in graf[uzel]:
+            if soused not in navstivene:
+                navstivene.add(soused)
+                fronta.append(soused)
+    return poradi
+
+print("BFS:", bfs(graf, 'A'))  # ['A', 'B', 'C', 'D', 'E', 'F']</code></pre>
+
+    <div class="code-desc"><strong>DFS</strong> (do hloubky) — rekurzivní verze. Prochází co nejdále jednou větví, pak se vrací (backtracking).</div>
+    <pre><code>def dfs(graf, start, navstivene=None):
+    """Pruchod do hloubky (Depth-First Search)"""
+    if navstivene is None:
+        navstivene = set()
+    navstivene.add(start)
+    poradi = [start]
+    for soused in graf[start]:
+        if soused not in navstivene:
+            poradi.extend(dfs(graf, soused, navstivene))
+    return poradi
+
+print("DFS:", dfs(graf, 'A'))  # ['A', 'B', 'D', 'E', 'F', 'C']</code></pre>
+
+    <div class="code-desc"><strong>Dijkstrův algoritmus</strong> — nalezení nejkratší cesty v ohodnoceném grafu s nezápornými vahami. Používá prioritní frontu (<code>heapq</code>).</div>
+    <pre><code>import heapq
+
+vahovany_graf = {
+    'A': [('B', 4), ('C', 2)],
+    'B': [('D', 3), ('C', 1)],
+    'C': [('B', 1), ('D', 5)],
+    'D': []
+}
+
+def dijkstra(graf, start):
+    """Nejkratsi cesty z pocatecniho uzlu"""
+    vzdalenosti = {uzel: float('inf') for uzel in graf}
+    vzdalenosti[start] = 0
+    prioritni_fronta = [(0, start)]
+
+    while prioritni_fronta:
+        aktualni_vzdalenost, aktualni = heapq.heappop(prioritni_fronta)
+        if aktualni_vzdalenost &gt; vzdalenosti[aktualni]:
+            continue
+        for soused, vaha in graf[aktualni]:
+            vzdalenost = aktualni_vzdalenost + vaha
+            if vzdalenost &lt; vzdalenosti[soused]:
+                vzdalenosti[soused] = vzdalenost
+                heapq.heappush(prioritni_fronta, (vzdalenost, soused))
+    return vzdalenosti
+
+print("Dijkstra:", dijkstra(vahovany_graf, 'A'))</code></pre>
+
+    <h2>Ukázkový kód — Řadicí algoritmy</h2>
+
+    <div class="code-desc"><strong>Bubble Sort</strong> — opakovaně porovnává sousední prvky a prohazuje je. Optimalizace s příznakem <code>prohozeno</code> pro včasné ukončení.</div>
+    <pre><code>def bubble_sort(pole):
+    """O(n²) - porovnava sousedni prvky, stabilni"""
+    n = len(pole)
+    for i in range(n):
+        prohozeno = False
+        for j in range(0, n - i - 1):
+            if pole[j] &gt; pole[j + 1]:
+                pole[j], pole[j + 1] = pole[j + 1], pole[j]
+                prohozeno = True
+        if not prohozeno:
+            break
+    return pole</code></pre>
+
+    <div class="code-desc"><strong>Merge Sort</strong> — rozděl a panuj. Rekurzivně dělí pole na poloviny a poté slučuje seřazené části. Stabilní, O(n log n).</div>
+    <pre><code>def merge_sort(pole):
+    """O(n log n) - rozdel a panuj, stabilni"""
+    if len(pole) &lt;= 1:
+        return pole
+    stred = len(pole) // 2
+    leva = merge_sort(pole[:stred])
+    prava = merge_sort(pole[stred:])
+
+    vysledek = []
+    i = j = 0
+    while i &lt; len(leva) and j &lt; len(prava):
+        if leva[i] &lt;= prava[j]:
+            vysledek.append(leva[i]); i += 1
+        else:
+            vysledek.append(prava[j]); j += 1
+    vysledek.extend(leva[i:])
+    vysledek.extend(prava[j:])
+    return vysledek</code></pre>
+
+    <div class="code-desc"><strong>Quick Sort</strong> — volí pivot a rozděluje pole na menší a větší prvky. Průměrně O(n log n), ale worst-case O(n²).</div>
+    <pre><code>def quick_sort(pole):
+    """O(n log n) prumerne - pivot, nestabilni"""
+    if len(pole) &lt;= 1:
+        return pole
+    pivot = pole[len(pole) // 2]
+    mensi = [x for x in pole if x &lt; pivot]
+    stejne = [x for x in pole if x == pivot]
+    vetsi = [x for x in pole if x &gt; pivot]
+    return quick_sort(mensi) + stejne + quick_sort(vetsi)</code></pre>
+
+    <div class="code-desc">BFS aplikace — <strong>hledání cesty v bludišti</strong>. Mřížka s překážkami (<code>#</code>), hledá nejkratší cestu z S do E.</div>
+    <pre><code>def bfs_bludiste(bludiste, start, cil):
+    """Najde nejkratsi cestu v bludisti pomoci BFS"""
+    radky, sloupce = len(bludiste), len(bludiste[0])
+    fronta = deque([(start, [start])])
+    navstivene = {start}
+
+    while fronta:
+        (r, c), cesta = fronta.popleft()
+        if (r, c) == cil:
+            return cesta
+
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            nr, nc = r + dr, c + dc
+            if (0 &lt;= nr &lt; radky and 0 &lt;= nc &lt; sloupce
+                and bludiste[nr][nc] != '#'
+                and (nr, nc) not in navstivene):
+                navstivene.add((nr, nc))
+                fronta.append(((nr, nc), cesta + [(nr, nc)]))
+    return None
+
+bludiste = [
+    ['S', '.', '.', '#', '.'],
+    ['#', '#', '.', '#', '.'],
+    ['.', '.', '.', '.', '.'],
+    ['.', '#', '#', '#', '.'],
+    ['.', '.', '.', '.', 'E']
+]
+cesta = bfs_bludiste(bludiste, (0,0), (4,4))
+print(f"Cesta bludistem: {cesta}")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21 - STP, EtherChannel, HSRP</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>21 – STP, EtherChannel a HSRP – Principy, konfigurace, failover, BPDU</h1>
+
+    <h2>STP (Spanning Tree Protocol) – IEEE 802.1D</h2>
+    <h3>Problém: Smyčky na L2</h3>
+    <ul>
+        <li>Redundantní spoje mezi přepínači → <strong>broadcastová bouře</strong> (broadcast storm)</li>
+        <li>Rámce se posílají dokola → MAC tabulka je nestabilní (MAC flapping)</li>
+        <li>Síť se stane nepoužitelnou</li>
+    </ul>
+    <p>STP eliminuje smyčky tím, že <strong>logicky zablokuje redundantní porty</strong> a udržuje stromovou topologii.</p>
+
+    <h3>BPDU (Bridge Protocol Data Unit)</h3>
+    <p>Zprávy, které si přepínače vyměňují pro volbu Root Bridge a určení stavu portů.</p>
+    <ul>
+        <li>Posílány na multicast <code>01:80:C2:00:00:00</code></li>
+        <li>Obsahují: <strong>Bridge ID</strong> (priority + MAC), <strong>Root Bridge ID</strong>, <strong>cost</strong>, <strong>port ID</strong></li>
+        <li>Hello timer = <strong>2 sekundy</strong> (default)</li>
+    </ul>
+
+    <h3>Bridge ID</h3>
+    <pre><code>Bridge ID = Priority (4 bity) + Extended System ID (12 bitů) + MAC adresa (48 bitů)
+                                  ↑ VLAN ID (pokud PVST+)
+Default priority = 32768 (+ VLAN ID)</code></pre>
+
+    <h3>Volba Root Bridge</h3>
+    <p>Přepínač s <strong>nejnižším Bridge ID</strong> se stane Root Bridge.</p>
+
+    <h3>Stavy portů (STP 802.1D)</h3>
+    <table>
+        <tr><th>Stav</th><th>Posílá/přijímá data</th><th>Učí MAC</th><th>Doba</th></tr>
+        <tr><td><strong>Blocking</strong></td><td>Ne</td><td>Ne</td><td>20s (max age)</td></tr>
+        <tr><td><strong>Listening</strong></td><td>Ne</td><td>Ne</td><td>15s (forward delay)</td></tr>
+        <tr><td><strong>Learning</strong></td><td>Ne</td><td>Ano</td><td>15s (forward delay)</td></tr>
+        <tr><td><strong>Forwarding</strong></td><td>Ano</td><td>Ano</td><td>–</td></tr>
+        <tr><td><strong>Disabled</strong></td><td>Ne</td><td>Ne</td><td>–</td></tr>
+    </table>
+    <p>Konvergence: 30–50 sekund (Blocking → Forwarding).</p>
+
+    <h3>Role portů</h3>
+    <table>
+        <tr><th>Role</th><th>Popis</th></tr>
+        <tr><td><strong>Root Port</strong></td><td>Nejlepší cesta k Root Bridge (jeden na každém non-root switchi)</td></tr>
+        <tr><td><strong>Designated Port</strong></td><td>Nejlepší port na segmentu (posílá rámce směrem od Root)</td></tr>
+        <tr><td><strong>Blocked/Alternate Port</strong></td><td>Redundantní port – zablokován, čeká na výpadek</td></tr>
+    </table>
+
+    <h3>STP cost</h3>
+    <table>
+        <tr><th>Rychlost</th><th>Cost (802.1D)</th><th>Cost (802.1t)</th></tr>
+        <tr><td>10 Mbps</td><td>100</td><td>2 000 000</td></tr>
+        <tr><td>100 Mbps</td><td>19</td><td>200 000</td></tr>
+        <tr><td>1 Gbps</td><td>4</td><td>20 000</td></tr>
+        <tr><td>10 Gbps</td><td>2</td><td>2 000</td></tr>
+    </table>
+
+    <h3>Verze STP</h3>
+    <table>
+        <tr><th>Verze</th><th>Standard</th><th>Popis</th></tr>
+        <tr><td>STP</td><td>802.1D</td><td>Původní, pomalý (30-50s konvergence)</td></tr>
+        <tr><td><strong>RSTP</strong></td><td>802.1w</td><td>Rapid STP – konvergence &lt; 6 sekund</td></tr>
+        <tr><td><strong>PVST+</strong></td><td>Cisco</td><td>Per-VLAN STP – samostatný strom pro každou VLAN</td></tr>
+        <tr><td><strong>Rapid PVST+</strong></td><td>Cisco</td><td>RSTP + per-VLAN (default na Cisco)</td></tr>
+        <tr><td>MSTP</td><td>802.1s</td><td>Více VLAN do jedné instance STP</td></tr>
+    </table>
+
+    <h3>Konfigurace STP (Cisco)</h3>
+    <pre><code>! Nastavení Root Bridge (nízká priorita)
+spanning-tree vlan 10 root primary         ! priority 24576
+spanning-tree vlan 10 root secondary       ! priority 28672
+
+! Nebo manuálně
+spanning-tree vlan 10 priority 4096        ! násobek 4096
+
+! PortFast – přeskočí listening/learning (pro koncové stanice)
+interface FastEthernet0/1
+  spanning-tree portfast
+
+! BPDU Guard – při přijetí BPDU zablokuj port (ochrana)
+interface FastEthernet0/1
+  spanning-tree bpduguard enable
+
+! Ověření
+show spanning-tree
+show spanning-tree vlan 10</code></pre>
+
+    <h2>EtherChannel</h2>
+    <p>Sdružení <strong>více fyzických linek</strong> do jedné logické – zvýšení propustnosti + redundance. STP vidí jen jednu linku → žádné blokování.</p>
+
+    <h3>Protokoly pro EtherChannel</h3>
+    <table>
+        <tr><th>Protokol</th><th>Standard</th><th>Režimy</th></tr>
+        <tr><td><strong>LACP</strong></td><td>IEEE 802.3ad</td><td>Active / Passive</td></tr>
+        <tr><td><strong>PAgP</strong></td><td>Cisco proprietary</td><td>Desirable / Auto</td></tr>
+        <tr><td><strong>Static</strong></td><td>–</td><td>On (bez vyjednávání)</td></tr>
+    </table>
+
+    <h3>Kombinace režimů</h3>
+    <table>
+        <tr><th></th><th>Active</th><th>Passive</th></tr>
+        <tr><td><strong>Active</strong></td><td>✅ Ano</td><td>✅ Ano</td></tr>
+        <tr><td><strong>Passive</strong></td><td>✅ Ano</td><td>❌ Ne</td></tr>
+    </table>
+
+    <h3>Konfigurace EtherChannel (LACP)</h3>
+    <pre><code>! Na obou přepínačích
+interface range GigabitEthernet0/1-2
+  channel-group 1 mode active             ! LACP active
+  ! channel-group 1 mode passive          ! LACP passive
+
+! Konfigurace Port-Channel rozhraní
+interface Port-Channel1
+  switchport mode trunk
+  switchport trunk allowed vlan 10,20
+
+! Ověření
+show etherchannel summary
+show etherchannel port-channel</code></pre>
+
+    <h2>HSRP (Hot Standby Router Protocol)</h2>
+    <p>Cisco proprietární protokol pro <strong>redundanci výchozí brány</strong>. Dva (nebo více) routerů sdílejí virtuální IP adresu.</p>
+
+    <h3>Princip HSRP</h3>
+    <ul>
+        <li><strong>Active router</strong> – obsluhuje provoz, odpovídá na virtuální IP</li>
+        <li><strong>Standby router</strong> – čeká, převezme při výpadku Active</li>
+        <li>Klienti mají jako gateway <strong>virtuální IP</strong> → failover transparentní</li>
+        <li>Virtuální <strong>MAC adresa</strong>: <code>0000.0c07.acXX</code> (XX = group number)</li>
+    </ul>
+
+    <h3>HSRP stavy</h3>
+    <table>
+        <tr><th>Stav</th><th>Popis</th></tr>
+        <tr><td>Initial</td><td>HSRP nespuštěn</td></tr>
+        <tr><td>Learn</td><td>Čeká na Hello od Active</td></tr>
+        <tr><td>Listen</td><td>Zná virtuální IP, nepodílí se na volbě</td></tr>
+        <tr><td>Speak</td><td>Účastní se volby Active/Standby</td></tr>
+        <tr><td><strong>Standby</strong></td><td>Záložní – připraven převzít</td></tr>
+        <tr><td><strong>Active</strong></td><td>Obsluhuje provoz</td></tr>
+    </table>
+
+    <h3>Konfigurace HSRP</h3>
+    <pre><code>! Router 1 (Active)
+interface GigabitEthernet0/0
+  ip address 192.168.1.2 255.255.255.0
+  standby 1 ip 192.168.1.1              ! virtuální IP (gateway pro klienty)
+  standby 1 priority 110                 ! vyšší = Active (default 100)
+  standby 1 preempt                      ! při obnově převezmi zpět
+
+! Router 2 (Standby)
+interface GigabitEthernet0/0
+  ip address 192.168.1.3 255.255.255.0
+  standby 1 ip 192.168.1.1
+  standby 1 priority 90
+  standby 1 preempt
+
+! Ověření
+show standby
+show standby brief</code></pre>
+
+    <h3>Alternativy k HSRP</h3>
+    <table>
+        <tr><th>Protokol</th><th>Standard</th><th>Popis</th></tr>
+        <tr><td><strong>HSRP</strong></td><td>Cisco</td><td>Active/Standby, proprietární</td></tr>
+        <tr><td><strong>VRRP</strong></td><td>IEEE (RFC 5798)</td><td>Master/Backup, otevřený standard</td></tr>
+        <tr><td><strong>GLBP</strong></td><td>Cisco</td><td>Load balancing mezi routery</td></tr>
+    </table>
+
+    <div class="note">
+        <strong>Preempt:</strong> Pokud Active router spadne a pak se vrátí, s preempt automaticky převezme zpět roli Active (pokud má vyšší prioritu). Bez preempt zůstane jako Standby.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

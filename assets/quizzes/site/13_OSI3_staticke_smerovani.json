@@ -1,0 +1,62 @@
+{
+  "title": "OSI 3 – Statické směrování, tabulky, administrativní vzdálenost",
+  "questions": [
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky, jak router zpracuje příchozí paket:",
+      "items": [
+        "Router přijme rámec a odstraní L2 hlavičku",
+        "Přečte cílovou IP adresu z IP hlavičky",
+        "Vyhledá ve směrovací tabulce nejdelší shodu (longest prefix match)",
+        "Sníží TTL o 1 (pokud TTL=0, zahodí a pošle ICMP Time Exceeded)",
+        "Vytvoří nový L2 rámec s novými MAC adresami",
+        "Odešle paket na příslušné rozhraní směrem k next-hopu"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď kód ve směrovací tabulce k typu záznamu:",
+      "pairs": [
+        ["C (Connected)", "Přímo připojená síť"],
+        ["S (Static)", "Ručně nakonfigurovaná statická cesta"],
+        ["O (OSPF)", "Cesta naučená přes OSPF protokol"],
+        ["S* (Static default)", "Výchozí cesta 0.0.0.0/0"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Floating static route má nižší administrativní vzdálenost než běžná statická cesta, proto se použije jako záložní cesta.",
+      "answer": false,
+      "explanation": "Floating static route má naopak VYŠŠÍ administrativní vzdálenost (např. 150) než primární cesta. Díky vyšší AD se do tabulky dostane jen tehdy, když primární cesta zmizí. Nižší AD = vyšší důvěryhodnost."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň administrativní vzdálenosti směrovacích protokolů:",
+      "text": "Přímo připojená síť má AD {{0}}, statická cesta má AD {{1}}, OSPF má AD {{110}} a RIP má AD {{120}}. Pokud existuje cesta ze dvou zdrojů, router zvolí tu s {{nižší}} administrativní vzdáleností.",
+      "answers": ["0", "1", "110", "120", "nižší"]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli princip longest prefix match. Proč router při rozhodování vybírá nejspecifičtější cestu?",
+      "keywords": ["nejdelší prefix", "specifická", "přesnost", "tabulka", "/24", "/16", "/8", "shoda"]
+    },
+    {
+      "type": "match",
+      "prompt": "Porovnej statické a dynamické směrování:",
+      "pairs": [
+        ["Statické – konfigurace", "Ruční zadávání tras administrátorem"],
+        ["Dynamické – adaptabilita", "Automatická konvergence při výpadku"],
+        ["Statické – bezpečnost", "Vyšší – žádné směrovací zprávy v síti"],
+        ["Dynamické – škálovatelnost", "Vhodné pro střední a velké sítě"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "AD (administrativní vzdálenost) a metrika slouží ke stejnému účelu – rozhodují, která cesta je nejlepší.",
+      "answer": false,
+      "explanation": "AD rozhoduje mezi cestami z různých zdrojů/protokolů (např. OSPF vs. RIP), zatímco metrika rozhoduje mezi více cestami v rámci jednoho protokolu (např. která z OSPF cest je lepší). Nejprve se porovná AD, pak metrika."
+    }
+  ]
+}

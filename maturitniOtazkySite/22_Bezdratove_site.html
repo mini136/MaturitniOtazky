@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22 - Bezdrátové sítě</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>22 – Bezdrátové sítě – EM vlny, antény, modulace, zabezpečení, frekvenční pásma</h1>
+
+    <h2>Elektromagnetické vlny</h2>
+    <h3>Základní principy</h3>
+    <ul>
+        <li>Wi-Fi využívá <strong>rádiové vlny</strong> (část EM spektra)</li>
+        <li>Vlnová délka × frekvence = rychlost světla: <code>λ × f = c</code></li>
+        <li>Vyšší frekvence → vyšší přenosová rychlost, ale <strong>kratší dosah</strong> a horší průchod překážkami</li>
+    </ul>
+
+    <h3>Šíření signálu</h3>
+    <table>
+        <tr><th>Jev</th><th>Popis</th></tr>
+        <tr><td><strong>Útlum (Attenuation)</strong></td><td>Oslabení signálu se vzdáleností</td></tr>
+        <tr><td><strong>Odraz (Reflection)</strong></td><td>Signál se odrazí od velkých ploch (zdi, kov)</td></tr>
+        <tr><td><strong>Ohyb (Diffraction)</strong></td><td>Změna směru kolem překážek</td></tr>
+        <tr><td><strong>Rozptyl (Scattering)</strong></td><td>Rozptýlení na drobných objektech</td></tr>
+        <tr><td><strong>Interference</strong></td><td>Rušení od jiných zdrojů na stejné frekvenci</td></tr>
+        <tr><td><strong>Multipath</strong></td><td>Signál přichází více cestami → zkreslení</td></tr>
+    </table>
+
+    <h2>Frekvenční pásma Wi-Fi</h2>
+    <table>
+        <tr><th>Pásmo</th><th>Frekvence</th><th>Kanály</th><th>Vlastnosti</th></tr>
+        <tr><td><strong>2,4 GHz</strong></td><td>2,400 – 2,4835 GHz</td><td>1–14 (3 nepřekrývající: 1, 6, 11)</td><td>Delší dosah, horší propustnost, více rušení (mikrovlnka, BT)</td></tr>
+        <tr><td><strong>5 GHz</strong></td><td>5,150 – 5,825 GHz</td><td>23+ nepřekrývajících kanálů</td><td>Kratší dosah, vyšší rychlost, méně rušení</td></tr>
+        <tr><td><strong>6 GHz</strong></td><td>5,925 – 7,125 GHz</td><td>59 kanálů (Wi-Fi 6E/7)</td><td>Nejvyšší rychlost, nejkratší dosah, bez legacy rušení</td></tr>
+    </table>
+
+    <div class="note">
+        <strong>Kanály 2,4 GHz:</strong> Každý kanál = 22 MHz šířka, rozestup 5 MHz. Proto se překrývají! Nepřekrývající kombinace: <strong>1, 6, 11</strong> (nebo 1, 5, 9, 13 v EU).
+    </div>
+
+    <h2>Wi-Fi standardy (IEEE 802.11)</h2>
+    <table>
+        <tr><th>Standard</th><th>Název</th><th>Pásmo</th><th>Max rychlost</th><th>Modulace</th></tr>
+        <tr><td>802.11b</td><td>–</td><td>2,4 GHz</td><td>11 Mbps</td><td>DSSS/CCK</td></tr>
+        <tr><td>802.11a</td><td>–</td><td>5 GHz</td><td>54 Mbps</td><td>OFDM</td></tr>
+        <tr><td>802.11g</td><td>–</td><td>2,4 GHz</td><td>54 Mbps</td><td>OFDM</td></tr>
+        <tr><td>802.11n</td><td><strong>Wi-Fi 4</strong></td><td>2,4 + 5 GHz</td><td>600 Mbps</td><td>OFDM + MIMO</td></tr>
+        <tr><td>802.11ac</td><td><strong>Wi-Fi 5</strong></td><td>5 GHz</td><td>6,9 Gbps</td><td>OFDM + MU-MIMO</td></tr>
+        <tr><td>802.11ax</td><td><strong>Wi-Fi 6/6E</strong></td><td>2,4 + 5 + 6 GHz</td><td>9,6 Gbps</td><td>OFDMA + MU-MIMO</td></tr>
+        <tr><td>802.11be</td><td><strong>Wi-Fi 7</strong></td><td>2,4 + 5 + 6 GHz</td><td>46 Gbps</td><td>4096-QAM, MLO</td></tr>
+    </table>
+
+    <h2>Antény</h2>
+    <table>
+        <tr><th>Typ</th><th>Vyzařovací vzor</th><th>Zisk</th><th>Použití</th></tr>
+        <tr><td><strong>Omnidirekční</strong></td><td>360° horizontálně</td><td>Nízký (2–5 dBi)</td><td>AP v místnosti, domácí routery</td></tr>
+        <tr><td><strong>Směrová (Directional)</strong></td><td>Úzký paprsek</td><td>Vysoký (10–24 dBi)</td><td>Point-to-point spoje, venkovní</td></tr>
+        <tr><td><strong>Sektorová</strong></td><td>Výseč (60°–120°)</td><td>Střední</td><td>Venkovní pokrytí (stadiony, kampusy)</td></tr>
+        <tr><td><strong>Patch / Panel</strong></td><td>Polokruhový</td><td>Střední (7–12 dBi)</td><td>Vnitřní pokrytí, nástěnná montáž</td></tr>
+    </table>
+
+    <h3>Zisk a výkon</h3>
+    <ul>
+        <li><strong>dBi</strong> – zisk antény (oproti izotropnímu zářiči)</li>
+        <li><strong>dBm</strong> – absolutní výkon (0 dBm = 1 mW)</li>
+        <li><strong>EIRP</strong> (Effective Isotropic Radiated Power) = výkon vysílače + zisk antény – útlum kabelu</li>
+    </ul>
+
+    <h2>Modulace</h2>
+    <p>Proces zakódování digitálních dat do rádiového signálu.</p>
+    <table>
+        <tr><th>Modulace</th><th>Popis</th></tr>
+        <tr><td><strong>DSSS</strong></td><td>Direct Sequence Spread Spectrum – rozprostření přes celé pásmo (802.11b)</td></tr>
+        <tr><td><strong>OFDM</strong></td><td>Orthogonal FDM – paralelní nosné, odolné proti multipath (802.11a/g/n/ac)</td></tr>
+        <tr><td><strong>OFDMA</strong></td><td>OFDM + přidělení subkanálů více klientům současně (802.11ax)</td></tr>
+        <tr><td><strong>QAM</strong></td><td>Quadrature Amplitude Modulation – kombinace amplitudy a fáze</td></tr>
+    </table>
+    <h3>QAM úrovně</h3>
+    <ul>
+        <li>Wi-Fi 4: 64-QAM (6 bitů/symbol)</li>
+        <li>Wi-Fi 5: 256-QAM (8 bitů/symbol)</li>
+        <li>Wi-Fi 6: 1024-QAM (10 bitů/symbol)</li>
+        <li>Wi-Fi 7: 4096-QAM (12 bitů/symbol)</li>
+    </ul>
+
+    <h3>MIMO a MU-MIMO</h3>
+    <ul>
+        <li><strong>MIMO</strong> – Multiple Input Multiple Output – více antén na obou stranách → více prostorových toků</li>
+        <li><strong>MU-MIMO</strong> – Multi-User MIMO – komunikace s více klienty současně</li>
+        <li><strong>Beamforming</strong> – směrování signálu ke konkrétnímu klientovi</li>
+    </ul>
+
+    <h2>CSMA/CA (přístupová metoda Wi-Fi)</h2>
+    <p>Carrier Sense Multiple Access / Collision Avoidance (oproti CSMA/CD u Ethernetu).</p>
+    <ol>
+        <li>Poslechni kanál (carrier sense)</li>
+        <li>Pokud volný → čekej náhodný čas (backoff)</li>
+        <li>Pokud stále volný → vysílej</li>
+        <li>Příjemce pošle <strong>ACK</strong> → potvrzení doručení</li>
+        <li>Volitelně: <strong>RTS/CTS</strong> (Request to Send / Clear to Send) pro skrytý uzel</li>
+    </ol>
+
+    <h2>Zabezpečení Wi-Fi</h2>
+    <table>
+        <tr><th>Standard</th><th>Šifrování</th><th>Bezpečnost</th></tr>
+        <tr><td><strong>WEP</strong></td><td>RC4 (40/104 bit)</td><td>❌ Prolomen – nepoužívat!</td></tr>
+        <tr><td><strong>WPA</strong></td><td>TKIP (RC4 vylepšený)</td><td>⚠️ Zastaralý</td></tr>
+        <tr><td><strong>WPA2</strong></td><td>AES-CCMP (128 bit)</td><td>✅ Dobrý (standard)</td></tr>
+        <tr><td><strong>WPA3</strong></td><td>AES-GCMP (128/256 bit), SAE</td><td>✅ Nejlepší</td></tr>
+    </table>
+
+    <h3>Režimy autentizace</h3>
+    <table>
+        <tr><th>Režim</th><th>Popis</th><th>Použití</th></tr>
+        <tr><td><strong>Personal (PSK)</strong></td><td>Sdílené heslo (Pre-Shared Key)</td><td>Domácnosti, malé firmy</td></tr>
+        <tr><td><strong>Enterprise (802.1X)</strong></td><td>RADIUS server, individuální přihlášení</td><td>Firmy, školy</td></tr>
+    </table>
+
+    <h3>WPA3 vylepšení</h3>
+    <ul>
+        <li><strong>SAE</strong> (Simultaneous Authentication of Equals) – nahrazuje 4-way handshake, odolné proti offline slovníkovým útokům</li>
+        <li><strong>Forward Secrecy</strong> – kompromitace hesla neodhalí dříve zachycený provoz</li>
+        <li><strong>192-bit security</strong> (Enterprise)</li>
+    </ul>
+
+    <h2>Infrastruktura bezdrátové sítě</h2>
+    <table>
+        <tr><th>Režim</th><th>Popis</th></tr>
+        <tr><td><strong>Infrastructure (BSS)</strong></td><td>Klienti se připojují k AP → AP je napojen na LAN</td></tr>
+        <tr><td><strong>Ad-hoc (IBSS)</strong></td><td>Klienti komunikují přímo bez AP</td></tr>
+        <tr><td><strong>Mesh</strong></td><td>Více AP propojených bezdrátově</td></tr>
+    </table>
+
+    <div class="important">
+        <strong>Pro maturitu:</strong> WEP = prolomen, WPA2 + AES = minimum, WPA3 = nejlepší. 2,4 GHz = 3 nepřekrývající kanály (1,6,11), 5 GHz = více kanálů, méně rušení. CSMA/CA (ne CD!) u Wi-Fi.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05 - OS Linux - BASH skripty, textové soubory, regex, kompilace, zálohování</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>05 – OS Linux – BASH skripty, práce s textem, regex, kompilace, zálohování</h1>
+
+    <h2>Tvorba BASH skriptů</h2>
+    <h3>Základní struktura</h3>
+    <pre><code>#!/bin/bash
+# Shebang na prvním řádku říká systému, jaký interpret použít
+
+# Spuštění:
+# chmod +x skript.sh && ./skript.sh
+# nebo: bash skript.sh</code></pre>
+
+    <h3>Proměnné</h3>
+    <pre><code>NAME="Linux"                  # bez mezer kolem =
+echo "Systém: $NAME"          # interpolace v dvojitých uvozovkách
+echo 'Systém: $NAME'          # jednoduché uvozovky = literální text
+echo "Verze: ${NAME}_v2"      # {} pro oddělení jména proměnné
+
+# Speciální proměnné
+$0          # jméno skriptu
+$1, $2...   # argumenty
+$#          # počet argumentů
+$@          # všechny argumenty (jako pole)
+$?          # návratový kód posledního příkazu
+$$          # PID aktuálního skriptu
+$!          # PID posledního procesu na pozadí
+
+# Čtení vstupu
+read -p "Zadej jméno: " JMENO
+echo "Ahoj, $JMENO"
+
+# Příkaz do proměnné
+DATUM=$(date +%Y-%m-%d)
+SOUBORY=$(ls -1 | wc -l)</code></pre>
+
+    <h3>Podmínky</h3>
+    <pre><code># if-elif-else
+if [ "$1" -gt 10 ]; then
+    echo "Větší než 10"
+elif [ "$1" -eq 10 ]; then
+    echo "Rovno 10"
+else
+    echo "Menší než 10"
+fi
+
+# Porovnávání čísel: -eq -ne -lt -le -gt -ge
+# Porovnávání řetězců: = != -z (prázdný) -n (neprázdný)
+# Testy souborů: -f (soubor) -d (adresář) -e (existuje) -r -w -x
+
+# Modernější [[ ]]
+if [[ "$STR" == *"hello"* ]]; then
+    echo "Obsahuje hello"
+fi
+
+# Case
+case "$1" in
+    start)  echo "Starting..." ;;
+    stop)   echo "Stopping..." ;;
+    *)      echo "Usage: $0 {start|stop}" ;;
+esac</code></pre>
+
+    <h3>Cykly</h3>
+    <pre><code># For
+for i in 1 2 3 4 5; do echo $i; done
+for i in {1..10}; do echo $i; done
+for i in $(seq 1 2 10); do echo $i; done   # krok 2
+for file in *.txt; do echo "$file"; done
+
+# C-style for
+for ((i=0; i<10; i++)); do echo $i; done
+
+# While
+count=0
+while [ $count -lt 5 ]; do
+    echo $count
+    ((count++))
+done
+
+# While read (čtení souboru řádek po řádku)
+while IFS= read -r line; do
+    echo "$line"
+done < soubor.txt</code></pre>
+
+    <h3>Funkce</h3>
+    <pre><code>moje_funkce() {
+    local jmeno=$1          # lokální proměnná
+    echo "Ahoj, $jmeno"
+    return 0                # návratový kód
+}
+
+moje_funkce "Svět"
+echo "Návratový kód: $?"</code></pre>
+
+    <h3>Pole (Arrays)</h3>
+    <pre><code>ovoce=("jablko" "hruška" "banán")
+echo ${ovoce[0]}           # jablko
+echo ${ovoce[@]}           # všechny prvky
+echo ${#ovoce[@]}          # počet prvků
+ovoce+=("kiwi")            # přidání prvku
+
+for o in "${ovoce[@]}"; do echo "$o"; done</code></pre>
+
+    <h2>Práce s textovými soubory</h2>
+    <h3>Základní nástroje</h3>
+    <pre><code>cat soubor.txt              # výpis celého souboru
+head -n 20 soubor.txt       # prvních 20 řádků
+tail -n 20 soubor.txt       # posledních 20 řádků
+tail -f /var/log/syslog     # živé sledování
+less soubor.txt             # stránkování
+wc -l soubor.txt            # počet řádků
+wc -w soubor.txt            # počet slov
+sort soubor.txt             # seřazení
+sort -n soubor.txt          # numerické řazení
+sort -u soubor.txt          # unikátní + řazení
+uniq                        # odstranění duplikátů (musí být seřazeno)
+cut -d: -f1 /etc/passwd     # výběr 1. sloupce (oddělovač :)
+tr 'a-z' 'A-Z' < soubor    # překlad/nahrazení znaků
+paste soubor1 soubor2       # spojení souborů vedle sebe
+diff soubor1 soubor2        # porovnání souborů</code></pre>
+
+    <h3>Přesměrování a roury</h3>
+    <pre><code>cmd > soubor        # přesměrování stdout (přepíše)
+cmd >> soubor       # přesměrování stdout (přidá)
+cmd 2> errors.log   # přesměrování stderr
+cmd &> all.log      # stdout + stderr
+cmd 2>&1            # stderr do stdout
+cmd < soubor        # stdin ze souboru
+cmd1 | cmd2         # roura (pipe) – stdout cmd1 → stdin cmd2
+
+# Příklady
+ps aux | grep nginx | grep -v grep
+cat access.log | cut -d' ' -f1 | sort | uniq -c | sort -rn | head</code></pre>
+
+    <h2>Filtrace textu</h2>
+    <h3>grep</h3>
+    <pre><code>grep "vzor" soubor          # hledání vzoru
+grep -i "vzor" soubor       # case-insensitive
+grep -r "vzor" /etc/        # rekurzivní hledání
+grep -n "vzor" soubor       # s čísly řádků
+grep -c "vzor" soubor       # počet výskytů
+grep -v "vzor" soubor       # invertovaný výběr (řádky BEZ vzoru)
+grep -E "vzor1|vzor2" soubor # rozšířený regex (egrep)
+grep -w "slovo" soubor      # celé slovo</code></pre>
+
+    <h3>sed (Stream Editor)</h3>
+    <pre><code>sed 's/starý/nový/' soubor       # nahrazení prvního výskytu na řádku
+sed 's/starý/nový/g' soubor      # nahrazení všech výskytů
+sed -i 's/starý/nový/g' soubor   # in-place (přepíše soubor)
+sed -n '5,10p' soubor             # výpis řádků 5-10
+sed '3d' soubor                   # smazání 3. řádku
+sed '/vzor/d' soubor              # smazání řádků s vzorem</code></pre>
+
+    <h3>awk</h3>
+    <pre><code>awk '{print $1}' soubor               # 1. sloupec
+awk -F: '{print $1, $3}' /etc/passwd  # oddělovač :, 1. a 3. sloupec
+awk '$3 > 1000 {print $1}' /etc/passwd # podmínka
+awk 'NR==5' soubor                     # 5. řádek
+awk '{sum += $1} END {print sum}'      # součet 1. sloupce
+awk '/vzor/ {print}' soubor            # řádky odpovídající vzoru</code></pre>
+
+    <h2>Regulární výrazy (Regex)</h2>
+    <table>
+        <tr><th>Metaznak</th><th>Význam</th><th>Příklad</th></tr>
+        <tr><td><code>.</code></td><td>Jakýkoli znak</td><td><code>a.c</code> → abc, a1c</td></tr>
+        <tr><td><code>^</code></td><td>Začátek řádku</td><td><code>^root</code></td></tr>
+        <tr><td><code>$</code></td><td>Konec řádku</td><td><code>bash$</code></td></tr>
+        <tr><td><code>*</code></td><td>0 nebo více opakování</td><td><code>ab*c</code> → ac, abc, abbc</td></tr>
+        <tr><td><code>+</code></td><td>1 nebo více (ERE)</td><td><code>ab+c</code> → abc, abbc</td></tr>
+        <tr><td><code>?</code></td><td>0 nebo 1 (ERE)</td><td><code>colou?r</code></td></tr>
+        <tr><td><code>[abc]</code></td><td>Jeden z a, b, c</td><td><code>[aeiou]</code> – samohlásky</td></tr>
+        <tr><td><code>[^abc]</code></td><td>Jakýkoli kromě a, b, c</td><td></td></tr>
+        <tr><td><code>[0-9]</code></td><td>Číslice</td><td></td></tr>
+        <tr><td><code>\d</code></td><td>Číslice (Perl regex)</td><td></td></tr>
+        <tr><td><code>\w</code></td><td>Alfanumerický znak</td><td></td></tr>
+        <tr><td><code>\s</code></td><td>Bílý znak</td><td></td></tr>
+        <tr><td><code>{n,m}</code></td><td>n až m opakování</td><td><code>a{2,4}</code> → aa, aaa, aaaa</td></tr>
+        <tr><td><code>(a|b)</code></td><td>Alternace</td><td><code>(cat|dog)</code></td></tr>
+    </table>
+
+    <h2>Kompilace</h2>
+    <h3>Kompilace C/C++ programu</h3>
+    <pre><code># GCC
+gcc -o program program.c              # kompilace C
+g++ -o program program.cpp            # kompilace C++
+gcc -Wall -O2 -o program program.c    # s varováními a optimalizací
+
+# Kompilace s knihovnami
+gcc -o program program.c -lm -lpthread
+
+# Make
+make                    # kompilace podle Makefile
+make clean              # vyčištění
+make install            # instalace</code></pre>
+
+    <h3>Makefile</h3>
+    <pre><code>CC = gcc
+CFLAGS = -Wall -O2
+
+program: main.o utils.o
+	$(CC) $(CFLAGS) -o program main.o utils.o
+
+main.o: main.c
+	$(CC) $(CFLAGS) -c main.c
+
+utils.o: utils.c utils.h
+	$(CC) $(CFLAGS) -c utils.c
+
+clean:
+	rm -f *.o program</code></pre>
+
+    <h2>Zálohování</h2>
+    <h3>tar</h3>
+    <pre><code>tar -czf zaloha.tar.gz /home/user     # vytvoření komprimované zálohy (gzip)
+tar -cjf zaloha.tar.bz2 /home/user   # bzip2 komprese
+tar -xzf zaloha.tar.gz               # rozbalení
+tar -xzf zaloha.tar.gz -C /tmp/      # rozbalení do adresáře
+tar -tzf zaloha.tar.gz               # výpis obsahu</code></pre>
+
+    <h3>rsync</h3>
+    <pre><code># Lokální synchronizace
+rsync -av /zdrojovy/ /cilovy/
+
+# Vzdálená záloha
+rsync -avz /home/user/ user@server:/backup/
+rsync -avz --delete /zdroj/ /cil/     # smazání souborů v cíli, které nejsou ve zdroji
+
+# -a = archivní (rekurze, práva, časy...)
+# -v = verbose
+# -z = komprese při přenosu
+# --exclude '*.tmp' = vynechání souborů</code></pre>
+
+    <h3>dd</h3>
+    <pre><code># Záloha celého disku/oddílu (bit po bitu)
+dd if=/dev/sda of=/backup/disk.img bs=4M status=progress
+dd if=/backup/disk.img of=/dev/sdb bs=4M   # obnova</code></pre>
+
+    <h3>Zálohovací strategie</h3>
+    <ul>
+        <li><strong>Plná záloha</strong> – kompletní kopie všech dat</li>
+        <li><strong>Inkrementální</strong> – jen změny od poslední zálohy (rychlá, ale obnova složitější)</li>
+        <li><strong>Diferenční</strong> – změny od poslední plné zálohy (kompromis)</li>
+        <li><strong>Pravidlo 3-2-1</strong> – 3 kopie, 2 různá média, 1 mimo lokalitu</li>
+    </ul>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

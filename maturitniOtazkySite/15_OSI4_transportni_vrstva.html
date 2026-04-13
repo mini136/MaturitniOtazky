@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15 - OSI 4 - Transportní vrstva (TCP, UDP)</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>15 – OSI 4 – Transportní vrstva – UDP, TCP, segmentace, řízení rychlosti, kontrola chyb</h1>
+
+    <h2>Role transportní vrstvy</h2>
+    <ul>
+        <li><strong>Logická komunikace</strong> mezi procesy (aplikacemi) na různých hostech</li>
+        <li><strong>Segmentace a znovusestavení</strong> dat</li>
+        <li><strong>Multiplexing</strong> – více aplikací na jednom hostu (identifikace přes porty)</li>
+        <li>Dva hlavní protokoly: <strong>TCP</strong> (spolehlivý) a <strong>UDP</strong> (nespolehlivý)</li>
+    </ul>
+
+    <h3>Porty</h3>
+    <table>
+        <tr><th>Rozsah</th><th>Název</th><th>Popis</th></tr>
+        <tr><td>0 – 1023</td><td>Well-Known</td><td>Rezervováno pro standardní služby (HTTP 80, HTTPS 443, SSH 22, DNS 53)</td></tr>
+        <tr><td>1024 – 49151</td><td>Registered</td><td>Registrované aplikace (MySQL 3306, RDP 3389)</td></tr>
+        <tr><td>49152 – 65535</td><td>Dynamic / Ephemeral</td><td>Klientské (dočasné) porty</td></tr>
+    </table>
+
+    <h3>Socket</h3>
+    <p>Unikátní identifikace spojení: <strong>IP adresa + port</strong>. Např. <code>192.168.1.10:443</code>.</p>
+    <p>Plné TCP spojení je identifikováno čtveřicí: <code>(src_IP, src_port, dst_IP, dst_port)</code></p>
+
+    <h2>UDP (User Datagram Protocol)</h2>
+    <h3>Vlastnosti</h3>
+    <ul>
+        <li><strong>Nespolehlivý</strong> – žádné potvrzení doručení</li>
+        <li><strong>Bezspojový</strong> (connectionless) – žádný handshake</li>
+        <li>Nízká režie – hlavička pouze <strong>8 bajtů</strong></li>
+        <li>Rychlý – vhodný pro real-time aplikace</li>
+        <li>Negarantuje pořadí doručení</li>
+    </ul>
+
+    <h3>UDP hlavička (8 B)</h3>
+    <table>
+        <tr><th>Pole</th><th>Bity</th><th>Popis</th></tr>
+        <tr><td>Source Port</td><td>16</td><td>Zdrojový port</td></tr>
+        <tr><td>Destination Port</td><td>16</td><td>Cílový port</td></tr>
+        <tr><td>Length</td><td>16</td><td>Délka datagramu (hlavička + data)</td></tr>
+        <tr><td>Checksum</td><td>16</td><td>Kontrolní součet (volitelný v IPv4, povinný v IPv6)</td></tr>
+    </table>
+
+    <h3>Typické UDP služby</h3>
+    <table>
+        <tr><th>Služba</th><th>Port</th></tr>
+        <tr><td>DNS (dotazy)</td><td>53</td></tr>
+        <tr><td>DHCP</td><td>67/68</td></tr>
+        <tr><td>TFTP</td><td>69</td></tr>
+        <tr><td>SNMP</td><td>161/162</td></tr>
+        <tr><td>NTP</td><td>123</td></tr>
+        <tr><td>VoIP (RTP)</td><td>dynamické</td></tr>
+        <tr><td>Online hry, streaming</td><td>různé</td></tr>
+    </table>
+
+    <h2>TCP (Transmission Control Protocol)</h2>
+    <h3>Vlastnosti</h3>
+    <ul>
+        <li><strong>Spolehlivý</strong> – potvrzení doručení (ACK)</li>
+        <li><strong>Spojově orientovaný</strong> – 3-way handshake</li>
+        <li>Garantuje <strong>pořadí a úplnost</strong> dat</li>
+        <li>Řízení toku a přetížení</li>
+        <li>Hlavička <strong>20–60 bajtů</strong></li>
+    </ul>
+
+    <h3>TCP hlavička (20 B + options)</h3>
+    <table>
+        <tr><th>Pole</th><th>Bity</th><th>Popis</th></tr>
+        <tr><td>Source Port</td><td>16</td><td>Zdrojový port</td></tr>
+        <tr><td>Destination Port</td><td>16</td><td>Cílový port</td></tr>
+        <tr><td>Sequence Number</td><td>32</td><td>Pořadové číslo bajtu</td></tr>
+        <tr><td>Acknowledgment Number</td><td>32</td><td>Další očekávaný bajt</td></tr>
+        <tr><td>Data Offset</td><td>4</td><td>Délka hlavičky (v 32b slovech)</td></tr>
+        <tr><td>Flags</td><td>6+</td><td>SYN, ACK, FIN, RST, PSH, URG</td></tr>
+        <tr><td>Window Size</td><td>16</td><td>Velikost přijímacího okna (flow control)</td></tr>
+        <tr><td>Checksum</td><td>16</td><td>Kontrolní součet</td></tr>
+        <tr><td>Urgent Pointer</td><td>16</td><td>Ukazatel na urgentní data</td></tr>
+        <tr><td>Options</td><td>0–320</td><td>MSS, Window Scaling, SACK, Timestamps</td></tr>
+    </table>
+
+    <h3>TCP příznaky (flags)</h3>
+    <table>
+        <tr><th>Flag</th><th>Účel</th></tr>
+        <tr><td><strong>SYN</strong></td><td>Synchronizace – zahájení spojení</td></tr>
+        <tr><td><strong>ACK</strong></td><td>Potvrzení přijetí</td></tr>
+        <tr><td><strong>FIN</strong></td><td>Ukončení spojení</td></tr>
+        <tr><td><strong>RST</strong></td><td>Reset – okamžité přerušení</td></tr>
+        <tr><td><strong>PSH</strong></td><td>Push – ihned předat aplikaci</td></tr>
+        <tr><td><strong>URG</strong></td><td>Urgentní data</td></tr>
+    </table>
+
+    <h2>3-Way Handshake (navázání spojení)</h2>
+    <pre><code>Klient                         Server
+  |                               |
+  |---- SYN (seq=100) ----------->|   1. Klient chce spojení
+  |                               |
+  |<--- SYN+ACK (seq=300,ack=101)-|   2. Server potvrzuje + nabízí
+  |                               |
+  |---- ACK (seq=101,ack=301) --->|   3. Klient potvrzuje
+  |                               |
+  |===== SPOJENÍ NAVÁZÁNO =======|</code></pre>
+
+    <h2>4-Way Termination (ukončení spojení)</h2>
+    <pre><code>Klient                         Server
+  |                               |
+  |---- FIN ---------------------->|   1. Klient chce ukončit
+  |<--- ACK ----------------------|   2. Server potvrzuje
+  |                               |
+  |<--- FIN ----------------------|   3. Server chce ukončit
+  |---- ACK ---------------------->|   4. Klient potvrzuje
+  |                               |
+  |==== SPOJENÍ UKONČENO ========|</code></pre>
+
+    <h2>Segmentace a znovusestavení</h2>
+    <h3>Segmentace</h3>
+    <ul>
+        <li>Data z aplikace jsou rozdělena na <strong>segmenty</strong> velikosti ≤ <strong>MSS</strong> (Maximum Segment Size)</li>
+        <li>MSS = MTU − IP hlavička − TCP hlavička = 1500 − 20 − 20 = <strong>1460 B</strong> (typicky)</li>
+        <li>Každý segment má <strong>sequence number</strong> = pozice prvního bajtu v proudu</li>
+    </ul>
+
+    <h3>Znovusestavení</h3>
+    <ul>
+        <li>Příjemce řadí segmenty podle <strong>sequence number</strong></li>
+        <li>Potvrzuje přijetí pomocí <strong>ACK number</strong> (další očekávaný bajt)</li>
+        <li>Chybějící segmenty → vyžádání opětovného odeslání</li>
+    </ul>
+
+    <h2>Řízení přenosové rychlosti</h2>
+    <h3>Flow Control (řízení toku)</h3>
+    <p>Příjemce reguluje rychlost odesílatele pomocí <strong>Window Size</strong>.</p>
+    <pre><code>Window Size = 4000 B → odesílatel může poslat max 4000 B bez ACK
+
+Host A ---[Seg 1 (1000B)]---> Host B
+Host A ---[Seg 2 (1000B)]---> Host B
+Host A ---[Seg 3 (1000B)]---> Host B
+Host A ---[Seg 4 (1000B)]---> Host B
+Host A <--[ACK, Window=2000]- Host B   ← příjemce zpomaluje
+Host A ---[Seg 5 (1000B)]---> Host B
+Host A ---[Seg 6 (1000B)]---> Host B
+Host A <--[ACK, Window=0]---- Host B   ← STOP! Buffer plný</code></pre>
+
+    <h3>Congestion Control (řízení přetížení)</h3>
+    <p>Odesílatel reguluje rychlost sám podle stavu sítě:</p>
+    <table>
+        <tr><th>Mechanismus</th><th>Popis</th></tr>
+        <tr><td><strong>Slow Start</strong></td><td>Začni s cwnd=1 MSS, zdvojnásob po každém ACK (exponenciální růst)</td></tr>
+        <tr><td><strong>Congestion Avoidance</strong></td><td>Po dosažení ssthresh: cwnd += 1 MSS za RTT (lineární růst)</td></tr>
+        <tr><td><strong>Fast Retransmit</strong></td><td>3 duplikátní ACK → okamžitý retransmit bez čekání na timeout</td></tr>
+        <tr><td><strong>Fast Recovery</strong></td><td>Po fast retransmit: ssthresh = cwnd/2, nepřecházet na slow start</td></tr>
+    </table>
+
+    <h2>Kontrola chyb</h2>
+    <ul>
+        <li><strong>Checksum</strong> – ověření integrity segmentu (povinný v TCP i UDP/IPv6)</li>
+        <li><strong>Sequence Numbers</strong> – detekce ztráty, duplicity a špatného pořadí</li>
+        <li><strong>ACK</strong> – potvrzení = odeslání čísla dalšího očekávaného bajtu</li>
+        <li><strong>Retransmission Timer</strong> – pokud nepřijde ACK do timeoutu → opětovné odeslání</li>
+        <li><strong>Selective ACK (SACK)</strong> – potvrzení konkrétních přijatých rozsahů (TCP option)</li>
+    </ul>
+
+    <h2>Srovnání TCP vs. UDP</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>TCP</th><th>UDP</th></tr>
+        <tr><td>Spojení</td><td>Spojově orientovaný (3-way handshake)</td><td>Bezspojový</td></tr>
+        <tr><td>Spolehlivost</td><td>Ano (ACK, retransmit)</td><td>Ne</td></tr>
+        <tr><td>Pořadí</td><td>Garantováno (sequence numbers)</td><td>Negarantováno</td></tr>
+        <tr><td>Flow Control</td><td>Ano (window)</td><td>Ne</td></tr>
+        <tr><td>Congestion Control</td><td>Ano</td><td>Ne</td></tr>
+        <tr><td>Hlavička</td><td>20–60 B</td><td>8 B</td></tr>
+        <tr><td>Rychlost</td><td>Pomalejší (režie)</td><td>Rychlejší</td></tr>
+        <tr><td>Použití</td><td>HTTP, FTP, SSH, SMTP, databáze</td><td>DNS, DHCP, VoIP, streaming, hry</td></tr>
+    </table>
+
+    <div class="important">
+        <strong>Známé porty pro maturitu:</strong> FTP 20/21, SSH 22, Telnet 23, SMTP 25, DNS 53, DHCP 67/68, HTTP 80, POP3 110, IMAP 143, HTTPS 443, RDP 3389.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

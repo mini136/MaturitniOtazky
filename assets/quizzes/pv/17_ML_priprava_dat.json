@@ -1,0 +1,51 @@
+{
+  "title": "ML: Příprava dat",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď typ strojového učení k jeho popisu:",
+      "pairs": [
+        ["Supervised learning", "Data s labely — vstup X mapován na výstup y"],
+        ["Unsupervised learning", "Data bez labelů — clustering, redukce dimenzí"],
+        ["Reinforcement learning", "Agent se učí z odměn a trestů"],
+        ["Klasifikace", "Predikce diskrétní kategorie (supervised)"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky data pipeline pro strojové učení:",
+      "items": [
+        "Sběr dat (API, scraping, databáze)",
+        "Čištění dat (chybějící hodnoty, duplikáty, outliers)",
+        "Transformace (normalizace, encoding)",
+        "Feature engineering (výběr a tvorba příznaků)",
+        "Rozdělení na trénovací a testovací sadu"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň vzorce a pojmy normalizace:",
+      "text": "Min-Max normalizace převádí hodnoty do rozsahu [0, 1] vzorcem (x − min) / ({{max}} − min). Z-score standardizace počítá (x − μ) / {{σ}}, kde μ je průměr a σ je směrodatná odchylka. Pro detekci odlehlých hodnot se používá metoda {{IQR}}.",
+      "answers": ["max", "σ", "IQR"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "One-hot encoding převede kategorickou proměnnou s 5 unikátními hodnotami na 5 binárních sloupců (0/1).",
+      "answer": true,
+      "explanation": "One-hot encoding vytvoří pro každou unikátní kategorii vlastní sloupec. Pokud záznam patří do dané kategorie, má hodnotu 1, jinak 0. Při 5 kategoriích vznikne 5 nových sloupců."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, proč je důležité ošetřit chybějící hodnoty (imputace) před trénováním modelu a jaké metody imputace znáš.",
+      "keywords": ["průměr", "medián", "modus", "zkreslení", "chybějící", "NaN", "None"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Pearsonův korelační koeficient blízký 0 znamená, že mezi dvěma proměnnými neexistuje žádný vztah.",
+      "answer": false,
+      "explanation": "Pearsonův koeficient měří pouze lineární závislost. Hodnota blízká 0 znamená, že neexistuje lineární vztah, ale může existovat nelineární závislost (např. kvadratická)."
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>08 - OSI 2 - Linková vrstva - Přepínače, rámce, MAC</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>08 – OSI 2 – Linková vrstva – Přepínače, rámce, adresování, kolize, MAC, řízení toku</h1>
+
+    <h2>Linková vrstva (Data Link Layer)</h2>
+    <p>Druhá vrstva OSI modelu. Zajišťuje spolehlivý přenos rámců mezi <strong>přímo spojenými uzly</strong>. Dělí se na dvě podvrstvy:</p>
+    <ul>
+        <li><strong>LLC (Logical Link Control)</strong> – IEEE 802.2 – multiplexování protokolů, řízení toku</li>
+        <li><strong>MAC (Media Access Control)</strong> – IEEE 802.3 – přístup k médiu, adresování, rámcování</li>
+    </ul>
+
+    <h2>MAC adresa</h2>
+    <ul>
+        <li><strong>48 bitů</strong> (6 bajtů), zapsáno hexadecimálně: <code>AA:BB:CC:DD:EE:FF</code></li>
+        <li>Prvních 24 bitů = <strong>OUI</strong> (Organizationally Unique Identifier) – identifikuje výrobce</li>
+        <li>Posledních 24 bitů = unikátní číslo zařízení</li>
+        <li><strong>Unicast</strong> – nejnižší bit prvního bajtu = 0 (adresa jednoho zařízení)</li>
+        <li><strong>Multicast</strong> – nejnižší bit prvního bajtu = 1</li>
+        <li><strong>Broadcast</strong> – <code>FF:FF:FF:FF:FF:FF</code> (všechna zařízení v segmentu)</li>
+    </ul>
+    <pre><code># Zobrazení MAC adresy
+ip link show           # Linux
+ipconfig /all          # Windows
+ifconfig               # starší Linux/macOS</code></pre>
+
+    <h2>Ethernet rámec (Frame)</h2>
+    <h3>Struktura Ethernet II rámce</h3>
+    <table>
+        <tr><th>Pole</th><th>Velikost</th><th>Popis</th></tr>
+        <tr><td>Preambule</td><td>7 bajtů</td><td>Synchronizace (střídající se 10101010)</td></tr>
+        <tr><td>SFD (Start Frame Delimiter)</td><td>1 bajt</td><td>10101011 – označení začátku rámce</td></tr>
+        <tr><td><strong>Cílová MAC</strong></td><td>6 bajtů</td><td>MAC adresa příjemce</td></tr>
+        <tr><td><strong>Zdrojová MAC</strong></td><td>6 bajtů</td><td>MAC adresa odesílatele</td></tr>
+        <tr><td><strong>Type/Length</strong></td><td>2 bajty</td><td>Typ protokolu (0x0800=IPv4, 0x0806=ARP, 0x86DD=IPv6)</td></tr>
+        <tr><td><strong>Data (Payload)</strong></td><td>46–1500 bajtů</td><td>Přenášená data (paket z vyšší vrstvy)</td></tr>
+        <tr><td><strong>FCS (Frame Check Sequence)</strong></td><td>4 bajty</td><td>CRC-32 pro detekci chyb</td></tr>
+    </table>
+    <p><strong>MTU (Maximum Transmission Unit)</strong> = 1500 bajtů (výchozí pro Ethernet). Jumbo frames: 9000 B.</p>
+
+    <h2>Přepínače (Switches)</h2>
+    <h3>Princip činnosti</h3>
+    <ol>
+        <li><strong>Učení (Learning)</strong> – switch si zapamatuje zdrojovou MAC adresu a port, ze kterého rámec přišel → <strong>MAC tabulka (CAM)</strong></li>
+        <li><strong>Přeposílání (Forwarding)</strong> – má-li cílovou MAC v tabulce, pošle rámec jen na daný port</li>
+        <li><strong>Zaplavení (Flooding)</strong> – nemá-li cílovou MAC, pošle rámec na všechny porty kromě zdrojového</li>
+        <li><strong>Filtrování (Filtering)</strong> – pokud jsou zdrojový i cílový port stejné, rámec se zahodí</li>
+        <li><strong>Stárnutí (Aging)</strong> – nepoužívané záznamy v MAC tabulce se po čase mažou (výchozí 300 s)</li>
+    </ol>
+
+    <pre><code># Cisco – zobrazení MAC tabulky
+show mac address-table</code></pre>
+
+    <h3>Hub vs. Switch vs. Router</h3>
+    <table>
+        <tr><th>Zařízení</th><th>Vrstva</th><th>Adresace</th><th>Režim</th></tr>
+        <tr><td><strong>Hub</strong></td><td>L1</td><td>Žádná</td><td>Pošle na všechny porty, half-duplex</td></tr>
+        <tr><td><strong>Switch</strong></td><td>L2</td><td>MAC</td><td>Pošle na cílový port, full-duplex</td></tr>
+        <tr><td><strong>Router</strong></td><td>L3</td><td>IP</td><td>Směrování mezi sítěmi</td></tr>
+    </table>
+
+    <h3>Metody přepínání</h3>
+    <table>
+        <tr><th>Metoda</th><th>Popis</th><th>Latence</th></tr>
+        <tr><td><strong>Store-and-Forward</strong></td><td>Přijme celý rámec, zkontroluje CRC, pak přepošle</td><td>Vyšší (ale kontrola chyb)</td></tr>
+        <tr><td><strong>Cut-Through</strong></td><td>Čte jen cílovou MAC (prvních 6 B) a okamžitě přepošle</td><td>Nízká (bez kontroly chyb)</td></tr>
+        <tr><td><strong>Fragment-Free</strong></td><td>Přečte prvních 64 B (min. rámec – odfiltruje kolizní fragmenty)</td><td>Střední kompromis</td></tr>
+    </table>
+
+    <h2>Kolize</h2>
+    <h3>Kolizní doména</h3>
+    <p>Část sítě, kde se mohou rámce srazit (kolize). Každý <strong>port switche</strong> = samostatná kolizní doména. Hub sdílí jednu kolizní doménu pro všechny porty.</p>
+
+    <h3>Broadcast doména</h3>
+    <p>Část sítě, kam dorazí broadcast rámec. Všechny porty switche = jedna broadcast doména. Router odděluje broadcast domény.</p>
+
+    <h3>CSMA/CD (u hubů / half-duplex)</h3>
+    <ol>
+        <li>Naslouchej – je médium volné?</li>
+        <li>Ano → vysílej</li>
+        <li>Detekuješ kolizi? → pošli JAM signál, čekej náhodný čas (exponenciální backoff)</li>
+        <li>Zkus znovu (max. 16 pokusů)</li>
+    </ol>
+
+    <h2>Detekce a oprava chyb</h2>
+    <h3>FCS (Frame Check Sequence)</h3>
+    <ul>
+        <li>Každý Ethernet rámec obsahuje <strong>CRC-32</strong> kontrolní součet</li>
+        <li>Odesílatel vypočítá CRC z obsahu rámce a přidá na konec</li>
+        <li>Příjemce přepočítá CRC a porovná → nesouhlasí = chyba → rámec zahozen</li>
+        <li>Linková vrstva <strong>neřeší opravu chyb</strong> – to dělá vyšší vrstva (TCP)</li>
+    </ul>
+
+    <h2>Řízení toku dat (Flow Control)</h2>
+    <h3>IEEE 802.3x – Pause Frames</h3>
+    <p>Pokud je příjemce zahlcen, pošle <strong>PAUSE rámec</strong> odesílateli → ten pozastaví vysílání na specifikovanou dobu.</p>
+
+    <h3>Priority Flow Control (PFC) – 802.1Qbb</h3>
+    <p>Umožňuje pozastavení konkrétní priority provozu (pro lossless Ethernet – FCoE, iSCSI).</p>
+
+    <h2>Přepínač – konfigurace (Cisco)</h2>
+    <pre><code>enable                              # privilegovaný režim
+configure terminal                   # konfigurační režim
+
+# Základní nastavení
+hostname MujSwitch
+enable secret MojeHeslo
+service password-encryption
+
+# Nastavení portu
+interface FastEthernet0/1
+  description PC-Uzivatel
+  speed 100
+  duplex full
+  no shutdown
+
+# Zabezpečení portů (Port Security)
+interface FastEthernet0/1
+  switchport mode access
+  switchport port-security
+  switchport port-security maximum 2
+  switchport port-security mac-address sticky
+  switchport port-security violation shutdown
+
+# Diagnostika
+show interfaces status
+show mac address-table
+show interfaces FastEthernet0/1</code></pre>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

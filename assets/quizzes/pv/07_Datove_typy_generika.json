@@ -1,0 +1,53 @@
+{
+  "title": "Datové typy, generika, výčtové typy",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď vlastnost k hodnotovým nebo referenčním typům v C#:",
+      "pairs": [
+        ["Uložen na stacku, přiřazení vytváří kopii", "Hodnotový typ (struct, int, bool)"],
+        ["Uložen na heapu, přiřazení kopíruje referenci", "Referenční typ (class, string, array)"],
+        ["Default hodnota je 0 nebo false", "Hodnotový typ"],
+        ["Default hodnota je null", "Referenční typ"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "V Javě generika používají type erasure, což znamená, že typová informace je dostupná i za běhu programu.",
+      "answer": false,
+      "explanation": "Type erasure v Javě odstraní typové parametry při kompilaci — za běhu List<String> a List<Integer> jsou oba jen List. Typová bezpečnost je kontrolována pouze při kompilaci, ne za běhu."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o generikách a constraints v C#:",
+      "text": "Constraint {{where T : class}} vyžaduje, aby T byl referenční typ. Constraint {{where T : new()}} vyžaduje bezparametrický konstruktor. Generika zajišťují {{typovou bezpečnost}} při kompilaci bez nutnosti castování.",
+      "answers": ["where T : class", "where T : new()", "typovou bezpečnost"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky práce s Nullable a null-safe operátory v C#:",
+      "items": [
+        "Deklarace: int? moznaNull = null;",
+        "Null-conditional: text?.Length (vrátí null místo výjimky)",
+        "Null-coalescing: moznaNull ?? 42 (náhradní hodnota)",
+        "Použití hodnoty v dalším výpočtu"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, co je [Flags] atribut u enum v C# a jak fungují bitové kombinace hodnot.",
+      "keywords": ["bitový", "kombinace", "OR", "HasFlag", "příznaky", "mocniny dvou"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď generický typ/kolekci k jazyku:",
+      "pairs": [
+        ["List<T>, Dictionary<K,V>", "C#"],
+        ["List<T> (type erasure)", "Java"],
+        ["list[int] (type hints, nekontroluje se za běhu)", "Python"],
+        ["where T : IComparable", "C# constraint (omezení)"]
+      ]
+    }
+  ]
+}

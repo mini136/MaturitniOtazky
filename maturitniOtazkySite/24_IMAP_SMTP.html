@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24 - IMAP a SMTP</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>24 – IMAP a SMTP – Odesílání a přijímání e-mailů</h1>
+
+    <h2>Přehled e-mailových protokolů</h2>
+    <table>
+        <tr><th>Protokol</th><th>Funkce</th><th>Port</th><th>Port (TLS)</th></tr>
+        <tr><td><strong>SMTP</strong></td><td>Odesílání e-mailů</td><td>25 (server↔server), 587 (klient→server)</td><td>465 (SMTPS)</td></tr>
+        <tr><td><strong>IMAP</strong></td><td>Přijímání + synchronizace</td><td>143</td><td>993 (IMAPS)</td></tr>
+        <tr><td><strong>POP3</strong></td><td>Stahování e-mailů</td><td>110</td><td>995 (POP3S)</td></tr>
+    </table>
+
+    <h2>Cesta e-mailu</h2>
+    <pre><code>Odesílatel (MUA)                                         Příjemce (MUA)
+     |                                                          ↑
+     | SMTP (port 587)                              IMAP (port 993)
+     ↓                                                          |
+Mail Server A (MTA)  --- SMTP (port 25) ---→  Mail Server B (MTA)
+     |                                              |
+     └── MDA (doručení do schránky) ←───────────────┘
+
+MUA = Mail User Agent (klient: Thunderbird, Outlook, Gmail web)
+MTA = Mail Transfer Agent (server: Postfix, Exim, Sendmail)
+MDA = Mail Delivery Agent (doručení do mailboxu: Dovecot)</code></pre>
+
+    <h2>SMTP (Simple Mail Transfer Protocol)</h2>
+    <h3>Funkce</h3>
+    <ul>
+        <li><strong>Odesílání</strong> e-mailů od klienta na server</li>
+        <li><strong>Přenos</strong> e-mailů mezi servery (relay)</li>
+        <li>Textový protokol (příkaz → odpověď s kódem)</li>
+    </ul>
+
+    <h3>SMTP porty</h3>
+    <table>
+        <tr><th>Port</th><th>Použití</th><th>Zabezpečení</th></tr>
+        <tr><td><strong>25</strong></td><td>Server ↔ Server (relay)</td><td>Volitelné STARTTLS</td></tr>
+        <tr><td><strong>587</strong></td><td>Klient → Server (submission)</td><td>STARTTLS (povinné)</td></tr>
+        <tr><td><strong>465</strong></td><td>Klient → Server (SMTPS)</td><td>Implicitní TLS</td></tr>
+    </table>
+
+    <h3>SMTP příkazy</h3>
+    <table>
+        <tr><th>Příkaz</th><th>Popis</th></tr>
+        <tr><td><code>EHLO</code></td><td>Úvodní pozdrav + oznámení schopností (Extended HELO)</td></tr>
+        <tr><td><code>AUTH LOGIN</code></td><td>Autentizace uživatele</td></tr>
+        <tr><td><code>MAIL FROM:</code></td><td>Adresa odesílatele (obálka)</td></tr>
+        <tr><td><code>RCPT TO:</code></td><td>Adresa příjemce</td></tr>
+        <tr><td><code>DATA</code></td><td>Začátek těla zprávy (končí <code>.</code> na řádku)</td></tr>
+        <tr><td><code>QUIT</code></td><td>Ukončení spojení</td></tr>
+        <tr><td><code>STARTTLS</code></td><td>Přepnutí na šifrované spojení</td></tr>
+    </table>
+
+    <h3>SMTP komunikace (příklad)</h3>
+    <pre><code>S: 220 mail.example.com ESMTP Postfix
+C: EHLO klient.example.com
+S: 250-mail.example.com
+S: 250-STARTTLS
+S: 250 AUTH LOGIN PLAIN
+C: STARTTLS
+S: 220 2.0.0 Ready to start TLS
+    [TLS handshake]
+C: AUTH LOGIN
+S: 334 VXNlcm5hbWU6            (Base64: "Username:")
+C: dXNlcg==                      (Base64: "user")
+S: 334 UGFzc3dvcmQ6            (Base64: "Password:")
+C: cGFzcw==                      (Base64: "pass")
+S: 235 2.7.0 Authentication successful
+C: MAIL FROM:&lt;odesilatel@example.com&gt;
+S: 250 2.1.0 Ok
+C: RCPT TO:&lt;prijemce@example.com&gt;
+S: 250 2.1.5 Ok
+C: DATA
+S: 354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;
+C: Subject: Test
+C: From: odesilatel@example.com
+C: To: prijemce@example.com
+C:
+C: Toto je telo emailu.
+C: .
+S: 250 2.0.0 Ok: queued
+C: QUIT
+S: 221 2.0.0 Bye</code></pre>
+
+    <h3>SMTP stavové kódy</h3>
+    <table>
+        <tr><th>Kód</th><th>Význam</th></tr>
+        <tr><td>220</td><td>Server ready</td></tr>
+        <tr><td>250</td><td>OK / příkaz úspěšný</td></tr>
+        <tr><td>354</td><td>Start mail input</td></tr>
+        <tr><td>421</td><td>Service not available</td></tr>
+        <tr><td>450</td><td>Mailbox unavailable (dočasně)</td></tr>
+        <tr><td>550</td><td>Mailbox not found</td></tr>
+        <tr><td>554</td><td>Transaction failed</td></tr>
+    </table>
+
+    <h2>IMAP (Internet Message Access Protocol)</h2>
+    <h3>Funkce</h3>
+    <ul>
+        <li>E-maily zůstávají <strong>na serveru</strong></li>
+        <li>Klient <strong>synchronizuje</strong> stav se serverem (přečteno, označeno, smazáno)</li>
+        <li>Podpora <strong>složek</strong> (Inbox, Sent, Drafts, Trash…)</li>
+        <li>Více klientů přistupuje ke <strong>stejné schránce</strong></li>
+        <li>IDLE příkaz → <strong>push notifikace</strong> o nových e-mailech</li>
+    </ul>
+
+    <h3>IMAP příkazy</h3>
+    <table>
+        <tr><th>Příkaz</th><th>Popis</th></tr>
+        <tr><td><code>LOGIN</code></td><td>Přihlášení (jméno + heslo)</td></tr>
+        <tr><td><code>LIST</code></td><td>Výpis složek</td></tr>
+        <tr><td><code>SELECT</code></td><td>Otevření složky (INBOX)</td></tr>
+        <tr><td><code>FETCH</code></td><td>Stažení e-mailu (hlavičky, tělo, část)</td></tr>
+        <tr><td><code>SEARCH</code></td><td>Hledání e-mailů na serveru</td></tr>
+        <tr><td><code>STORE</code></td><td>Změna flagů (\Seen, \Deleted, \Flagged)</td></tr>
+        <tr><td><code>EXPUNGE</code></td><td>Fyzické smazání e-mailů označených \Deleted</td></tr>
+        <tr><td><code>IDLE</code></td><td>Čekání na nové zprávy (push)</td></tr>
+        <tr><td><code>LOGOUT</code></td><td>Odhlášení</td></tr>
+    </table>
+
+    <h3>IMAP komunikace (příklad)</h3>
+    <pre><code>S: * OK IMAP4rev1 server ready
+C: A001 LOGIN user password
+S: A001 OK LOGIN completed
+C: A002 LIST "" "*"
+S: * LIST (\HasNoChildren) "." "INBOX"
+S: * LIST (\HasNoChildren) "." "Sent"
+S: * LIST (\HasNoChildren) "." "Drafts"
+S: A002 OK LIST completed
+C: A003 SELECT INBOX
+S: * 15 EXISTS                  (15 zpráv ve složce)
+S: * 3 RECENT                   (3 nové)
+S: * FLAGS (\Answered \Flagged \Deleted \Seen \Draft)
+S: A003 OK [READ-WRITE] SELECT completed
+C: A004 FETCH 15 (BODY[HEADER] BODY[TEXT])
+S: * 15 FETCH (BODY[HEADER] {250}
+S: Subject: Testovaci email
+S: From: odesilatel@example.com
+S: Date: Mon, 15 Jan 2025 10:30:00 +0100
+S: BODY[TEXT] {30}
+S: Telo emailu.)
+S: A004 OK FETCH completed
+C: A005 STORE 15 +FLAGS (\Seen)
+S: * 15 FETCH (FLAGS (\Seen))
+S: A005 OK STORE completed
+C: A006 LOGOUT
+S: * BYE server closing connection
+S: A006 OK LOGOUT completed</code></pre>
+
+    <h2>IMAP vs POP3</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>IMAP</th><th>POP3</th></tr>
+        <tr><td>E-maily</td><td><strong>Na serveru</strong></td><td>Staženy do klienta</td></tr>
+        <tr><td>Synchronizace</td><td>✅ Ano (flagy, složky)</td><td>❌ Ne</td></tr>
+        <tr><td>Více klientů</td><td>✅ Ano (konzistentní)</td><td>⚠️ Problematické</td></tr>
+        <tr><td>Složky</td><td>✅ Serverové složky</td><td>❌ Pouze INBOX</td></tr>
+        <tr><td>Offline přístup</td><td>Vyžaduje cache</td><td>✅ Lokální kopie</td></tr>
+        <tr><td>Místo na serveru</td><td>Zabírá místo</td><td>Uvolňuje místo</td></tr>
+        <tr><td>Porty</td><td>143 / 993 (TLS)</td><td>110 / 995 (TLS)</td></tr>
+    </table>
+
+    <h2>Struktura e-mailu (RFC 5322 + MIME)</h2>
+    <h3>Hlavičky</h3>
+    <pre><code>From: Jan Novak &lt;jan@example.com&gt;
+To: Eva Svobodova &lt;eva@example.com&gt;
+Cc: petr@example.com
+Subject: Pozvanka na schuzku
+Date: Mon, 15 Jan 2025 10:30:00 +0100
+Message-ID: &lt;abc123@example.com&gt;
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="----=_Part_001"</code></pre>
+
+    <h3>MIME (Multipurpose Internet Mail Extensions)</h3>
+    <p>Rozšíření pro přílohy, HTML obsah, kódování (Base64, Quoted-Printable).</p>
+    <table>
+        <tr><th>Content-Type</th><th>Popis</th></tr>
+        <tr><td><code>text/plain</code></td><td>Prostý text</td></tr>
+        <tr><td><code>text/html</code></td><td>HTML formátování</td></tr>
+        <tr><td><code>multipart/mixed</code></td><td>Text + přílohy</td></tr>
+        <tr><td><code>multipart/alternative</code></td><td>Alternativní formáty (text + HTML)</td></tr>
+        <tr><td><code>application/pdf</code></td><td>PDF příloha</td></tr>
+    </table>
+
+    <h2>E-mailová bezpečnost</h2>
+    <table>
+        <tr><th>Mechanismus</th><th>Popis</th></tr>
+        <tr><td><strong>SPF</strong></td><td>DNS TXT záznam – které servery smí odesílat za doménu</td></tr>
+        <tr><td><strong>DKIM</strong></td><td>Digitální podpis hlaviček – ověření integrity</td></tr>
+        <tr><td><strong>DMARC</strong></td><td>Kombinace SPF + DKIM + politika (reject/quarantine/none)</td></tr>
+        <tr><td><strong>STARTTLS</strong></td><td>Upgrade nešifrovaného spojení na TLS</td></tr>
+        <tr><td><strong>S/MIME</strong></td><td>End-to-end šifrování a podpis e-mailů (certifikáty)</td></tr>
+        <tr><td><strong>PGP/GPG</strong></td><td>End-to-end šifrování (web of trust, veřejné klíče)</td></tr>
+    </table>
+
+    <div class="note">
+        <strong>SPF TXT záznam příklad:</strong> <code>v=spf1 mx a:mail.example.com -all</code>
+    </div>
+
+    <div class="important">
+        <strong>Pro maturitu:</strong> SMTP = odesílání (port 587/465). IMAP = příjem + synchronizace se serverem (port 993). POP3 = stažení a smazání ze serveru (port 995). MIME = přílohy. SPF/DKIM/DMARC = ochrana proti spoofingu.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

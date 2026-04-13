@@ -1,0 +1,53 @@
+{
+  "title": "Testování software",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď úroveň testování k tomu, co testuje:",
+      "pairs": [
+        ["Unit testy", "Jednotlivé funkce a metody izolovaně"],
+        ["Integrační testy", "Spolupráce více komponent dohromady"],
+        ["E2E testy", "Celý systém z pohledu uživatele"],
+        ["Mocking", "Nahrazení reálné závislosti falešnou implementací"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky TDD (Test-Driven Development) cyklu:",
+      "items": [
+        "RED — napiš test, který selže",
+        "GREEN — napiš minimální kód, aby test prošel",
+        "REFACTOR — vylepši kód, testy zůstávají zelené",
+        "Opakuj cyklus pro další funkcionalitu"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy z testovacího patternu AAA:",
+      "text": "V kroku {{Arrange}} připravíme vstupy a prostředí. V kroku {{Act}} provedeme testovanou operaci. V kroku {{Assert}} ověříme výsledek. Metoda {{setUp}} v unittest se volá před každým testem pro inicializaci.",
+      "answers": ["Arrange", "Act", "Assert", "setUp"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "V pyramidě testování by E2E testy měly tvořit největší část testů, protože testují celý systém.",
+      "answer": false,
+      "explanation": "Naopak — pyramida testování říká, že unit testy tvoří základ (nejvíce testů, nejrychlejší). E2E testy jsou na vrcholu — málo testů, pomalé a křehké. Většina pokrytí by měla být zajištěna unit testy."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, co je mocking a proč ho potřebujeme při testování. Uveď příklad situace.",
+      "keywords": ["závislost", "izolace", "falešný objekt", "databáze", "Mock", "return_value", "assert_called"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď FIRST princip k jeho významu:",
+      "pairs": [
+        ["Fast", "Testy běží rychle"],
+        ["Independent", "Testy nezávisí na sobě navzájem"],
+        ["Repeatable", "Vždy stejný výsledek při opakovaném spuštění"],
+        ["Self-validating", "Automaticky ověří pass/fail bez manuální kontroly"]
+      ]
+    }
+  ]
+}

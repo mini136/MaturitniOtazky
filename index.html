@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maturitní otázky - Hlavní rozcestník</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8fbff 0%, #ecf4ff 100%);
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .container {
+            width: 100%;
+            max-width: 860px;
+            background: #ffffff;
+            border: 1px solid #dbe7ff;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.08);
+        }
+        h1 {
+            margin-top: 0;
+            color: #0f172a;
+            font-size: 2rem;
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 10px;
+        }
+        p {
+            margin: 10px 0 22px;
+            color: #475569;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .card {
+            display: block;
+            text-decoration: none;
+            border: 1px solid #c7dcff;
+            border-radius: 12px;
+            padding: 18px;
+            background: #f8fbff;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: #2563eb;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.14);
+        }
+        .title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+        .desc {
+            color: #475569;
+            line-height: 1.5;
+        }
+        .badge {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .tips {
+            border: 1px solid #c7dcff;
+            border-radius: 12px;
+            background: #f8fbff;
+            padding: 16px;
+        }
+        .tips h2 {
+            margin: 0 0 8px;
+            color: #1e3a8a;
+            font-size: 1.15rem;
+        }
+        .tips ul {
+            margin: 0;
+            padding-left: 18px;
+            color: #334155;
+        }
+        .tips li {
+            margin: 6px 0;
+        }
+        .search-box {
+            border: 1px solid #c7dcff;
+            border-radius: 12px;
+            background: #ffffff;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .search-box h2 {
+            margin: 0 0 10px;
+            color: #1e3a8a;
+            font-size: 1.15rem;
+        }
+        .search-input {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font: inherit;
+        }
+        .search-results {
+            margin-top: 10px;
+            display: grid;
+            gap: 8px;
+            max-height: 360px;
+            overflow: auto;
+        }
+        .search-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            border: 1px solid #dbeafe;
+            border-radius: 8px;
+            padding: 9px 10px;
+            color: #1f2937;
+            background: #f8fbff;
+        }
+        .search-item:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+        .search-badge {
+            display: inline-block;
+            min-width: 34px;
+            text-align: center;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 6px;
+        }
+        .search-title {
+            font-size: 0.93rem;
+            line-height: 1.35;
+        }
+        .search-empty {
+            color: #64748b;
+            font-size: 0.92rem;
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <h1>Maturitní otázky - hlavní rozcestník</h1>
+        <p>Studijní web pro 4. ročník. Z této stránky otevřeš obě sady otázek a v každé otázce můžeš tisknout i přidat připomínku.</p>
+
+        <section class="grid">
+            <a class="card" href="maturitniOtazkySite/index.html">
+                <div class="title">Síťové otázky</div>
+                <div class="desc">Kompletní sada HTML otázek zaměřená na počítačové sítě.</div>
+                <span class="badge">maturitniOtazkySite</span>
+            </a>
+
+            <a class="card" href="maturitniOtazkyPv_html/index.html">
+                <div class="title">Programování (PV)</div>
+                <div class="desc">25 HTML otázek z PV, včetně viditelného kódu a vysvětlení.</div>
+                <span class="badge">maturitniOtazkyPv_html</span>
+            </a>
+        </section>
+
+        <section class="search-box">
+            <h2>Vyhledávání napříč otázkami (Sítě + PV)</h2>
+            <input id="global-search-input" class="search-input" type="text" placeholder="Napis tema, protokol, pojem...">
+            <div id="global-search-results" class="search-results"></div>
+        </section>
+
+        <section class="tips">
+            <h2>Jak to používat</h2>
+            <ul>
+                <li>V každé otázce je tlačítko <strong>Tisk stránky</strong> a při tisku se automaticky skryjí komentáře i ovládací prvky.</li>
+                <li>Dole u otázky je sekce <strong>Komentáře k otázce</strong>, kde lze vyplnit nick, email a napsat co je špatně nebo co chybí.</li>
+                <li>Při spuštěném backendu běží komentáře <strong>online sdíleně přes MySQL</strong> pro celou třídu, jinak se ukládají lokálně jako záloha.</li>
+            </ul>
+        </section>
+    </main>
+    <script src="assets/search.js"></script>
+</body>
+</html>

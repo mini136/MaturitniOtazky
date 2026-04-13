@@ -1,0 +1,54 @@
+{
+  "title": "Výjimky a debugování",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď blok try-except struktury k jeho účelu:",
+      "pairs": [
+        ["try", "Kód, který může vyhodit výjimku"],
+        ["except", "Zachycení a ošetření konkrétní výjimky"],
+        ["else", "Provede se jen pokud výjimka NENASTALA"],
+        ["finally", "Provede se VŽDY — cleanup kód"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o výjimkách a debugování:",
+      "text": "Vlastní výjimky dědí od třídy {{Exception}}. Pro zachování původní výjimky jako příčiny použijeme {{raise ... from e}}. Logging má 5 úrovní: DEBUG, INFO, {{WARNING}}, ERROR, CRITICAL. Pro automatický cleanup prostředků slouží {{context manager}} (with statement).",
+      "answers": ["Exception", "raise ... from e", "WARNING", "context manager"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Assertions by se měly používat pro validaci uživatelského vstupu v produkčním kódu.",
+      "answer": false,
+      "explanation": "Assertions lze vypnout příkazem python -O, takže v produkci by nemusely být aktivní. Slouží pro kontrolu programátorských chyb (invarianty, preconditions). Pro validaci uživatelského vstupu se musí použít exceptions, které jsou vždy aktivní."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď hierarchii výjimek v Pythonu od nejobecnější:",
+      "items": [
+        "BaseException",
+        "Exception",
+        "ValueError / TypeError / IOError",
+        "FileNotFoundError (podtřída IOError)",
+        "Vlastní výjimka (dědí od Exception)"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi logging a print() pro debugování. Proč je logging lepší v produkci?",
+      "keywords": ["úrovně", "DEBUG", "ERROR", "soubor", "konfigurace", "vypnutí", "formátování"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď techniku k jejímu účelu:",
+      "pairs": [
+        ["assert", "Kontrola programátorských invariantů"],
+        ["raise", "Vyvolání výjimky při běhové chybě"],
+        ["traceback.print_exc()", "Výpis zásobníku volání při chybě"],
+        ["f'{x=}'", "Rychlý debug výpis proměnné s jejím názvem"]
+      ]
+    }
+  ]
+}

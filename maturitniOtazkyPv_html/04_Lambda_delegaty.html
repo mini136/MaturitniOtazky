@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04 - Lambda výrazy a delegáty</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>04 – Lambda výrazy, delegáty, speciální metody</h1>
+
+    <h2>Lambda výrazy</h2>
+    <ul>
+        <li>Anonymní (bezejmenné) funkce pro krátké operace</li>
+        <li><strong>Python:</strong> <code>lambda x, y: x + y</code></li>
+        <li><strong>C#:</strong> <code>(x, y) =&gt; x + y</code></li>
+        <li><strong>Java:</strong> <code>(x, y) -&gt; x + y</code></li>
+    </ul>
+
+    <h2>Delegáty (C#)</h2>
+    <table>
+        <tr><th>Typ</th><th>Signatura</th><th>Popis</th></tr>
+        <tr><td><code>Func&lt;T, TResult&gt;</code></td><td>Vstup → Výstup</td><td>Vrací hodnotu</td></tr>
+        <tr><td><code>Action&lt;T&gt;</code></td><td>Vstup → void</td><td>Nic nevrací</td></tr>
+        <tr><td><code>Predicate&lt;T&gt;</code></td><td>Vstup → bool</td><td>Vrací true/false</td></tr>
+    </table>
+
+    <h2>Speciální metody (Python magic methods)</h2>
+    <table>
+        <tr><th>Metoda</th><th>Operátor/Funkce</th></tr>
+        <tr><td><code>__init__</code></td><td>Konstruktor</td></tr>
+        <tr><td><code>__str__</code></td><td><code>str(obj)</code>, <code>print(obj)</code></td></tr>
+        <tr><td><code>__repr__</code></td><td><code>repr(obj)</code>, debugger</td></tr>
+        <tr><td><code>__add__</code></td><td><code>obj + other</code></td></tr>
+        <tr><td><code>__len__</code></td><td><code>len(obj)</code></td></tr>
+        <tr><td><code>__eq__</code></td><td><code>obj == other</code></td></tr>
+        <tr><td><code>__enter__/__exit__</code></td><td><code>with</code> blok</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — C# (delegáty, LINQ, eventy)</h2>
+
+    <div class="code-desc">Vlastní delegát, <code>Func</code>, <code>Action</code> a <code>Predicate</code> — generické delegáty poskytované .NET frameworkem pro běžné signatury.</div>
+    <pre><code>// Vlastni delegat
+delegate int Operace(int a, int b);
+
+Operace scitani = (a, b) =&gt; a + b;
+Operace nasobeni = (a, b) =&gt; a * b;
+Console.WriteLine($"3 + 5 = {scitani(3, 5)}");
+Console.WriteLine($"3 * 5 = {nasobeni(3, 5)}");
+
+// Func, Action, Predicate
+Func&lt;int, int, int&gt; mocnina = (zaklad, exp) =&gt; (int)Math.Pow(zaklad, exp);
+Action&lt;string&gt; vypis = zprava =&gt; Console.WriteLine($"  [{zprava}]");
+Predicate&lt;int&gt; jeSude = n =&gt; n % 2 == 0;
+
+Console.WriteLine($"2^10 = {mocnina(2, 10)}");
+vypis("Ahoj ze Action!");
+Console.WriteLine($"Je 42 sude? {jeSude(42)}");</code></pre>
+
+    <div class="code-desc"><strong>LINQ</strong> — Language Integrated Query. Lambda výrazy se používají jako predikáty pro filtrování, transformaci a řazení kolekcí.</div>
+    <pre><code>var cisla = new List&lt;int&gt; { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+var suda = cisla.Where(n =&gt; n % 2 == 0).ToList();          // [2,4,6,8,10]
+var mocniny = cisla.Select(n =&gt; n * n).ToList();            // [1,4,9,...,100]
+var suma = cisla.Where(n =&gt; n &gt; 5).Sum();                   // 40
+var prvni = cisla.First(n =&gt; n &gt; 3);                        // 4
+
+Console.WriteLine($"Suda: {string.Join(", ", suda)}");
+Console.WriteLine($"Mocniny: {string.Join(", ", mocniny)}");
+Console.WriteLine($"Suma &gt;5: {suma}");</code></pre>
+
+    <div class="code-desc"><strong>Multicast delegát a eventy</strong> — delegát může odkazovat na více metod najednou. Event je bezpečný wrapper nad delegátem (publisher-subscriber).</div>
+    <pre><code>// Multicast delegat
+Action&lt;string&gt; logovani = zprava =&gt; Console.WriteLine($"  [Konzole] {zprava}");
+logovani += zprava =&gt; Console.WriteLine($"  [Soubor] {zprava}");
+logovani("Aplikace spustena");  // oba handlery se zavolaji
+
+// Event
+class Tlacitko {
+    public event EventHandler&lt;string&gt; Kliknuto;
+    public void Klikni() =&gt; Kliknuto?.Invoke(this, "Klik!");
+}
+
+var btn = new Tlacitko();
+btn.Kliknuto += (sender, e) =&gt; Console.WriteLine($"  Handler 1: {e}");
+btn.Kliknuto += (sender, e) =&gt; Console.WriteLine($"  Handler 2: {e}");
+btn.Klikni();</code></pre>
+
+    <h2>Ukázkový kód — Python (lambda, magic methods, context manager)</h2>
+
+    <div class="code-desc">Lambda výrazy v Pythonu — <code>map</code>, <code>filter</code>, <code>sorted</code> s lambda jako klíčem.</div>
+    <pre><code># Lambda zaklady
+secti = lambda a, b: a + b
+print(f"Lambda: 3 + 5 = {secti(3, 5)}")
+
+# Map, Filter, Sorted
+cisla = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+suda = list(filter(lambda x: x % 2 == 0, cisla))
+mocniny = list(map(lambda x: x**2, cisla))
+print(f"Filter suda: {suda}")
+print(f"Map mocniny: {mocniny}")
+
+studenti = [("Alice", 85), ("Bob", 92), ("Charlie", 78)]
+serazeni = sorted(studenti, key=lambda s: s[1], reverse=True)
+print(f"Sorted: {serazeni}")</code></pre>
+
+    <div class="code-desc"><strong>Magic methods</strong> — přetížení operátorů (<code>__add__</code>, <code>__mul__</code>), řetězcová reprezentace (<code>__str__</code>, <code>__repr__</code>), porovnání (<code>__eq__</code>) a <code>__len__</code>.</div>
+    <pre><code>class Vektor:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Vektor(self.x + other.x, self.y + other.y)
+
+    def __mul__(self, skalar):
+        return Vektor(self.x * skalar, self.y * skalar)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __len__(self):
+        return int((self.x**2 + self.y**2)**0.5)
+
+    def __str__(self):
+        return f"Vektor({self.x}, {self.y})"
+
+    def __repr__(self):
+        return f"Vektor(x={self.x}, y={self.y})"
+
+v1 = Vektor(3, 4)
+v2 = Vektor(1, 2)
+print(f"{v1} + {v2} = {v1 + v2}")
+print(f"{v1} * 3 = {v1 * 3}")
+print(f"len({v1}) = {len(v1)}")</code></pre>
+
+    <div class="code-desc"><strong>Context manager</strong> — třída s <code>__enter__</code> a <code>__exit__</code> pro automatickou správu prostředků v <code>with</code> bloku.</div>
+    <pre><code>class MeritCas:
+    """Context manager pro mereni casu"""
+    def __enter__(self):
+        import time
+        self.start = time.time()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        import time
+        self.trvani = time.time() - self.start
+        print(f"  Cas: {self.trvani:.4f}s")
+        return False
+
+with MeritCas():
+    sum(range(1000000))</code></pre>
+
+    <div class="code-desc"><strong>Static method vs Class method</strong> — <code>@staticmethod</code> nepřijímá class/instance, <code>@classmethod</code> přijímá třídu jako <code>cls</code>.</div>
+    <pre><code>class Matematika:
+    zaklad = 10
+
+    @staticmethod
+    def secti(a, b):
+        """Nepotrebuje instanci ani tridu"""
+        return a + b
+
+    @classmethod
+    def pricti_zaklad(cls, hodnota):
+        """Pristupuje k tridnim atributum"""
+        return cls.zaklad + hodnota
+
+print(f"Static: {Matematika.secti(3, 5)}")
+print(f"Class: {Matematika.pricti_zaklad(5)}")</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

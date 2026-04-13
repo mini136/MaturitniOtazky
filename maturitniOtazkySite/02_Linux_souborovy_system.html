@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02 - OS Linux - Souborový systém</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>02 – OS Linux – Souborový systém, formátování, dělení a připojování FS, základní adresáře</h1>
+
+    <h2>Souborové systémy v Linuxu</h2>
+    <h3>Typy souborových systémů</h3>
+    <table>
+        <tr><th>FS</th><th>Popis</th><th>Použití</th></tr>
+        <tr><td><strong>ext4</strong></td><td>Výchozí pro většinu distribucí, žurnálovací</td><td>Root, /home</td></tr>
+        <tr><td><strong>XFS</strong></td><td>Výkonný pro velké soubory, výchozí v RHEL</td><td>Servery, databáze</td></tr>
+        <tr><td><strong>Btrfs</strong></td><td>Copy-on-write, snapshoty, komprese</td><td>openSUSE, moderní systémy</td></tr>
+        <tr><td><strong>ZFS</strong></td><td>Pokročilý CoW FS, RAID, snapshoty</td><td>NAS, storage servery</td></tr>
+        <tr><td><strong>FAT32/exFAT</strong></td><td>Kompatibilita s Windows</td><td>USB disky</td></tr>
+        <tr><td><strong>NTFS</strong></td><td>Nativní souborový systém Windows</td><td>Duální boot</td></tr>
+        <tr><td><strong>swap</strong></td><td>Odkládací prostor</td><td>Swap oddíl</td></tr>
+        <tr><td><strong>tmpfs</strong></td><td>Dočasný FS v RAM</td><td>/tmp, /run</td></tr>
+    </table>
+
+    <h3>Žurnálování (Journaling)</h3>
+    <p>Žurnálovací FS (ext3, ext4, XFS) zapisují změny nejprve do <strong>žurnálu</strong> (logu), teprve pak na disk. Při havárii lze oddíl obnovit z žurnálu → méně poškozených dat.</p>
+
+    <h2>Formátování disků</h2>
+    <pre><code># Vytvoření souborového systému
+mkfs.ext4 /dev/sdb1        # formátování na ext4
+mkfs.xfs /dev/sdb1         # formátování na XFS
+mkfs.vfat /dev/sdb1        # FAT32
+mkswap /dev/sdb2           # swap oddíl
+
+# Kontrola souborového systému
+fsck /dev/sdb1              # kontrola a oprava
+e2fsck -f /dev/sdb1         # vynucená kontrola ext FS</code></pre>
+
+    <h2>Dělení disků (Partitioning)</h2>
+    <h3>Typy tabulek oddílů</h3>
+    <table>
+        <tr><th>Typ</th><th>Max. velikost disku</th><th>Max. oddílů</th><th>Boot</th></tr>
+        <tr><td><strong>MBR</strong></td><td>2 TB</td><td>4 primární (nebo 3 + extended)</td><td>BIOS</td></tr>
+        <tr><td><strong>GPT</strong></td><td>~9.4 ZB</td><td>128 (výchozí)</td><td>UEFI</td></tr>
+    </table>
+
+    <h3>Nástroje pro dělení</h3>
+    <pre><code># fdisk – pro MBR i GPT
+fdisk /dev/sdb              # interaktivní dělení
+fdisk -l                    # výpis oddílů
+
+# gdisk – specificky pro GPT
+gdisk /dev/sdb
+
+# parted – universální
+parted /dev/sdb
+  mklabel gpt               # vytvoření GPT tabulky
+  mkpart primary ext4 1MiB 100%  # vytvoření oddílu
+
+# lsblk – přehled blokových zařízení
+lsblk                       # stromová struktura disků
+lsblk -f                    # včetně souborových systémů</code></pre>
+
+    <h3>LVM – Logical Volume Manager</h3>
+    <p>Umožňuje flexibilní správu diskového prostoru – snadné zvětšování/zmenšování oddílů.</p>
+    <pre><code># Fyzické svazky → Skupiny svazků → Logické svazky
+pvcreate /dev/sdb1          # vytvoření Physical Volume
+vgcreate moje_vg /dev/sdb1  # vytvoření Volume Group
+lvcreate -L 10G -n moje_lv moje_vg  # Logical Volume
+mkfs.ext4 /dev/moje_vg/moje_lv      # formátování
+lvextend -L +5G /dev/moje_vg/moje_lv # zvětšení</code></pre>
+
+    <h2>Připojování souborových systémů (Mounting)</h2>
+    <h3>Ruční připojení</h3>
+    <pre><code>mount /dev/sdb1 /mnt/data        # připojení
+mount -t ntfs /dev/sdc1 /mnt/win # s určením typu FS
+umount /mnt/data                  # odpojení
+mount -o ro /dev/sdb1 /mnt/data  # jen pro čtení</code></pre>
+
+    <h3>Automatické připojení – /etc/fstab</h3>
+    <pre><code># Formát: zařízení   bod_připojení   typ   volby   dump   pass
+/dev/sda1       /               ext4    defaults        0       1
+/dev/sda2       /home           ext4    defaults        0       2
+/dev/sda3       swap            swap    defaults        0       0
+UUID=xxxx-xxxx  /mnt/data       ext4    defaults,noatime 0      2
+//server/share  /mnt/samba      cifs    credentials=/etc/samba/cred 0 0</code></pre>
+
+    <div class="note">
+        <strong>UUID</strong> – doporučeno místo /dev/sdX, protože UUID se nemění při přidání disků. Zjistíme: <code>blkid</code>
+    </div>
+
+    <pre><code>mount -a                # připojení všeho z /etc/fstab
+findmnt                 # zobrazení stromové struktury mountů
+df -h                   # využití diskového prostoru
+du -sh /var             # velikost adresáře</code></pre>
+
+    <h2>Účel základních adresářů (FHS – Filesystem Hierarchy Standard)</h2>
+    <table>
+        <tr><th>Adresář</th><th>Účel</th></tr>
+        <tr><td><code>/</code></td><td>Kořenový adresář – vše je pod ním</td></tr>
+        <tr><td><code>/bin</code></td><td>Základní binárky (ls, cp, cat) – nyní často symlink na /usr/bin</td></tr>
+        <tr><td><code>/sbin</code></td><td>Systémové binárky (fdisk, mount, iptables)</td></tr>
+        <tr><td><code>/etc</code></td><td>Konfigurační soubory systému a služeb</td></tr>
+        <tr><td><code>/home</code></td><td>Domovské adresáře uživatelů (/home/user)</td></tr>
+        <tr><td><code>/root</code></td><td>Domovský adresář uživatele root</td></tr>
+        <tr><td><code>/var</code></td><td>Proměnlivá data – logy (/var/log), cache, maily, databáze</td></tr>
+        <tr><td><code>/tmp</code></td><td>Dočasné soubory (mazány při restartu)</td></tr>
+        <tr><td><code>/usr</code></td><td>Uživatelské programy, knihovny, dokumentace</td></tr>
+        <tr><td><code>/usr/local</code></td><td>Ručně instalovaný software (mimo balíčkovací systém)</td></tr>
+        <tr><td><code>/opt</code></td><td>Volitelný software třetích stran</td></tr>
+        <tr><td><code>/dev</code></td><td>Souborová reprezentace zařízení (/dev/sda, /dev/null)</td></tr>
+        <tr><td><code>/proc</code></td><td>Virtuální FS – informace o procesech a jádru</td></tr>
+        <tr><td><code>/sys</code></td><td>Virtuální FS – informace o zařízeních a ovladačích</td></tr>
+        <tr><td><code>/boot</code></td><td>Jádro, initramfs, konfigurace bootloaderu (GRUB)</td></tr>
+        <tr><td><code>/lib</code></td><td>Sdílené knihovny pro /bin a /sbin</td></tr>
+        <tr><td><code>/mnt</code></td><td>Dočasné připojovací body (mount)</td></tr>
+        <tr><td><code>/media</code></td><td>Automaticky připojená zařízení (USB, CD)</td></tr>
+        <tr><td><code>/run</code></td><td>Runtime data (PID soubory, sockety) – tmpfs</td></tr>
+    </table>
+
+    <h3>Speciální soubory v /dev</h3>
+    <ul>
+        <li><code>/dev/null</code> – „černá díra" – zahazuje vše co se do něj zapíše</li>
+        <li><code>/dev/zero</code> – generuje nulové bajty</li>
+        <li><code>/dev/random</code> – náhodná data (blokující)</li>
+        <li><code>/dev/urandom</code> – pseudonáhodná data (neblokující)</li>
+        <li><code>/dev/sda</code> – první SCSI/SATA disk</li>
+        <li><code>/dev/sda1</code> – první oddíl prvního disku</li>
+    </ul>
+
+    <h3>Typy souborů v Linuxu</h3>
+    <table>
+        <tr><th>Typ</th><th>Označení (ls -l)</th><th>Popis</th></tr>
+        <tr><td>Běžný soubor</td><td><code>-</code></td><td>Textový, binární soubor</td></tr>
+        <tr><td>Adresář</td><td><code>d</code></td><td>Adresář (složka)</td></tr>
+        <tr><td>Symbolický link</td><td><code>l</code></td><td>Odkaz na jiný soubor/adresář</td></tr>
+        <tr><td>Bloková zařízení</td><td><code>b</code></td><td>Disky (/dev/sda)</td></tr>
+        <tr><td>Znaková zařízení</td><td><code>c</code></td><td>Terminály, /dev/null</td></tr>
+        <tr><td>Pojmenovaná roura</td><td><code>p</code></td><td>FIFO pro meziprocesovou komunikaci</td></tr>
+        <tr><td>Socket</td><td><code>s</code></td><td>Unix socket pro síťovou komunikaci</td></tr>
+    </table>
+
+    <h3>Inody (Inodes)</h3>
+    <p>Každý soubor má <strong>inode</strong> – datovou strukturu obsahující metadata (vlastník, práva, časové značky, ukazatele na datové bloky). Název souboru je uložen v adresáři jako odkaz na inode.</p>
+    <pre><code>ls -i soubor        # zobrazení čísla inode
+df -i               # využití inodů
+stat soubor         # detailní info o souboru</code></pre>
+
+    <h3>Linky</h3>
+    <ul>
+        <li><strong>Hard link</strong> – další název pro stejný inode; nefunguje přes FS, nefunguje na adresáře</li>
+        <li><strong>Symbolic (soft) link</strong> – ukazatel na cestu; funguje přes FS i na adresáře</li>
+    </ul>
+    <pre><code>ln soubor hardlink          # hard link
+ln -s soubor symlink        # symbolic link</code></pre>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

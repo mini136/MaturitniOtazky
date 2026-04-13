@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16 - OSI 5, 6, 7 - Vyšší vrstvy</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>16 – OSI 5, 6, 7 – Soketové programování, formáty dat, šifrování, komprese, autentizace</h1>
+
+    <h2>OSI vrstva 5 – Relační (Session Layer)</h2>
+    <h3>Funkce</h3>
+    <ul>
+        <li><strong>Řízení dialogu</strong> – simplex, half-duplex, full-duplex komunikace</li>
+        <li><strong>Správa relací</strong> – navázání, udržování a ukončení sezení</li>
+        <li><strong>Synchronizace</strong> – checkpointy pro obnovení přenosu při přerušení</li>
+        <li><strong>Token management</strong> – řízení, kdo má právo vysílat</li>
+    </ul>
+    <h3>Příklady protokolů a technologií</h3>
+    <ul>
+        <li>NetBIOS, RPC (Remote Procedure Call)</li>
+        <li>PPTP (Point-to-Point Tunneling Protocol)</li>
+        <li>SQL session management, SIP (Session Initiation Protocol)</li>
+    </ul>
+
+    <h2>Soketové programování</h2>
+    <p>Socket = koncový bod komunikace identifikovaný jako <strong>(IP adresa, port, protokol)</strong>.</p>
+
+    <h3>TCP Server/Klient (Python)</h3>
+    <pre><code># TCP Server
+import socket
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # IPv4, TCP
+server.bind(('0.0.0.0', 12345))
+server.listen(5)                     # max 5 čekajících spojení
+print("Server naslouchá na portu 12345...")
+
+conn, addr = server.accept()        # blokující volání – čeká na klienta
+print(f"Připojen: {addr}")
+data = conn.recv(1024)              # přijmi max 1024 bajtů
+conn.send(b"Odpoved od serveru")
+conn.close()
+server.close()
+
+# TCP Klient
+import socket
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(('127.0.0.1', 12345))
+client.send(b"Ahoj servere!")
+odpoved = client.recv(1024)
+print(odpoved.decode())
+client.close()</code></pre>
+
+    <h3>UDP Server/Klient (Python)</h3>
+    <pre><code># UDP Server
+import socket
+
+server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)   # UDP
+server.bind(('0.0.0.0', 12345))
+data, addr = server.recvfrom(1024)      # přijmi datagram
+server.sendto(b"Odpoved", addr)         # odešli odpověď
+
+# UDP Klient
+client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+client.sendto(b"Ahoj", ('127.0.0.1', 12345))
+data, addr = client.recvfrom(1024)
+print(data.decode())</code></pre>
+
+    <h3>Workflow socketu</h3>
+    <pre><code>TCP Server:  socket() → bind() → listen() → accept() → recv()/send() → close()
+TCP Klient:  socket() → connect() → send()/recv() → close()
+
+UDP Server:  socket() → bind() → recvfrom()/sendto() → close()
+UDP Klient:  socket() → sendto()/recvfrom() → close()</code></pre>
+
+    <h2>OSI vrstva 6 – Prezentační (Presentation Layer)</h2>
+    <h3>Funkce</h3>
+    <ul>
+        <li><strong>Převod formátů dat</strong> – kódování, formátování</li>
+        <li><strong>Šifrování / dešifrování</strong></li>
+        <li><strong>Komprese / dekomprese</strong></li>
+    </ul>
+
+    <h3>Převod formátů dat</h3>
+    <table>
+        <tr><th>Typ</th><th>Formáty</th><th>Popis</th></tr>
+        <tr><td>Text</td><td>ASCII, UTF-8, UTF-16, ISO-8859</td><td>Kódování znaků</td></tr>
+        <tr><td>Struktura</td><td>JSON, XML, YAML, ASN.1</td><td>Strukturovaná data</td></tr>
+        <tr><td>Obrázky</td><td>JPEG, PNG, GIF, BMP</td><td>Obrazové formáty</td></tr>
+        <tr><td>Multimedia</td><td>MP3, H.264, AAC, AVI</td><td>Audio/video kodeky</td></tr>
+        <tr><td>Binární</td><td>Protocol Buffers, MessagePack</td><td>Efektivní serializace</td></tr>
+    </table>
+
+    <h3>Serializace dat</h3>
+    <pre><code># JSON
+import json
+data = {"jmeno": "Jan", "vek": 20}
+json_str = json.dumps(data)             # → '{"jmeno": "Jan", "vek": 20}'
+parsed = json.loads(json_str)           # → dict
+
+# XML
+import xml.etree.ElementTree as ET
+root = ET.fromstring('&lt;student&gt;&lt;jmeno&gt;Jan&lt;/jmeno&gt;&lt;/student&gt;')
+print(root.find('jmeno').text)          # → Jan</code></pre>
+
+    <h3>Šifrování</h3>
+    <table>
+        <tr><th>Typ</th><th>Princip</th><th>Příklady</th></tr>
+        <tr><td><strong>Symetrické</strong></td><td>Stejný klíč pro šifrování i dešifrování</td><td>AES, DES, 3DES, ChaCha20</td></tr>
+        <tr><td><strong>Asymetrické</strong></td><td>Veřejný klíč šifruje, privátní dešifruje</td><td>RSA, ECC, Diffie-Hellman</td></tr>
+        <tr><td><strong>Hash</strong></td><td>Jednosměrná funkce (digest)</td><td>SHA-256, SHA-3, MD5 (zastaralý)</td></tr>
+    </table>
+
+    <h3>Komprese</h3>
+    <table>
+        <tr><th>Typ</th><th>Princip</th><th>Příklady</th></tr>
+        <tr><td><strong>Bezztrátová</strong></td><td>Původní data lze plně rekonstruovat</td><td>ZIP, GZIP, LZ77, Huffman, DEFLATE</td></tr>
+        <tr><td><strong>Ztrátová</strong></td><td>Některá data se ztratí (akceptovatelná ztráta)</td><td>JPEG, MP3, H.264, AAC</td></tr>
+    </table>
+
+    <h2>OSI vrstva 7 – Aplikační (Application Layer)</h2>
+    <h3>Funkce</h3>
+    <ul>
+        <li>Poskytuje rozhraní mezi <strong>uživatelem/aplikací</strong> a sítí</li>
+        <li>Definuje protokoly pro konkrétní síťové služby</li>
+    </ul>
+
+    <h3>Důležité aplikační protokoly</h3>
+    <table>
+        <tr><th>Protokol</th><th>Port</th><th>Transport</th><th>Popis</th></tr>
+        <tr><td>HTTP/HTTPS</td><td>80/443</td><td>TCP</td><td>Webové stránky</td></tr>
+        <tr><td>FTP</td><td>20/21</td><td>TCP</td><td>Přenos souborů</td></tr>
+        <tr><td>SSH</td><td>22</td><td>TCP</td><td>Zabezpečený vzdálený přístup</td></tr>
+        <tr><td>Telnet</td><td>23</td><td>TCP</td><td>Nezabezpečený vzdálený přístup</td></tr>
+        <tr><td>SMTP</td><td>25/587</td><td>TCP</td><td>Odesílání e-mailů</td></tr>
+        <tr><td>DNS</td><td>53</td><td>UDP/TCP</td><td>Překlad doménových jmen</td></tr>
+        <tr><td>DHCP</td><td>67/68</td><td>UDP</td><td>Automatická konfigurace IP</td></tr>
+        <tr><td>TFTP</td><td>69</td><td>UDP</td><td>Jednoduchý přenos souborů</td></tr>
+        <tr><td>POP3</td><td>110</td><td>TCP</td><td>Stahování e-mailů</td></tr>
+        <tr><td>IMAP</td><td>143</td><td>TCP</td><td>Správa e-mailů na serveru</td></tr>
+        <tr><td>SNMP</td><td>161/162</td><td>UDP</td><td>Správa síťových zařízení</td></tr>
+        <tr><td>RDP</td><td>3389</td><td>TCP</td><td>Vzdálená plocha (Windows)</td></tr>
+    </table>
+
+    <h2>Autentizace</h2>
+    <h3>Metody autentizace</h3>
+    <table>
+        <tr><th>Metoda</th><th>Popis</th></tr>
+        <tr><td><strong>Heslo</strong></td><td>Základní – uživatelské jméno + heslo (plaintext je nebezpečný!)</td></tr>
+        <tr><td><strong>Tokeny / OTP</strong></td><td>Jednorázový kód (Google Authenticator, SMS)</td></tr>
+        <tr><td><strong>Certifikáty</strong></td><td>X.509 – asymetrická kryptografie (SSL/TLS)</td></tr>
+        <tr><td><strong>Kerberos</strong></td><td>Ticket-based autentizace (Active Directory)</td></tr>
+        <tr><td><strong>RADIUS / TACACS+</strong></td><td>Centralizovaná autentizace síťových zařízení (AAA)</td></tr>
+        <tr><td><strong>OAuth 2.0</strong></td><td>Delegovaná autorizace (přihlášení přes Google/GitHub)</td></tr>
+        <tr><td><strong>2FA / MFA</strong></td><td>Vícefaktorová – kombinace: co znám + co mám + co jsem</td></tr>
+    </table>
+
+    <h3>AAA model</h3>
+    <ul>
+        <li><strong>Authentication</strong> – ověření identity (kdo jsi?)</li>
+        <li><strong>Authorization</strong> – oprávnění (co smíš?)</li>
+        <li><strong>Accounting</strong> – logování (co jsi dělal?)</li>
+    </ul>
+
+    <div class="note">
+        <strong>V praxi (TCP/IP model):</strong> Vrstvy 5–7 jsou sloučeny do <strong>aplikační vrstvy</strong>. Většina moderních protokolů (HTTP, TLS) pokrývá funkce všech tří OSI vrstev.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,48 @@
+{
+  "title": "Bezpečnost a šifrování: SSL/TLS, RSA",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď šifrovací algoritmus ke správné kategorii:",
+      "pairs": [
+        ["AES-256-GCM", "Symetrické šifrování"],
+        ["RSA (2048 bit)", "Asymetrické šifrování"],
+        ["SHA-256", "Hash funkce"],
+        ["ECDHE", "Výměna klíčů (Key Exchange)"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky TLS 1.2 handshake:",
+      "items": ["ClientHello (verze, cipher suites, random)", "ServerHello + Certificate (certifikát s veřejným klíčem)", "ClientKeyExchange (pre-master secret šifrovaný veřejným klíčem)", "ChangeCipherSpec + Finished (obě strany)", "Šifrovaná komunikace pomocí symetrického klíče"]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o TLS verzích:",
+      "text": "TLS 1.3 vyžaduje pouze {{1}} RTT pro handshake (oproti {{2}} RTT u TLS 1.2). TLS 1.3 vyžaduje povinně {{ECDHE}} pro výměnu klíčů, čímž zajišťuje {{Perfect Forward Secrecy}}.",
+      "answers": ["1", "2", "ECDHE", "Perfect Forward Secrecy"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "RSA se v TLS 1.3 stále používá pro výměnu klíčů (key exchange), protože je to nejbezpečnější metoda.",
+      "answer": false,
+      "explanation": "TLS 1.3 odstranil RSA key exchange, protože neposkytuje Forward Secrecy – kompromitace privátního klíče serveru by umožnila dešifrovat veškerou dříve zachycenou komunikaci. TLS 1.3 vyžaduje povinně ECDHE, kde se pro každé spojení generují dočasné klíče."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli řetězec důvěry certifikátů (chain of trust) – jak prohlížeč ověřuje, že certifikát serveru je platný.",
+      "keywords": ["Root CA", "Intermediate CA", "podpis", "veřejný klíč", "prohlížeč", "důvěra", "X.509"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď AES režim k jeho vlastnosti:",
+      "pairs": [
+        ["Každý blok šifrován nezávisle – nebezpečné vzory", "ECB"],
+        ["Blok XORován s předchozím ciphertextem", "CBC"],
+        ["Paralelizovatelný counter mode", "CTR"],
+        ["CTR + autentizace – doporučený pro TLS 1.3", "GCM"]
+      ]
+    }
+  ]
+}

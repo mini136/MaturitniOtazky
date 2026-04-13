@@ -1,0 +1,48 @@
+{
+  "title": "Firewall – Principy, NAT, DMZ, VPN",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď vlastnost ke správnému typu firewallu:",
+      "pairs": [
+        ["Filtruje každý paket nezávisle podle hlaviček", "Stateless (Packet Filtering)"],
+        ["Udržuje tabulku stavů spojení", "Stateful"],
+        ["Pracuje na vrstvě 7, rozumí obsahu (HTTP, DNS)", "Aplikační (Proxy)"],
+        ["Kombinace stateful + IPS + DPI + identifikace aplikací", "Next-Generation (NGFW)"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o NAT:",
+      "text": "Nejběžnější typ NAT je {{PAT}} (NAT Overload), kdy více privátních adres sdílí {{jednu}} veřejnou a rozlišují se pomocí {{portů}}. Static NAT je mapování {{1:1}} a používá se typicky pro servery.",
+      "answers": ["PAT", "jednu", "portů", "1:1"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "V DMZ je povolena přímá komunikace ze serverů v DMZ do vnitřní sítě LAN bez omezení.",
+      "answer": false,
+      "explanation": "Komunikace z DMZ do LAN je zakázána nebo přísně omezena na konkrétní porty (např. databázový port). DMZ je oddělená zóna právě proto, aby kompromitace veřejného serveru v DMZ neohrozila vnitřní síť."
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď typy VPN protokolů od nejstaršího/nejméně bezpečného po nejmodernější:",
+      "items": ["PPTP (zastaralý, nebezpečný)", "L2TP/IPSec", "OpenVPN (SSL/TLS)", "WireGuard (moderní, UDP)"]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi IPSec Transport mode a Tunnel mode. Kdy se který používá?",
+      "keywords": ["payload", "celý paket", "IP hlavička", "host-to-host", "site-to-site", "šifruje"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď pravidla komunikace v architektuře s DMZ:",
+      "pairs": [
+        ["Internet → DMZ", "Povoleny specifické služby (HTTP, SMTP)"],
+        ["DMZ → LAN", "Zakázáno nebo přísně omezeno"],
+        ["LAN → Internet", "Povoleno přes NAT"],
+        ["LAN → DMZ", "Povoleno"]
+      ]
+    }
+  ]
+}

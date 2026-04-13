@@ -1,0 +1,54 @@
+{
+  "title": "ML: Regrese a klasifikace",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď algoritmus k jeho hlavnímu použití:",
+      "pairs": [
+        ["Lineární regrese", "Predikce spojité hodnoty (cena, teplota)"],
+        ["Logistická regrese", "Binární klasifikace pomocí sigmoid funkce"],
+        ["KNN", "Klasifikace podle K nejbližších sousedů"],
+        ["SVM", "Hledání optimální dělicí roviny mezi třídami"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň metriky klasifikace:",
+      "text": "Precision se počítá jako TP / (TP + {{FP}}) a měří přesnost pozitivních predikcí. Recall se počítá jako TP / (TP + {{FN}}) a měří úplnost. {{F1}} Score je harmonický průměr Precision a Recall. Pro regresi se používá metrika {{MSE}} (střední kvadratická chyba).",
+      "answers": ["FP", "FN", "F1", "MSE"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky gradientního sestupu u lineární regrese:",
+      "items": [
+        "Inicializace vah w a biasu b",
+        "Výpočet predikce y_pred = w*x + b",
+        "Výpočet chyby (MSE)",
+        "Výpočet gradientů dw a db",
+        "Aktualizace parametrů: w -= lr * dw"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "KNN algoritmus se musí natrénovat na datech předem a poté může rychle predikovat nové vzorky.",
+      "answer": false,
+      "explanation": "KNN je 'lazy learner' — netrénuje žádný model předem. Při predikci pokaždé prochází celá trénovací data a hledá K nejbližších sousedů. Predikce je proto pomalá, zatímco 'trénování' je okamžité (jen uloží data)."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, jak funguje logistická regrese a proč se nazývá 'regrese', když řeší klasifikaci.",
+      "keywords": ["sigmoid", "pravděpodobnost", "práh 0.5", "binární", "lineární kombinace", "log-odds"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď metriku k situaci, kde je nejdůležitější:",
+      "pairs": [
+        ["Precision", "Spam filtr — nechceme označit dobrý email jako spam"],
+        ["Recall", "Diagnostika rakoviny — nechceme přehlédnout nemocného"],
+        ["Accuracy", "Vyvážený dataset s podobným počtem tříd"],
+        ["R²", "Hodnocení kvality regresního modelu"]
+      ]
+    }
+  ]
+}

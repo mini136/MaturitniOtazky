@@ -1,0 +1,51 @@
+{
+  "title": "OOP principy, SOLID",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď SOLID princip k jeho významu:",
+      "pairs": [
+        ["Single Responsibility", "Třída má jednu zodpovědnost"],
+        ["Open/Closed", "Otevřeno pro rozšíření, uzavřeno pro modifikaci"],
+        ["Liskov Substitution", "Potomek musí být zaměnitelný za rodiče"],
+        ["Dependency Inversion", "Závisej na abstrakci, ne na implementaci"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy týkající se vztahů mezi třídami:",
+      "text": "Při {{kompozici}} části neexistují bez celku (např. Dům → Místnosti), zatímco při {{agregaci}} části mohou existovat samostatně (např. Tým → Hráči). Volný vztah, kde objekty existují zcela nezávisle, se nazývá {{asociace}}.",
+      "answers": ["kompozici", "agregaci", "asociace"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky při aplikaci Dependency Inversion principu:",
+      "items": [
+        "Identifikuj závislost na konkrétní implementaci",
+        "Vytvoř abstraktní rozhraní (ABC / interface)",
+        "Implementuj rozhraní v konkrétních třídách",
+        "Předej abstrakci jako závislost přes konstruktor",
+        "Klient pracuje pouze s abstrakcí"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Polymorfismus znamená, že funkce může pracovat s různými typy objektů přes stejné rozhraní, přičemž každý typ se chová jinak.",
+      "answer": true,
+      "explanation": "Polymorfismus umožňuje volat stejnou metodu (např. zvuk()) na různých objektech (Pes, Kočka) a každý objekt ji implementuje po svém. Funkce nemusí znát konkrétní typ."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi zapouzdřením a abstrakcí. Kdy použiješ které?",
+      "keywords": ["skrytí", "implementace", "rozhraní", "vnitřní stav", "přístup", "metody"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Interface Segregation princip říká, že je lepší mít jedno velké univerzální rozhraní než několik malých specializovaných.",
+      "answer": false,
+      "explanation": "Je to naopak — ISP říká, že je lepší mít více malých rozhraní místo jednoho velkého. Třídy by neměly být nuceny implementovat metody, které nepotřebují."
+    }
+  ]
+}

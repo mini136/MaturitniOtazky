@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 - Databáze</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>10 – Databáze, ORM, CRUD operace</h1>
+
+    <h2>Přístupy k databázi</h2>
+    <table>
+        <tr><th>Přístup</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><strong>Přímé SQL</strong></td><td>Ruční psaní dotazů</td><td><code>sqlite3</code>, <code>psycopg2</code></td></tr>
+        <tr><td><strong>ORM</strong></td><td>Mapování objektů na tabulky</td><td>SQLAlchemy, Entity Framework</td></tr>
+        <tr><td><strong>Query Builder</strong></td><td>Programatické sestavení dotazů</td><td>Knex.js</td></tr>
+    </table>
+
+    <h2>CRUD → SQL → HTTP</h2>
+    <table>
+        <tr><th>CRUD</th><th>SQL</th><th>HTTP</th><th>Popis</th></tr>
+        <tr><td>Create</td><td><code>INSERT INTO</code></td><td>POST</td><td>Vytvoření záznamu</td></tr>
+        <tr><td>Read</td><td><code>SELECT</code></td><td>GET</td><td>Čtení dat</td></tr>
+        <tr><td>Update</td><td><code>UPDATE</code></td><td>PUT/PATCH</td><td>Aktualizace</td></tr>
+        <tr><td>Delete</td><td><code>DELETE</code></td><td>DELETE</td><td>Smazání</td></tr>
+    </table>
+
+    <h2>ORM principy</h2>
+    <ul>
+        <li><strong>Třída</strong> = tabulka v DB</li>
+        <li><strong>Instance</strong> = řádek v tabulce</li>
+        <li><strong>Atribut</strong> = sloupec</li>
+    </ul>
+
+    <h3>Výhody a nevýhody ORM</h3>
+    <table>
+        <tr><th>Výhody</th><th>Nevýhody</th></tr>
+        <tr><td>Méně SQL kódu</td><td>Abstrakce může skrýt neefektivity</td></tr>
+        <tr><td>Typová bezpečnost</td><td>Složitější dotazy mohou být pomalé</td></tr>
+        <tr><td>Přenositelný kód (nezávislý na DB)</td><td>Učební křivka</td></tr>
+        <tr><td>Automatická prevence SQL Injection</td><td>N+1 problém (lazy loading)</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python (SQLite CRUD, transakce, ORM vzor)</h2>
+
+    <div class="code-desc"><strong>CRUD operace</strong> s SQLite — vytvoření tabulky, vložení, čtení, aktualizace a mazání záznamů. Používá parametrizované dotazy (<code>?</code>).</div>
+    <pre><code>import sqlite3
+
+# In-memory databaze
+conn = sqlite3.connect(':memory:')
+conn.row_factory = sqlite3.Row  # pristup pres nazvy sloupcu
+cursor = conn.cursor()
+
+# CREATE tabulky
+cursor.execute('''
+    CREATE TABLE studenti (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        jmeno TEXT NOT NULL,
+        vek INTEGER CHECK(vek &gt; 0),
+        prumer REAL DEFAULT 0.0
+    )
+''')
+
+# INSERT (Create)
+studenti_data = [("Alice", 20, 1.5), ("Bob", 22, 2.1), ("Charlie", 21, 1.8)]
+cursor.executemany(
+    "INSERT INTO studenti (jmeno, vek, prumer) VALUES (?, ?, ?)",
+    studenti_data
+)
+conn.commit()
+
+# SELECT (Read)
+cursor.execute("SELECT * FROM studenti WHERE vek &gt;= ?", (21,))
+for row in cursor.fetchall():
+    print(f"  {dict(row)}")
+
+# UPDATE
+cursor.execute("UPDATE studenti SET prumer = ? WHERE jmeno = ?", (1.2, "Alice"))
+
+# DELETE
+cursor.execute("DELETE FROM studenti WHERE jmeno = ?", ("Charlie",))
+conn.commit()</code></pre>
+
+    <div class="code-desc"><strong>Transakce</strong> — atomické operace s <code>try/commit/rollback</code>. Pokud kterýkoli krok selže, celá transakce se vrátí zpět.</div>
+    <pre><code>def prevod_kreditu(conn, od, komu, castka):
+    """Atomicky prevod kreditu mezi studenty"""
+    try:
+        cursor = conn.cursor()
+        # Kontrola zustatku
+        cursor.execute("SELECT prumer FROM studenti WHERE jmeno = ?", (od,))
+        row = cursor.fetchone()
+        if row is None or row['prumer'] &lt; castka:
+            raise ValueError("Nedostatek kreditu!")
+
+        cursor.execute("UPDATE studenti SET prumer = prumer - ? WHERE jmeno = ?",
+                       (castka, od))
+        cursor.execute("UPDATE studenti SET prumer = prumer + ? WHERE jmeno = ?",
+                       (castka, komu))
+        conn.commit()
+        print(f"  Prevod {castka} od {od} ke {komu}: OK")
+    except Exception as e:
+        conn.rollback()
+        print(f"  Prevod SELHAL: {e}")
+
+prevod_kreditu(conn, "Alice", "Bob", 0.5)</code></pre>
+
+    <div class="code-desc"><strong>ORM vzor</strong> — <code>StudentRepository</code> zapouzdřuje přímé SQL dotazy. Třída <code>Student</code> (dataclass) reprezentuje řádek tabulky.</div>
+    <pre><code>from dataclasses import dataclass
+
+@dataclass
+class Student:
+    id: int = 0
+    jmeno: str = ""
+    vek: int = 0
+    prumer: float = 0.0
+
+class StudentRepository:
+    """Jednoduchy ORM-like pattern"""
+
+    def __init__(self, conn):
+        self.conn = conn
+
+    def najdi_vsechny(self):
+        cursor = self.conn.execute("SELECT * FROM studenti")
+        return [Student(**dict(row)) for row in cursor.fetchall()]
+
+    def najdi_podle_id(self, id):
+        cursor = self.conn.execute("SELECT * FROM studenti WHERE id = ?", (id,))
+        row = cursor.fetchone()
+        return Student(**dict(row)) if row else None
+
+    def uloz(self, student):
+        if student.id == 0:
+            self.conn.execute(
+                "INSERT INTO studenti (jmeno, vek, prumer) VALUES (?, ?, ?)",
+                (student.jmeno, student.vek, student.prumer))
+        else:
+            self.conn.execute(
+                "UPDATE studenti SET jmeno=?, vek=?, prumer=? WHERE id=?",
+                (student.jmeno, student.vek, student.prumer, student.id))
+        self.conn.commit()
+
+    def smaz(self, id):
+        self.conn.execute("DELETE FROM studenti WHERE id = ?", (id,))
+        self.conn.commit()
+
+# Pouziti
+repo = StudentRepository(conn)
+for s in repo.najdi_vsechny():
+    print(f"  {s}")
+
+conn.close()</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

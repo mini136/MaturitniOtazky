@@ -1,0 +1,53 @@
+{
+  "title": "OSI 1 – Fyzická vrstva – přenosová média, signály, topologie",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď kategorii UTP kabelu k její maximální rychlosti:",
+      "pairs": [
+        ["Cat 5e", "1 Gbps"],
+        ["Cat 6", "1 Gbps (10G do 55 m)"],
+        ["Cat 6a", "10 Gbps na 100 m"],
+        ["Cat 8", "25/40 Gbps"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Singlemode optické vlákno má větší průměr jádra než multimode, proto přenáší data na větší vzdálenosti.",
+      "answer": false,
+      "explanation": "Je to naopak – singlemode má menší jádro (8–10 µm) než multimode (50/62.5 µm). Díky menšímu jádru se světlo šíří jedním paprskem bez modální disperze, což umožňuje přenos na desítky km."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o přenosových režimech:",
+      "text": "Při režimu {{simplex}} je přenos jednosměrný (např. TV vysílání). Režim {{half-duplex}} umožňuje obousměrný přenos, ale ne současně (např. vysílačka). Režim {{full-duplex}} umožňuje současný obousměrný přenos (např. switch Ethernet).",
+      "answers": ["simplex", "half-duplex", "full-duplex"]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi bitrate a baudrate. Jak může být bitrate vyšší než baudrate?",
+      "keywords": ["bity za sekundu", "změny signálu", "stavů", "QAM", "modulace", "log₂"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď síťovou topologii k jejímu popisu:",
+      "pairs": [
+        ["Hvězda (Star)", "Centrální prvek (switch/hub), nejběžnější topologie"],
+        ["Sběrnice (Bus)", "Všechny stanice na jednom sdíleném kabelu"],
+        ["Mesh", "Každý s každým, vysoká redundance"],
+        ["Kruh (Ring)", "Uzavřený okruh, data kolují jedním směrem"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď metody detekce a opravy chyb od nejjednodušší po nejsložitější:",
+      "items": [
+        "Paritní bit – detekce jednobitové chyby",
+        "Kontrolní součet (Checksum) – součet datových bloků",
+        "CRC (Cyclic Redundancy Check) – polynomiální dělení, detekce burst chyb",
+        "FEC (Forward Error Correction) – korekce chyb bez opakování přenosu"
+      ]
+    }
+  ]
+}

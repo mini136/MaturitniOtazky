@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25 - Technologie, které přežily</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>25 – Technologie, které přežily změny současného rozvoje ICT</h1>
+
+    <h2>Ethernet (1973 → dodnes)</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Popis</th></tr>
+        <tr><td>Vznik</td><td>1973 – Robert Metcalfe, Xerox PARC</td></tr>
+        <tr><td>Standard</td><td>IEEE 802.3</td></tr>
+        <tr><td>Původní rychlost</td><td>2,94 Mbps (koax)</td></tr>
+        <tr><td>Dnes</td><td>400 Gbps (802.3bs), vývoj 800G/1,6T</td></tr>
+        <tr><td>Proč přežil</td><td>Jednoduchost, zpětná kompatibilita, škálovatelnost, nízká cena</td></tr>
+    </table>
+    <h3>Evoluce</h3>
+    <ul>
+        <li><strong>10BASE5</strong> (thick coax) → <strong>10BASE-T</strong> (UTP, hvězdicová topologie) → <strong>100BASE-TX</strong> (Fast Ethernet)</li>
+        <li><strong>1000BASE-T</strong> (Gigabit) → <strong>10GBASE-T</strong> → <strong>25G/40G/100G</strong> (data centra)</li>
+        <li>Přechod z koaxu na UTP, pak na optiku v páteřních sítích</li>
+        <li>CSMA/CD → full duplex (bez kolizí) u přepínaných sítí</li>
+    </ul>
+
+    <h2>TCP/IP (1974 → dodnes)</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Popis</th></tr>
+        <tr><td>Vznik</td><td>1974 – Vint Cerf, Bob Kahn (ARPANET)</td></tr>
+        <tr><td>RFC</td><td>TCP: RFC 793 (1981), IP: RFC 791 (1981)</td></tr>
+        <tr><td>Dnes</td><td>Základ celého internetu a většiny sítí</td></tr>
+        <tr><td>Proč přežil</td><td>Otevřené standardy, vrstvová architektura, nezávislost na médiu</td></tr>
+    </table>
+    <h3>Klíčové principy</h3>
+    <ul>
+        <li><strong>End-to-end princip</strong> – inteligence na koncových bodech, síť je „hloupá" (best effort)</li>
+        <li><strong>Vrstvový model</strong> – každá vrstva řeší svůj problém</li>
+        <li><strong>Packet switching</strong> – data rozdělena na pakety, nezávislé směrování</li>
+        <li>IPv4 → IPv6 přechod zajišťuje budoucnost</li>
+    </ul>
+
+    <h2>DNS (1983 → dodnes)</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Popis</th></tr>
+        <tr><td>Vznik</td><td>1983 – Paul Mockapetris (RFC 882/883, poté RFC 1034/1035)</td></tr>
+        <tr><td>Nahradil</td><td>HOSTS.TXT – centrální soubor na SRI-NIC (neškálovatelný)</td></tr>
+        <tr><td>Dnes</td><td>Hierarchický distribuovaný systém, 13 root serverů (anycast)</td></tr>
+        <tr><td>Proč přežil</td><td>Distribuovaná architektura, caching, hierarchie, rozšiřitelnost</td></tr>
+    </table>
+    <h3>Evoluce</h3>
+    <ul>
+        <li>Původní DNS → <strong>DNSSEC</strong> (podpisy, ochrana integrity)</li>
+        <li><strong>DoH</strong> (DNS over HTTPS) a <strong>DoT</strong> (DNS over TLS) – šifrování dotazů</li>
+        <li>Nové TLD (.app, .dev, .io…)</li>
+        <li>Cloudflare (1.1.1.1), Google (8.8.8.8) – veřejné resolvery</li>
+    </ul>
+
+    <h2>SMTP (1982 → dodnes)</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Popis</th></tr>
+        <tr><td>Vznik</td><td>1982 – RFC 821 (Jon Postel)</td></tr>
+        <tr><td>Dnes</td><td>RFC 5321 (2008), stále základ e-mailové komunikace</td></tr>
+        <tr><td>Proč přežil</td><td>Jednoduchost, rozšiřitelnost (ESMTP), store-and-forward model</td></tr>
+    </table>
+    <h3>Evoluce</h3>
+    <ul>
+        <li>Původní plain text → <strong>STARTTLS</strong> (šifrování)</li>
+        <li><strong>SPF, DKIM, DMARC</strong> – ochrana proti spamu a spoofingu</li>
+        <li><strong>MIME</strong> – přílohy, HTML e-maily, kódování</li>
+        <li>I přes alternativy (messaging, Slack…) e-mail zůstává klíčový</li>
+    </ul>
+
+    <h2>HTTP/HTML/WWW (1991 → dodnes)</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Popis</th></tr>
+        <tr><td>Vznik</td><td>1989–1991 – Tim Berners-Lee (CERN)</td></tr>
+        <tr><td>Verze HTTP</td><td>0.9 → 1.0 → 1.1 → 2 (2015) → 3 (2022, QUIC)</td></tr>
+        <tr><td>Proč přežil</td><td>Otevřené standardy, jednoduchost, hyperlinkový model</td></tr>
+    </table>
+    <h3>Evoluce</h3>
+    <ul>
+        <li>HTTP/1.0 (jedno spojení na požadavek) → HTTP/1.1 (keep-alive, pipelining)</li>
+        <li><strong>HTTP/2</strong> (multiplexing, binární, header compression, server push)</li>
+        <li><strong>HTTP/3</strong> (UDP + QUIC – 0-RTT, bez head-of-line blocking)</li>
+        <li>HTML 1.0 → HTML5 (multimedia, canvas, WebSocket, offline apps)</li>
+        <li><strong>HTTPS</strong> (TLS) – dnes default (Let's Encrypt)</li>
+    </ul>
+
+    <h2>BGP (1989 → dodnes)</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Popis</th></tr>
+        <tr><td>Vznik</td><td>1989 – RFC 1105, aktuální BGP-4 RFC 4271</td></tr>
+        <tr><td>Funkce</td><td>Směrování mezi autonomními systémy (inter-AS / EGP)</td></tr>
+        <tr><td>Dnes</td><td>„Lepidlo internetu" – propojuje ~70 000+ AS</td></tr>
+        <tr><td>Proč přežil</td><td>Politika směrování, škálovatelnost, flexibilita</td></tr>
+    </table>
+
+    <h2>SSH (1995 → dodnes)</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Popis</th></tr>
+        <tr><td>Vznik</td><td>1995 – Tatu Ylönen (nahradil Telnet, rlogin, rsh)</td></tr>
+        <tr><td>Standard</td><td>RFC 4251–4254 (SSH-2)</td></tr>
+        <tr><td>Dnes</td><td>Vzdálená správa serverů, přenos souborů, tunely, Git</td></tr>
+        <tr><td>Proč přežil</td><td>Bezpečnost, všestrannost, OpenSSH implementace</td></tr>
+    </table>
+
+    <h2>DHCP (1993 → dodnes)</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Popis</th></tr>
+        <tr><td>Vznik</td><td>1993 – RFC 1531 (nahradil BOOTP)</td></tr>
+        <tr><td>Dnes</td><td>DHCPv4 (RFC 2131) + DHCPv6 (RFC 8415)</td></tr>
+        <tr><td>Proč přežil</td><td>Automatická konfigurace, bez alternativy pro IPv4</td></tr>
+    </table>
+
+    <h2>Wi-Fi / IEEE 802.11 (1997 → dodnes)</h2>
+    <table>
+        <tr><th>Vlastnost</th><th>Popis</th></tr>
+        <tr><td>Vznik</td><td>1997 – IEEE 802.11 (2 Mbps, 2.4 GHz)</td></tr>
+        <tr><td>Dnes</td><td>Wi-Fi 7 (802.11be, 46 Gbps, 2.4/5/6 GHz)</td></tr>
+        <tr><td>Proč přežil</td><td>Mobilita, pohodlí, zpětná kompatibilita, neustálé inovace</td></tr>
+    </table>
+
+    <h2>Technologie, které NEPŘEŽILY</h2>
+    <table>
+        <tr><th>Technologie</th><th>Nahrazena čím</th><th>Důvod zániku</th></tr>
+        <tr><td><strong>Token Ring</strong></td><td>Ethernet</td><td>Nákladnější, proprietární (IBM), složitější</td></tr>
+        <tr><td><strong>ATM</strong></td><td>MPLS, Ethernet</td><td>Složitost, vysoká cena, malá buňka (53B)</td></tr>
+        <tr><td><strong>IPX/SPX</strong></td><td>TCP/IP</td><td>Proprietární (Novell), internet = TCP/IP</td></tr>
+        <tr><td><strong>Telnet</strong></td><td>SSH</td><td>Nešifrovaný → bezpečnostní riziko</td></tr>
+        <tr><td><strong>FTP</strong></td><td>SFTP, SCP, HTTPS</td><td>Nešifrovaný, problémy s firewallem</td></tr>
+        <tr><td><strong>ISDN</strong></td><td>DSL, optika, LTE</td><td>Nízká rychlost (128 kbps)</td></tr>
+        <tr><td><strong>Frame Relay</strong></td><td>MPLS, VPN</td><td>Zastaralé WAN řešení</td></tr>
+        <tr><td><strong>AppleTalk</strong></td><td>TCP/IP</td><td>Proprietární (Apple), neškálovatelné</td></tr>
+        <tr><td><strong>NetBEUI</strong></td><td>TCP/IP</td><td>Nesměrovatelný, pouze LAN</td></tr>
+        <tr><td><strong>WEP</strong></td><td>WPA2/WPA3</td><td>Prolomen, nebezpečný</td></tr>
+    </table>
+
+    <h2>Proč některé technologie přežijí</h2>
+    <ol>
+        <li><strong>Otevřené standardy</strong> – TCP/IP, HTTP, SMTP jsou otevřené a svobodné</li>
+        <li><strong>Zpětná kompatibilita</strong> – Ethernet, Wi-Fi – novější verze podporují starší</li>
+        <li><strong>Škálovatelnost</strong> – DNS hierarchie, TCP/IP vrstvový model</li>
+        <li><strong>Adaptabilita</strong> – HTTP (text → binary → QUIC), SMTP (plain → TLS + DKIM)</li>
+        <li><strong>Síťový efekt</strong> – čím více uživatelů, tím hodnotnější (internet, e-mail)</li>
+        <li><strong>Jednoduchost</strong> – End-to-end princip, minimální jádro, rozšiřitelnost</li>
+    </ol>
+
+    <div class="important">
+        <strong>Pro maturitu:</strong> Přežily: Ethernet, TCP/IP, DNS, SMTP, HTTP, BGP, SSH, DHCP, Wi-Fi. Nepřežily: Token Ring, ATM, IPX/SPX, Telnet, ISDN. Klíč k přežití = otevřené standardy, zpětná kompatibilita, škálovatelnost, adaptabilita.
+    </div>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

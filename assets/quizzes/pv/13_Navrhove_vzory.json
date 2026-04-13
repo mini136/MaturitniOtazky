@@ -1,0 +1,61 @@
+{
+  "title": "Návrhové vzory (Design Patterns)",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď návrhový vzor k jeho kategorii (GoF):",
+      "pairs": [
+        ["Singleton, Factory, Builder", "Creational — vytváření objektů"],
+        ["Adapter, Decorator, Facade", "Structural — struktura tříd"],
+        ["Observer, Strategy, Command", "Behavioral — chování objektů"],
+        ["Prototype", "Creational — klonování existujícího objektu"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Decorator vzor a dědičnost řeší stejný problém — oba přidávají funkcionalitu třídě při kompilaci.",
+      "answer": false,
+      "explanation": "Decorator přidává funkcionalitu DYNAMICKY za běhu obalením objektu, zatímco dědičnost je statická (při kompilaci). Decorator umožňuje kombinovat různé rozšíření flexibilně bez explozivního počtu podtříd."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové vlastnosti návrhových vzorů:",
+      "text": "{{Singleton}} zajišťuje jedinou instanci třídy v celé aplikaci. {{Factory}} vytváří objekty bez specifikace přesné třídy. {{Observer}} implementuje publisher-subscriber model, kde změna jednoho objektu notifikuje všechny {{odběratele}}.",
+      "answers": ["Singleton", "Factory", "Observer", "odběratele"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky Builder vzoru při vytváření složitého objektu:",
+      "items": [
+        "Vytvoření nové instance builderu",
+        "Nastavení velikosti (nastav_velikost)",
+        "Nastavení dalších vlastností (nastav_testo)",
+        "Přidání volitelných součástí (pridej ingredience)",
+        "Zavolání postav() — vrátí hotový objekt"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli Strategy vzor a uveď příklad, kdy je vhodné ho použít místo if/else řetězu.",
+      "keywords": ["algoritmus", "zaměnitelný", "runtime", "rozhraní", "flexibilita", "if/else"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď návrhový vzor k praktickému příkladu použití:",
+      "pairs": [
+        ["Singleton", "Konfigurace aplikace — jediná sdílená instance"],
+        ["Observer", "Event systém — notifikace při login události"],
+        ["Decorator", "Káva + mléko + cukr — dynamické přidávání vlastností"],
+        ["Strategy", "Výběr řadicího algoritmu za běhu programu"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Builder vzor je vhodný, když objekt má mnoho volitelných parametrů a chceme se vyhnout konstruktoru s desítkami argumentů.",
+      "answer": true,
+      "explanation": "Builder odděluje konstrukci objektu od jeho reprezentace. Místo konstruktoru s mnoha parametry (telescoping constructor) používáme řetězení metod (fluent interface), které je čitelnější a flexibilnější."
+    }
+  ]
+}

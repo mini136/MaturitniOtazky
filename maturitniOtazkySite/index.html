@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maturitní otázky – Sítě (Ječná)</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; text-align: center; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        .topic-list { list-style: none; padding: 0; }
+        .topic-list li { margin: 8px 0; }
+        .topic-list a { display: block; padding: 12px 15px; background: #ecf0f1; border-radius: 5px; text-decoration: none; color: #2c3e50; border-left: 4px solid #3498db; transition: all 0.2s; }
+        .topic-list a:hover { background: #d5dbdb; border-left-color: #2980b9; padding-left: 20px; }
+        .topic-list .number { color: #3498db; font-weight: bold; margin-right: 8px; }
+        .section-label { background: #3498db; color: white; padding: 5px 12px; border-radius: 3px; font-size: 0.85em; display: inline-block; margin-top: 25px; margin-bottom: 10px; }
+        @media print {
+            body { font-size: 11pt; }
+            h1 { font-size: 18pt; }
+            .topic-list a { border: 1px solid #ccc; color: #333; }
+            .topic-list a:hover { padding-left: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Maturitní otázky ze sítí<br><small style="color:#7f8c8d; font-size:0.6em;">SPŠE Ječná – 4. ročník</small></h1>
+
+    <div class="section-label">Linux (otázky 1–5)</div>
+    <ul class="topic-list">
+        <li><a href="01_Linux_charakteristika.html"><span class="number">01</span> OS Linux – Charakteristika, struktura OS, start systému, služby, procesy, paměť</a></li>
+        <li><a href="02_Linux_souborovy_system.html"><span class="number">02</span> OS Linux – Souborový systém, formátování, dělení a připojování, adresáře</a></li>
+        <li><a href="03_Linux_uzivatele_prava.html"><span class="number">03</span> OS Linux – Správa uživatelů, skupin, zabezpečení přístupu, práva, SUDO</a></li>
+        <li><a href="04_Linux_SSH_CRON_logy.html"><span class="number">04</span> OS Linux – SSH, CRON, procesy a služby, systémové logy, virtualizace</a></li>
+        <li><a href="05_Linux_BASH_skripty.html"><span class="number">05</span> OS Linux – BASH skripty, textové soubory, filtrace, regex, kompilace, zálohování</a></li>
+    </ul>
+
+    <div class="section-label">OSI Vrstva 1 – Fyzická (otázky 6–7)</div>
+    <ul class="topic-list">
+        <li><a href="06_OSI1_fyzicka_vrstva_media.html"><span class="number">06</span> OSI 1 – Přenosová média, signály, topologie sítí, kódování dat, detekce chyb</a></li>
+        <li><a href="07_OSI1_ethernet_kabelaz.html"><span class="number">07</span> OSI 1 – Ethernet principy, standardy, strukturovaná kabeláž, optika, konektory</a></li>
+    </ul>
+
+    <div class="section-label">OSI Vrstva 2 – Linková (otázky 8–10)</div>
+    <ul class="topic-list">
+        <li><a href="08_OSI2_prepinace_ramce.html"><span class="number">08</span> OSI 2 – Přepínače, rámce, adresování, kolize, MAC, řízení toku dat</a></li>
+        <li><a href="09_OSI2_ARP_zapouzdreni.html"><span class="number">09</span> OSI 2 – ARP, MAC, vztah rámec/paket, zapouzdření</a></li>
+        <li><a href="10_OSI2_VLAN.html"><span class="number">10</span> OSI 2 – VLAN, trunk/access porty, DTP, protokol 802.1Q</a></li>
+    </ul>
+
+    <div class="section-label">OSI Vrstva 3 – Síťová (otázky 11–14)</div>
+    <ul class="topic-list">
+        <li><a href="11_OSI3_IPv4.html"><span class="number">11</span> OSI 3 – IPv4, maska, podsíťování, porovnání s IPv6, fragmentace</a></li>
+        <li><a href="12_OSI3_IPv6.html"><span class="number">12</span> OSI 3 – IPv6, maska, podsíťování, porovnání s IPv4, fragmentace</a></li>
+        <li><a href="13_OSI3_staticke_smerovani.html"><span class="number">13</span> OSI 3 – Statické směrování, tabulky, administrativní vzdálenost</a></li>
+        <li><a href="14_OSI3_dynamicke_smerovani.html"><span class="number">14</span> OSI 3 – Dynamické směrování (RIP, OSPF), konfigurace, metriky</a></li>
+    </ul>
+
+    <div class="section-label">OSI Vrstva 4 – Transportní (otázka 15)</div>
+    <ul class="topic-list">
+        <li><a href="15_OSI4_transportni_vrstva.html"><span class="number">15</span> OSI 4 – UDP, TCP, segmentace, řízení přenosové rychlosti, kontrola chyb</a></li>
+    </ul>
+
+    <div class="section-label">OSI Vrstvy 5–7 – Vyšší (otázka 16)</div>
+    <ul class="topic-list">
+        <li><a href="16_OSI567_vyssi_vrstvy.html"><span class="number">16</span> OSI 5/6/7 – Sokety, formáty dat, šifrování, komprese, autentizace</a></li>
+    </ul>
+
+    <div class="section-label">Služby a protokoly (otázky 17–20)</div>
+    <ul class="topic-list">
+        <li><a href="17_DHCP4.html"><span class="number">17</span> DHCPv4 – Funkce, konfigurace rozsahů, MAC rezervace, relay</a></li>
+        <li><a href="18_DHCP6.html"><span class="number">18</span> DHCPv6 – Funkce, SLAAC, stateless/stateful, konfigurace</a></li>
+        <li><a href="19_DNS.html"><span class="number">19</span> DNS – Hierarchie, záznamy, konfigurace, bezpečnost</a></li>
+        <li><a href="20_Firewall.html"><span class="number">20</span> Firewall – Typy, ACL, iptables, NAT, DMZ, VPN</a></li>
+    </ul>
+
+    <div class="section-label">Pokročilé sítě (otázky 21–22)</div>
+    <ul class="topic-list">
+        <li><a href="21_STP_Etherchannel_HSRP.html"><span class="number">21</span> STP, EtherChannel, HSRP – Redundance, failover, BPDU</a></li>
+        <li><a href="22_Bezdratove_site.html"><span class="number">22</span> Bezdrátové sítě – EM vlny, antény, modulace, zabezpečení, Wi-Fi</a></li>
+    </ul>
+
+    <div class="section-label">Bezpečnost a komunikace (otázky 23–24)</div>
+    <ul class="topic-list">
+        <li><a href="23_SSL_TLS_RSA.html"><span class="number">23</span> SSL/TLS, RSA – Symetrické/asymetrické šifrování, handshake, CA</a></li>
+        <li><a href="24_IMAP_SMTP.html"><span class="number">24</span> IMAP a SMTP – Odesílání a přijímání e-mailů, synchronizace</a></li>
+    </ul>
+
+    <div class="section-label">Závěrečná otázka (25)</div>
+    <ul class="topic-list">
+        <li><a href="25_Technologie_prezily.html"><span class="number">25</span> Technologie, které přežily změny současného rozvoje ICT</a></li>
+    </ul>
+</body>
+</html>

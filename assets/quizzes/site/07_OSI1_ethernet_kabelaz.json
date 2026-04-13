@@ -1,0 +1,55 @@
+{
+  "title": "OSI 1 – Ethernet principy, strukturovaná kabeláž, optika",
+  "questions": [
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky CSMA/CD algoritmu při kolizi:",
+      "items": [
+        "Stanice naslouchá, zda je médium volné (Carrier Sense)",
+        "Médium je volné – stanice začne vysílat",
+        "Během vysílání je detekována kolize (Collision Detection)",
+        "Stanice odešle JAM signál ostatním",
+        "Stanice čeká náhodnou dobu (exponenciální backoff)",
+        "Stanice zkouší vysílat znovu"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď Ethernet standard k jeho parametrům:",
+      "pairs": [
+        ["100BASE-TX", "100 Mbps, UTP Cat 5+, 100 m"],
+        ["1000BASE-T", "1 Gbps, UTP Cat 5e+, 100 m"],
+        ["1000BASE-LX", "1 Gbps, optika singlemode, 5 km"],
+        ["10GBASE-SR", "10 Gbps, optika multimode, 300 m"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pravidla strukturované kabeláže:",
+      "text": "Maximální délka horizontálního kabelu od zásuvky k patch panelu je {{90 m}}. Celková maximální délka včetně patch kabelů je {{100 m}}. Na propojení PC se switchem se používá {{přímý}} kabel, zatímco propojení dvou switchů vyžadovalo {{křížený}} kabel (dnes Auto-MDI/X).",
+      "answers": ["90 m", "100 m", "přímý", "křížený"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Standard PoE (802.3af) dokáže napájet zařízení výkonem až 100 W po Ethernet kabelu.",
+      "answer": false,
+      "explanation": "Standard 802.3af (PoE) poskytuje maximálně 15.4 W. Pro 30 W je potřeba 802.3at (PoE+) a pro 60/100 W standard 802.3bt (PoE++/PoE Type 4)."
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď optický konektor k jeho popisu:",
+      "pairs": [
+        ["LC", "Little Connector – malý, nejpoužívanější v datových centrech"],
+        ["SC", "Square Connector – push-pull mechanismus"],
+        ["ST", "Straight Tip – bajonetový, starší typ"],
+        ["MPO/MTP", "Multi-fiber – hromadný konektor pro 12/24 vláken"]
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, proč se v moderních sítích se switchi ve full-duplexu nepoužívá CSMA/CD. Jaký byl jeho původní účel?",
+      "keywords": ["kolize", "sdílené médium", "hub", "full-duplex", "switch", "dedikovaný port"]
+    }
+  ]
+}

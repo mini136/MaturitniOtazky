@@ -1,0 +1,55 @@
+{
+  "title": "OS Linux – BASH skripty, práce s textem, regex, zálohování",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď speciální proměnnou v BASHi k jejímu významu:",
+      "pairs": [
+        ["$?", "Návratový kód posledního příkazu"],
+        ["$#", "Počet argumentů skriptu"],
+        ["$@", "Všechny argumenty skriptu jako pole"],
+        ["$0", "Jméno aktuálně běžícího skriptu"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň příkazy pro práci s textem:",
+      "text": "Pro nahrazení všech výskytů slova v souboru přímo na místě použijeme {{sed -i 's/starý/nový/g' soubor}}. Pro výpis prvního sloupce z /etc/passwd s oddělovačem : použijeme {{awk -F: '{print $1}' /etc/passwd}}. K hledání vzoru v souborech rekurzivně použijeme {{grep -r \"vzor\" /etc/}}.",
+      "answers": ["sed -i 's/starý/nový/g' soubor", "awk -F: '{print $1}' /etc/passwd", "grep -r \"vzor\" /etc/"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Příkaz cmd 2>&1 > soubor.log přesměruje jak stdout tak stderr do souboru soubor.log.",
+      "answer": false,
+      "explanation": "Pořadí přesměrování je důležité. Tento příkaz nejprve přesměruje stderr na aktuální stdout (terminál), a teprve pak přesměruje stdout do souboru. Stderr tedy stále jde na terminál. Správně je cmd > soubor.log 2>&1 nebo cmd &> soubor.log."
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď regex metaznak k jeho významu:",
+      "pairs": [
+        ["^", "Začátek řádku"],
+        ["$", "Konec řádku"],
+        ["[^abc]", "Jakýkoli znak kromě a, b, c"],
+        ["{n,m}", "n až m opakování předchozího znaku"]
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli zálohovací strategie: plná, inkrementální a diferenční záloha. Co je pravidlo 3-2-1?",
+      "keywords": ["plná", "inkrementální", "diferenční", "3-2-1", "kopie", "média", "mimo lokalitu"]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky zpracování textu v pipeline, která zjistí 10 nejčastějších IP adres v access logu:",
+      "items": [
+        "cat access.log – načtení souboru",
+        "cut -d' ' -f1 – extrakce prvního sloupce (IP adresa)",
+        "sort – seřazení pro uniq",
+        "uniq -c – počet výskytů",
+        "sort -rn – seřazení sestupně podle počtu",
+        "head – zobrazení prvních 10 řádků"
+      ]
+    }
+  ]
+}

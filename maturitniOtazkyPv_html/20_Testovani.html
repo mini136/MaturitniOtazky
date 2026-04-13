@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20 - Testování</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>20 – Testování software</h1>
+
+    <h2>Pyramida testování</h2>
+    <table>
+        <tr><th>Úroveň</th><th>Co testuje</th><th>Rychlost</th><th>Pokrytí</th></tr>
+        <tr><td><strong>Unit testy</strong></td><td>Jednotlivé funkce/metody</td><td>Rychlé</td><td>Mnoho testů</td></tr>
+        <tr><td><strong>Integrační testy</strong></td><td>Spolupráce komponent</td><td>Střední</td><td>Méně</td></tr>
+        <tr><td><strong>E2E testy</strong></td><td>Celý systém</td><td>Pomalé</td><td>Málo</td></tr>
+    </table>
+
+    <h2>AAA pattern</h2>
+    <ol>
+        <li><strong>Arrange</strong> — příprava vstupů a prostředí</li>
+        <li><strong>Act</strong> — provedení testované operace</li>
+        <li><strong>Assert</strong> — ověření výsledku</li>
+    </ol>
+
+    <h2>FIRST princip</h2>
+    <ul>
+        <li><strong>F</strong>ast — testy běží rychle</li>
+        <li><strong>I</strong>ndependent — nezávisí na sobě</li>
+        <li><strong>R</strong>epeatable — vždy stejný výsledek</li>
+        <li><strong>S</strong>elf-validating — automaticky ověří pass/fail</li>
+        <li><strong>T</strong>imely — píší se včas (TDD: před kódem)</li>
+    </ul>
+
+    <h2>TDD cyklus</h2>
+    <ol>
+        <li><strong style="color: red;">RED</strong> — napiš test → selže</li>
+        <li><strong style="color: green;">GREEN</strong> — napiš minimální kód → test projde</li>
+        <li><strong style="color: blue;">REFACTOR</strong> — vylepši kód (testy stále zelené)</li>
+    </ol>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Třída Kalkulacka</strong> — testovaná třída s metodami pro sčítání, odčítání, násobení a dělení (včetně ošetření dělení nulou).</div>
+    <pre><code>class Kalkulacka:
+    """Jednoducha kalkulacka pro demonstraci testovani"""
+
+    def secti(self, a, b):
+        return a + b
+
+    def odecti(self, a, b):
+        return a - b
+
+    def vynasob(self, a, b):
+        return a * b
+
+    def vydel(self, a, b):
+        if b == 0:
+            raise ZeroDivisionError("Nelze delit nulou!")
+        return a / b
+
+    def prumer(self, cisla):
+        if not cisla:
+            raise ValueError("Prazdny seznam!")
+        return sum(cisla) / len(cisla)</code></pre>
+
+    <div class="code-desc"><strong>Unit testy s unittest</strong> — testovací třída <code>TestKalkulacka</code> testuje všechny metody kalkulačky. <code>setUp()</code> inicializuje kalkulačku před každým testem. <code>assertRaises</code> ověřuje výjimky.</div>
+    <pre><code>import unittest
+
+class TestKalkulacka(unittest.TestCase):
+    """Testy pro Kalkulacku"""
+
+    def setUp(self):
+        """Arrange - pred kazdym testem"""
+        self.calc = Kalkulacka()
+
+    def test_secti_kladna(self):
+        # Arrange (hotovo v setUp)
+        # Act
+        vysledek = self.calc.secti(2, 3)
+        # Assert
+        self.assertEqual(vysledek, 5)
+
+    def test_secti_zaporna(self):
+        self.assertEqual(self.calc.secti(-1, -1), -2)
+
+    def test_secti_nula(self):
+        self.assertEqual(self.calc.secti(0, 0), 0)
+
+    def test_odecti(self):
+        self.assertEqual(self.calc.odecti(10, 3), 7)
+
+    def test_vynasob(self):
+        self.assertEqual(self.calc.vynasob(4, 5), 20)
+
+    def test_vydel(self):
+        self.assertAlmostEqual(self.calc.vydel(10, 3), 3.333, places=2)
+
+    def test_vydel_nulou(self):
+        """Test vyjimky pri deleni nulou"""
+        with self.assertRaises(ZeroDivisionError):
+            self.calc.vydel(10, 0)
+
+    def test_prumer(self):
+        self.assertEqual(self.calc.prumer([1, 2, 3, 4, 5]), 3.0)
+
+    def test_prumer_prazdny(self):
+        with self.assertRaises(ValueError):
+            self.calc.prumer([])</code></pre>
+
+    <div class="code-desc"><strong>Parametrizované testy</strong> — <code>subTest()</code> umožňuje testovat více vstupů v jednom testu. Při selhání jednoho případu se zbylé stále provedou.</div>
+    <pre><code>class TestParametrizovane(unittest.TestCase):
+    """Parametrizovane testy s subTest"""
+
+    def test_secti_parametry(self):
+        calc = Kalkulacka()
+        test_cases = [
+            (2, 3, 5),
+            (-1, 1, 0),
+            (0, 0, 0),
+            (100, -50, 50),
+            (0.1, 0.2, 0.3),
+        ]
+        for a, b, ocekavano in test_cases:
+            with self.subTest(a=a, b=b):
+                self.assertAlmostEqual(calc.secti(a, b), ocekavano, places=5)</code></pre>
+
+    <div class="code-desc"><strong>Mocking</strong> — <code>unittest.mock.Mock</code> nahrazuje reálnou databázi falešnou. Testujeme <code>StudentManager</code> izolovaně od databáze pomocí <code>mock.return_value</code>.</div>
+    <pre><code>from unittest.mock import Mock, patch
+
+class Databaze:
+    def najdi_studenta(self, id): pass
+    def uloz_studenta(self, student): pass
+
+class StudentManager:
+    def __init__(self, db):
+        self.db = db
+
+    def get_student_info(self, id):
+        student = self.db.najdi_studenta(id)
+        if student is None:
+            raise ValueError(f"Student {id} nenalezen")
+        return f"{student['jmeno']} (vek: {student['vek']})"
+
+class TestStudentManagerMock(unittest.TestCase):
+    def test_get_info(self):
+        # Arrange - mock databaze
+        mock_db = Mock(spec=Databaze)
+        mock_db.najdi_studenta.return_value = {"jmeno": "Alice", "vek": 20}
+
+        manager = StudentManager(mock_db)
+
+        # Act
+        info = manager.get_student_info(1)
+
+        # Assert
+        self.assertEqual(info, "Alice (vek: 20)")
+        mock_db.najdi_studenta.assert_called_once_with(1)
+
+    def test_student_nenalezen(self):
+        mock_db = Mock(spec=Databaze)
+        mock_db.najdi_studenta.return_value = None
+
+        manager = StudentManager(mock_db)
+
+        with self.assertRaises(ValueError):
+            manager.get_student_info(999)</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

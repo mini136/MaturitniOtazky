@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13 - Návrhové vzory</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>13 – Návrhové vzory (Design Patterns)</h1>
+
+    <h2>Kategorie</h2>
+    <table>
+        <tr><th>Kategorie</th><th>Vzory</th><th>Účel</th></tr>
+        <tr><td><strong>Creational</strong></td><td>Singleton, Factory, Builder, Prototype</td><td>Vytváření objektů</td></tr>
+        <tr><td><strong>Structural</strong></td><td>Adapter, Decorator, Facade, Proxy, Composite</td><td>Struktura tříd</td></tr>
+        <tr><td><strong>Behavioral</strong></td><td>Observer, Strategy, Command, Iterator, State, Template</td><td>Chování objektů</td></tr>
+    </table>
+
+    <h2>Ukázkový kód — Python</h2>
+
+    <div class="code-desc"><strong>Singleton</strong> — zajišťuje jedinou instanci třídy v celé aplikaci. Zde implementováno přes <code>__new__</code> s <code>_instance</code> atributem.</div>
+    <pre><code>class Konfigurace:
+    """Singleton - jedina instance"""
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.nastaveni = {}
+        return cls._instance
+
+    def nastav(self, klic, hodnota):
+        self.nastaveni[klic] = hodnota
+
+    def get(self, klic, default=None):
+        return self.nastaveni.get(klic, default)
+
+# Obe promenne ukazuji na STEJNOU instanci
+k1 = Konfigurace()
+k2 = Konfigurace()
+k1.nastav("debug", True)
+print(f"k1 is k2: {k1 is k2}")           # True
+print(f"k2.debug: {k2.get('debug')}")     # True</code></pre>
+
+    <div class="code-desc"><strong>Factory</strong> — vytváří objekty bez specifikace přesné třídy. Metoda <code>vytvor()</code> podle typu vrátí správnou instanci.</div>
+    <pre><code>from abc import ABC, abstractmethod
+
+class Notifikace(ABC):
+    @abstractmethod
+    def odesli(self, zprava): pass
+
+class EmailNotifikace(Notifikace):
+    def odesli(self, zprava):
+        print(f"  EMAIL: {zprava}")
+
+class SMSNotifikace(Notifikace):
+    def odesli(self, zprava):
+        print(f"  SMS: {zprava}")
+
+class PushNotifikace(Notifikace):
+    def odesli(self, zprava):
+        print(f"  PUSH: {zprava}")
+
+class NotifikaceFactory:
+    """Factory - vytvari objekty podle typu"""
+    _typy = {
+        "email": EmailNotifikace,
+        "sms": SMSNotifikace,
+        "push": PushNotifikace
+    }
+
+    @classmethod
+    def vytvor(cls, typ):
+        trida = cls._typy.get(typ)
+        if trida is None:
+            raise ValueError(f"Neznamy typ: {typ}")
+        return trida()
+
+# Pouziti - klient nezna konkretni tridy
+for typ in ["email", "sms", "push"]:
+    notifikace = NotifikaceFactory.vytvor(typ)
+    notifikace.odesli(f"Zprava pres {typ}")</code></pre>
+
+    <div class="code-desc"><strong>Builder</strong> — krok za krokem vytváří složitý objekt. Umožňuje řetězení volání (<code>return self</code>).</div>
+    <pre><code>class PizzaBuilder:
+    def __init__(self):
+        self.velikost = "stredni"
+        self.testo = "klasicke"
+        self.ingredience = []
+
+    def nastav_velikost(self, v):
+        self.velikost = v
+        return self  # retezeni
+
+    def nastav_testo(self, t):
+        self.testo = t
+        return self
+
+    def pridej(self, ingredience):
+        self.ingredience.append(ingredience)
+        return self
+
+    def postav(self):
+        return {
+            "velikost": self.velikost,
+            "testo": self.testo,
+            "ingredience": self.ingredience
+        }
+
+# Retezeni volani (fluent interface)
+pizza = (PizzaBuilder()
+    .nastav_velikost("velka")
+    .nastav_testo("tenke")
+    .pridej("syr")
+    .pridej("sunka")
+    .pridej("olivy")
+    .postav())
+print(f"Pizza: {pizza}")</code></pre>
+
+    <div class="code-desc"><strong>Observer</strong> — publisher oznamuje změny všem registrovaným subscriberům (event systém).</div>
+    <pre><code>class EventSystem:
+    """Observer - publisher / subscriber"""
+    def __init__(self):
+        self._odberatele = {}
+
+    def prihlasit(self, udalost, callback):
+        if udalost not in self._odberatele:
+            self._odberatele[udalost] = []
+        self._odberatele[udalost].append(callback)
+
+    def odhlasit(self, udalost, callback):
+        if udalost in self._odberatele:
+            self._odberatele[udalost].remove(callback)
+
+    def vyvolat(self, udalost, data=None):
+        for callback in self._odberatele.get(udalost, []):
+            callback(data)
+
+# Pouziti
+events = EventSystem()
+events.prihlasit("login", lambda u: print(f"  LOG: Uzivatel {u} se prihlasil"))
+events.prihlasit("login", lambda u: print(f"  EMAIL: Vitejte, {u}!"))
+events.vyvolat("login", "Alice")</code></pre>
+
+    <div class="code-desc"><strong>Strategy</strong> — definuje rodinu algoritmů a umožňuje je zaměňovat za běhu. Třída <code>Razeni</code> přijímá strategii jako funkci.</div>
+    <pre><code>def bubble_sort(data):
+    arr = data.copy()
+    for i in range(len(arr)):
+        for j in range(len(arr)-i-1):
+            if arr[j] &gt; arr[j+1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+    return arr
+
+def quick_sort(data):
+    if len(data) &lt;= 1: return data
+    pivot = data[len(data)//2]
+    return (quick_sort([x for x in data if x &lt; pivot])
+          + [x for x in data if x == pivot]
+          + quick_sort([x for x in data if x &gt; pivot]))
+
+class Razeni:
+    """Strategy - zamenitelne algoritmy"""
+    def __init__(self, strategie=None):
+        self.strategie = strategie or sorted
+
+    def serad(self, data):
+        return self.strategie(data)
+
+data = [5, 2, 8, 1, 9]
+for nazev, fn in [("Bubble", bubble_sort), ("Quick", quick_sort), ("Built-in", sorted)]:
+    r = Razeni(fn)
+    print(f"  {nazev}: {r.serad(data)}")</code></pre>
+
+    <div class="code-desc"><strong>Decorator</strong> — dynamicky přidává funkcionalitu objektu. Zde: <code>MlekoDekorator</code> a <code>CukrDekorator</code> obalují základní kávu.</div>
+    <pre><code>class Kava:
+    def cena(self): return 50
+    def popis(self): return "Kava"
+
+class MlekoDekorator:
+    def __init__(self, kava):
+        self._kava = kava
+    def cena(self): return self._kava.cena() + 15
+    def popis(self): return self._kava.popis() + " + mleko"
+
+class CukrDekorator:
+    def __init__(self, kava):
+        self._kava = kava
+    def cena(self): return self._kava.cena() + 5
+    def popis(self): return self._kava.popis() + " + cukr"
+
+# Obalujeme zakladni kavu dekoratory
+kava = Kava()
+kava = MlekoDekorator(kava)
+kava = CukrDekorator(kava)
+print(f"  {kava.popis()}: {kava.cena()} Kc")  # Kava + mleko + cukr: 70 Kc</code></pre>
+
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

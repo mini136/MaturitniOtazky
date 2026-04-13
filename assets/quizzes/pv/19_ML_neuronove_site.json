@@ -1,0 +1,51 @@
+{
+  "title": "ML: Neuronové sítě",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď aktivační funkci k její vlastnosti:",
+      "pairs": [
+        ["ReLU — max(0, x)", "Nejčastější ve skrytých vrstvách, řeší vanishing gradient"],
+        ["Sigmoid — 1/(1+e⁻ˣ)", "Výstupní vrstva pro binární klasifikaci, rozsah (0,1)"],
+        ["Softmax", "Výstupní vrstva pro multi-class, pravděpodobnostní rozložení"],
+        ["Tanh", "Rozsah (-1, 1), používaná ve skrytých vrstvách"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky trénování neuronové sítě (jedna epocha):",
+      "items": [
+        "Forward pass — vstup prochází vrstvami přes váhy a aktivace",
+        "Výpočet loss funkce (porovnání predikce se skutečností)",
+        "Backward pass — výpočet gradientů zpětnou propagací",
+        "Aktualizace vah: w = w − lr × gradient",
+        "Opakování pro další trénovací vzorky"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy architektury neuronové sítě:",
+      "text": "Vstupní vrstva má počet neuronů rovný počtu {{příznaků}}. {{Skryté}} vrstvy extrahují příznaky z dat. Perceptron je nejjednodušší neuronová síť s {{jedním}} neuronem. Pro řešení nelineárních problémů jako XOR potřebujeme minimálně {{dvouvrstvou}} síť.",
+      "answers": ["příznaků", "Skryté", "jedním", "dvouvrstvou"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Jeden perceptron je schopen naučit se logickou funkci XOR.",
+      "answer": false,
+      "explanation": "XOR je nelineárně separabilní problém — nelze jej rozdělit jednou přímkou. Perceptron (jeden neuron) umí řešit jen lineárně separabilní problémy (AND, OR). Pro XOR potřebujeme síť s alespoň jednou skrytou vrstvou."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli princip backpropagation a proč je důležitý pro trénování neuronových sítí.",
+      "keywords": ["gradient", "řetězové pravidlo", "chain rule", "zpětná propagace", "aktualizace vah", "loss"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Softmax funkce zajistí, že součet výstupních pravděpodobností všech tříd je roven 1.",
+      "answer": true,
+      "explanation": "Softmax normalizuje vektor logitů tak, že každý prvek je eˣⁱ / Σeˣʲ. Výsledkem jsou hodnoty v rozsahu (0,1), jejichž součet je přesně 1, což odpovídá pravděpodobnostnímu rozložení přes třídy."
+    }
+  ]
+}

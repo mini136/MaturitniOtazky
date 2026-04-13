@@ -1,0 +1,48 @@
+{
+  "title": "DNS – Funkce, hierarchie, konfigurace",
+  "questions": [
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky DNS překladu domény www.example.com od klienta po výsledek:",
+      "items": ["Kontrola lokálního souboru hosts", "Kontrola DNS cache", "Dotaz na rekurzivní resolver", "Resolver se ptá Root serveru na .com TLD", "Resolver se ptá TLD serveru na autoritativní NS", "Autoritativní server vrací A záznam s IP adresou"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď typ DNS záznamu k jeho funkci:",
+      "pairs": [
+        ["Překlad domény na IPv4 adresu", "A"],
+        ["Alias pro jiné doménové jméno", "CNAME"],
+        ["Určení poštovního serveru s prioritou", "MX"],
+        ["Reverzní překlad IP na doménu", "PTR"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o DNS infrastruktuře:",
+      "text": "DNS funguje na portu {{53}} a existuje {{13}} logických root serverů. Rekurzivní dotaz znamená, že resolver zjistí odpověď {{za klienta celou}}, zatímco iterativní dotaz vrací pouze {{odkaz na další server}}.",
+      "answers": ["53", "13", "za klienta celou", "odkaz na další server"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "DNSSEC šifruje DNS dotazy a odpovědi, čímž chrání soukromí uživatele.",
+      "answer": false,
+      "explanation": "DNSSEC podepisuje DNS záznamy digitálním podpisem, čímž zajišťuje autenticitu a integritu odpovědí, ale NEšifruje je. Pro šifrování DNS dotazů slouží DoH (DNS over HTTPS) na portu 443 nebo DoT (DNS over TLS) na portu 853."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, co je DNS Cache Poisoning a jak proti němu chrání DNSSEC.",
+      "keywords": ["podvržená", "odpověď", "cache", "digitální podpis", "autenticita", "integrita", "ověření"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď typ DNS zóny k jejímu popisu:",
+      "pairs": [
+        ["Jméno → IP (A, AAAA záznamy)", "Forward lookup"],
+        ["IP → jméno (PTR záznamy)", "Reverse lookup"],
+        ["R/W kopie zóny", "Primary (Master)"],
+        ["R/O kopie synchronizovaná z primary", "Secondary (Slave)"]
+      ]
+    }
+  ]
+}

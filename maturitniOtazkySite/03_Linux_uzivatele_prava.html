@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03 - OS Linux - Správa uživatelů, skupin, práva, SUDO</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #27ae60; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #3498db; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
+        nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+    </style>
+    <link rel="stylesheet" href="../assets/study.css">
+</head>
+<body>
+    <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
+
+    <h1>03 – OS Linux – Správa uživatelů, skupin, zabezpečení přístupu, práva, SUDO</h1>
+
+    <h2>Uživatelé</h2>
+    <h3>Typy uživatelů</h3>
+    <ul>
+        <li><strong>root (UID 0)</strong> – superuživatel, má plný přístup ke všemu</li>
+        <li><strong>Systémoví uživatelé (UID 1–999)</strong> – pro služby (www-data, mysql, nobody)</li>
+        <li><strong>Běžní uživatelé (UID 1000+)</strong> – lidské účty</li>
+    </ul>
+
+    <h3>Důležité soubory</h3>
+    <table>
+        <tr><th>Soubor</th><th>Obsah</th></tr>
+        <tr><td><code>/etc/passwd</code></td><td>Seznam uživatelů – username:x:UID:GID:info:home:shell</td></tr>
+        <tr><td><code>/etc/shadow</code></td><td>Hashovaná hesla, politika hesel (čitelný jen root)</td></tr>
+        <tr><td><code>/etc/group</code></td><td>Skupiny – groupname:x:GID:členové</td></tr>
+        <tr><td><code>/etc/gshadow</code></td><td>Hesla skupin</td></tr>
+        <tr><td><code>/etc/skel</code></td><td>Šablona domovského adresáře nového uživatele</td></tr>
+        <tr><td><code>/etc/login.defs</code></td><td>Výchozí nastavení pro nové uživatele</td></tr>
+    </table>
+
+    <h3>Formát /etc/passwd</h3>
+    <pre><code>username:x:1000:1000:Celé Jméno:/home/username:/bin/bash
+# x = heslo je v /etc/shadow
+# UID = User ID
+# GID = primární Group ID</code></pre>
+
+    <h3>Správa uživatelů</h3>
+    <pre><code># Vytvoření uživatele
+useradd -m -s /bin/bash -G sudo,docker novyuser
+# -m = vytvořit domovský adresář
+# -s = výchozí shell
+# -G = doplňkové skupiny
+
+# Nastavení hesla
+passwd novyuser
+
+# Úprava uživatele
+usermod -aG docker novyuser      # přidání do skupiny (-a = append!)
+usermod -s /bin/zsh novyuser     # změna shellu
+usermod -L novyuser              # zamčení účtu
+usermod -U novyuser              # odemčení účtu
+
+# Smazání uživatele
+userdel novyuser                 # smazání (zachová /home)
+userdel -r novyuser              # smazání včetně /home
+
+# Informace o uživateli
+id novyuser                      # UID, GID, skupiny
+whoami                           # aktuální uživatel
+who / w                          # kdo je přihlášen
+last                             # historie přihlášení</code></pre>
+
+    <h2>Skupiny</h2>
+    <pre><code># Vytvoření skupiny
+groupadd vyvojari
+
+# Přidání uživatele do skupiny
+usermod -aG vyvojari novyuser    # POZOR: bez -a přepíše skupiny!
+gpasswd -a novyuser vyvojari    # alternativa
+
+# Odebrání ze skupiny
+gpasswd -d novyuser vyvojari
+
+# Smazání skupiny
+groupdel vyvojari
+
+# Výpis skupin uživatele
+groups novyuser
+id novyuser</code></pre>
+
+    <h3>Primární vs. doplňkové skupiny</h3>
+    <ul>
+        <li><strong>Primární skupina</strong> – určena GID v /etc/passwd, nově vytvořené soubory patří této skupině</li>
+        <li><strong>Doplňkové (suplementární) skupiny</strong> – další skupiny, do kterých uživatel patří</li>
+    </ul>
+
+    <h2>Práva (Permissions)</h2>
+    <h3>Základní práva</h3>
+    <table>
+        <tr><th>Právo</th><th>Znak</th><th>Číselně</th><th>Pro soubor</th><th>Pro adresář</th></tr>
+        <tr><td>Read</td><td>r</td><td>4</td><td>Čtení obsahu</td><td>Výpis souborů (ls)</td></tr>
+        <tr><td>Write</td><td>w</td><td>2</td><td>Zápis/úprava</td><td>Vytvoření/smazání souborů uvnitř</td></tr>
+        <tr><td>Execute</td><td>x</td><td>1</td><td>Spuštění</td><td>Vstup do adresáře (cd)</td></tr>
+    </table>
+
+    <h3>Výpis práv (ls -l)</h3>
+    <pre><code>-rwxr-xr-- 1 user group 4096 Jan 01 12:00 soubor.sh
+│││││││││
+│└┬┘└┬┘└┬┘
+│ │  │  └── ostatní (others): r-- = 4
+│ │  └───── skupina (group):  r-x = 5
+│ └──────── vlastník (user):  rwx = 7
+└────────── typ souboru: - = soubor, d = adresář, l = link</code></pre>
+
+    <h3>Změna práv – chmod</h3>
+    <pre><code># Číselně (oktálově)
+chmod 755 soubor.sh      # rwxr-xr-x
+chmod 644 soubor.txt     # rw-r--r--
+chmod 700 privatni/      # rwx------
+
+# Symbolicky
+chmod u+x soubor.sh      # přidat execute pro vlastníka
+chmod g-w soubor.txt     # odebrat write pro skupinu
+chmod o=r soubor.txt     # nastavit ostatním jen read
+chmod a+r soubor.txt     # přidat read pro všechny (all)
+chmod -R 755 adresar/    # rekurzivně</code></pre>
+
+    <h3>Změna vlastníka – chown</h3>
+    <pre><code>chown user soubor              # změna vlastníka
+chown user:group soubor        # vlastník + skupina
+chown :group soubor            # jen skupina
+chown -R user:group adresar/   # rekurzivně</code></pre>
+
+    <h3>Změna skupiny – chgrp</h3>
+    <pre><code>chgrp group soubor</code></pre>
+
+    <h3>Speciální bity</h3>
+    <table>
+        <tr><th>Bit</th><th>Číselně</th><th>Popis</th></tr>
+        <tr><td><strong>SUID</strong></td><td>4xxx</td><td>Soubor se spustí s právy vlastníka (např. /usr/bin/passwd)</td></tr>
+        <tr><td><strong>SGID</strong></td><td>2xxx</td><td>Soubor: spuštění s právy skupiny. Adresář: nové soubory dědí skupinu</td></tr>
+        <tr><td><strong>Sticky bit</strong></td><td>1xxx</td><td>V adresáři může soubor smazat jen vlastník (např. /tmp)</td></tr>
+    </table>
+    <pre><code>chmod 4755 program       # SUID
+chmod 2755 adresar/      # SGID
+chmod 1777 /tmp          # Sticky bit
+chmod u+s program        # SUID symbolicky
+chmod g+s adresar/       # SGID symbolicky
+chmod +t adresar/        # Sticky bit symbolicky</code></pre>
+
+    <h3>Výchozí práva – umask</h3>
+    <pre><code>umask                    # zobrazí aktuální masku (typicky 0022)
+umask 0027               # nastavení masky
+
+# Výchozí práva = maximální - umask
+# Soubory: 666 - 022 = 644 (rw-r--r--)
+# Adresáře: 777 - 022 = 755 (rwxr-xr-x)</code></pre>
+
+    <h2>ACL (Access Control Lists)</h2>
+    <p>Rozšířená práva nad rámec standardního Unix modelu owner/group/others.</p>
+    <pre><code>setfacl -m u:novyuser:rwx soubor    # přidání ACL pro uživatele
+setfacl -m g:vyvojari:rx soubor     # přidání ACL pro skupinu
+getfacl soubor                       # zobrazení ACL
+setfacl -x u:novyuser soubor        # odebrání ACL
+setfacl -b soubor                    # smazání všech ACL</code></pre>
+
+    <h2>SUDO</h2>
+    <h3>Co je SUDO</h3>
+    <p><strong>sudo</strong> (Substitute User DO) – umožňuje oprávněným uživatelům spouštět příkazy jako root (nebo jiný uživatel) bez znalosti root hesla.</p>
+
+    <h3>Konfigurace – /etc/sudoers</h3>
+    <pre><code># Editace VŽDY přes visudo (kontrola syntaxe!)
+visudo
+
+# Formát: kdo   kde=(jako kdo)   co
+root    ALL=(ALL:ALL) ALL          # root může vše
+%sudo   ALL=(ALL:ALL) ALL          # skupina sudo může vše
+novyuser ALL=(ALL) NOPASSWD: ALL   # bez hesla (nebezpečné!)
+novyuser ALL=(ALL) /usr/bin/apt    # jen příkaz apt
+
+# Include soubory
+# Práva se dají definovat v /etc/sudoers.d/
+# Např. /etc/sudoers.d/novyuser</code></pre>
+
+    <h3>Použití sudo</h3>
+    <pre><code>sudo apt update              # spuštění jako root
+sudo -u jinyuser příkaz      # spuštění jako jiný uživatel
+sudo -i                      # interaktivní root shell
+sudo -l                      # výpis oprávnění aktuálního uživatele
+sudo su -                    # přepnutí na root účet</code></pre>
+
+    <div class="important">
+        <strong>Bezpečnost:</strong> SUDO loguje všechny příkazy. Nikdy nedávejte NOPASSWD: ALL běžným uživatelům. Vždy specifikujte minimální nutná oprávnění.
+    </div>
+
+    <h2>Zabezpečení přístupu ke službám</h2>
+    <ul>
+        <li><strong>PAM (Pluggable Authentication Modules)</strong> – modulární autentizační framework</li>
+        <li>Konfigurace v <code>/etc/pam.d/</code></li>
+        <li><strong>TCP Wrappers</strong> – <code>/etc/hosts.allow</code>, <code>/etc/hosts.deny</code></li>
+        <li><strong>Firewall (iptables/nftables/ufw)</strong> – omezení síťového přístupu</li>
+        <li><strong>SELinux / AppArmor</strong> – mandatory access control (MAC)</li>
+    </ul>
+    <link rel="stylesheet" href="../assets/quiz.css"><script src="../assets/study.js"></script><script src="../assets/quiz.js"></script>
+</body>
+</html>
+

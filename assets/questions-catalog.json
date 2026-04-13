@@ -1,0 +1,252 @@
+[
+  {
+    "source": "site",
+    "title": "01 OS Linux – Charakteristika, struktura OS, start systému, služby, procesy, paměť",
+    "path": "maturitniOtazkySite/01_Linux_charakteristika.html"
+  },
+  {
+    "source": "site",
+    "title": "02 OS Linux – Souborový systém, formátování, dělení a připojování, adresáře",
+    "path": "maturitniOtazkySite/02_Linux_souborovy_system.html"
+  },
+  {
+    "source": "site",
+    "title": "03 OS Linux – Správa uživatelů, skupin, zabezpečení přístupu, práva, SUDO",
+    "path": "maturitniOtazkySite/03_Linux_uzivatele_prava.html"
+  },
+  {
+    "source": "site",
+    "title": "04 OS Linux – SSH, CRON, procesy a služby, systémové logy, virtualizace",
+    "path": "maturitniOtazkySite/04_Linux_SSH_CRON_logy.html"
+  },
+  {
+    "source": "site",
+    "title": "05 OS Linux – BASH skripty, textové soubory, filtrace, regex, kompilace, zálohování",
+    "path": "maturitniOtazkySite/05_Linux_BASH_skripty.html"
+  },
+  {
+    "source": "site",
+    "title": "06 OSI 1 – Přenosová média, signály, topologie sítí, kódování dat, detekce chyb",
+    "path": "maturitniOtazkySite/06_OSI1_fyzicka_vrstva_media.html"
+  },
+  {
+    "source": "site",
+    "title": "07 OSI 1 – Ethernet principy, standardy, strukturovaná kabeláž, optika, konektory",
+    "path": "maturitniOtazkySite/07_OSI1_ethernet_kabelaz.html"
+  },
+  {
+    "source": "site",
+    "title": "08 OSI 2 – Přepínače, rámce, adresování, kolize, MAC, řízení toku dat",
+    "path": "maturitniOtazkySite/08_OSI2_prepinace_ramce.html"
+  },
+  {
+    "source": "site",
+    "title": "09 OSI 2 – ARP, MAC, vztah rámec/paket, zapouzdření",
+    "path": "maturitniOtazkySite/09_OSI2_ARP_zapouzdreni.html"
+  },
+  {
+    "source": "site",
+    "title": "10 OSI 2 – VLAN, trunk/access porty, DTP, protokol 802.1Q",
+    "path": "maturitniOtazkySite/10_OSI2_VLAN.html"
+  },
+  {
+    "source": "site",
+    "title": "11 OSI 3 – IPv4, maska, podsíťování, porovnání s IPv6, fragmentace",
+    "path": "maturitniOtazkySite/11_OSI3_IPv4.html"
+  },
+  {
+    "source": "site",
+    "title": "12 OSI 3 – IPv6, maska, podsíťování, porovnání s IPv4, fragmentace",
+    "path": "maturitniOtazkySite/12_OSI3_IPv6.html"
+  },
+  {
+    "source": "site",
+    "title": "13 OSI 3 – Statické směrování, tabulky, administrativní vzdálenost",
+    "path": "maturitniOtazkySite/13_OSI3_staticke_smerovani.html"
+  },
+  {
+    "source": "site",
+    "title": "14 OSI 3 – Dynamické směrování (RIP, OSPF), konfigurace, metriky",
+    "path": "maturitniOtazkySite/14_OSI3_dynamicke_smerovani.html"
+  },
+  {
+    "source": "site",
+    "title": "15 OSI 4 – UDP, TCP, segmentace, řízení přenosové rychlosti, kontrola chyb",
+    "path": "maturitniOtazkySite/15_OSI4_transportni_vrstva.html"
+  },
+  {
+    "source": "site",
+    "title": "16 OSI 5/6/7 – Sokety, formáty dat, šifrování, komprese, autentizace",
+    "path": "maturitniOtazkySite/16_OSI567_vyssi_vrstvy.html"
+  },
+  {
+    "source": "site",
+    "title": "17 DHCPv4 – Funkce, konfigurace rozsahů, MAC rezervace, relay",
+    "path": "maturitniOtazkySite/17_DHCP4.html"
+  },
+  {
+    "source": "site",
+    "title": "18 DHCPv6 – Funkce, SLAAC, stateless/stateful, konfigurace",
+    "path": "maturitniOtazkySite/18_DHCP6.html"
+  },
+  {
+    "source": "site",
+    "title": "19 DNS – Hierarchie, záznamy, konfigurace, bezpečnost",
+    "path": "maturitniOtazkySite/19_DNS.html"
+  },
+  {
+    "source": "site",
+    "title": "20 Firewall – Typy, ACL, iptables, NAT, DMZ, VPN",
+    "path": "maturitniOtazkySite/20_Firewall.html"
+  },
+  {
+    "source": "site",
+    "title": "21 STP, EtherChannel, HSRP – Redundance, failover, BPDU",
+    "path": "maturitniOtazkySite/21_STP_Etherchannel_HSRP.html"
+  },
+  {
+    "source": "site",
+    "title": "22 Bezdrátové sítě – EM vlny, antény, modulace, zabezpečení, Wi-Fi",
+    "path": "maturitniOtazkySite/22_Bezdratove_site.html"
+  },
+  {
+    "source": "site",
+    "title": "23 SSL/TLS, RSA – Symetrické/asymetrické šifrování, handshake, CA",
+    "path": "maturitniOtazkySite/23_SSL_TLS_RSA.html"
+  },
+  {
+    "source": "site",
+    "title": "24 IMAP a SMTP – Odesílání a přijímání e-mailů, synchronizace",
+    "path": "maturitniOtazkySite/24_IMAP_SMTP.html"
+  },
+  {
+    "source": "site",
+    "title": "25 Technologie, které přežily změny současného rozvoje ICT",
+    "path": "maturitniOtazkySite/25_Technologie_prezily.html"
+  },
+  {
+    "source": "pv",
+    "title": "01 Správa paměti",
+    "path": "maturitniOtazkyPv_html/01_Sprava_pameti.html"
+  },
+  {
+    "source": "pv",
+    "title": "02 Grafy a řazení",
+    "path": "maturitniOtazkyPv_html/02_Grafy_razeni.html"
+  },
+  {
+    "source": "pv",
+    "title": "03 Rekurze a brute force",
+    "path": "maturitniOtazkyPv_html/03_Rekurze_bruteforce.html"
+  },
+  {
+    "source": "pv",
+    "title": "04 Lambda výrazy a delegáty",
+    "path": "maturitniOtazkyPv_html/04_Lambda_delegaty.html"
+  },
+  {
+    "source": "pv",
+    "title": "05 Architektonické vzory",
+    "path": "maturitniOtazkyPv_html/05_Architectural_patterns.html"
+  },
+  {
+    "source": "pv",
+    "title": "06 Asymptotická složitost",
+    "path": "maturitniOtazkyPv_html/06_Asymptotika.html"
+  },
+  {
+    "source": "pv",
+    "title": "07 Datové typy a generika",
+    "path": "maturitniOtazkyPv_html/07_Datove_typy_generika.html"
+  },
+  {
+    "source": "pv",
+    "title": "08 Dědičnost",
+    "path": "maturitniOtazkyPv_html/08_Dedicnost.html"
+  },
+  {
+    "source": "pv",
+    "title": "09 Integrita a bezpečnost",
+    "path": "maturitniOtazkyPv_html/09_Integrita_bezpecnost.html"
+  },
+  {
+    "source": "pv",
+    "title": "10 Databáze",
+    "path": "maturitniOtazkyPv_html/10_Databaze.html"
+  },
+  {
+    "source": "pv",
+    "title": "11 Síťová komunikace",
+    "path": "maturitniOtazkyPv_html/11_Sitova_komunikace.html"
+  },
+  {
+    "source": "pv",
+    "title": "12 Metodiky vývoje",
+    "path": "maturitniOtazkyPv_html/12_Metodiky_vyvoje.html"
+  },
+  {
+    "source": "pv",
+    "title": "13 Návrhové vzory",
+    "path": "maturitniOtazkyPv_html/13_Navrhove_vzory.html"
+  },
+  {
+    "source": "pv",
+    "title": "14 OOP principy",
+    "path": "maturitniOtazkyPv_html/14_OOP_principy.html"
+  },
+  {
+    "source": "pv",
+    "title": "15 Programovací jazyky",
+    "path": "maturitniOtazkyPv_html/15_Programovaci_jazyky.html"
+  },
+  {
+    "source": "pv",
+    "title": "16 Soubory a serializace",
+    "path": "maturitniOtazkyPv_html/16_Soubory_serializace.html"
+  },
+  {
+    "source": "pv",
+    "title": "17 ML – Příprava dat",
+    "path": "maturitniOtazkyPv_html/17_ML_priprava_dat.html"
+  },
+  {
+    "source": "pv",
+    "title": "18 ML – Regrese a klasifikace",
+    "path": "maturitniOtazkyPv_html/18_ML_regrese_klasifikace.html"
+  },
+  {
+    "source": "pv",
+    "title": "19 ML – Neuronové sítě",
+    "path": "maturitniOtazkyPv_html/19_ML_neuronove_site.html"
+  },
+  {
+    "source": "pv",
+    "title": "20 Testování",
+    "path": "maturitniOtazkyPv_html/20_Testovani.html"
+  },
+  {
+    "source": "pv",
+    "title": "21 Datové struktury",
+    "path": "maturitniOtazkyPv_html/21_Datove_struktury.html"
+  },
+  {
+    "source": "pv",
+    "title": "22 Vlákna a paralelismus",
+    "path": "maturitniOtazkyPv_html/22_Vlakna_paralelismus.html"
+  },
+  {
+    "source": "pv",
+    "title": "23 Vlastnosti datových struktur",
+    "path": "maturitniOtazkyPv_html/23_Vlastnosti_DS.html"
+  },
+  {
+    "source": "pv",
+    "title": "24 Výjimky a debugování",
+    "path": "maturitniOtazkyPv_html/24_Vyjimky_debugovani.html"
+  },
+  {
+    "source": "pv",
+    "title": "25 Textové zpracování a regex",
+    "path": "maturitniOtazkyPv_html/25_Textove_zpracovani.html"
+  }
+]

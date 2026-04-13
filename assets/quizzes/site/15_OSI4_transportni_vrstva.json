@@ -1,0 +1,48 @@
+{
+  "title": "OSI 4 – Transportní vrstva (TCP, UDP)",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď vlastnost ke správnému protokolu:",
+      "pairs": [
+        ["3-way handshake", "TCP"],
+        ["Hlavička 8 bajtů", "UDP"],
+        ["Sequence a ACK numbers", "TCP"],
+        ["Vhodný pro VoIP a streaming", "UDP"]
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky TCP 3-way handshake při navazování spojení:",
+      "items": ["Klient odešle SYN", "Server odpoví SYN+ACK", "Klient potvrdí ACK", "Spojení je navázáno a data proudí"]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o segmentaci a portech:",
+      "text": "Typická hodnota MSS je {{1460}} bajtů. Well-known porty mají rozsah {{0–1023}} a efemérní (dynamické) porty začínají od {{49152}}.",
+      "answers": ["1460", "0–1023", "49152"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Při TCP řízení přetížení (Congestion Control) fáze Slow Start zvyšuje velikost okna lineárně po každém ACK.",
+      "answer": false,
+      "explanation": "Slow Start zvyšuje congestion window exponenciálně (zdvojnásobení po každém RTT), ne lineárně. Lineární růst (přičtení 1 MSS za RTT) nastává až ve fázi Congestion Avoidance po dosažení ssthresh."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, jak TCP Flow Control pomocí Window Size chrání příjemce před zahlcením a co se stane, když příjemce nastaví Window Size na 0.",
+      "keywords": ["okno", "buffer", "příjemce", "zastavení", "odesílatel", "ACK"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď službu ke správnému známému portu:",
+      "pairs": [
+        ["SSH", "22"],
+        ["DNS", "53"],
+        ["HTTPS", "443"],
+        ["SMTP", "25"]
+      ]
+    }
+  ]
+}

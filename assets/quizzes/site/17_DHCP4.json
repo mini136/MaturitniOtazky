@@ -1,0 +1,45 @@
+{
+  "title": "DHCPv4 – Funkce, konfigurace, přidělování",
+  "questions": [
+    {
+      "type": "order",
+      "prompt": "Seřaď kroky procesu DORA při přidělení IP adresy přes DHCP:",
+      "items": ["DISCOVER – klient hledá DHCP server (broadcast)", "OFFER – server nabízí IP adresu", "REQUEST – klient žádá o konkrétní nabídku (broadcast)", "ACK – server potvrzuje přidělení"]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o DHCP komunikaci:",
+      "text": "DHCP server naslouchá na UDP portu {{67}} a klient na portu {{68}}. Pokud klient nedostane odpověď od serveru, přidělí si adresu z rozsahu {{169.254.0.0/16}}, což se nazývá APIPA.",
+      "answers": ["67", "68", "169.254.0.0/16"]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď DHCP zprávu k její funkci:",
+      "pairs": [
+        ["Hledání serveru broadcastem", "DISCOVER"],
+        ["Uvolnění přidělené adresy", "RELEASE"],
+        ["Zamítnutí adresy serverem", "NAK"],
+        ["Žádost o parametry, když IP mám", "INFORM"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "DHCP REQUEST pro obnovu lease se poprvé posílá při 87,5 % vypršení lease time jako broadcast.",
+      "answer": false,
+      "explanation": "Při 50 % lease time klient posílá REQUEST jako unicast přímo na server. Teprve při 87,5 % lease time, pokud server neodpověděl, klient posílá REQUEST jako broadcast, aby odpověděl jakýkoli DHCP server."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli, proč je potřeba DHCP Relay (ip helper-address) a jak funguje v prostředí s více podsítěmi.",
+      "keywords": ["broadcast", "router", "neprojde", "přeposílá", "jiná podsíť", "unicast"]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "DHCP Snooping chrání síť proti podvrženým DHCP serverům tím, že označuje porty jako trusted a untrusted.",
+      "answer": true,
+      "explanation": "DHCP Snooping skutečně označuje porty jako trusted (kde je reálný DHCP server) a untrusted (klientské porty). Na untrusted portech jsou DHCP OFFER a ACK zprávy od podvržených serverů blokovány."
+    }
+  ]
+}
