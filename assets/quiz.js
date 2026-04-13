@@ -329,7 +329,7 @@
   }
 
   /* ── build entire quiz ── */
-  function buildQuiz(data, anchor) {
+  function buildQuiz(data, anchor, standalone) {
     var section = document.createElement("section");
     section.className = "quiz-section";
     section.innerHTML =
@@ -437,26 +437,18 @@
 
     btnReset.addEventListener("click", function () {
       section.remove();
-      buildQuiz(data, anchor);
+      buildQuiz(data, anchor, standalone);
     });
 
-    anchor.insertAdjacentElement("beforebegin", section);
+    if (standalone) {
+      anchor.appendChild(section);
+    } else {
+      anchor.insertAdjacentElement("beforebegin", section);
+    }
   }
 
-  /* ── init ── */
-  document.addEventListener("DOMContentLoaded", async function () {
-    var path = window.location.pathname.toLowerCase();
-    if (!path.endsWith(".html") || path.endsWith("/index.html")) return;
-
-    try {
-      var data = await loadQuiz();
-      var navs = document.querySelectorAll("nav");
-      var anchor = navs.length ? navs[navs.length - 1] : null;
-      if (anchor && data && data.questions && data.questions.length) {
-        buildQuiz(data, anchor);
-      }
-    } catch (e) {
-      /* no quiz data for this page – silent */
-    }
-  });
+  /* ── standalone mode (quiz.html) ── */
+  window.__quizBuild = function (data, container) {
+    buildQuiz(data, container, true);
+  };
 })();

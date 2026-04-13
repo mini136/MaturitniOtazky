@@ -147,6 +147,37 @@
     });
   }
 
+  function getQuizUrl() {
+    var p = window.location.pathname;
+    var parts = p.split("/");
+    var file = parts[parts.length - 1].replace(/\.html$/i, "");
+    var folder = parts[parts.length - 2] || "";
+    var sub = "pv";
+    if (/site/i.test(folder)) sub = "site";
+    var back = encodeURIComponent(window.location.href);
+    return "../assets/quiz.html?q=" + sub + "/" + file + "&back=" + back;
+  }
+
+  function buildQuizButton(anchor) {
+    var wrap = document.createElement("div");
+    wrap.style.cssText = "text-align:center;margin:30px 0 10px;";
+    var btn = document.createElement("a");
+    btn.href = getQuizUrl();
+    btn.style.cssText =
+      "display:inline-block;background:#6366f1;color:#fff;padding:14px 36px;" +
+      "border-radius:10px;font-size:1.15rem;font-weight:700;text-decoration:none;" +
+      "transition:background 0.15s;box-shadow:0 2px 8px rgba(99,102,241,0.3);";
+    btn.textContent = "📝 Procvičit tuto otázku";
+    btn.addEventListener("mouseenter", function () {
+      btn.style.background = "#4f46e5";
+    });
+    btn.addEventListener("mouseleave", function () {
+      btn.style.background = "#6366f1";
+    });
+    wrap.appendChild(btn);
+    anchor.insertAdjacentElement("beforebegin", wrap);
+  }
+
   async function buildComments(anchor) {
     var wrap = document.createElement("section");
     wrap.className = "comment-section";
@@ -175,7 +206,7 @@
       "</form>" +
       '<ul class="comment-list" id="study-comment-list"></ul>';
 
-    anchor.insertAdjacentElement("beforebegin", wrap);
+    anchor.insertAdjacentElement("afterend", wrap);
 
     var form = wrap.querySelector("#study-comment-form");
     var list = wrap.querySelector("#study-comment-list");
@@ -305,6 +336,7 @@
       buildToolbar(anchorTop);
     }
     if (anchorBottom) {
+      buildQuizButton(anchorBottom);
       buildComments(anchorBottom);
     }
   });

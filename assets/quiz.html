@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procvičování</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; background: #faf5ff; }
+        .quiz-back { display: inline-block; margin-bottom: 16px; color: #6366f1; text-decoration: none; font-weight: 600; }
+        .quiz-back:hover { text-decoration: underline; }
+        .quiz-loading { text-align: center; padding: 60px 20px; color: #6366f1; font-size: 1.2rem; }
+        .quiz-error { text-align: center; padding: 60px 20px; color: #dc2626; font-size: 1.1rem; }
+    </style>
+    <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+    <a class="quiz-back" id="back-link" href="#">⬅ Zpět na teorii</a>
+    <div id="quiz-root">
+        <div class="quiz-loading">Načítám kvíz…</div>
+    </div>
+    <script src="quiz.js"></script>
+    <script>
+    (function() {
+        var params = new URLSearchParams(window.location.search);
+        var q = params.get("q") || "";
+        var back = params.get("back") || "";
+
+        var backLink = document.getElementById("back-link");
+        if (back) {
+            backLink.href = back;
+        } else {
+            backLink.style.display = "none";
+        }
+
+        if (!q) {
+            document.getElementById("quiz-root").innerHTML =
+                '<div class="quiz-error">Chybí parametr otázky (?q=pv/01_Sprava_pameti)</div>';
+            return;
+        }
+
+        var jsonUrl = "quizzes/" + q + ".json";
+
+        fetch(jsonUrl)
+            .then(function(res) {
+                if (!res.ok) throw new Error("not_found");
+                return res.json();
+            })
+            .then(function(data) {
+                document.title = "Procvičování: " + data.title;
+                document.getElementById("quiz-root").innerHTML = "";
+                /* quiz.js exposes buildQuiz on window when loaded from quiz.html */
+                if (window.__quizBuild) {
+                    window.__quizBuild(data, document.getElementById("quiz-root"));
+                }
+            })
+            .catch(function() {
+                document.getElementById("quiz-root").innerHTML =
+                    '<div class="quiz-error">Kvíz pro tuto otázku nebyl nalezen.</div>';
+            });
+    })();
+    </script>
+</body>
+</html>
