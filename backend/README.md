@@ -32,6 +32,26 @@ npm start
 
 Backend poběží na `http://localhost:3000` a servíruje i statické HTML soubory z nadřazené složky.
 
+## 3b) Docker nasazeni
+
+V koreni repozitare:
+
+```sh
+cp .env.example .env
+docker compose up -d --build
+```
+
+Web pak poběží na portu podle `APP_PORT` v `.env` a MySQL se uloží do persistentniho Docker volume.
+
+Automaticke aktualizace z GitHubu na Linux serveru nastavis takto:
+
+```sh
+chmod +x deploy/update.sh deploy/install-auto-update.sh
+./deploy/install-auto-update.sh /cesta/k/repozitari
+```
+
+Cron pak kazdou minutu zkontroluje `origin/main` a pri zmene provede `git pull` a `docker compose up -d --build`.
+
 ## 4) Pouziti
 
 - Otevri `http://localhost:3000/index.html`
