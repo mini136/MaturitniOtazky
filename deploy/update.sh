@@ -11,6 +11,10 @@ if [ ! -d .git ]; then
   exit 1
 fi
 
+export DOCKER_CONFIG="${DOCKER_CONFIG:-$REPO_DIR/.docker-config}"
+export BUILDX_CONFIG="${BUILDX_CONFIG:-$REPO_DIR/.buildx}"
+mkdir -p "$DOCKER_CONFIG" "$BUILDX_CONFIG"
+
 git fetch origin "$BRANCH"
 
 LOCAL_SHA="$(git rev-parse HEAD)"

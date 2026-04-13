@@ -51,6 +51,7 @@ chmod +x deploy/update.sh deploy/install-auto-update.sh
 ```
 
 Cron pak kazdou minutu zkontroluje `origin/main` a pri zmene provede `git pull` a `docker compose up -d --build`.
+Docker metadata pro build se ukladaji do repozitare, takze to funguje i na serverech, kde je maly nebo omezeny domovsky adresar.
 
 ## 4) Pouziti
 
