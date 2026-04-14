@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650">
+  <rect width="1200" height="650" fill="#f8fafc"/>
+  <text x="90" y="90" font-family="Segoe UI" font-size="42" fill="#0f172a" font-weight="700">TCP 3-way handshake</text>
+  <line x1="240" y1="150" x2="240" y2="580" stroke="#1e3a8a" stroke-width="6"/>
+  <line x1="930" y1="150" x2="930" y2="580" stroke="#0f766e" stroke-width="6"/>
+  <text x="185" y="140" font-family="Segoe UI" font-size="30" fill="#1e3a8a">Klient</text>
+  <text x="870" y="140" font-family="Segoe UI" font-size="30" fill="#0f766e">Server</text>
+
+  <path d="M270 230 L890 230" stroke="#2563eb" stroke-width="5" marker-end="url(#a)"/>
+  <text x="500" y="212" font-family="Segoe UI" font-size="28" fill="#1e3a8a">SYN</text>
+
+  <path d="M900 340 L280 340" stroke="#0d9488" stroke-width="5" marker-end="url(#a)"/>
+  <text x="500" y="322" font-family="Segoe UI" font-size="28" fill="#0f766e">SYN + ACK</text>
+
+  <path d="M270 450 L890 450" stroke="#2563eb" stroke-width="5" marker-end="url(#a)"/>
+  <text x="530" y="432" font-family="Segoe UI" font-size="28" fill="#1e3a8a">ACK</text>
+
+  <text x="440" y="540" font-family="Segoe UI" font-size="30" fill="#166534" font-weight="700">Spojeni navazano</text>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#334155"/></marker></defs>
+</svg>

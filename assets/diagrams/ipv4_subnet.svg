@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#f8fafc"/>
+  <text x="70" y="90" font-family="Segoe UI" font-size="42" fill="#0f172a" font-weight="700">IPv4 subnetting</text>
+  <rect x="90" y="180" width="1000" height="120" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+  <text x="130" y="250" font-family="Segoe UI" font-size="32" fill="#1e3a8a" font-weight="700">192.168.10.0/24</text>
+  <rect x="120" y="380" width="220" height="180" rx="12" fill="#dcfce7"/><text x="160" y="450" font-family="Segoe UI" font-size="28" fill="#166534">/26 #1</text>
+  <text x="145" y="490" font-family="Segoe UI" font-size="22" fill="#166534">.0 - .63</text>
+  <rect x="370" y="380" width="220" height="180" rx="12" fill="#dcfce7"/><text x="410" y="450" font-family="Segoe UI" font-size="28" fill="#166534">/26 #2</text>
+  <text x="395" y="490" font-family="Segoe UI" font-size="22" fill="#166534">.64 - .127</text>
+  <rect x="620" y="380" width="220" height="180" rx="12" fill="#dcfce7"/><text x="660" y="450" font-family="Segoe UI" font-size="28" fill="#166534">/26 #3</text>
+  <text x="640" y="490" font-family="Segoe UI" font-size="22" fill="#166534">.128 - .191</text>
+  <rect x="870" y="380" width="220" height="180" rx="12" fill="#dcfce7"/><text x="910" y="450" font-family="Segoe UI" font-size="28" fill="#166534">/26 #4</text>
+  <text x="895" y="490" font-family="Segoe UI" font-size="22" fill="#166534">.192 - .255</text>
+</svg>

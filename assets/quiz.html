@@ -10,6 +10,11 @@
         .quiz-back:hover { text-decoration: underline; }
         .quiz-loading { text-align: center; padding: 60px 20px; color: #6366f1; font-size: 1.2rem; }
         .quiz-error { text-align: center; padding: 60px 20px; color: #dc2626; font-size: 1.1rem; }
+        @media (max-width: 760px) {
+            body { padding: 12px; }
+            .quiz-back { margin-bottom: 10px; }
+            .quiz-loading, .quiz-error { padding: 30px 12px; font-size: 1rem; }
+        }
     </style>
     <link rel="stylesheet" href="quiz.css">
 </head>

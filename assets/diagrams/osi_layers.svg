@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="780" viewBox="0 0 900 780">
+  <rect width="900" height="780" fill="#f8fafc"/>
+  <text x="80" y="70" font-family="Segoe UI" font-size="40" fill="#0f172a" font-weight="700">OSI model - 7 vrstev</text>
+  <g font-family="Segoe UI" font-size="28" font-weight="700">
+    <rect x="90" y="120" width="720" height="75" rx="12" fill="#fee2e2"/><text x="120" y="170" fill="#991b1b">7 Application</text>
+    <rect x="90" y="205" width="720" height="75" rx="12" fill="#ffedd5"/><text x="120" y="255" fill="#9a3412">6 Presentation</text>
+    <rect x="90" y="290" width="720" height="75" rx="12" fill="#fef9c3"/><text x="120" y="340" fill="#854d0e">5 Session</text>
+    <rect x="90" y="375" width="720" height="75" rx="12" fill="#dcfce7"/><text x="120" y="425" fill="#166534">4 Transport</text>
+    <rect x="90" y="460" width="720" height="75" rx="12" fill="#dbeafe"/><text x="120" y="510" fill="#1e3a8a">3 Network</text>
+    <rect x="90" y="545" width="720" height="75" rx="12" fill="#e0e7ff"/><text x="120" y="595" fill="#3730a3">2 Data Link</text>
+    <rect x="90" y="630" width="720" height="75" rx="12" fill="#ede9fe"/><text x="120" y="680" fill="#5b21b6">1 Physical</text>
+  </g>
+</svg>

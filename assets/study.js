@@ -18,6 +18,15 @@
     return window.location.pathname.replace(/^\/+/, "");
   }
 
+  function getTopicKey() {
+    var p = window.location.pathname;
+    var parts = p.split("/");
+    var file = (parts[parts.length - 1] || "").replace(/\.html$/i, "");
+    var folder = parts[parts.length - 2] || "";
+    var sub = /site/i.test(folder) ? "site" : "pv";
+    return sub + "/" + file;
+  }
+
   function loadComments() {
     try {
       var raw = localStorage.getItem(getKey());
@@ -176,6 +185,119 @@
     });
     wrap.appendChild(btn);
     anchor.insertAdjacentElement("beforebegin", wrap);
+
+    if (window.matchMedia("(max-width: 680px)").matches) {
+      btn.style.display = "block";
+      btn.style.padding = "12px 14px";
+      btn.style.fontSize = "1rem";
+    }
+  }
+
+  function buildVisualAid(anchor) {
+    var aids = {
+      "pv/01_Sprava_pameti": {
+        title: "Rychlý diagram: Stack vs Heap",
+        text: "Vizuální rozdělení zásobníku a haldy pro rychlé opakování před testem.",
+        image: "memory_stack_heap.svg",
+      },
+      "pv/02_Grafy_razeni": {
+        title: "Rychlý diagram: Řazení a složitost",
+        text: "Přehled typických složitostí algoritmů řazení.",
+        image: "sorting_big_o.svg",
+      },
+      "pv/03_Rekurze_bruteforce": {
+        title: "Rychlý diagram: Rekurzivní strom",
+        text: "Jak se větví volání při rekurzi.",
+        image: "recursion_tree.svg",
+      },
+      "pv/04_Lambda_delegaty": {
+        title: "Rychlý diagram: Lambda a delegate",
+        text: "Jednoduchý tok volání metody přes delegát.",
+        image: "lambda_delegate_flow.svg",
+      },
+      "pv/09_Integrita_bezpecnost": {
+        title: "Rychlý diagram: CIA triáda",
+        text: "Confidentiality, Integrity, Availability v jednom obrázku.",
+        image: "security_cia.svg",
+      },
+      "pv/10_Databaze": {
+        title: "Rychlý diagram: Normalizace databáze",
+        text: "Přehled 1NF/2NF/3NF v jedné infografice.",
+        image: "sql_normalization.svg",
+      },
+      "pv/14_OOP_principy": {
+        title: "Rychlý diagram: OOP principy",
+        text: "4 základní pilíře OOP a jejich vztah.",
+        image: "oop_principles.svg",
+      },
+      "pv/22_Vlakna_paralelismus": {
+        title: "Rychlý diagram: Stavový cyklus vlákna",
+        text: "Od vytvoření až po ukončení vlákna.",
+        image: "thread_lifecycle.svg",
+      },
+      "pv/25_Textove_zpracovani": {
+        title: "Rychlý diagram: Regex pipeline",
+        text: "Text -> pattern -> match -> capture groups.",
+        image: "regex_pipeline.svg",
+      },
+      "site/10_OSI2_VLAN": {
+        title: "Rychlý diagram: VLAN trunk/access",
+        text: "Rozdíl mezi access a trunk portem.",
+        image: "vlan_trunk.svg",
+      },
+      "site/11_OSI3_IPv4": {
+        title: "Rychlý diagram: IPv4 subnetting",
+        text: "Rychlá vizualizace dělení sítě na podsítě.",
+        image: "ipv4_subnet.svg",
+      },
+      "site/12_OSI3_IPv6": {
+        title: "Rychlý diagram: OSI vrstvy",
+        text: "Rychlá orientace v OSI modelu před ústním zkoušením.",
+        image: "osi_layers.svg",
+      },
+      "site/15_OSI4_transportni_vrstva": {
+        title: "Rychlý diagram: TCP handshake",
+        text: "SYN -> SYN+ACK -> ACK. Nejčastější otázka u transportní vrstvy.",
+        image: "tcp_handshake.svg",
+      },
+      "site/19_DNS": {
+        title: "Rychlý diagram: DNS resolution",
+        text: "Cesta dotazu od klienta až po autoritativní DNS server.",
+        image: "dns_resolution.svg",
+      },
+      "site/20_Firewall": {
+        title: "Rychlý diagram: Firewall zóny",
+        text: "Rozdělení WAN/DMZ/LAN a tok pravidel.",
+        image: "firewall_zones.svg",
+      },
+    };
+
+    var key = getTopicKey();
+    var aid = aids[key];
+    if (!aid) {
+      return;
+    }
+
+    var section = document.createElement("section");
+    section.className = "visual-aid";
+    section.innerHTML =
+      "<h2>📌 " +
+      safeText(aid.title) +
+      "</h2>" +
+      "<p>" +
+      safeText(aid.text) +
+      "</p>" +
+      "<figure>" +
+      '<a href="../assets/diagrams/' +
+      safeText(aid.image) +
+      '" target="_blank" rel="noopener noreferrer">' +
+      '<img src="../assets/diagrams/' +
+      safeText(aid.image) +
+      '" alt="Studijni diagram"></a>' +
+      "<figcaption>Kliknutím otevřeš diagram ve větší velikosti.</figcaption>" +
+      "</figure>";
+
+    anchor.insertAdjacentElement("afterend", section);
   }
 
   async function buildComments(anchor) {
@@ -328,12 +450,16 @@
     var nav = document.querySelector("nav");
     var bottomNav = document.querySelectorAll("nav");
     var anchorTop = nav || document.body.firstElementChild;
+    var h1 = document.querySelector("h1");
     var anchorBottom = bottomNav.length
       ? bottomNav[bottomNav.length - 1]
       : null;
 
     if (anchorTop) {
       buildToolbar(anchorTop);
+    }
+    if (h1) {
+      buildVisualAid(h1);
     }
     if (anchorBottom) {
       buildQuizButton(anchorBottom);

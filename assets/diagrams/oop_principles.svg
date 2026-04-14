@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#f8fafc"/>
+  <text x="90" y="90" font-family="Segoe UI" font-size="42" fill="#0f172a" font-weight="700">OOP principy</text>
+  <circle cx="600" cy="360" r="110" fill="#dbeafe" stroke="#2563eb" stroke-width="4"/>
+  <text x="540" y="370" font-family="Segoe UI" font-size="34" fill="#1e3a8a" font-weight="700">OOP</text>
+
+  <rect x="120" y="190" width="280" height="120" rx="14" fill="#fee2e2"/><text x="165" y="260" font-family="Segoe UI" font-size="30" fill="#991b1b" font-weight="700">Abstrakce</text>
+  <rect x="800" y="190" width="280" height="120" rx="14" fill="#fef9c3"/><text x="840" y="260" font-family="Segoe UI" font-size="30" fill="#854d0e" font-weight="700">Zapouzdreni</text>
+  <rect x="120" y="470" width="280" height="120" rx="14" fill="#dcfce7"/><text x="165" y="540" font-family="Segoe UI" font-size="30" fill="#166534" font-weight="700">Dedicnost</text>
+  <rect x="800" y="470" width="280" height="120" rx="14" fill="#ede9fe"/><text x="845" y="540" font-family="Segoe UI" font-size="30" fill="#5b21b6" font-weight="700">Polymorfismus</text>
+
+  <line x1="400" y1="250" x2="500" y2="320" stroke="#334155" stroke-width="4"/>
+  <line x1="800" y1="250" x2="700" y2="320" stroke="#334155" stroke-width="4"/>
+  <line x1="400" y1="530" x2="500" y2="400" stroke="#334155" stroke-width="4"/>
+  <line x1="800" y1="530" x2="700" y2="400" stroke="#334155" stroke-width="4"/>
+</svg>

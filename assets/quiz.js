@@ -35,6 +35,15 @@
     return "quizzes/" + sub + "/" + file + ".json";
   }
 
+  function historyKey() {
+    return (
+      "quiz-history::" +
+      window.location.pathname +
+      "::" +
+      window.location.search
+    );
+  }
+
   /* ── load quiz JSON ── */
   async function loadQuiz() {
     var base = document
@@ -130,7 +139,19 @@
           }
         }
       });
-      return { got: score, max: pairs.length };
+      return {
+        got: score,
+        max: pairs.length,
+        detail:
+          score === pairs.length
+            ? ""
+            : "Spravne dvojice: " +
+              pairs
+                .map(function (p) {
+                  return p[0] + " -> " + p[1];
+                })
+                .join("; "),
+      };
     };
   }
 
@@ -157,6 +178,7 @@
     return function evaluate() {
       var inputs = div.querySelectorAll("input");
       var score = 0;
+      var missing = [];
       inputs.forEach(function (inp) {
         var i = parseInt(inp.dataset.idx, 10);
         var expected = norm(q.answers[i]);
@@ -170,9 +192,14 @@
           inp.classList.add("wrong");
           inp.classList.remove("correct");
           inp.title = "Spravne: " + q.answers[i];
+          missing.push(q.answers[i]);
         }
       });
-      return { got: score, max: q.answers.length };
+      return {
+        got: score,
+        max: q.answers.length,
+        detail: missing.length ? "Dopln spravne: " + missing.join(", ") : "",
+      };
     };
   }
 
@@ -235,7 +262,14 @@
           if (lis[i]) lis[i].classList.add("wrong");
         }
       });
-      return { got: score, max: correct.length };
+      return {
+        got: score,
+        max: correct.length,
+        detail:
+          score === correct.length
+            ? ""
+            : "Spravne poradi: " + correct.join(" -> "),
+      };
     };
   }
 
@@ -289,16 +323,23 @@
       if (correct) pts++;
       if (hasExpl) pts++;
       var fb = qEl.querySelector(".q-feedback");
+      var detail = "";
       if (!correct) {
+        detail =
+          "Spravna odpoved: " +
+          (q.answer ? "Pravda" : "Nepravda") +
+          ". " +
+          q.explanation;
         fb.textContent =
           "Spravna odpoved: " +
           (q.answer ? "Pravda" : "Nepravda") +
           ". " +
           q.explanation;
       } else if (!hasExpl) {
+        detail = "Spravne, ale chybi podrobnejsi vysvetleni.";
         fb.textContent = "Spravne! Ale zkus napsat vysvetleni podrobneji.";
       }
-      return { got: pts, max: 2 };
+      return { got: pts, max: 2, detail: detail };
     };
   }
 
@@ -321,10 +362,12 @@
         }
       });
       var fb = qEl.querySelector(".q-feedback");
+      var detail = "";
       if (missing.length) {
+        detail = "Chybi pojmy: " + missing.join(", ");
         fb.textContent = "Chybi pojmy: " + missing.join(", ");
       }
-      return { got: found, max: q.keywords.length };
+      return { got: found, max: q.keywords.length, detail: detail };
     };
   }
 
@@ -385,7 +428,7 @@
       var fb = document.createElement("div");
       fb.className = "q-feedback";
       qEl.appendChild(fb);
-      evaluators.push({ fn: evalFn, fb: fb });
+      evaluators.push({ fn: evalFn, fb: fb, question: q.prompt || "Otazka" });
       section.appendChild(qEl);
     });
 
@@ -406,9 +449,15 @@
     controls.appendChild(scoreSpan);
     section.appendChild(controls);
 
+    var review = document.createElement("div");
+    review.className = "quiz-review";
+    review.style.display = "none";
+    section.appendChild(review);
+
     btnEval.addEventListener("click", function () {
       var total = 0;
       var got = 0;
+      var weak = [];
       evaluators.forEach(function (ev) {
         var r = ev.fn();
         got += r.got;
@@ -421,18 +470,70 @@
         } else if (r.got > 0) {
           ev.fb.classList.add("partial");
           ev.fb.classList.remove("ok", "fail");
-          if (!ev.fb.textContent)
+          if (r.detail) {
+            ev.fb.textContent = r.detail;
+          } else if (!ev.fb.textContent) {
             ev.fb.textContent =
               "Castecne spravne (" + r.got + "/" + r.max + ")";
+          }
         } else {
           ev.fb.classList.add("fail");
           ev.fb.classList.remove("ok", "partial");
-          if (!ev.fb.textContent)
+          if (r.detail) {
+            ev.fb.textContent = r.detail;
+          } else if (!ev.fb.textContent) {
             ev.fb.textContent = "Spatne (0/" + r.max + ")";
+          }
+        }
+
+        if (r.got < r.max) {
+          weak.push(ev.question);
         }
       });
       var pct = total ? Math.round((got / total) * 100) : 0;
       scoreSpan.textContent = "Skore: " + got + "/" + total + " (" + pct + "%)";
+
+      try {
+        var key = historyKey();
+        var arr = JSON.parse(localStorage.getItem(key) || "[]");
+        arr.unshift({
+          at: new Date().toISOString(),
+          got: got,
+          total: total,
+          pct: pct,
+        });
+        localStorage.setItem(key, JSON.stringify(arr.slice(0, 20)));
+      } catch (e) {}
+
+      var history = [];
+      try {
+        history = JSON.parse(localStorage.getItem(historyKey()) || "[]");
+      } catch (e) {
+        history = [];
+      }
+
+      review.style.display = "block";
+      review.innerHTML =
+        "<h3>Co si zopakovat</h3>" +
+        (weak.length
+          ? "<ul>" +
+            weak
+              .slice(0, 5)
+              .map(function (w) {
+                return "<li>" + esc(w) + "</li>";
+              })
+              .join("") +
+            "</ul>"
+          : "<p>Super, vsechny otazky mas spravne.</p>") +
+        (history.length
+          ? '<p style="margin-top:8px;color:#475569;font-size:.88rem;">Posledni pokus: ' +
+            history[0].got +
+            "/" +
+            history[0].total +
+            " (" +
+            history[0].pct +
+            "%)</p>"
+          : "");
     });
 
     btnReset.addEventListener("click", function () {

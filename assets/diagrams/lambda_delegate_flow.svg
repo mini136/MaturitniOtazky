@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680">
+  <rect width="1200" height="680" fill="#f8fafc"/>
+  <text x="70" y="85" font-family="Segoe UI" font-size="42" fill="#0f172a" font-weight="700">Lambda a delegaty: tok volani</text>
+  <rect x="90" y="180" width="280" height="120" rx="14" fill="#dbeafe"/><text x="140" y="250" font-family="Segoe UI" font-size="30" fill="#1e3a8a" font-weight="700">Metoda</text>
+  <rect x="460" y="180" width="280" height="120" rx="14" fill="#ede9fe"/><text x="500" y="250" font-family="Segoe UI" font-size="30" fill="#5b21b6" font-weight="700">Delegate</text>
+  <rect x="830" y="180" width="280" height="120" rx="14" fill="#dcfce7"/><text x="885" y="250" font-family="Segoe UI" font-size="30" fill="#166534" font-weight="700">Invoke()</text>
+  <line x1="370" y1="240" x2="460" y2="240" stroke="#334155" stroke-width="5" marker-end="url(#arr)"/>
+  <line x1="740" y1="240" x2="830" y2="240" stroke="#334155" stroke-width="5" marker-end="url(#arr)"/>
+  <text x="120" y="400" font-family="Segoe UI" font-size="26" fill="#334155">Lambda je anonymni metoda, kterou prirazujes do delegate.</text>
+  <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#334155"/></marker></defs>
+</svg>

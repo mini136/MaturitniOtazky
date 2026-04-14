@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680">
+  <rect width="1200" height="680" fill="#f8fafc"/>
+  <text x="70" y="90" font-family="Segoe UI" font-size="42" fill="#0f172a" font-weight="700">VLAN: access vs trunk</text>
+  <rect x="120" y="200" width="220" height="250" rx="12" fill="#dbeafe"/><text x="160" y="250" font-family="Segoe UI" font-size="28" fill="#1e3a8a">Switch A</text>
+  <rect x="860" y="200" width="220" height="250" rx="12" fill="#e0e7ff"/><text x="900" y="250" font-family="Segoe UI" font-size="28" fill="#3730a3">Switch B</text>
+  <line x1="340" y1="320" x2="860" y2="320" stroke="#f59e0b" stroke-width="10"/>
+  <text x="530" y="300" font-family="Segoe UI" font-size="28" fill="#92400e" font-weight="700">TRUNK 802.1Q</text>
+  <text x="160" y="380" font-family="Segoe UI" font-size="24" fill="#1e3a8a">Access port: 1 VLAN</text>
+  <text x="900" y="380" font-family="Segoe UI" font-size="24" fill="#3730a3">Nese vice VLAN</text>
+</svg>

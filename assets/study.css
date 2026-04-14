@@ -49,6 +49,50 @@
     font-size: 0.9rem;
 }
 
+.visual-aid {
+    margin: 18px 0 20px;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+    padding: 14px;
+}
+
+.visual-aid h2 {
+    margin: 0 0 6px;
+    color: #1e3a8a;
+    font-size: 1.1rem;
+}
+
+.visual-aid p {
+    margin: 0 0 10px;
+    color: #334155;
+}
+
+.visual-aid figure {
+    margin: 0;
+}
+
+.visual-aid img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #dbeafe;
+    background: #fff;
+}
+
+.visual-aid figcaption {
+    margin-top: 8px;
+    font-size: 0.86rem;
+    color: #475569;
+}
+
+.repeat-note {
+    margin-top: 8px;
+    font-size: 0.88rem;
+    color: #475569;
+}
+
 .comment-section {
     margin-top: 26px;
     border: 1px solid #d9e8ff;
@@ -124,7 +168,64 @@
     margin-bottom: 6px;
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+pre {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+code {
+    word-break: break-word;
+}
+
 @media (max-width: 680px) {
+    body {
+        padding: 14px;
+    }
+
+    h1 {
+        font-size: 1.45rem;
+    }
+
+    h2 {
+        font-size: 1.15rem;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .study-toolbar {
+        padding: 10px;
+        gap: 8px;
+    }
+
+    .study-toolbar .right {
+        width: 100%;
+    }
+
+    .study-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .visual-aid {
+        padding: 10px;
+    }
+
     .comment-form .row {
         grid-template-columns: 1fr;
     }

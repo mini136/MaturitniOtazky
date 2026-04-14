@@ -156,6 +156,88 @@
             color: #64748b;
             font-size: 0.92rem;
         }
+        .repeat-box {
+            border: 1px solid #c7dcff;
+            border-radius: 12px;
+            background: #ffffff;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .repeat-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .repeat-head h2 {
+            margin: 0;
+            color: #1e3a8a;
+            font-size: 1.15rem;
+        }
+        .repeat-btn {
+            border: 1px solid #93c5fd;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font: inherit;
+            font-weight: 600;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .repeat-btn:hover {
+            background: #dbeafe;
+        }
+        .repeat-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 10px;
+        }
+        .repeat-item {
+            display: block;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            padding: 10px;
+            text-decoration: none;
+            color: #1f2937;
+            background: #f8fbff;
+        }
+        .repeat-item:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+        .repeat-item small {
+            color: #64748b;
+            display: block;
+            margin-top: 4px;
+        }
+        @media (max-width: 700px) {
+            body {
+                padding: 14px;
+                align-items: flex-start;
+            }
+            .container {
+                padding: 16px;
+                border-radius: 12px;
+            }
+            h1 {
+                font-size: 1.45rem;
+                line-height: 1.25;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .search-results {
+                max-height: 280px;
+            }
+            .search-item {
+                align-items: flex-start;
+            }
+            .search-title {
+                font-size: 0.89rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -181,6 +263,14 @@
             <h2>Vyhledávání napříč otázkami (Sítě + PV)</h2>
             <input id="global-search-input" class="search-input" type="text" placeholder="Napis tema, protokol, pojem...">
             <div id="global-search-results" class="search-results"></div>
+        </section>
+
+        <section class="repeat-box">
+            <div class="repeat-head">
+                <h2>Dnes opakuj</h2>
+                <button class="repeat-btn" id="repeat-mix" type="button">Namíchat znovu</button>
+            </div>
+            <div id="repeat-list" class="repeat-list"></div>
         </section>
 
         <section class="tips">

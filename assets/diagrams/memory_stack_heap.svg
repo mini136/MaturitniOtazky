@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#f8fafc"/>
+  <text x="60" y="80" font-family="Segoe UI" font-size="42" fill="#0f172a" font-weight="700">Sprava pameti: Stack vs Heap</text>
+  <rect x="70" y="130" width="480" height="500" rx="20" fill="#dbeafe" stroke="#2563eb" stroke-width="4"/>
+  <text x="100" y="190" font-family="Segoe UI" font-size="34" fill="#1e3a8a" font-weight="700">Stack</text>
+  <text x="100" y="240" font-family="Segoe UI" font-size="28" fill="#1e3a8a">- lokalni promenne</text>
+  <text x="100" y="285" font-family="Segoe UI" font-size="28" fill="#1e3a8a">- LIFO</text>
+  <text x="100" y="330" font-family="Segoe UI" font-size="28" fill="#1e3a8a">- rychla alokace</text>
+  <text x="100" y="375" font-family="Segoe UI" font-size="28" fill="#1e3a8a">- automaticke uvolneni</text>
+
+  <rect x="650" y="130" width="480" height="500" rx="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="4"/>
+  <text x="680" y="190" font-family="Segoe UI" font-size="34" fill="#5b21b6" font-weight="700">Heap</text>
+  <text x="680" y="240" font-family="Segoe UI" font-size="28" fill="#5b21b6">- dynamicka alokace</text>
+  <text x="680" y="285" font-family="Segoe UI" font-size="28" fill="#5b21b6">- reference na objekty</text>
+  <text x="680" y="330" font-family="Segoe UI" font-size="28" fill="#5b21b6">- sprava pres GC/new-delete</text>
+  <text x="680" y="375" font-family="Segoe UI" font-size="28" fill="#5b21b6">- hrozi memory leak</text>
+</svg>

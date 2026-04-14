@@ -110,6 +110,25 @@ app.post("/api/comments", async (req, res) => {
   }
 });
 
+app.get("/api/comments/stats", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT question_path AS questionPath,
+              COUNT(*) AS total,
+              SUM(kind='chyba') AS chyby,
+              SUM(kind='chybi') AS chybi,
+              SUM(kind='dotaz') AS dotazy,
+              MAX(created_at) AS lastComment
+       FROM comments
+       GROUP BY question_path
+       ORDER BY total DESC`,
+    );
+    return res.json({ stats: rows });
+  } catch (err) {
+    return res.status(500).json({ error: "db_read_failed" });
+  }
+});
+
 /* ── Admin auth middleware ── */
 function requireAdmin(req, res, next) {
   const auth = req.headers["x-admin-password"] || "";
