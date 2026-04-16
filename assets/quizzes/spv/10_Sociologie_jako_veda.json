@@ -1,0 +1,68 @@
+{
+  "title": "Sociologie jako věda",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď pojmy z tématu k souvisejícím vysvětlením:",
+      "pairs": [
+        [
+          "tradiční a moderní společnost",
+          "Comte"
+        ],
+        [
+          "urbanizace",
+          "Durkheim"
+        ],
+        [
+          "sekularizace",
+          "Weber"
+        ],
+        [
+          "industrializace",
+          "Marx"
+        ]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové pojmy:",
+      "text": "Téma 'Sociologie jako věda' se skládá ze 3 částí: {{Úvod do sociologie}}, {{Osobnosti sociologie}}, {{Sociologický výzkum}}. V odpovědi pracuj s pojmy {{tradiční a moderní společnost}} a {{Comte}}.",
+      "answers": [
+        "Úvod do sociologie",
+        "Osobnosti sociologie",
+        "Sociologický výzkum",
+        "tradiční a moderní společnost",
+        "Comte"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď doporučený postup přípravy odpovědi:",
+      "items": [
+        "Vymezit základní pojmy tématu",
+        "Vysvětlit hlavní teorie nebo směry",
+        "Doplnit konkrétní příklady z praxe",
+        "Shrnout vlastní argument a závěr"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "U maturitní otázky SPV stačí vyjmenovat pojmy bez vysvětlení a bez příkladů.",
+      "answer": false,
+      "explanation": "Nestačí pouze vyjmenovat pojmy. Je potřeba je vysvětlit, propojit mezi sebou a ukázat aplikaci v praxi."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli téma vlastními slovy. Uveď minimálně 2 klíčové pojmy z každé části a 1 aktuální příklad.",
+      "keywords": [
+        "tradiční a moderní společnost",
+        "urbanizace",
+        "Comte",
+        "kvalitativní a kvantitativní výzkum",
+        "příklad",
+        "souvislost"
+      ]
+    }
+  ]
+}

@@ -233,13 +233,23 @@ app.put(
 /* ── Admin: list all question pages ── */
 app.get("/api/admin/pages", requireAdmin, (req, res) => {
   const pages = [];
-  ["maturitniOtazkyPv_html", "maturitniOtazkySite"].forEach((dir) => {
+  [
+    "maturitniOtazkyPv_html",
+    "maturitniOtazkySite",
+    "maturitniOtazkySpv_html",
+  ].forEach((dir) => {
     const full = path.join(ROOT_DIR, dir);
     try {
       fs.readdirSync(full).forEach((f) => {
         if (f.endsWith(".html") && f !== "index.html") {
+          let source = "pv";
+          if (dir.includes("Site")) {
+            source = "site";
+          } else if (dir.includes("Spv")) {
+            source = "spv";
+          }
           pages.push({
-            source: dir.includes("Site") ? "site" : "pv",
+            source,
             path: dir + "/" + f,
             name: f,
           });

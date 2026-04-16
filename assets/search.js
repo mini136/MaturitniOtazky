@@ -29,7 +29,13 @@
   }
 
   function badge(source) {
-    return source === "site" ? "SIT" : "PV";
+    if (source === "site") {
+      return "SIT";
+    }
+    if (source === "spv") {
+      return "SPV";
+    }
+    return "PV";
   }
 
   function shuffle(items) {

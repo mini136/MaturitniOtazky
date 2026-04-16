@@ -1,0 +1,68 @@
+{
+  "title": "Světová náboženství",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď pojmy z tématu k souvisejícím vysvětlením:",
+      "pairs": [
+        [
+          "religionistika",
+          "postavy"
+        ],
+        [
+          "monoteismus",
+          "texty"
+        ],
+        [
+          "polyteismus",
+          "rituály"
+        ],
+        [
+          "panteismus",
+          "svátky"
+        ]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové pojmy:",
+      "text": "Téma 'Světová náboženství' se skládá ze 3 částí: {{Náboženství obecně}}, {{Judaismus, křesťanství a islám}}, {{Hinduismus a buddhismus}}. V odpovědi pracuj s pojmy {{religionistika}} a {{postavy}}.",
+      "answers": [
+        "Náboženství obecně",
+        "Judaismus, křesťanství a islám",
+        "Hinduismus a buddhismus",
+        "religionistika",
+        "postavy"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď doporučený postup přípravy odpovědi:",
+      "items": [
+        "Vymezit základní pojmy tématu",
+        "Vysvětlit hlavní teorie nebo směry",
+        "Doplnit konkrétní příklady z praxe",
+        "Shrnout vlastní argument a závěr"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "U maturitní otázky SPV stačí vyjmenovat pojmy bez vysvětlení a bez příkladů.",
+      "answer": false,
+      "explanation": "Nestačí pouze vyjmenovat pojmy. Je potřeba je vysvětlit, propojit mezi sebou a ukázat aplikaci v praxi."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli téma vlastními slovy. Uveď minimálně 2 klíčové pojmy z každé části a 1 aktuální příklad.",
+      "keywords": [
+        "religionistika",
+        "monoteismus",
+        "postavy",
+        "čtyři vznešené pravdy",
+        "příklad",
+        "souvislost"
+      ]
+    }
+  ]
+}

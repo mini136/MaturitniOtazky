@@ -32,6 +32,7 @@
     var folder = parts[parts.length - 2] || "";
     var sub = "pv";
     if (/site/i.test(folder)) sub = "site";
+    if (/spv/i.test(folder)) sub = "spv";
     return "quizzes/" + sub + "/" + file + ".json";
   }
 

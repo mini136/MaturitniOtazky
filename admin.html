@@ -290,7 +290,13 @@ body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f1f5f9; colo
     var sel = $("#editor-select");
     sel.innerHTML = '<option value="">Vyber stránku...</option>';
     allPages.forEach(function(p) {
-      var label = (p.source === "pv" ? "[PV] " : "[SÍŤ] ") + p.name;
+      var prefix = "[PV] ";
+      if (p.source === "site") {
+        prefix = "[SÍŤ] ";
+      } else if (p.source === "spv") {
+        prefix = "[SPV] ";
+      }
+      var label = prefix + p.name;
       sel.innerHTML += '<option value="' + esc(p.path) + '">' + esc(label) + '</option>';
     });
   }

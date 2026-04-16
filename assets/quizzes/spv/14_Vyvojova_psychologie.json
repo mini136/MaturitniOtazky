@@ -1,0 +1,68 @@
+{
+  "title": "Vývojová psychologie",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď pojmy z tématu k souvisejícím vysvětlením:",
+      "pairs": [
+        [
+          "fylogeneze",
+          "prenatální období"
+        ],
+        [
+          "ontogeneze",
+          "novorozenec"
+        ],
+        [
+          "zrání",
+          "batole"
+        ],
+        [
+          "učení",
+          "předškolní věk"
+        ]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové pojmy:",
+      "text": "Téma 'Vývojová psychologie' se skládá ze 3 částí: {{Základní mechanismy vývoje}}, {{Vývojová období}}, {{Teorie Freuda, Piageta, Kohlberga}}. V odpovědi pracuj s pojmy {{fylogeneze}} a {{prenatální období}}.",
+      "answers": [
+        "Základní mechanismy vývoje",
+        "Vývojová období",
+        "Teorie Freuda, Piageta, Kohlberga",
+        "fylogeneze",
+        "prenatální období"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď doporučený postup přípravy odpovědi:",
+      "items": [
+        "Vymezit základní pojmy tématu",
+        "Vysvětlit hlavní teorie nebo směry",
+        "Doplnit konkrétní příklady z praxe",
+        "Shrnout vlastní argument a závěr"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "U maturitní otázky SPV stačí vyjmenovat pojmy bez vysvětlení a bez příkladů.",
+      "answer": false,
+      "explanation": "Nestačí pouze vyjmenovat pojmy. Je potřeba je vysvětlit, propojit mezi sebou a ukázat aplikaci v praxi."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli téma vlastními slovy. Uveď minimálně 2 klíčové pojmy z každé části a 1 aktuální příklad.",
+      "keywords": [
+        "fylogeneze",
+        "ontogeneze",
+        "prenatální období",
+        "Oidipův komplex",
+        "příklad",
+        "souvislost"
+      ]
+    }
+  ]
+}

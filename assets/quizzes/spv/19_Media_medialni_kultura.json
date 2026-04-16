@@ -1,0 +1,68 @@
+{
+  "title": "Média a mediální kultura",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď pojmy z tématu k souvisejícím vysvětlením:",
+      "pairs": [
+        [
+          "funkce médií",
+          "bulvární a seriózní médium"
+        ],
+        [
+          "druhy médií",
+          "publicistika a zpravodajství"
+        ],
+        [
+          "vlastnictví médií v ČR",
+          "informační bublina"
+        ],
+        [
+          "financování",
+          "sociální bublina"
+        ]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové pojmy:",
+      "text": "Téma 'Média a mediální kultura' se skládá ze 3 částí: {{Funkce médií a česká mediální scéna}}, {{Různost mediálního obsahu I}}, {{Různost mediálního obsahu II}}. V odpovědi pracuj s pojmy {{funkce médií}} a {{bulvární a seriózní médium}}.",
+      "answers": [
+        "Funkce médií a česká mediální scéna",
+        "Různost mediálního obsahu I",
+        "Různost mediálního obsahu II",
+        "funkce médií",
+        "bulvární a seriózní médium"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď doporučený postup přípravy odpovědi:",
+      "items": [
+        "Vymezit základní pojmy tématu",
+        "Vysvětlit hlavní teorie nebo směry",
+        "Doplnit konkrétní příklady z praxe",
+        "Shrnout vlastní argument a závěr"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "U maturitní otázky SPV stačí vyjmenovat pojmy bez vysvětlení a bez příkladů.",
+      "answer": false,
+      "explanation": "Nestačí pouze vyjmenovat pojmy. Je potřeba je vysvětlit, propojit mezi sebou a ukázat aplikaci v praxi."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli téma vlastními slovy. Uveď minimálně 2 klíčové pojmy z každé části a 1 aktuální příklad.",
+      "keywords": [
+        "funkce médií",
+        "druhy médií",
+        "bulvární a seriózní médium",
+        "propaganda",
+        "příklad",
+        "souvislost"
+      ]
+    }
+  ]
+}

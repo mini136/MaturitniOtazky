@@ -248,5 +248,100 @@
     "source": "pv",
     "title": "25 Textové zpracování a regex",
     "path": "maturitniOtazkyPv_html/25_Textove_zpracovani.html"
+  },
+  {
+    "title": "01 Úvod do filosofie a nejvýznamnější filosofové antiky",
+    "path": "maturitniOtazkySpv_html/01_Uvod_filosofie_antika.html",
+    "source": "spv"
+  },
+  {
+    "title": "02 Gnoseologie a logika",
+    "path": "maturitniOtazkySpv_html/02_Gnoseologie_logika.html",
+    "source": "spv"
+  },
+  {
+    "title": "03 Vybrané filosofické směry 19. a 20. stol.",
+    "path": "maturitniOtazkySpv_html/03_Filosoficke_smery_19_20.html",
+    "source": "spv"
+  },
+  {
+    "title": "04 Etika",
+    "path": "maturitniOtazkySpv_html/04_Etika.html",
+    "source": "spv"
+  },
+  {
+    "title": "05 Politická filosofie",
+    "path": "maturitniOtazkySpv_html/05_Politicka_filosofie.html",
+    "source": "spv"
+  },
+  {
+    "title": "06 Stát a mezinárodní politika",
+    "path": "maturitniOtazkySpv_html/06_Stat_a_mezinarodni_politika.html",
+    "source": "spv"
+  },
+  {
+    "title": "07 Účast občanů na řízení státu - demokracie",
+    "path": "maturitniOtazkySpv_html/07_Demokracie_a_volby.html",
+    "source": "spv"
+  },
+  {
+    "title": "08 Politické strany a ideologie",
+    "path": "maturitniOtazkySpv_html/08_Politicke_strany_ideologie.html",
+    "source": "spv"
+  },
+  {
+    "title": "09 Globalizace",
+    "path": "maturitniOtazkySpv_html/09_Globalizace.html",
+    "source": "spv"
+  },
+  {
+    "title": "10 Sociologie jako věda",
+    "path": "maturitniOtazkySpv_html/10_Sociologie_jako_veda.html",
+    "source": "spv"
+  },
+  {
+    "title": "11 Základní sociologické koncepce a současné problémy",
+    "path": "maturitniOtazkySpv_html/11_Sociologicke_koncepce.html",
+    "source": "spv"
+  },
+  {
+    "title": "12 Psychologie jako vědní obor",
+    "path": "maturitniOtazkySpv_html/12_Psychologie_jako_obor.html",
+    "source": "spv"
+  },
+  {
+    "title": "13 Psychologie osobnosti",
+    "path": "maturitniOtazkySpv_html/13_Psychologie_osobnosti.html",
+    "source": "spv"
+  },
+  {
+    "title": "14 Vývojová psychologie",
+    "path": "maturitniOtazkySpv_html/14_Vyvojova_psychologie.html",
+    "source": "spv"
+  },
+  {
+    "title": "15 Psychologie učení a motivace",
+    "path": "maturitniOtazkySpv_html/15_Uceni_a_motivace.html",
+    "source": "spv"
+  },
+  {
+    "title": "16 Náročné životní situace a duševní poruchy",
+    "path": "maturitniOtazkySpv_html/16_Narocne_situace_dusevni_poruchy.html",
+    "source": "spv"
+  },
+  {
+    "title": "17 Sociální psychologie",
+    "path": "maturitniOtazkySpv_html/17_Socialni_psychologie.html",
+    "source": "spv"
+  },
+  {
+    "title": "18 Světová náboženství",
+    "path": "maturitniOtazkySpv_html/18_Svetova_nabozenstvi.html",
+    "source": "spv"
+  },
+  {
+    "title": "19 Média a mediální kultura",
+    "path": "maturitniOtazkySpv_html/19_Media_medialni_kultura.html",
+    "source": "spv"
   }
 ]

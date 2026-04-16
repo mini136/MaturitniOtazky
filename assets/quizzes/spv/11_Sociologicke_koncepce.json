@@ -1,0 +1,68 @@
+{
+  "title": "Základní sociologické koncepce a současné problémy",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď pojmy z tématu k souvisejícím vysvětlením:",
+      "pairs": [
+        [
+          "stratifikace",
+          "sociální skupiny"
+        ],
+        [
+          "sociální status",
+          "rodina"
+        ],
+        [
+          "role",
+          "kultura"
+        ],
+        [
+          "společenská třída",
+          "subkultura"
+        ]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové pojmy:",
+      "text": "Téma 'Základní sociologické koncepce a současné problémy' se skládá ze 3 částí: {{Sociální stratifikace}}, {{Různé koncepce}}, {{Česká společnost}}. V odpovědi pracuj s pojmy {{stratifikace}} a {{sociální skupiny}}.",
+      "answers": [
+        "Sociální stratifikace",
+        "Různé koncepce",
+        "Česká společnost",
+        "stratifikace",
+        "sociální skupiny"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď doporučený postup přípravy odpovědi:",
+      "items": [
+        "Vymezit základní pojmy tématu",
+        "Vysvětlit hlavní teorie nebo směry",
+        "Doplnit konkrétní příklady z praxe",
+        "Shrnout vlastní argument a závěr"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "U maturitní otázky SPV stačí vyjmenovat pojmy bez vysvětlení a bez příkladů.",
+      "answer": false,
+      "explanation": "Nestačí pouze vyjmenovat pojmy. Je potřeba je vysvětlit, propojit mezi sebou a ukázat aplikaci v praxi."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli téma vlastními slovy. Uveď minimálně 2 klíčové pojmy z každé části a 1 aktuální příklad.",
+      "keywords": [
+        "stratifikace",
+        "sociální status",
+        "sociální skupiny",
+        "homogamie",
+        "příklad",
+        "souvislost"
+      ]
+    }
+  ]
+}

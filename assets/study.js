@@ -23,7 +23,12 @@
     var parts = p.split("/");
     var file = (parts[parts.length - 1] || "").replace(/\.html$/i, "");
     var folder = parts[parts.length - 2] || "";
-    var sub = /site/i.test(folder) ? "site" : "pv";
+    var sub = "pv";
+    if (/site/i.test(folder)) {
+      sub = "site";
+    } else if (/spv/i.test(folder)) {
+      sub = "spv";
+    }
     return sub + "/" + file;
   }
 
@@ -163,6 +168,7 @@
     var folder = parts[parts.length - 2] || "";
     var sub = "pv";
     if (/site/i.test(folder)) sub = "site";
+    if (/spv/i.test(folder)) sub = "spv";
     var back = encodeURIComponent(window.location.href);
     return "../assets/quiz.html?q=" + sub + "/" + file + "&back=" + back;
   }

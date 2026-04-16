@@ -1,0 +1,68 @@
+{
+  "title": "Sociální psychologie",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď pojmy z tématu k souvisejícím vysvětlením:",
+      "pairs": [
+        [
+          "dehumanizace",
+          "konformita"
+        ],
+        [
+          "sociální role",
+          "postoje"
+        ],
+        [
+          "cíle experimentu",
+          "přesvědčování"
+        ],
+        [
+          "kontroverze",
+          "manipulace"
+        ]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové pojmy:",
+      "text": "Téma 'Sociální psychologie' se skládá ze 3 částí: {{Stanfordský vězeňský experiment}}, {{Aschův experiment a další fenomény}}, {{Milgramův experiment}}. V odpovědi pracuj s pojmy {{dehumanizace}} a {{konformita}}.",
+      "answers": [
+        "Stanfordský vězeňský experiment",
+        "Aschův experiment a další fenomény",
+        "Milgramův experiment",
+        "dehumanizace",
+        "konformita"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď doporučený postup přípravy odpovědi:",
+      "items": [
+        "Vymezit základní pojmy tématu",
+        "Vysvětlit hlavní teorie nebo směry",
+        "Doplnit konkrétní příklady z praxe",
+        "Shrnout vlastní argument a závěr"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "U maturitní otázky SPV stačí vyjmenovat pojmy bez vysvětlení a bez příkladů.",
+      "answer": false,
+      "explanation": "Nestačí pouze vyjmenovat pojmy. Je potřeba je vysvětlit, propojit mezi sebou a ukázat aplikaci v praxi."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli téma vlastními slovy. Uveď minimálně 2 klíčové pojmy z každé části a 1 aktuální příklad.",
+      "keywords": [
+        "dehumanizace",
+        "sociální role",
+        "konformita",
+        "poslušnost autoritě",
+        "příklad",
+        "souvislost"
+      ]
+    }
+  ]
+}

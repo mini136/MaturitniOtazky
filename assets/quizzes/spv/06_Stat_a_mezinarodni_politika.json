@@ -1,0 +1,68 @@
+{
+  "title": "Stát a mezinárodní politika",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď pojmy z tématu k souvisejícím vysvětlením:",
+      "pairs": [
+        [
+          "znaky státu",
+          "republika"
+        ],
+        [
+          "suverenita",
+          "monarchie"
+        ],
+        [
+          "vznik státu",
+          "federace"
+        ],
+        [
+          "funkce státu",
+          "unitární stát"
+        ]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové pojmy:",
+      "text": "Téma 'Stát a mezinárodní politika' se skládá ze 3 částí: {{Stát}}, {{Druhy státu}}, {{Mezinárodní politika}}. V odpovědi pracuj s pojmy {{znaky státu}} a {{republika}}.",
+      "answers": [
+        "Stát",
+        "Druhy státu",
+        "Mezinárodní politika",
+        "znaky státu",
+        "republika"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď doporučený postup přípravy odpovědi:",
+      "items": [
+        "Vymezit základní pojmy tématu",
+        "Vysvětlit hlavní teorie nebo směry",
+        "Doplnit konkrétní příklady z praxe",
+        "Shrnout vlastní argument a závěr"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "U maturitní otázky SPV stačí vyjmenovat pojmy bez vysvětlení a bez příkladů.",
+      "answer": false,
+      "explanation": "Nestačí pouze vyjmenovat pojmy. Je potřeba je vysvětlit, propojit mezi sebou a ukázat aplikaci v praxi."
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli téma vlastními slovy. Uveď minimálně 2 klíčové pojmy z každé části a 1 aktuální příklad.",
+      "keywords": [
+        "znaky státu",
+        "suverenita",
+        "republika",
+        "aktéři",
+        "příklad",
+        "souvislost"
+      ]
+    }
+  ]
+}
