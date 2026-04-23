@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang='cs'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>01 – Ota Pavel – Smrt krásných srnců</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 980px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #7c2d12; border-bottom: 3px solid #ea580c; padding-bottom: 10px; }
+        h2 { color: #9a3412; border-bottom: 1px solid #fed7aa; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #c2410c; margin-top: 18px; }
+        nav { background: #fff7ed; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #c2410c; font-weight: 600; }
+        nav a:hover { text-decoration: underline; }
+        .note { background: #fff7ed; border-left: 4px solid #ea580c; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+        .quote { background: #fef3c7; border-left: 4px solid #d97706; padding: 12px 16px; margin: 16px 0; border-radius: 0 5px 5px 0; font-style: italic; }
+        .quote cite { display: block; margin-top: 8px; font-size: 0.9em; color: #92400e; font-style: normal; }
+        .keywords { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+        .keywords ul { margin: 0; padding-left: 20px; }
+        .keywords li { margin: 4px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #fed7aa; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #ea580c; color: white; }
+        tr:nth-child(even) { background: #fff7ed; }
+        .story-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fffbf5; padding: 14px 18px; margin: 14px 0; }
+        .story-card h3 { margin-top: 0; color: #9a3412; }
+        .story-card p { margin: 6px 0; }
+        .story-card .theme { font-size: 0.88em; color: #c2410c; font-weight: 600; }
+        .author-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fff7ed; padding: 14px 18px; margin: 14px 0; }
+        .author-card h3 { margin-top: 0; color: #7c2d12; }
+        .flash-wrap { display: grid; gap: 10px; }
+        .flash-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fffbf5; padding: 8px 12px; }
+        .flash-card summary { cursor: pointer; font-weight: 700; color: #9a3412; }
+        .flash-card p { margin: 10px 0 4px; }
+        .timeline { list-style: none; padding: 0; }
+        .timeline li { padding: 8px 0 8px 28px; border-left: 3px solid #ea580c; margin-left: 12px; position: relative; }
+        .timeline li::before { content: '●'; position: absolute; left: -10px; color: #ea580c; }
+        .timeline li strong { display: block; color: #7c2d12; }
+        @media print { nav, .flash-wrap { display: none; } }
+    </style>
+    <link rel='stylesheet' href='../assets/study.css'>
+</head>
+<body>
+    <nav>
+        <a href='index.html'>⬅ Zpět na obsah ČJ</a>
+        <a href='../index.html'>🏠 Hlavní rozcestník</a>
+    </nav>
+
+    <h1>01 – Ota Pavel – Smrt krásných srnců</h1>
+
+    <div class='note'>
+        Téma pokrývá autora Otu Pavla, rozbor sbírky <strong>Smrt krásných srnců</strong>, dobový literární kontext a srovnání se soudobými autory.
+    </div>
+
+    <div class='quote'>
+        „Vše hezké má brát člověk od života jako velký dar a vážit si toho."
+        <cite>— Ota Pavel v dopise bratru Hugovi, 20. 9. 1965</cite>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2>1. O autorovi – Ota Pavel</h2>
+
+    <h3>Základní údaje</h3>
+    <table>
+        <tr><th>Kategorie</th><th>Informace</th></tr>
+        <tr><td>Vlastní jméno</td><td>Otto Popper</td></tr>
+        <tr><td>Narozen</td><td>2. července 1930, Praha</td></tr>
+        <tr><td>Zemřel</td><td>31. března 1973, Praha (Bohnice) – selhání srdce</td></tr>
+        <tr><td>Profese</td><td>Prozaik, publicista, sportovní reportér</td></tr>
+        <tr><td>Rodina</td><td>Rodiče: Hermína a Leo Popper; dva starší bratři Jiří a Hugo; manželka Věra; synové Petr, Jan, Jiří</td></tr>
+        <tr><td>Ocenění</td><td>Cena Víta Nejedlého, novinářská cena Julia Fučíka</td></tr>
+        <tr><td>Členství</td><td>Svaz československých spisovatelů</td></tr>
+    </table>
+
+    <h3>Životní chronologie</h3>
+    <ul class='timeline'>
+        <li><strong>1930</strong> Narozen jako třetí syn Hermíně a Leovi Popperovým v Praze.</li>
+        <li><strong>1939</strong> Rodina se přestěhovala do Buštěhradu kvůli nacistickým rasovým zákonům (otec byl židovského původu). Žili v domě čp. 54 u Leových rodičů.</li>
+        <li><strong>1943–1945</strong> Bratři Jiří a Hugo deportováni do Terezína (1943); otec Leo v roce 1945. Ota pracoval v dole Prago – důl Dunderka v Dubí u Kladna.</li>
+        <li><strong>1945</strong> Po válce se celá rodina vrátila z Terezína živá. Ota začal studovat na dvouleté obchodní škole.</li>
+        <li><strong>1949</strong> Na doporučení Arnošta Lustiga nastoupil jako sportovní redaktor do Čs. rozhlasu (do 1956).</li>
+        <li><strong>1953</strong> Po vojně se rozhodl stát se spisovatelem, začal publikovat povídky v časopisech.</li>
+        <li><strong>1956</strong> Oženil se s Věrou Novákovou; začal psát pro sportovní týdeník Stadion.</li>
+        <li><strong>1957</strong> Redaktorem časopisu Československý voják.</li>
+        <li><strong>1960</strong> Odmaturoval na večerní střední škole.</li>
+        <li><strong>1962</strong> Doprovázel fotbalisty pražské Dukly na zájezdu do USA → kniha <em>Dukla mezi mrakodrapy</em>.</li>
+        <li><strong>1964</strong> Onemocněl maniodepresivní psychózou. První záchvat na IX. zimních olympijských hrách v Innsbrucku – zapálil selskou usedlost, první hospitalizace na psychiatrické klinice.</li>
+        <li><strong>1966</strong> Odchod do invalidního důchodu kvůli nemoci. Útočiště v Kouřimecké rybárně u Jaroslava Zýky.</li>
+        <li><strong>1971</strong> Vydal <em>Smrt krásných srnců</em> – první autobiografická knížka.</li>
+        <li><strong>1973</strong> 31. března ho bratr Jiří odvezl (po šestnácté) do bohnické léčebny; tentýž den zemřel na selhání srdce.</li>
+    </ul>
+
+    <h3>Charakter tvorby</h3>
+    <div class='keywords'>
+        <ul>
+            <li><strong>Autobiografická próza</strong> – vychází z vlastního životního příběhu a zážitků</li>
+            <li><strong>Lyrická próza</strong> – poetický, citově nabitý jazyk; příroda jako symbol</li>
+            <li><strong>Dvě tematické linie:</strong> sportovní próza + próza z Křivoklátska (dětství, příroda, rybářství)</li>
+            <li><strong>Ústřední motiv:</strong> otec Leo Popper – sympatický, výstřední obchodní cestující, nezlomný optimista</li>
+            <li><strong>Prostředí:</strong> Berounka, Křivoklát, Kouřimecký přívoz, hospůdka U Rozvědčíka, Buštěhrad</li>
+            <li><strong>Doba:</strong> hlavně období 2. světové války a dětství autora</li>
+            <li><strong>Styl:</strong> humor, nostalgie, lyričnost, lidskost; bez nenávisti vůči Němcům – spíše lidský pohled na přežití</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2>2. Dílo – přehled</h2>
+
+    <h3>Sportovní próza</h3>
+    <table>
+        <tr><th>Rok</th><th>Název</th><th>Poznámka</th></tr>
+        <tr><td>1964</td><td>Dukla mezi mrakodrapy</td><td>Záznamy ze zájezdu fotbalové Dukly do USA</td></tr>
+        <tr><td>1967</td><td>Plná bedna šampaňského</td><td>Sportovní reportáže a příběhy</td></tr>
+        <tr><td>1968</td><td>Cena vítězství</td><td>Sportovní próza</td></tr>
+        <tr><td>1971</td><td>Pohár od pánaboha</td><td>Lyricko-reportážní sportovní příběhy</td></tr>
+        <tr><td>1972</td><td>Syn celerového krále</td><td>Sportovní próza</td></tr>
+        <tr><td>1974 (posmrtně)</td><td>Pohádka o Raškovi</td><td>O skijaři Jiřím Raškovi – zlatý olympijský příběh</td></tr>
+    </table>
+
+    <h3>Autobiografická próza z dětství a Křivoklátska</h3>
+    <table>
+        <tr><th>Rok</th><th>Název</th><th>Poznámka</th></tr>
+        <tr><td>1971</td><td><strong>Smrt krásných srnců</strong></td><td>1. autobiografická knížka; Čs. spisovatel; o otci Leovi a dětství za války</td></tr>
+        <tr><td>1974 (posmrtně)</td><td>Jak jsem potkal ryby</td><td>2. autobiografická knížka; Mladá fronta; rybářské příběhy z Křivoklátska</td></tr>
+    </table>
+
+    <h3>Posmrtné výbory (nejdůležitější)</h3>
+    <div class='keywords'>
+        <ul>
+            <li>Fialový poustevník (1977)</li>
+            <li>Zlatí úhoři (1985)</li>
+            <li>Výstup na Eiger (1989)</li>
+            <li>Jak šel táta Afrikou (1994)</li>
+            <li><strong>Sebrané spisy</strong> (2002–2003, nakl. HAK Praha, 7 dílů)</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2>3. Smrt krásných srnců (1971) – rozbor díla</h2>
+
+    <div class='note'>
+        Sbírka autobiografických povídek vydaná v nakladatelství Československý spisovatel (1971). Ota Pavel ji psal v intervalech mezi hospitalizacemi jako terapeutický záznam vzpomínek na otce a dětství. Jde o jeho nejslavnější a nejčtenější dílo.
+    </div>
+
+    <h3>Základní informace</h3>
+    <table>
+        <tr><th>Kategorie</th><th>Informace</th></tr>
+        <tr><td>Žánr</td><td>Sbírka autobiografických povídek / lyrická próza</td></tr>
+        <tr><td>Vydáno</td><td>1971, nakladatelství Československý spisovatel</td></tr>
+        <tr><td>Téma</td><td>Dětství za 2. světové války, vztah otec–syn, příroda Křivoklátska, přežití pod nacistickou okupací</td></tr>
+        <tr><td>Prostředí</td><td>Buštěhrad, Berounka, Křivoklátsko, Kouřimecký přívoz</td></tr>
+        <tr><td>Vyprávěcí perspektiva</td><td>Er-forma i ich-forma; dospělý vypravěč vzpomíná na dětství</td></tr>
+        <tr><td>Filmové zpracování</td><td>Smrt krásných srnců (1987, rež. Karel Kachyňa); Zlatí úhoři (TV 1979, rež. Karel Kachyňa)</td></tr>
+    </table>
+
+    <h3>Ústřední postava – táta Leo Popper</h3>
+    <div class='keywords'>
+        <ul>
+            <li>Obchodní cestující firmy Elektrolux – prodával vysavače po celém Československu</li>
+            <li>Žid, proto po roce 1939 pod nacistickým tlakem</li>
+            <li>Neuvěřitelný optimista, dobrodruh, vynálezce; miloval ryby, přírodu, lidi</li>
+            <li>Byl schopen přesvědčit kohokoliv o čemkoliv – prodavač v životě</li>
+            <li>Symbolizuje vitalitu, lásku k životu, schopnost zachovat si lidskost i v nelidských podmínkách</li>
+            <li>Ota Pavel o něm psal s obrovskou láskou a humorem – „největší postava české literatury"</li>
+        </ul>
+    </div>
+
+    <h3>Příběhy v knize</h3>
+
+    <div class='story-card'>
+        <h3>Kapři pro Wehrmacht</h3>
+        <p><strong>Děj:</strong> Táta Leo byl za války nucen zásobovat Wehrmacht kapry. Měl totiž pronajaty rybníky na Křivoklátsku a němečtí vojáci si vyžádali dodávku ryb. Leo se svými třemi syny (Jiřím, Hugem a mladým Otou) vydává za mrazivé noci chytat kapry v téměř zamrzlém rybníce. I přes obrovské fyzické vypětí nakonec kapry donesou – a část si uloví pro rodinu. Táta při tom podvede Němce a zachrání část úlovku pro vlastní potřebu.</p>
+        <p><strong>Téma:</strong> Přežití, vynalézavost, otcovská láska, solidarita rodiny, nenásilný odpor vůči okupantům.</p>
+        <p class='theme'>Klíčové: „kapři pro Němce" jako symbol ponížení, ale i chytré obrany; rybník Kersko; táta jako hrdina všedního dne.</p>
+    </div>
+
+    <div class='story-card'>
+        <h3>Smrt krásných srnců (titulní povídka)</h3>
+        <p><strong>Děj:</strong> SS Hauptsturmführer Prášil si od tátů vyžádal zvěřinu – srny z křivoklátských lesů. Leo Popper, přestože není myslivec a lov pro Židy byl zakázán, se vydá ilegálně na lov jelenů, aby uchránil rodinu. Podniká noční výpravy do lesa. Nakonec srnce uloví, ale příběh je plný napětí, humoru i hořkosti nad situací, do níž je rodina vehnána.</p>
+        <p><strong>Téma:</strong> Nacistická zvůle a ponižování, otcova odvaha a láska k rodině, paradox – musí lovit zvěř, aby rodina přežila.</p>
+        <p class='theme'>Klíčové: „krásní srnci" = symbol krásy, která je ničena válkou; les = svoboda vs. nebezpečí; táta jako ochránce.</p>
+    </div>
+
+    <div class='story-card'>
+        <h3>Jak jsme se potkali s rybáři</h3>
+        <p><strong>Děj:</strong> Příběhy setkání tátů a mladého Oty s místními rybáři a přívozníky na Berounce. Líčí prostý svět vesničanů, kteří pomáhají rodině i v těžkých dobách. Přívoz u Kouřimce je místem klidu a útočištěm.</p>
+        <p><strong>Téma:</strong> Lidská solidarita, příroda jako útočiště, svět prostých lidí bez předsudků.</p>
+        <p class='theme'>Klíčové: Berounka, přívoz, Jaroslav Zýka; příroda jako protiváha násilí a války.</p>
+    </div>
+
+    <div class='story-card'>
+        <h3>Zlatí úhoři</h3>
+        <p><strong>Děj:</strong> Táta a bratři loví úhoře v Berounce. Táta, vždy plný plánů a fantazie, vymyslí geniální způsob chytání. Příběh je humorný a poetický – rybaření jako rituál, chvíle štěstí uprostřed válečné bídy.</p>
+        <p><strong>Téma:</strong> Radost ze života i v těžkých dobách, příroda jako zdroj potravy i duševní pohody, táta jako kouzelník života.</p>
+        <p class='theme'>Klíčové: úhoři jako vzácná kořist; humor a lehkost i v temné době.</p>
+    </div>
+
+    <div class='story-card'>
+        <h3>Jak tatínek chtěl potkat krále</h3>
+        <p><strong>Děj:</strong> Táta se pokusí setkat se s významnou osobností (nebo s někým v roli „krále"). Příběh líčí tátovu naivní, ale okouzlující touhu po velkých věcech a setkáních. Ota jako vypravěč hledí na tátovy nápady s láskyplnou ironií.</p>
+        <p><strong>Téma:</strong> Sny a realita, tátova neuvěřitelná víra v sebe sama, komika vzniklá z kontrastu přání a skutečnosti.</p>
+        <p class='theme'>Klíčové: táta jako Don Quijote; humor jako obranný mechanismus.</p>
+    </div>
+
+    <div class='story-card'>
+        <h3>Otec a já / vzpomínky na otcův návrat z Terezína</h3>
+        <p><strong>Děj:</strong> Poválečné příběhy – táta se vrací z Terezína jako zlomený, ale nezlomený člověk. Ota vzpomíná na okamžik otcova návratu, na to, jak se postupně vzpamatovával z holocaustu. Setkání je plné emocí, ticha, nevyřčeného.</p>
+        <p><strong>Téma:</strong> Trauma holocaustu, otcovská láska přetrvávající smrt, obnova rodiny po válce, mlčení jako způsob vyrovnání se s hrůzou.</p>
+        <p class='theme'>Klíčové: Terezín; návrat; ticho jako řeč; přežití jako zázrak.</p>
+    </div>
+
+    <h3>Jazykové a stylistické prostředky</h3>
+    <table>
+        <tr><th>Prostředek</th><th>Příklad / popis</th></tr>
+        <tr><td>Lyričnost</td><td>Poetické popisy přírody (Berounka, les, rybníky); příroda jako živý účastník příběhů</td></tr>
+        <tr><td>Humor a ironie</td><td>Tátovy přehnané plány; situační komika; jemná ironie bez hořkosti</td></tr>
+        <tr><td>Kontrast</td><td>Krása přírody vs. válečná brutalita; tátův optimismus vs. reálná nebezpečí</td></tr>
+        <tr><td>Přímá řeč</td><td>Živé dialogy, autentičnost postav, tátovo specifické vyjadřování</td></tr>
+        <tr><td>Retrospektiva</td><td>Dospělý vypravěč vzpomíná – kombinace naivního pohledu dítěte a reflexe dospělého</td></tr>
+        <tr><td>Zkrácené věty</td><td>Rytmický, energický styl; spád příběhu; obrazná vyjádření</td></tr>
+        <tr><td>Personifikace přírody</td><td>Řeka, les, ryby jako partneři příběhu – ne jen kulisa</td></tr>
+    </table>
+
+    <!-- ============================================================ -->
+    <h2>4. Dobový literární kontext</h2>
+
+    <div class='note'>
+        Ota Pavel patří ke generaci českých autorů píšících v 50.–70. letech 20. století. Mnozí tematizovali 2. světovou válku, holocaust a deformace totalitního režimu.
+    </div>
+
+    <h3>Česká literatura 50.–70. let – přehled tendencí</h3>
+    <table>
+        <tr><th>Tendence</th><th>Popis</th></tr>
+        <tr><td>Socialismus a schematismus (50. léta)</td><td>Oficiálně podporovaná literatura; budovatelské romány; propagandistické texty – Ota Pavel se tomuto proudu vyhýbal.</td></tr>
+        <tr><td>Tání a uvolnění (60. léta)</td><td>Větší svoboda projevu; kritická literatura; Pražské jaro 1968; Ota Pavel se rozvíjí jako spisovatel.</td></tr>
+        <tr><td>Normalizace (1968–1989)</td><td>Po srpnu 1968 opět cenzura; mnozí autoři odchází do exilu nebo píší do šuplíku. Pavlovy povídky vycházely s redakčními úpravami.</td></tr>
+        <tr><td>Lyrická próza</td><td>Poetický, subjektivní přístup k próze; Ota Pavel je jedním z představitelů; blízkost k poezii.</td></tr>
+        <tr><td>Autobiografická próza</td><td>Osobní svědectví; holocaust; dětství; rodina – Lustig, Pavel, Fuks.</td></tr>
+    </table>
+
+    <!-- ============================================================ -->
+    <h2>5. Soudobí autoři</h2>
+
+    <div class='author-card'>
+        <h3>Arnošt Lustig (1926–2011)</h3>
+        <p><strong>Osobní vazba:</strong> Lustig doporučil Otu Pavla do rozhlasu v roce 1949. Oba sdílejí téma holocaustu a židovské identity.</p>
+        <p><strong>Dílo:</strong> Dita Saxová (1962), Modlitba pro Kateřinu Horovitzovou (1964), Noc a naděje (1958). Psal o přežití v koncentračních táborech, o lidské důstojnosti tváří v tvář nacistické mašinerii.</p>
+        <p><strong>Styl:</strong> Psychologická próza, morální dilemata, holocaust jako centrální téma. Po 1968 emigroval – jeho dílo bylo v Československu zakázáno.</p>
+    </div>
+
+    <div class='author-card'>
+        <h3>Bohumil Hrabal (1914–1997)</h3>
+        <p><strong>Dílo:</strong> Ostře sledované vlaky (1965), Pábitelé (1964), Postřižiny (1976), Příliš hlučná samota (1976). Jeden z největších českých prozaiků 20. stol.</p>
+        <p><strong>Styl:</strong> Poetický realismus, „pábení" (bujné vyprávění plné odboček), typická hospodská atmosféra, oslava prostého člověka, groteskní humor. Podobně jako Pavel miluje lidi ze „spodiny" a hledá krásu v každodennosti.</p>
+        <p><strong>Podobnost s Pavlem:</strong> Oba píší o prostých lidech s velkou láskou a humorem, oba pracují s lyrickým jazykem a nostalgií.</p>
+    </div>
+
+    <div class='author-card'>
+        <h3>Milan Kundera (1929–2023)</h3>
+        <p><strong>Dílo:</strong> Žert (1967), Směšné lásky (1963–1968), Nesnesitelná lehkost bytí (1984, exilové), Kniha smíchu a zapomnění (1979).</p>
+        <p><strong>Styl:</strong> Filozofická, ironická próza; tematizuje politický totalitarismus a jeho dopady na soukromý život; propojení erotiky, politiky a filozofie. Po 1968 odešel do exilu (Francie), kde psal francouzsky.</p>
+        <p><strong>Kontext:</strong> Žert byl vydán těsně před srpnem 1968, pak zakázán. Kundera představuje intelektuálnější, filozofičtější proud oproti Pavlově lyrice a prostotě.</p>
+    </div>
+
+    <div class='author-card'>
+        <h3>Ladislav Fuks (1923–1994)</h3>
+        <p><strong>Dílo:</strong> Pan Theodor Mundstock (1963), Spalovač mrtvol (1967), Mí černovlasí bratři (1964), Variace pro temnou strunu (1966).</p>
+        <p><strong>Styl:</strong> Psychologická, groteskní próza; téma pronásledování Židů za nacismu; pocit strachu, paranoy a odcizení. Na rozdíl od Pavla je jeho tón temnější, expresionistický.</p>
+        <p><strong>Podobnost s Pavlem:</strong> Oba tematizují osud Židů za 2. světové války, ale z jiného úhlu – Fuks tragicky-groteskně, Pavel s humornou nostalgií.</p>
+    </div>
+
+    <div class='author-card'>
+        <h3>Josef Škvorecký (1924–2012)</h3>
+        <p><strong>Dílo:</strong> Zbabělci (1958/1964 – cenzura), Tankový prapor (1971), Mirákl (1972). Po 1968 emigroval do Kanady; založil nakladatelství 68 Publishers.</p>
+        <p><strong>Styl:</strong> Jazz, americká kultura, hovorový jazyk, kritika totalitarismů (nacismus i komunismus). Zbabělci líčí konec války v malém českém městě očima mladého jazzmana.</p>
+        <p><strong>Kontext:</strong> Generačně blízký Pavlovi, oba vstoupili do literatury v 50.–60. letech; Škvorecký však píše s větší ironií a politickým sarkasmem.</p>
+    </div>
+
+    <div class='author-card'>
+        <h3>Vladimír Páral (1932)</h3>
+        <p><strong>Dílo:</strong> Soukromá vichřice (1966), Veletrh splněných přání (1964), Katapult (1967), Profesionální žena (1971).</p>
+        <p><strong>Styl:</strong> Satirická próza zaměřená na konzumní společnost socialismu; opakující se vzorce a stereotypy; absurdní humor; kritika lidské povrchnosti. Tématicky vzdálený od Pavla, ale chronologicky soudobý.</p>
+    </div>
+
+    <h3>Srovnávací tabulka – soudobí autoři</h3>
+    <table>
+        <tr><th>Autor</th><th>Téma</th><th>Styl</th><th>Osud po 1968</th></tr>
+        <tr><td>Ota Pavel</td><td>Dětství, válka, otec, příroda</td><td>Lyricko-humorná autobiografie</td><td>Zůstal; dílo s úpravami</td></tr>
+        <tr><td>Arnošt Lustig</td><td>Holocaust, přežití</td><td>Psychologická próza</td><td>Emigroval, zakázán</td></tr>
+        <tr><td>Bohumil Hrabal</td><td>Prostí lidé, hospody, práce</td><td>Poetický realismus, pábení</td><td>Zůstal; kompromisy s režimem</td></tr>
+        <tr><td>Milan Kundera</td><td>Politika, láska, filozofie</td><td>Filozofická ironie</td><td>Emigroval, zakázán</td></tr>
+        <tr><td>Ladislav Fuks</td><td>Pronásledování Židů</td><td>Groteskní psychologie</td><td>Zůstal; kolaboroval s režimem</td></tr>
+        <tr><td>Josef Škvorecký</td><td>Jazz, válka, totalita</td><td>Hovorový jazyk, ironie</td><td>Emigroval, nakladatelství 68P</td></tr>
+    </table>
+
+    <!-- ============================================================ -->
+    <h2>6. Filmová zpracování a posmrtná recepce</h2>
+
+    <div class='keywords'>
+        <ul>
+            <li><strong>Kapři pro Wehrmacht</strong> – krátkometrážní film FAMU (1975), rež. Karel Smyczek; role tatínka J. Somr</li>
+            <li><strong>Smrt krásných srnců</strong> – krátkometrážní film FAMU (1975), rež. Vladimír Merta; role tatínka Z. Řehoř</li>
+            <li><strong>Zlatí úhoři</strong> – český televizní film (premiéra 1979), rež. Karel Kachyňa</li>
+            <li><strong>Smrt krásných srnců</strong> – český celovečerní film (premiéra 1987), rež. Karel Kachyňa</li>
+            <li>Kraj Křivoklátska se dnes označuje jako „<strong>kraj Oty Pavla</strong>" – turistická oblast kolem Berounky</li>
+            <li>Kouřimecký přívoz, hospůdka U Rozvědčíka – místa z povídek existují dodnes</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2>7. Klíčové pojmy k zapamatování</h2>
+    <div class='keywords'>
+        <ul>
+            <li>autobiografická próza, lyrická próza, ich-forma, er-forma, retrospektiva</li>
+            <li>Leo Popper – táta; Elektrolux; obchodní cestující; žid</li>
+            <li>Křivoklátsko, Berounka, Buštěhrad, Kouřimecký přívoz</li>
+            <li>Terezín (Teresienstadt) – koncentrační tábor pro Židy z Protektorátu</li>
+            <li>maniodepresivní psychóza – Pavlova choroba od roku 1964</li>
+            <li>Kapři pro Wehrmacht, Smrt krásných srnců, Zlatí úhoři</li>
+            <li>Jak jsem potkal ryby (1974) – druhá autobiografická knížka</li>
+            <li>Pohádka o Raškovi – sportovní próza o skijaři</li>
+            <li>Karel Kachyňa – režisér filmových adaptací</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2>8. Studijní kartičky</h2>
+    <div class='flash-wrap'>
+        <details class='flash-card'>
+            <summary>Kdo byl Ota Pavel vlastním jménem a kdy žil?</summary>
+            <p>Vlastním jménem <strong>Otto Popper</strong>, narozen 2. 7. 1930 v Praze, zemřel 31. 3. 1973 v Praze (Bohnice). Prozaik, publicista, sportovní reportér.</p>
+        </details>
+        <details class='flash-card'>
+            <summary>Proč se rodina přestěhovala do Buštěhradu v roce 1939?</summary>
+            <p>Kvůli <strong>nacistickým rasovým zákonům</strong> – otec Leo byl židovského původu. V Buštěhradě žili u Leových rodičů v domě čp. 54.</p>
+        </details>
+        <details class='flash-card'>
+            <summary>Co je to maniodepresivní psychóza a kdy ji Ota Pavel poprvé dostal?</summary>
+            <p>Závažná duševní choroba s výkyvy nálad (mánie – deprese). Pavel onemocněl v roce <strong>1964</strong> na IX. zimních olympijských hrách v <strong>Innsbrucku</strong>. Vícekrát hospitalizován; zemřel při 16. hospitalizaci v Bohnicích.</p>
+        </details>
+        <details class='flash-card'>
+            <summary>O čem je povídka Kapři pro Wehrmacht?</summary>
+            <p>Táta Leo musel zásobovat <strong>Wehrmacht kapry</strong> ze svých rybníků. S třemi syny loví v noci za mrazu – příběh o přežití, tátově vynalézavosti a odporování Němcům podvodem.</p>
+        </details>
+        <details class='flash-card'>
+            <summary>O čem je titulní povídka Smrt krásných srnců?</summary>
+            <p>SS Hauptsturmführer Prášil požaduje od tátů zvěřinu. Leo ilegálně loví srny v křivoklátském lese, aby zachránil rodinu. Symbolizuje ponížení Židy nacisty, ale i tátovu odvahu a lásku.</p>
+        </details>
+        <details class='flash-card'>
+            <summary>Kdo byl Arnošt Lustig a jak je spojen s Otou Pavlem?</summary>
+            <p>Arnošt Lustig (1926–2011) – spisovatel o holocaustu. V roce <strong>1949</strong> doporučil Otu Pavla do Čs. rozhlasu jako sportovního redaktora. Oba sdíleli téma válečného utrpení Židů.</p>
+        </details>
+        <details class='flash-card'>
+            <summary>Čím se liší Ota Pavel a Ladislav Fuks v přístupu k tématu holocaustu?</summary>
+            <p>Pavel: <strong>lyrický, humorný, nostalgický</strong> – otec jako hrdina všedního dne. Fuks: <strong>groteskní, temný, psychologický</strong> – strach, paranoia, ztráta identity (Pan Theodor Mundstock).</p>
+        </details>
+        <details class='flash-card'>
+            <summary>Kdy vyšla Smrt krásných srnců a co bylo druhé autobiografické dílo?</summary>
+            <p>Smrt krásných srnců: <strong>1971</strong>, nakl. Čs. spisovatel. Druhé autobiografické dílo: <strong>Jak jsem potkal ryby</strong> (1974, posmrtně, Mladá fronta).</p>
+        </details>
+        <details class='flash-card'>
+            <summary>Jaký je literární styl Oty Pavla?</summary>
+            <p><strong>Autobiografická lyrická próza</strong>: poetický jazyk, retrospektiva, humor s nostalgií, příroda jako symbol, ústřední postava táty Lea Poppera, prostředí Křivoklátska a Berounky.</p>
+        </details>
+        <details class='flash-card'>
+            <summary>Kdo zrežíroval filmy podle Oty Pavla a kdy?</summary>
+            <p><strong>Karel Kachyňa</strong>: Zlatí úhoři (1979, TV) a Smrt krásných srnců (1987, film). Krátkometrážní filmy FAMU z roku 1975: Kapři pro Wehrmacht (rež. K. Smyczek) a Smrt krásných srnců (rež. V. Merta).</p>
+        </details>
+    </div>
+
+    <nav style='margin-top: 30px;'>
+        <a href='index.html'>⬅ Zpět na obsah ČJ</a>
+        <a href='../index.html'>🏠 Hlavní rozcestník</a>
+    </nav>
+</body>
+<script src='../assets/study.js'></script>
+</html>
