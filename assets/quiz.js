@@ -33,6 +33,7 @@
     var sub = "pv";
     if (/site/i.test(folder)) sub = "site";
     if (/spv/i.test(folder)) sub = "spv";
+    if (/cs/i.test(folder)) sub = "cs";
     return "quizzes/" + sub + "/" + file + ".json";
   }
 
