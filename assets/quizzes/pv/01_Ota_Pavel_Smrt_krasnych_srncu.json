@@ -1,0 +1,353 @@
+{
+  "title": "Ota Pavel – Smrt krásných srnců",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď povídky ke správnému popisu děje:",
+      "pairs": [
+        ["Kapři pro Wehrmacht", "Táta musí dodat kapry německým vojákům, s syny loví za mrazivé noci v rybníce"],
+        ["Smrt krásných srnců", "SS Hauptsturmführer požaduje zvěřinu, táta ilegálně loví srny v křivoklátském lese"],
+        ["Zlatí úhoři", "Rybaření na Berounce, táta vymyslí geniální způsob lovu úhořů"],
+        ["Jak jsem potkal ryby", "Druhá autobiografická knížka, vydána posmrtně v roce 1974"]
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď soudobé autory k jejich nejznámějším dílům:",
+      "pairs": [
+        ["Arnošt Lustig", "Modlitba pro Kateřinu Horovitzovou"],
+        ["Bohumil Hrabal", "Ostře sledované vlaky"],
+        ["Milan Kundera", "Žert"],
+        ["Ladislav Fuks", "Pan Theodor Mundstock"],
+        ["Josef Škvorecký", "Zbabělci"]
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď rok k události z Pavlova života:",
+      "pairs": [
+        ["1930", "Narozen jako Otto Popper v Praze"],
+        ["1939", "Přestěhování rodiny do Buštěhradu (nacistické zákony)"],
+        ["1964", "První záchvat maniodepresivní psychózy v Innsbrucku"],
+        ["1971", "Vydání knihy Smrt krásných srnců"],
+        ["1973", "Smrt v bohnické léčebně"]
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď literární pojem k jeho charakteristice:",
+      "pairs": [
+        ["Autobiografická próza", "Autor čerpá z vlastního života a vzpomínek"],
+        ["Lyrická próza", "Próza s poetickým, citovým jazykem blízkým poezii"],
+        ["Retrospektiva", "Vypravěč se vrací do minulosti a hodnotí ji zpětně"],
+        ["Ich-forma", "Příběh vypráví první osoba – já"],
+        ["Er-forma", "Příběh vypráví třetí osoba – on/ona"]
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň klíčové informace o Otovi Pavlovi:",
+      "text": "Ota Pavel se vlastním jménem jmenoval {{Otto Popper}} a narodil se {{2. července 1930}} v Praze. Jeho otec {{Leo Popper}} byl obchodní cestující firmy {{Elektrolux}} a byl {{židovského}} původu. V roce 1939 se rodina přestěhovala do {{Buštěhradu}}. Svou nejslavnější knížku {{Smrt krásných srnců}} vydal v roce {{1971}}. Od roku 1964 trpěl {{maniodepresivní psychózou}}.",
+      "answers": [
+        "Otto Popper",
+        "2. července 1930",
+        "Leo Popper",
+        "Elektrolux",
+        "židovského",
+        "Buštěhradu",
+        "Smrt krásných srnců",
+        "1971",
+        "maniodepresivní psychózou"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o knihách a jejich vydání:",
+      "text": "Smrt krásných srnců je sbírka {{autobiografických}} povídek vydaná v nakladatelství {{Československý spisovatel}} v roce {{1971}}. Druhou autobiografickou knížkou jsou {{Jak jsem potkal ryby}} vydané posmrtně v roce {{1974}} v nakladatelství {{Mladá fronta}}. Sportovní próza {{Pohádka o Raškovi}} vyšla také posmrtně a pojednává o skijařovi Jiřím {{Raškovi}}.",
+      "answers": [
+        "autobiografických",
+        "Československý spisovatel",
+        "1971",
+        "Jak jsem potkal ryby",
+        "1974",
+        "Mladá fronta",
+        "Pohádka o Raškovi",
+        "Raškovi"
+      ]
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň informace o soudobých autorech:",
+      "text": "Arnošt {{Lustig}} v roce 1949 doporučil Otu Pavla do {{rozhlasu}}. Bohumil {{Hrabal}} je autorem stylu zvaného {{pábení}} – bujného rozvitého vyprávění. Milan {{Kundera}} napsal román {{Žert}}, který byl po srpnu 1968 zakázán. Ladislav {{Fuks}} psal {{groteskní}} psychologickou prózu, jeho nejslavnější dílo je {{Pan Theodor Mundstock}}.",
+      "answers": [
+        "Lustig",
+        "rozhlasu",
+        "Hrabal",
+        "pábení",
+        "Kundera",
+        "Žert",
+        "Fuks",
+        "groteskní",
+        "Pan Theodor Mundstock"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď životní události Oty Pavla chronologicky:",
+      "items": [
+        "Narozen jako Otto Popper v Praze (1930)",
+        "Rodina se přestěhovala do Buštěhradu (1939)",
+        "Bratři Hugo a Jiří deportováni do Terezína (1943)",
+        "Nastoupil jako sportovní redaktor do rozhlasu (1949)",
+        "Oženil se s Věrou Novákovou ve Špindlerově Mlýně (1956)",
+        "Vydal Smrt krásných srnců (1971)",
+        "Zemřel v bohnické léčebně na selhání srdce (1973)"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď sportovní prózy Oty Pavla podle roku vydání (od nejstarší):",
+      "items": [
+        "Dukla mezi mrakodrapy (1964)",
+        "Plná bedna šampaňského (1967)",
+        "Cena vítězství (1968)",
+        "Pohár od pánaboha (1971)",
+        "Syn celerového krále (1972)",
+        "Pohádka o Raškovi (1974, posmrtně)"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni, zda je výrok pravdivý, a vysvětli proč:",
+      "statement": "Ota Pavel byl přímým účastníkem věznění v Terezíně – prošel jím jako jeho bratři a otec.",
+      "answer": false,
+      "explanation": "Ota Pavel do Terezína deportován nebyl. Deportováni byli jeho bratři Jiří a Hugo (1943) a otec Leo (1945). Ota pracoval v dole Prago–Dunderka v Dubí u Kladna."
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni, zda je výrok pravdivý, a vysvětli proč:",
+      "statement": "Kniha Smrt krásných srnců je románem s jednou ucelenou dějovou linií.",
+      "answer": false,
+      "explanation": "Smrt krásných srnců je sbírka autobiografických povídek (próz), nikoli román. Jednotlivé povídky jsou propojeny osobou tátů Lea Poppera a prostředím Křivoklátska, ale každá je samostatným příběhem."
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni, zda je výrok pravdivý, a vysvětli proč:",
+      "statement": "Celovečerní film Smrt krásných srnců (1987) režíroval Karel Kachyňa.",
+      "answer": true,
+      "explanation": "Karel Kachyňa natočil celovečerní film Smrt krásných srnců (premiéra 1987) i televizní film Zlatí úhoři (1979). Kachyňa byl jedním z nejvýznamnějších českých filmových režisérů."
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni, zda je výrok pravdivý, a vysvětli proč:",
+      "statement": "Arnošt Lustig hrál klíčovou roli v kariéře Oty Pavla tím, že mu doporučil místo sportovního redaktora v rozhlase.",
+      "answer": true,
+      "explanation": "Arnošt Lustig doporučil Otu Pavla do Čs. rozhlasu v roce 1949. Lustig byl o 4 roky starší a sám byl již tehdy literárně aktivní. Oba sdíleli téma válečného utrpení Židů."
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni, zda je výrok pravdivý, a vysvětli proč:",
+      "statement": "Po srpnu 1968 vydával Ota Pavel svá díla v zahraničí (v exilu), protože mu bylo zakázáno publikovat doma.",
+      "answer": false,
+      "explanation": "Ota Pavel v exilu nepůsobil – zůstal v Československu. Jeho díla vycházela doma, ale s cenzurními úpravami. Do exilu odešli jiní autoři – např. Kundera, Škvorecký."
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni, zda je výrok pravdivý, a vysvětli proč:",
+      "statement": "Táta Leo Popper se z Terezína po válce vrátil živý.",
+      "answer": true,
+      "explanation": "Všichni tři – otec Leo i oba bratři Jiří a Hugo – se z Terezína vrátili živí. Tato skutečnost je pro Pavlovy texty klíčová: na rozdíl od mnoha jiných židovských rodin holocaust fyzicky přežili."
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni, zda je výrok pravdivý, a vysvětli proč:",
+      "statement": "Ota Pavel zemřel relativně mladý – ve věku 42 let.",
+      "answer": true,
+      "explanation": "Ota Pavel se narodil 2. 7. 1930 a zemřel 31. 3. 1973, tedy ve věku 42 let. Příčinou byl infarkt srdce při 16. pobytu v bohnické psychiatrické léčebně."
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni, zda je výrok pravdivý, a vysvětli proč:",
+      "statement": "Ladislav Fuks a Ota Pavel sdílejí téma holocaustu, ale zpracovávají ho podobným lyrickým a humorným stylem.",
+      "answer": false,
+      "explanation": "Oba tematizují osud Židů za nacismu, ale stylem jsou odlišní. Pavel píše lyrickým, humorným a nostalgickým způsobem. Fuks naopak volí temný, groteskní a psychologicky expresionistický přístup (strach, paranoia, deformace identity)."
+    },
+    {
+      "type": "choice",
+      "prompt": "Kde se odehrává většina příběhů z knihy Smrt krásných srnců?",
+      "options": [
+        "Praha a Brno",
+        "Křivoklátsko – Berounka, Buštěhrad, okolí Kouřimeckého přívozu",
+        "Šumava a Lipno",
+        "Jeseníky a Olomoucko"
+      ],
+      "answer": 1,
+      "explanation": "Ota Pavel měl silný citový vztah ke Křivoklátsku – Berounce, Kouřimeckému přívozu, hospůdce U Rozvědčíka. Tyto kraje jsou dnes označovány jako 'kraj Oty Pavla'."
+    },
+    {
+      "type": "choice",
+      "prompt": "Čím byl táta Leo Popper v době míru (před válkou) zaměstnán?",
+      "options": [
+        "Byl rybář a hajný v Křivoklátě",
+        "Byl obchodní cestující firmy Elektrolux – prodával vysavače",
+        "Byl sportovní novinář a redaktor",
+        "Byl učitel na obecné škole v Buštěhradě"
+      ],
+      "answer": 1,
+      "explanation": "Leo Popper byl obchodní cestující firmy Elektrolux – prodával vysavače po celém Československu. Byl vynikající prodavač, optimista a dobrodruh – tyto vlastnosti jsou klíčové pro pochopení příběhů."
+    },
+    {
+      "type": "choice",
+      "prompt": "Jaká nemoc zasáhla Otu Pavla od roku 1964?",
+      "options": [
+        "Tuberkulóza",
+        "Srdeční vada od narození",
+        "Maniodepresivní psychóza",
+        "Parkinsonova choroba"
+      ],
+      "answer": 2,
+      "explanation": "V roce 1964 onemocněl maniodepresivní psychózou. První záchvat nastal na zimních olympijských hrách v Innsbrucku, kde zapálil selskou usedlost. Byl 16× hospitalizován na psychiatrické klinice."
+    },
+    {
+      "type": "choice",
+      "prompt": "Který z těchto autorů je známý stylem zvaným 'pábení' a dílem Ostře sledované vlaky?",
+      "options": [
+        "Milan Kundera",
+        "Ladislav Fuks",
+        "Bohumil Hrabal",
+        "Josef Škvorecký"
+      ],
+      "answer": 2,
+      "explanation": "Bohumil Hrabal (1914–1997) je tvůrcem pojmu 'pábení' – bujného, rozvitého vyprávění. Ostře sledované vlaky (1965) je jeho nejslavnější dílo, podle nějž natočil Jiří Menzel oscarový film."
+    },
+    {
+      "type": "choice",
+      "prompt": "Na jakých zimních olympijských hrách dostihlo Otu Pavla první záchvat duševní nemoci?",
+      "options": [
+        "Grenoble 1968",
+        "Innsbruck 1964",
+        "Sapporo 1972",
+        "Oslo 1952"
+      ],
+      "answer": 1,
+      "explanation": "IX. zimní olympijské hry se konaly v Innsbrucku v roce 1964. Ota Pavel tam reportoval a při záchvatu zapálil selskou usedlost. Byl okamžitě hospitalizován na psychiatrické klinice Ústřední vojenské nemocnice v Praze."
+    },
+    {
+      "type": "choice",
+      "prompt": "Kde pracoval Ota Pavel za druhé světové války (jako náhrada za školu)?",
+      "options": [
+        "V továrně na munici v Kladně",
+        "V dole Prago – důl Dunderka v Dubí u Kladna",
+        "V zemědělském statku v Buštěhradě",
+        "V tiskárně nacistických novin v Praze"
+      ],
+      "answer": 1,
+      "explanation": "Od roku 1944 pracoval Ota Pavel v dole Prago – důl Dunderka v Dubí u Kladna. Pracoval tam až do konce války."
+    },
+    {
+      "type": "choice",
+      "prompt": "Jak se jmenuje druhá autobiografická knížka Oty Pavla vydaná posmrtně v roce 1974?",
+      "options": [
+        "Fialový poustevník",
+        "Jak šel táta Afrikou",
+        "Jak jsem potkal ryby",
+        "Zlatí úhoři"
+      ],
+      "answer": 2,
+      "explanation": "Jak jsem potkal ryby (1974, Mladá fronta) je druhá autobiografická knížka Oty Pavla. Navazuje na Smrt krásných srnců dalšími rybářskými příběhy z Křivoklátska."
+    },
+    {
+      "type": "choice",
+      "prompt": "Který autor po roce 1968 emigroval do Francie a psal část svých děl francouzsky?",
+      "options": [
+        "Arnošt Lustig",
+        "Ladislav Fuks",
+        "Josef Škvorecký",
+        "Milan Kundera"
+      ],
+      "answer": 3,
+      "explanation": "Milan Kundera po srpnu 1968 emigroval do Francie, kde od roku 1975 žil natrvalo. Část svých pozdějších děl psal přímo francouzsky (např. La Lenteur / Pomalost). Jeho díla byla v ČSSR zakázána."
+    },
+    {
+      "type": "choice",
+      "prompt": "Které dílo Milana Kundery bylo vydáno v roce 1967 těsně před Pražským jarem, a pak zakázáno?",
+      "options": [
+        "Nesnesitelná lehkost bytí",
+        "Žert",
+        "Kniha smíchu a zapomnění",
+        "Směšné lásky"
+      ],
+      "answer": 1,
+      "explanation": "Žert (1967) je první Kunderův román. Vyšel krátce před Pražským jarem a po srpnu 1968 byl zakázán. Pojednává o člověku, jehož studentský žert zničí celý život – metafora totalitního systému."
+    },
+    {
+      "type": "choice",
+      "prompt": "Jaký je klíčový motiv titulní povídky Smrt krásných srnců?",
+      "options": [
+        "Táta prodává srny na černo, aby zaplatil dluhy",
+        "Ota jako dítě zastřelí srnu omylem v lese",
+        "SS Hauptsturmführer Prášil požaduje zvěřinu, táta ilegálně loví, aby ochránil rodinu",
+        "Němci vystřílí srny v lese jako odplatu za partyzánský útok"
+      ],
+      "answer": 2,
+      "explanation": "SS Hauptsturmführer Prášil si vyžádá zvěřinu. Táta Leo, přestože lov byl pro Židy zakázán, loví ilegálně srny v noci, aby ochránil rodinu. Srny symbolizují krásu a nevinnost ničenou válkou."
+    },
+    {
+      "type": "choice",
+      "prompt": "Která z následujících charakteristik NEpatří ke stylu Oty Pavla?",
+      "options": [
+        "Lyrický, poetický jazyk plný obrazných přirovnání",
+        "Ústřední postava táty Lea Poppera jako životního hrdiny",
+        "Temná groteskní psychologie a existenciální strach",
+        "Humor a nostalgie v líčení dětských vzpomínek"
+      ],
+      "answer": 2,
+      "explanation": "Temná groteskní psychologie a existenciální strach jsou typické pro Ladislava Fukse, nikoli pro Pavla. Pavlův styl je naopak lyrický, humorný a nostalgický."
+    },
+    {
+      "type": "open",
+      "prompt": "Charakterizuj literární styl Oty Pavla. Uveď specifika Smrti krásných srnců a srovnej s alespoň dvěma soudobými autory.",
+      "keywords": [
+        "autobiografická próza",
+        "lyrická próza",
+        "Leo Popper",
+        "Křivoklátsko",
+        "humor a nostalgie",
+        "Arnošt Lustig",
+        "Bohumil Hrabal",
+        "holocaust",
+        "retrospektiva"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Popiš postavu táty Lea Poppera. Jakou funkci plní v povídkách a proč je pro Otu Pavla tak důležitá?",
+      "keywords": [
+        "Leo Popper",
+        "Elektrolux",
+        "Žid",
+        "optimismus",
+        "obchodní cestující",
+        "hrdina všedního dne",
+        "láska otce a syna",
+        "humor",
+        "přežití"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jak reagovala česká literatura na události roku 1968 (Pražské jaro, sovětská invaze)? Uveď konkrétní příklady autorů a jejich osudy.",
+      "keywords": [
+        "Pražské jaro",
+        "normalizace",
+        "exil",
+        "cenzura",
+        "Kundera",
+        "Škvorecký",
+        "68 Publishers",
+        "Hrabal",
+        "samizdat"
+      ]
+    }
+  ]
+}
