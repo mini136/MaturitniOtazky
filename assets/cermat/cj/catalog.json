@@ -1,0 +1,420 @@
+[
+  {
+    "id": "2025-podzim",
+    "label": "MZ 2025 – podzim",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2025-podzim/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJMAD25C0T04_web.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2025-podzim/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_2025p_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2025-podzim/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_Kl%C3%AD%C4%8D_spr%C3%A1vn%C3%BDch_%C5%99e%C5%A1en%C3%AD.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2025-jaro",
+    "label": "MZ 2025 – jaro",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2025-jaro/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_2025j_TS.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2025-jaro/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_2025j_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2025-jaro/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_2025j_KS%C5%98_web.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2024-podzim",
+    "label": "MZ 2024 – podzim",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2024-podzim/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/%C4%8CJL_MZ2024P_TS.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2024-podzim/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/%C4%8CJL_MZ2024P_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2024-podzim/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/%C4%8CJL_MZ2024P_KS%C5%98_web.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2024-jaro",
+    "label": "MZ 2024 – jaro",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2024-jaro/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_MZ2024J_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2024-jaro/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_MZ2024J_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2024-jaro/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJMZD24C0K01_web.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2023-podzim",
+    "label": "MZ 2023 – podzim",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2023-podzim/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_podzim_2023_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2023-podzim/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_podzim_2023_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2023-podzim/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJMZD23C0K04_Web_rozsireny_klic.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2023-jaro",
+    "label": "MZ 2023 – jaro",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2023-jaro/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_jaro_2023_sada_A_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2023-jaro/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJ_2023_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2023-jaro/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL_jaro_2023_sada_A_klic_na_web.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2022-podzim",
+    "label": "MZ 2022 – podzim",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2022-podzim/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2022P/CJL_2022P_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2022-podzim/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2022P/CJL_2022P_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2022-podzim/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2022P/CJL_2022P_KLIC.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2022-jaro",
+    "label": "MZ 2022 – jaro",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2022-jaro/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2022/CJL_DT_2022J.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2022-jaro/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2022/CJL_ZA_2022J.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2022-jaro/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2022/CJL_2022J_KLIC_doplneni_zpusob_hodnoceni_ulohy_24.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2021-podzim",
+    "label": "MZ 2021 – podzim",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2021-podzim/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2021P/MZ2021P_CJL_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2021-podzim/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2021P/MZ2021P_CJL_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2021-podzim/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2021P/MZ2021P_CJL_KLIC.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2021-jaro-mimoradny",
+    "label": "MZ 2021 – jaro (mimořádný)",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2021-jaro-mimoradny/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2021M/MZ2021M_CJL_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2021-jaro-mimoradny/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2021M/MZ2021M_CJL_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2021-jaro-mimoradny/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2021M/MZ2021M_CJL_KLIC.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2021-jaro",
+    "label": "MZ 2021 – jaro (řádný)",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2021-jaro/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2021/MZ2021_CJL_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2021-jaro/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2021/MZ2021_CJL_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2021-jaro/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2021/MZ2021_CJL_KLIC.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2020-podzim",
+    "label": "MZ 2020 – podzim",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2020-podzim/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2020P/MZ2020P_CJ-DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2020-podzim/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2020P/MZ2020P_CJ-DT_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2020-podzim/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2020P/MZ2020P_CJ-DT_klic.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2020-jaro",
+    "label": "MZ 2020 – jaro",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2020-jaro/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2020/CJL_jaro_2020_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2020-jaro/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2020/CJL_jaro_2020_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2020-jaro/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2020/CJL_jaro_2020_klic.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2019-podzim",
+    "label": "MZ 2019 – podzim",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2019-podzim/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2019P/CJL_podzim_2019_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2019-podzim/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2019P/CJL_podzim_2019_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2019-podzim/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2019P/CJL_2019P_klic.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2019-jaro",
+    "label": "MZ 2019 – jaro",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2019-jaro/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/testy-zadani-klice/CJL_jaro_2019_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2019-jaro/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/testy-zadani-klice/CJL_jaro_2019_DT_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2019-jaro/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/testy-zadani-klice/CJL_jaro_2019_DT_klic.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2018-podzim",
+    "label": "MZ 2018 – podzim",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2018-podzim/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2018P/CJL_podzim_2018_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2018-podzim/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2018P/CJL_podzim_2018_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2018-podzim/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2018P/CJL_podzim_2018_KLIC.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2018-jaro",
+    "label": "MZ 2018 – jaro",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2018-jaro/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2018/CJL_jaro_2018_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2018-jaro/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2018/CJL_jaro_2018_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2018-jaro/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2018/JL_jaro_2018_KLIC.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2017-podzim",
+    "label": "MZ 2017 – podzim",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2017-podzim/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2017P/CJL_podzim_2017_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2017-podzim/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2017P/CJL_podzim_2017_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2017-podzim/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2017P/CJL_podzim_2017_KLIC.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2017-jaro",
+    "label": "MZ 2017 – jaro",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2017-jaro/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2017/CJL_jaro_2017_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2017-jaro/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2017/CJL_jaro_2017_DT_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2017-jaro/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2017/CJL_jaro_2017_KLIC.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2016-podzim",
+    "label": "MZ 2016 – podzim",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2016-podzim/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2016P/CJL_podzim_2016_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2016-podzim/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2016P/CJL_podzim_2016_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2016-podzim/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2016P/CJL_podzim_2016_klic.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2016-jaro",
+    "label": "MZ 2016 – jaro",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2016-jaro/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2016/CJL_jaro_2016_DT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2016-jaro/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2016/CJL_jaro_2016_ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2016-jaro/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2016/CJL_jaro_2016_KLIC.pdf"
+      }
+    },
+    "questions": 32
+  },
+  {
+    "id": "2015-ilustracni",
+    "label": "Ilustrační test (2015)",
+    "files": {
+      "dt": {
+        "local": "assets/cermat/cj/2015-ilustracni/DT.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2015/CJL-2015-IT.pdf"
+      },
+      "za": {
+        "local": "assets/cermat/cj/2015-ilustracni/ZA.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2015/CJL-2015-IT-ZA.pdf"
+      },
+      "ksr": {
+        "local": "assets/cermat/cj/2015-ilustracni/KSR.pdf",
+        "remote": "https://maturita.cermat.cz/files/files/CJL/intaktni-zaci/MZ2015/CJL-2015-KLIC.pdf"
+      }
+    },
+    "questions": 32
+  }
+]

@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CERMAT – Český jazyk</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #2563eb; --dark: #1e3a8a; --light: #dbeafe; --bg: #f0f4ff;
+      --border: #bfdbfe; --text: #1f2937; --muted: #64748b;
+      --green: #16a34a; --red: #dc2626; --yellow: #f59e0b;
+    }
+    html, body { height: 100dvh; overflow: hidden; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--dark); color: #fff; padding: 7px 14px;
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; z-index: 30;
+    }
+    .topbar a { color: #bfdbfe; text-decoration: none; font-size: 0.82rem; white-space: nowrap; }
+    .topbar a:hover { color: #fff; }
+    .tb-sep { color: rgba(255,255,255,0.3); }
+
+    #test-select {
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 7px; color: #fff; padding: 5px 8px;
+      font: 0.85rem/1.2 'Segoe UI', sans-serif; max-width: 200px; cursor: pointer; flex: 1;
+    }
+    #test-select option { background: #1e3a8a; color: #fff; }
+
+    .timer-group { display: flex; align-items: center; gap: 5px; margin-left: auto; flex-wrap: wrap; }
+    .timer-disp {
+      font-size: 1.35rem; font-variant-numeric: tabular-nums; font-weight: 700;
+      min-width: 76px; color: #e0f2fe; letter-spacing: 0.02em;
+    }
+    .timer-disp.warn { color: #fde68a; animation: blink 1s infinite; }
+    .timer-disp.done { color: #fca5a5; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+    .tb-btn {
+      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 6px; color: #fff; font: 600 0.8rem/1 'Segoe UI', sans-serif;
+      padding: 5px 9px; cursor: pointer; transition: background 0.12s; white-space: nowrap;
+    }
+    .tb-btn:hover { background: rgba(255,255,255,0.28); }
+    .tb-btn.primary { background: #fff; color: var(--dark); border-color: #fff; }
+    .tb-btn.primary:hover { background: #bfdbfe; }
+
+    .min-wrap { display: flex; align-items: center; gap: 4px; font-size: 0.76rem; color: #bfdbfe; }
+    .min-wrap input {
+      width: 42px; border: 1px solid rgba(255,255,255,0.3); border-radius: 5px;
+      background: rgba(255,255,255,0.1); color: #fff; padding: 4px 5px;
+      font: 0.8rem 'Segoe UI', sans-serif; text-align: center;
+    }
+
+    /* ── PANEL TABS (mobile) ── */
+    .panel-tabs {
+      display: none; background: #fff; border-bottom: 2px solid var(--border); flex-shrink: 0;
+    }
+    .panel-tabs button {
+      flex: 1; padding: 9px 4px; border: none; background: none;
+      font: 600 0.88rem/1 'Segoe UI', sans-serif; color: var(--muted);
+      cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.13s;
+    }
+    .panel-tabs button.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+    /* ── PROGRESS STRIP ── */
+    .progress-strip { height: 3px; background: #c7d2fe; flex-shrink: 0; }
+    .progress-fill { height: 100%; background: var(--blue); transition: width 1s linear; width: 100%; }
+
+    /* ── MAIN LAYOUT ── */
+    .main-layout { flex: 1; display: grid; grid-template-columns: 1fr 300px; overflow: hidden; }
+
+    /* ── PDF PANEL ── */
+    .pdf-panel { display: flex; flex-direction: column; background: #374151; overflow: hidden; }
+    .pdf-toolbar {
+      background: #1f2937; padding: 6px 10px; display: flex; align-items: center;
+      gap: 6px; flex-shrink: 0; flex-wrap: wrap;
+    }
+    .pdf-toolbar button {
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 5px; color: #e5e7eb; font: 600 0.82rem/1.4 'Segoe UI', sans-serif;
+      padding: 4px 8px; cursor: pointer;
+    }
+    .pdf-toolbar button:hover:not(:disabled) { background: rgba(255,255,255,0.22); }
+    .pdf-toolbar button:disabled { opacity: 0.3; cursor: default; }
+    .page-info { color: #9ca3af; font-size: 0.8rem; min-width: 52px; text-align: center; }
+    .zoom-info { color: #6b7280; font-size: 0.76rem; min-width: 38px; text-align: center; }
+    .pdf-status { color: #9ca3af; font-size: 0.82rem; }
+    .pdf-canvas-area {
+      flex: 1; overflow: auto; display: flex; align-items: flex-start;
+      justify-content: center; padding: 12px;
+    }
+    #pdf-canvas { max-width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.4); border-radius: 2px; }
+    .no-state { color: #9ca3af; text-align: center; padding: 60px 20px; }
+    .no-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .no-state p { font-size: 0.88rem; line-height: 1.6; max-width: 260px; margin: 0 auto; }
+    .no-state h2 { color: #e5e7eb; font-size: 1.05rem; margin-bottom: 8px; }
+    .no-state code { background: rgba(255,255,255,0.1); border-radius: 3px; padding: 1px 5px; font-size: 0.8rem; }
+    .no-state a { color: #60a5fa; }
+
+    /* ── ANSWER PANEL ── */
+    .answer-panel {
+      background: #fff; display: flex; flex-direction: column;
+      overflow: hidden; border-left: 1px solid var(--border);
+    }
+    .answer-header {
+      padding: 9px 12px 7px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .answer-header h2 { font-size: 0.88rem; color: var(--dark); }
+    .ans-prog { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+    .answer-body { flex: 1; overflow-y: auto; padding: 6px 8px; }
+
+    /* answer grid */
+    .answer-grid { display: flex; flex-direction: column; gap: 2px; }
+    .a-row { display: grid; grid-template-columns: 24px repeat(4, 1fr); gap: 2px; align-items: center; }
+    .a-row.five { grid-template-columns: 24px repeat(5, 1fr); }
+    .q-num { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-align: right; padding-right: 2px; }
+    .opt {
+      border: 1.5px solid var(--border); border-radius: 5px; background: var(--bg);
+      color: var(--text); font: 600 0.76rem/1 'Segoe UI', sans-serif;
+      padding: 5px 2px; cursor: pointer; text-align: center;
+      transition: all 0.1s; user-select: none;
+    }
+    .opt:hover:not(:disabled) { background: var(--light); border-color: var(--blue); }
+    .opt.sel   { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .opt.ok    { background: #dcfce7; color: var(--green); border-color: var(--green); }
+    .opt.wrong { background: #fee2e2; color: var(--red);   border-color: var(--red); }
+    .opt.key   { background: #bbf7d0; color: var(--green); border-color: var(--green); font-weight: 900; }
+    .opt:disabled { cursor: default; }
+
+    .answer-footer {
+      padding: 9px 10px; border-top: 1px solid var(--border); flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .submit-btn {
+      background: var(--blue); color: #fff; border: none; border-radius: 8px;
+      padding: 10px; font: 600 0.88rem/1 'Segoe UI', sans-serif;
+      cursor: pointer; width: 100%; transition: background 0.12s;
+    }
+    .submit-btn:hover { background: #1d4ed8; }
+    .submit-btn:disabled { background: #94a3b8; cursor: default; }
+    .ksr-btn {
+      background: #f8fafc; color: var(--dark); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px; font: 0.8rem 'Segoe UI', sans-serif;
+      cursor: pointer; width: 100%; transition: background 0.12s; text-align: center;
+    }
+    .ksr-btn:hover { background: var(--light); }
+
+    /* ── MODALS ── */
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100;
+      display: none; align-items: center; justify-content: center; padding: 14px;
+    }
+    .overlay.open { display: flex; }
+    .modal {
+      background: #fff; border-radius: 14px; width: 100%; max-height: 90vh;
+      display: flex; flex-direction: column; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+    .modal.wide   { max-width: 840px; }
+    .modal.narrow { max-width: 460px; }
+    .modal-head {
+      background: var(--dark); color: #fff; padding: 11px 16px;
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .modal-head h2 { font-size: 0.95rem; }
+    .modal-x { background: none; border: none; color: #bfdbfe; font-size: 1.3rem; cursor: pointer; }
+    .modal-x:hover { color: #fff; }
+    .modal-body { padding: 18px; overflow-y: auto; flex: 1; }
+    .modal-pdf { flex: 1; border: none; width: 100%; min-height: 400px; }
+
+    /* results */
+    .score-box { text-align: center; padding: 16px 0 10px; }
+    .score-num { font-size: 3.2rem; font-weight: 900; color: var(--dark); line-height: 1; }
+    .score-pct { font-size: 1.2rem; color: var(--muted); margin-top: 4px; }
+    .grade-badge {
+      display: inline-block; margin-top: 10px; padding: 4px 16px;
+      border-radius: 99px; font-weight: 700; font-size: 0.95rem;
+    }
+    .g1 { background: #dcfce7; color: #15803d; }
+    .g2 { background: #bbf7d0; color: #166534; }
+    .g3 { background: #fef9c3; color: #854d0e; }
+    .g4 { background: #fee2e2; color: #991b1b; }
+    .g5 { background: #fecaca; color: #7f1d1d; }
+
+    .res-grid { margin-top: 14px; display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 4px; }
+    .rc { display: flex; flex-direction: column; align-items: center; padding: 5px 3px; border-radius: 6px; font-size: 0.68rem; }
+    .rc .rn { font-weight: 700; color: var(--muted); }
+    .rc .ra { font-weight: 700; font-size: 0.82rem; }
+    .rc .rd { font-size: 0.66rem; color: var(--muted); }
+    .rc.ok   { background: #dcfce7; } .rc.ok  .ra { color: var(--green); }
+    .rc.err  { background: #fee2e2; } .rc.err .ra { color: var(--red); }
+    .rc.skip { background: #f1f5f9; } .rc.skip .ra { color: var(--muted); }
+
+    .res-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .res-actions button {
+      flex: 1; min-width: 100px; padding: 9px 12px; border-radius: 8px;
+      font: 600 0.83rem/1 'Segoe UI', sans-serif; cursor: pointer;
+      border: 1px solid var(--border); background: var(--bg); color: var(--dark);
+    }
+    .res-actions button.pri { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .res-actions button:hover { opacity: 0.85; }
+
+    /* history */
+    .hist-list { display: flex; flex-direction: column; gap: 8px; }
+    .hist-item {
+      border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hist-item .hl      { flex: 1; }
+    .hist-item .hl-name { font-weight: 600; font-size: 0.88rem; }
+    .hist-item .hl-date { color: var(--muted); font-size: 0.74rem; margin-top: 2px; }
+    .hist-item .hs      { font-weight: 700; color: var(--dark); font-size: 1.05rem; }
+    .hist-empty { color: var(--muted); text-align: center; padding: 28px; font-size: 0.88rem; }
+
+    /* toast */
+    .toast {
+      position: fixed; top: 64px; left: 50%; transform: translateX(-50%) translateY(-8px);
+      background: #1e3a8a; color: #fff; border-radius: 10px; padding: 11px 20px;
+      font: 700 0.95rem/1 'Segoe UI', sans-serif; box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+      z-index: 200; opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) { .main-layout { grid-template-columns: 1fr 255px; } }
+    @media (max-width: 600px) {
+      .main-layout { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+      .panel-tabs  { display: flex; }
+      .pdf-panel    { display: none; }
+      .answer-panel { display: none; border-left: none; }
+      .pdf-panel.m-on    { display: flex; }
+      .answer-panel.m-on { display: flex; }
+      .min-wrap { display: none; }
+      #test-select { max-width: 130px; }
+      .timer-disp { font-size: 1.1rem; min-width: 62px; }
+    }
+    @media (max-width: 380px) {
+      .topbar { padding: 6px 8px; gap: 6px; }
+      #test-select { max-width: 100px; font-size: 0.76rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a href="index.html">← Rozcestník</a>
+  <span class="tb-sep">|</span>
+  <select id="test-select"><option value="">— Vyber test —</option></select>
+  <div class="timer-group">
+    <div class="timer-disp" id="timer-disp">1:15:00</div>
+    <button class="tb-btn" id="btn-start"  title="Spustit (Space)">▶</button>
+    <button class="tb-btn" id="btn-pause"  title="Pauza (Space)"  hidden>⏸</button>
+    <button class="tb-btn" id="btn-reset"  title="Reset (R)">↺</button>
+    <div class="min-wrap">
+      <span>min:</span>
+      <input type="number" id="timer-min" value="75" min="1" max="300">
+      <button class="tb-btn" id="btn-set-time">✓</button>
+    </div>
+    <button class="tb-btn primary" id="btn-submit-top" hidden>Odevzdat</button>
+    <button class="tb-btn" id="btn-history" title="Historie výsledků">📊</button>
+  </div>
+</header>
+
+<!-- MOBILE TABS -->
+<div class="panel-tabs" id="panel-tabs">
+  <button class="active" data-panel="pdf">📄 Test</button>
+  <button data-panel="answers">📋 Odpovědní arch</button>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-strip"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- MAIN -->
+<div class="main-layout">
+
+  <!-- PDF panel -->
+  <div class="pdf-panel m-on" id="panel-pdf">
+    <div class="pdf-toolbar">
+      <button id="pg-prev" disabled>‹</button>
+      <span class="page-info" id="pg-info">— / —</span>
+      <button id="pg-next" disabled>›</button>
+      <span style="flex:1"></span>
+      <span class="zoom-info" id="zm-info">—</span>
+      <button id="zm-out" disabled>−</button>
+      <button id="zm-in"  disabled>+</button>
+      <button id="zm-fit" disabled>⊞</button>
+      <span class="pdf-status" id="pdf-status"></span>
+    </div>
+    <div class="pdf-canvas-area" id="pdf-area">
+      <div class="no-state">
+        <div class="icon">📄</div>
+        <h2>Vyber test</h2>
+        <p>Z nabídky nahoře vyber zkouškový termín a test se zobrazí zde.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Answer panel -->
+  <div class="answer-panel" id="panel-answers">
+    <div class="answer-header">
+      <h2>Odpovědní arch</h2>
+      <span class="ans-prog" id="ans-prog">—</span>
+    </div>
+    <div class="answer-body">
+      <div class="answer-grid" id="ans-grid">
+        <div style="color:#94a3b8;text-align:center;padding:36px 10px;font-size:0.84rem;">
+          Nejdříve vyberte test
+        </div>
+      </div>
+    </div>
+    <div class="answer-footer" id="ans-footer" hidden>
+      <button class="submit-btn" id="btn-submit">✓ Odevzdat test</button>
+      <button class="ksr-btn" id="btn-ksr">🔑 Klíč správných řešení</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- KSR MODAL -->
+<div class="overlay" id="ksr-ov">
+  <div class="modal wide">
+    <div class="modal-head">
+      <h2 id="ksr-title">Klíč správných řešení</h2>
+      <button class="modal-x" id="ksr-x">✕</button>
+    </div>
+    <iframe class="modal-pdf" id="ksr-frame" src="about:blank" title="Klíč"></iframe>
+  </div>
+</div>
+
+<!-- RESULTS MODAL -->
+<div class="overlay" id="res-ov">
+  <div class="modal narrow">
+    <div class="modal-head">
+      <h2 id="res-title">Výsledky</h2>
+      <button class="modal-x" id="res-x">✕</button>
+    </div>
+    <div class="modal-body" id="res-body"></div>
+  </div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="overlay" id="hist-ov">
+  <div class="modal narrow">
+    <div class="modal-head">
+      <h2>Historie výsledků</h2>
+      <button class="modal-x" id="hist-x">✕</button>
+    </div>
+    <div class="modal-body" id="hist-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- PDF.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous"></script>
+<script>
+'use strict';
+(function () {
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let catalog = [], answerKeys = {};
+let cur = null;
+let pdfDoc = null, pdfPage = 1, pdfZoom = 1.0, pdfRendering = false, pdfPending = null;
+let userAnswers = [], questionCount = 32, submitted = false;
+let totalSec = 75 * 60, remainSec = totalSec, timerOn = false, timerTick = null;
+let ksrConfirmPending = false;
+
+// ── REFS ──────────────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const elSelect      = $('test-select');
+const elTimerDisp   = $('timer-disp');
+const elStart       = $('btn-start');
+const elPause       = $('btn-pause');
+const elReset       = $('btn-reset');
+const elTimerMin    = $('timer-min');
+const elSetTime     = $('btn-set-time');
+const elSubmitTop   = $('btn-submit-top');
+const elHistBtn     = $('btn-history');
+const elProgFill    = $('prog-fill');
+const elPdfArea     = $('pdf-area');
+const elPdfStatus   = $('pdf-status');
+const elPgInfo      = $('pg-info');
+const elZmInfo      = $('zm-info');
+const elPgPrev      = $('pg-prev');
+const elPgNext      = $('pg-next');
+const elZmIn        = $('zm-in');
+const elZmOut       = $('zm-out');
+const elZmFit       = $('zm-fit');
+const elAnsGrid     = $('ans-grid');
+const elAnsProg     = $('ans-prog');
+const elAnsFooter   = $('ans-footer');
+const elBtnSubmit   = $('btn-submit');
+const elBtnKsr      = $('btn-ksr');
+const elKsrOv       = $('ksr-ov');
+const elKsrTitle    = $('ksr-title');
+const elKsrFrame    = $('ksr-frame');
+const elKsrX        = $('ksr-x');
+const elResOv       = $('res-ov');
+const elResTitle    = $('res-title');
+const elResBody     = $('res-body');
+const elResX        = $('res-x');
+const elHistOv      = $('hist-ov');
+const elHistBody    = $('hist-body');
+const elHistX       = $('hist-x');
+const elToast       = $('toast');
+const elPanelPdf    = $('panel-pdf');
+const elPanelAns    = $('panel-answers');
+const elPanelTabs   = $('panel-tabs');
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init() {
+  try {
+    const r = await fetch('assets/cermat/cj/catalog.json');
+    if (r.ok) catalog = await r.json();
+  } catch(_) {}
+  try {
+    const r = await fetch('assets/cermat/cj/answers.json');
+    if (r.ok) answerKeys = await r.json();
+  } catch(_) {}
+
+  catalog.forEach(t => {
+    const o = document.createElement('option');
+    o.value = t.id;
+    o.textContent = t.label;
+    elSelect.appendChild(o);
+  });
+
+  // deep-link via ?test=
+  const param = new URLSearchParams(location.search).get('test');
+  if (param && catalog.find(t => t.id === param)) {
+    elSelect.value = param;
+    selectTest(param);
+  }
+}
+
+// ── TEST SELECTION ────────────────────────────────────────────────────────────
+elSelect.addEventListener('change', () => {
+  if (elSelect.value) selectTest(elSelect.value);
+});
+
+function selectTest(id) {
+  const t = catalog.find(c => c.id === id);
+  if (!t) return;
+  cur = t;
+
+  const url = new URL(location.href);
+  url.searchParams.set('test', id);
+  history.replaceState({}, '', url);
+
+  stopTimer();
+  remainSec = totalSec;
+  submitted = false;
+  ksrConfirmPending = false;
+  elTimerDisp.classList.remove('warn', 'done');
+  updateTimerDisp();
+  updateProg(1);
+
+  questionCount = (answerKeys[id] && answerKeys[id].length) || t.questions || 32;
+  userAnswers = new Array(questionCount).fill(null);
+
+  const dtFile = t.files && t.files.dt;
+  const dtSrc  = dtFile && (dtFile.local || dtFile.remote);
+  if (dtSrc) loadPdf(dtSrc);
+  else showPdfMsg('❌', 'PDF není dostupné', '');
+
+  buildGrid();
+  elAnsFooter.hidden = false;
+  elSubmitTop.hidden = false;
+  elBtnSubmit.disabled = false;
+  elBtnKsr.textContent = '🔑 Klíč správných řešení';
+  document.title = 'CERMAT – ' + t.label;
+}
+
+// ── PDF LOADING ───────────────────────────────────────────────────────────────
+async function loadPdf(url) {
+  pdfDoc = null;
+  pdfPage = 1;
+  pdfZoom = fitZoom();
+  elPdfArea.innerHTML = '<canvas id="pdf-canvas" style="max-width:100%;box-shadow:0 4px 20px rgba(0,0,0,.4);border-radius:2px;display:block"></canvas>';
+  elPdfStatus.textContent = 'Načítám…';
+  setPdfBtns(true);
+
+  try {
+    pdfDoc = await pdfjsLib.getDocument({ url }).promise;
+    elPdfStatus.textContent = '';
+    setPdfBtns(false);
+    renderPage(1);
+  } catch (e) {
+    pdfDoc = null;
+    showPdfMsg('⚠️', 'PDF nelze načíst',
+      'Ujisti se, že server běží (<code>node backend/server.js</code>) a zkus stránku obnovit. ' +
+      '<br><br><a href="' + url + '" target="_blank" style="color:#60a5fa">Otevřít PDF přímo →</a>');
+    elPdfStatus.textContent = '';
+    setPdfBtns(true);
+  }
+}
+
+function showPdfMsg(icon, head, body) {
+  elPdfArea.innerHTML =
+    '<div class="no-state"><div class="icon">' + icon + '</div>' +
+    '<h2>' + head + '</h2><p>' + body + '</p></div>';
+}
+
+function setPdfBtns(disabled) {
+  [elPgPrev, elPgNext, elZmIn, elZmOut, elZmFit].forEach(b => { b.disabled = disabled; });
+}
+
+async function renderPage(n) {
+  if (!pdfDoc) return;
+  if (pdfRendering) { pdfPending = n; return; }
+  pdfRendering = true;
+  const canvas = $('pdf-canvas');
+  if (!canvas) { pdfRendering = false; return; }
+  try {
+    const page = await pdfDoc.getPage(n);
+    const vp = page.getViewport({ scale: pdfZoom });
+    canvas.width  = vp.width;
+    canvas.height = vp.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+    pdfPage = n;
+    elPgInfo.textContent = pdfPage + ' / ' + pdfDoc.numPages;
+    elZmInfo.textContent = Math.round(pdfZoom * 100) + '%';
+    elPgPrev.disabled = pdfPage <= 1;
+    elPgNext.disabled = pdfPage >= pdfDoc.numPages;
+  } catch(e) {}
+  pdfRendering = false;
+  if (pdfPending !== null) {
+    const p = pdfPending; pdfPending = null;
+    renderPage(p);
+  }
+}
+
+function fitZoom() {
+  const w = elPdfArea.clientWidth - 28;
+  return Math.min(2.0, Math.max(0.4, w / 595));
+}
+
+elPgPrev.addEventListener('click', () => { if (pdfPage > 1) renderPage(pdfPage - 1); });
+elPgNext.addEventListener('click', () => { if (pdfDoc && pdfPage < pdfDoc.numPages) renderPage(pdfPage + 1); });
+elZmIn.addEventListener('click',   () => { pdfZoom = Math.min(3.0, pdfZoom + 0.2); renderPage(pdfPage); });
+elZmOut.addEventListener('click',  () => { pdfZoom = Math.max(0.3, pdfZoom - 0.2); renderPage(pdfPage); });
+elZmFit.addEventListener('click',  () => { pdfZoom = fitZoom(); renderPage(pdfPage); });
+
+// ── ANSWER GRID ───────────────────────────────────────────────────────────────
+function buildGrid() {
+  elAnsGrid.innerHTML = '';
+  const keys = answerKeys[cur && cur.id];
+  for (let i = 0; i < questionCount; i++) {
+    const row = document.createElement('div');
+    row.className = 'a-row';
+    row.dataset.q = i;
+
+    const num = document.createElement('div');
+    num.className = 'q-num';
+    num.textContent = i + 1;
+    row.appendChild(num);
+
+    // Use 5 options only if key explicitly says E; otherwise 4
+    const useE = keys && keys[i] === 'E';
+    const opts = useE ? ['A','B','C','D','E'] : ['A','B','C','D'];
+    if (useE) row.classList.add('five');
+
+    opts.forEach(o => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.textContent = o;
+      btn.dataset.o = o;
+      btn.addEventListener('click', () => pick(i, o));
+      row.appendChild(btn);
+    });
+    elAnsGrid.appendChild(row);
+  }
+  updateAnsProg();
+  tryRestoreProgress();
+}
+
+function pick(qi, opt) {
+  if (submitted) return;
+  userAnswers[qi] = (userAnswers[qi] === opt) ? null : opt;
+  const row = elAnsGrid.querySelector('[data-q="' + qi + '"]');
+  if (row) {
+    row.querySelectorAll('.opt').forEach(b => {
+      b.classList.toggle('sel', b.dataset.o === userAnswers[qi]);
+    });
+  }
+  updateAnsProg();
+  saveProgress();
+}
+
+function updateAnsProg() {
+  const n = userAnswers.filter(a => a !== null).length;
+  elAnsProg.textContent = n + ' / ' + questionCount;
+}
+
+function lockGrid() {
+  elAnsGrid.querySelectorAll('.opt').forEach(b => { b.disabled = true; });
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────────────────
+function doSubmit(auto) {
+  if (submitted) { showResults(); return; }
+  if (!cur) return;
+
+  if (!auto) {
+    const empty = userAnswers.filter(a => a === null).length;
+    if (empty > 0 && !confirm(empty + ' otázek bez odpovědi. Opravdu odevzdat?')) return;
+  }
+
+  submitted = true;
+  stopTimer();
+  lockGrid();
+  elBtnSubmit.disabled = true;
+  elSubmitTop.textContent = '📊 Výsledky';
+
+  const keys = answerKeys[cur.id];
+  if (keys && keys.length) colorGrid(keys);
+
+  const score = calcScore(keys);
+  saveHistory(cur.id, cur.label, score, questionCount);
+  clearProgress();
+  showResults(keys, score);
+}
+
+function colorGrid(keys) {
+  for (let i = 0; i < questionCount; i++) {
+    const row = elAnsGrid.querySelector('[data-q="' + i + '"]');
+    if (!row) continue;
+    const correct = keys[i];
+    const given   = userAnswers[i];
+    row.querySelectorAll('.opt').forEach(btn => {
+      const o = btn.dataset.o;
+      btn.classList.remove('sel');
+      if (o === correct && o === given) btn.classList.add('ok');
+      else if (o === given)             btn.classList.add('wrong');
+      else if (o === correct)           btn.classList.add('key');
+    });
+  }
+}
+
+function calcScore(keys) {
+  if (!keys || !keys.length) return null;
+  let n = 0;
+  for (let i = 0; i < Math.min(questionCount, keys.length); i++) {
+    if (keys[i] !== null && userAnswers[i] === keys[i]) n++;
+  }
+  return n;
+}
+
+// ── RESULTS MODAL ─────────────────────────────────────────────────────────────
+function showResults(keys, score) {
+  if (!keys)  keys  = answerKeys[cur && cur.id];
+  if (score === undefined) score = calcScore(keys);
+  elResTitle.textContent = 'Výsledky – ' + (cur ? cur.label : '');
+
+  let html = '';
+  if (score !== null && keys) {
+    const mcqCount = keys.filter(k => k !== null).length || questionCount;
+    const pct = Math.round((score / mcqCount) * 100);
+    const g   = gradeInfo(pct);
+    html += '<div class="score-box">' +
+      '<div class="score-num">' + score + ' / ' + mcqCount + '</div>' +
+      '<div class="score-pct">' + pct + ' %</div>' +
+      '<span class="grade-badge g' + g.n + '">' + g.label + '</span>' +
+      '</div><div class="res-grid">';
+    for (let i = 0; i < questionCount; i++) {
+      const given   = userAnswers[i] || '—';
+      const correct = keys[i] || '?';
+      const cls     = !userAnswers[i] ? 'skip' : given === correct ? 'ok' : 'err';
+      html += '<div class="rc ' + cls + '">' +
+        '<span class="rn">' + (i + 1) + '</span>' +
+        '<span class="ra">' + given + '</span>' +
+        (cls === 'err' ? '<span class="rd">' + correct + '</span>' : '') +
+        '</div>';
+    }
+    html += '</div>';
+  } else {
+    html += '<p style="color:#64748b;margin-bottom:14px">Klíč není dostupný — zkontroluj odpovědi ručně pomocí KSR PDF.</p>' +
+      '<div class="res-grid">';
+    for (let i = 0; i < questionCount; i++) {
+      html += '<div class="rc skip"><span class="rn">' + (i+1) + '</span><span class="ra">' + (userAnswers[i]||'—') + '</span></div>';
+    }
+    html += '</div>';
+  }
+
+  html += '<div class="res-actions">' +
+    '<button onclick="openKsr()">🔑 Zobrazit klíč</button>' +
+    '<button class="pri" onclick="closeResults()">Zavřít</button>' +
+    '</div>';
+  elResBody.innerHTML = html;
+  elResOv.classList.add('open');
+}
+
+window.closeResults = () => { elResOv.classList.remove('open'); };
+elResX.addEventListener('click', window.closeResults);
+elResOv.addEventListener('click', e => { if (e.target === elResOv) window.closeResults(); });
+
+function gradeInfo(pct) {
+  if (pct >= 90) return { n:1, label:'Výborný (1)' };
+  if (pct >= 75) return { n:2, label:'Chvalitebný (2)' };
+  if (pct >= 60) return { n:3, label:'Dobrý (3)' };
+  if (pct >= 45) return { n:4, label:'Dostatečný (4)' };
+  return { n:5, label:'Nedostatečný (5)' };
+}
+
+elBtnSubmit.addEventListener('click',  () => doSubmit(false));
+elSubmitTop.addEventListener('click',  () => submitted ? showResults() : doSubmit(false));
+
+// ── KSR MODAL ─────────────────────────────────────────────────────────────────
+function openKsr() {
+  if (!cur) return;
+  const ksrFile = cur.files && cur.files.ksr;
+  const src = ksrFile && (ksrFile.local || ksrFile.remote);
+  if (!src) { toast('Klíč není dostupný.'); return; }
+
+  // Require two-click confirmation if not yet submitted
+  if (!submitted) {
+    if (!ksrConfirmPending) {
+      ksrConfirmPending = true;
+      const orig = elBtnKsr.textContent;
+      elBtnKsr.textContent = '⚠️ Opravdu zobrazit?';
+      setTimeout(() => {
+        if (ksrConfirmPending) {
+          ksrConfirmPending = false;
+          elBtnKsr.textContent = orig;
+        }
+      }, 3000);
+      return;
+    }
+    ksrConfirmPending = false;
+  }
+
+  elKsrTitle.textContent = 'Klíč – ' + cur.label;
+  elKsrFrame.src = src;
+  elKsrOv.classList.add('open');
+}
+
+window.openKsr = openKsr;
+elBtnKsr.addEventListener('click', openKsr);
+elKsrX.addEventListener('click', () => { elKsrOv.classList.remove('open'); elKsrFrame.src = 'about:blank'; });
+elKsrOv.addEventListener('click', e => { if (e.target === elKsrOv) { elKsrOv.classList.remove('open'); elKsrFrame.src = 'about:blank'; } });
+
+// ── HISTORY ───────────────────────────────────────────────────────────────────
+const HIST_KEY = 'cermat-cj-hist';
+
+function saveHistory(id, label, score, total) {
+  const h = getHistory();
+  h.unshift({
+    id, label, score, total,
+    date: new Date().toLocaleDateString('cs-CZ'),
+    time: new Date().toLocaleTimeString('cs-CZ', { hour:'2-digit', minute:'2-digit' })
+  });
+  try { localStorage.setItem(HIST_KEY, JSON.stringify(h.slice(0, 60))); } catch(_) {}
+}
+
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(_) { return []; }
+}
+
+elHistBtn.addEventListener('click', () => {
+  const h = getHistory();
+  let html = '';
+  if (!h.length) {
+    html = '<div class="hist-empty">Žádné výsledky. Dokonči alespoň jeden test.</div>';
+  } else {
+    html = '<div class="hist-list">';
+    h.forEach(e => {
+      const pct = (e.score !== null && e.score !== undefined)
+        ? ' (' + Math.round((e.score / e.total) * 100) + '%)' : '';
+      const sc  = (e.score !== null && e.score !== undefined)
+        ? e.score + '/' + e.total + pct : '?';
+      html += '<div class="hist-item">' +
+        '<div class="hl"><div class="hl-name">' + escHtml(e.label) + '</div>' +
+        '<div class="hl-date">' + e.date + ' ' + e.time + '</div></div>' +
+        '<div class="hs">' + sc + '</div></div>';
+    });
+    html += '</div>';
+    html += '<button onclick="clearHist()" style="margin-top:12px;width:100%;padding:8px;' +
+      'border:1px solid #fca5a5;background:#fee2e2;color:#dc2626;border-radius:8px;' +
+      'cursor:pointer;font-size:0.8rem">Smazat historii</button>';
+  }
+  elHistBody.innerHTML = html;
+  elHistOv.classList.add('open');
+});
+
+window.clearHist = () => {
+  if (confirm('Opravdu smazat celou historii?')) {
+    localStorage.removeItem(HIST_KEY);
+    elHistOv.classList.remove('open');
+  }
+};
+
+elHistX.addEventListener('click', () => { elHistOv.classList.remove('open'); });
+elHistOv.addEventListener('click', e => { if (e.target === elHistOv) elHistOv.classList.remove('open'); });
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── PROGRESS SAVE / RESTORE ───────────────────────────────────────────────────
+function progKey() { return 'cermat-prog::' + (cur ? cur.id : ''); }
+
+function saveProgress() {
+  if (!cur || submitted) return;
+  try {
+    localStorage.setItem(progKey(), JSON.stringify({ answers: userAnswers, remain: remainSec }));
+  } catch(_) {}
+}
+
+function tryRestoreProgress() {
+  if (!cur) return;
+  try {
+    const raw = localStorage.getItem(progKey());
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (!s.answers || s.answers.length !== questionCount) return;
+    const filled = s.answers.filter(a => a !== null).length;
+    if (!filled) return;
+    const remStr = formatTime(s.remain || totalSec);
+    if (!confirm('Nalezen rozehraný test (' + filled + '/' + questionCount +
+        ' odpovědí, zbývá ' + remStr + '). Pokračovat?')) return;
+    userAnswers = s.answers;
+    remainSec   = s.remain || totalSec;
+    for (let i = 0; i < questionCount; i++) {
+      if (!userAnswers[i]) continue;
+      const row = elAnsGrid.querySelector('[data-q="' + i + '"]');
+      if (row) row.querySelectorAll('.opt').forEach(b => {
+        b.classList.toggle('sel', b.dataset.o === userAnswers[i]);
+      });
+    }
+    updateAnsProg();
+    updateTimerDisp();
+  } catch(_) {}
+}
+
+function clearProgress() {
+  if (cur) try { localStorage.removeItem(progKey()); } catch(_) {}
+}
+
+// ── TIMER ─────────────────────────────────────────────────────────────────────
+elStart.addEventListener('click',   startTimer);
+elPause.addEventListener('click',   pauseTimer);
+elReset.addEventListener('click',   resetTimer);
+elSetTime.addEventListener('click', () => {
+  const m = parseInt(elTimerMin.value, 10);
+  if (!m || m < 1) return;
+  totalSec = m * 60;
+  remainSec = totalSec;
+  stopTimer();
+  updateTimerDisp();
+  updateProg(1);
+});
+elTimerMin.addEventListener('keydown', e => { if (e.key === 'Enter') elSetTime.click(); });
+
+function startTimer() {
+  if (timerOn || remainSec <= 0 || submitted) return;
+  timerOn = true;
+  elStart.hidden = true;
+  elPause.hidden = false;
+  timerTick = setInterval(tick, 1000);
+}
+function pauseTimer() {
+  timerOn = false;
+  clearInterval(timerTick);
+  elStart.hidden = false;
+  elPause.hidden = true;
+  saveProgress();
+}
+function stopTimer() {
+  timerOn = false;
+  clearInterval(timerTick);
+  elStart.hidden = false;
+  elPause.hidden = true;
+}
+function resetTimer() {
+  stopTimer();
+  remainSec = totalSec;
+  elTimerDisp.classList.remove('warn', 'done');
+  updateTimerDisp();
+  updateProg(1);
+}
+
+function tick() {
+  if (remainSec <= 0) { onTimerEnd(); return; }
+  remainSec--;
+  updateTimerDisp();
+  updateProg(remainSec / totalSec);
+  if (remainSec > 0 && remainSec <= 600) elTimerDisp.classList.add('warn');
+  if (remainSec <= 0) onTimerEnd();
+  if (remainSec % 30 === 0) saveProgress();
+}
+
+function onTimerEnd() {
+  stopTimer();
+  elTimerDisp.classList.remove('warn');
+  elTimerDisp.classList.add('done');
+  toast('⏰ Čas vypršel! Test byl automaticky odevzdán.');
+  setTimeout(() => doSubmit(true), 1500);
+}
+
+function updateTimerDisp() { elTimerDisp.textContent = formatTime(remainSec); }
+
+function updateProg(ratio) {
+  elProgFill.style.width = (ratio * 100) + '%';
+  elProgFill.style.background = ratio > 0.5 ? '#2563eb' : ratio > 0.2 ? '#f59e0b' : '#dc2626';
+}
+
+function formatTime(s) {
+  s = Math.max(0, s);
+  const h  = Math.floor(s / 3600);
+  const m  = Math.floor((s % 3600) / 60);
+  const sc = s % 60;
+  if (h > 0) return h + ':' + pad(m) + ':' + pad(sc);
+  return pad(m) + ':' + pad(sc);
+}
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function toast(msg) {
+  elToast.textContent = msg;
+  elToast.classList.add('show');
+  setTimeout(() => elToast.classList.remove('show'), 4000);
+}
+
+// ── MOBILE TABS ───────────────────────────────────────────────────────────────
+elPanelTabs.querySelectorAll('button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    elPanelTabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = btn.dataset.panel;
+    elPanelPdf.classList.toggle('m-on', panel === 'pdf');
+    elPanelAns.classList.toggle('m-on', panel === 'answers');
+  });
+});
+
+// ── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  const tag = document.activeElement && document.activeElement.tagName;
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+
+  if (e.code === 'Space') {
+    e.preventDefault();
+    timerOn ? pauseTimer() : startTimer();
+  }
+  if (e.key === 'r' || e.key === 'R') resetTimer();
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+    if (pdfDoc && pdfPage < pdfDoc.numPages) renderPage(pdfPage + 1);
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    if (pdfPage > 1) renderPage(pdfPage - 1);
+  }
+  if (e.key === 'Escape') {
+    elKsrOv.classList.remove('open');
+    elResOv.classList.remove('open');
+    elHistOv.classList.remove('open');
+  }
+});
+
+// ── GO ────────────────────────────────────────────────────────────────────────
+init();
+
+})();
+</script>
+</body>
+</html>

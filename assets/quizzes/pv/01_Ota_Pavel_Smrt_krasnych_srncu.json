@@ -128,7 +128,7 @@
       "prompt": "Rozhodni, zda je výrok pravdivý, a vysvětli proč:",
       "statement": "Kniha Smrt krásných srnců je románem s jednou ucelenou dějovou linií.",
       "answer": false,
-      "explanation": "Smrt krásných srnců je sbírka autobiografických povídek (próz), nikoli román. Jednotlivé povídky jsou propojeny osobou tátů Lea Poppera a prostředím Křivoklátska, ale každá je samostatným příběhem."
+      "explanation": "Smrt krásných srnců je sbírka autobiografických povídek (próz), nikoli román. Jednotlivé povídky jsou propojeny osobou táty Lea Poppera a prostředím Křivoklátska, ale každá je samostatným příběhem."
     },
     {
       "type": "trueFalse",
@@ -237,12 +237,12 @@
       "prompt": "Kde pracoval Ota Pavel za druhé světové války (jako náhrada za školu)?",
       "options": [
         "V továrně na munici v Kladně",
-        "V dole Prago – důl Dunderka v Dubí u Kladna",
+        "V dole Dunderka (Prago) v Dubí u Kladna",
         "V zemědělském statku v Buštěhradě",
         "V tiskárně nacistických novin v Praze"
       ],
       "answer": 1,
-      "explanation": "Od roku 1944 pracoval Ota Pavel v dole Prago – důl Dunderka v Dubí u Kladna. Pracoval tam až do konce války."
+      "explanation": "Od roku 1944 až do konce války pracoval Ota Pavel v dole Prago – důl Dunderka v Dubí u Kladna."
     },
     {
       "type": "choice",
