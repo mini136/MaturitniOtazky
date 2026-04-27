@@ -117,7 +117,9 @@
     /* answer grid */
     .answer-grid { display: flex; flex-direction: column; gap: 2px; }
     .a-row { display: grid; grid-template-columns: 24px repeat(4, 1fr); gap: 2px; align-items: center; }
-    .a-row.five { grid-template-columns: 24px repeat(5, 1fr); }
+    .a-row.five  { grid-template-columns: 24px repeat(5, 1fr); }
+    .a-row.yesno { grid-template-columns: 24px 1fr 1fr; }
+    .a-row.open-q { grid-template-columns: 24px 1fr; }
     .q-num { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-align: right; padding-right: 2px; }
     .opt {
       border: 1.5px solid var(--border); border-radius: 5px; background: var(--bg);
@@ -131,6 +133,15 @@
     .opt.wrong { background: #fee2e2; color: var(--red);   border-color: var(--red); }
     .opt.key   { background: #bbf7d0; color: var(--green); border-color: var(--green); font-weight: 900; }
     .opt:disabled { cursor: default; }
+    .open-inp {
+      border: 1.5px solid var(--border); border-radius: 5px; background: var(--bg);
+      color: var(--text); font: 0.76rem/1 'Segoe UI', sans-serif;
+      padding: 5px 6px; width: 100%;
+    }
+    .open-inp:focus { outline: none; border-color: var(--blue); }
+    .open-inp.ok    { background: #dcfce7; border-color: var(--green); color: var(--green); }
+    .open-inp.wrong { background: #fee2e2; border-color: var(--red);   color: var(--red); }
+    .open-inp:disabled { cursor: default; }
 
     .answer-footer {
       padding: 9px 10px; border-top: 1px solid var(--border); flex-shrink: 0;
@@ -552,9 +563,13 @@ elZmOut.addEventListener('click',  () => { pdfZoom = Math.max(0.3, pdfZoom - 0.2
 elZmFit.addEventListener('click',  () => { pdfZoom = fitZoom(); renderPage(pdfPage); });
 
 // ── ANSWER GRID ───────────────────────────────────────────────────────────────
+const MCQ_OPTS = ['A','B','C','D','E'];
+
 function buildGrid() {
   elAnsGrid.innerHTML = '';
-  const keys = answerKeys[cur && cur.id];
+  const keys    = answerKeys[cur && cur.id];
+  const hasKeys = !!keys;
+
   for (let i = 0; i < questionCount; i++) {
     const row = document.createElement('div');
     row.className = 'a-row';
@@ -565,19 +580,44 @@ function buildGrid() {
     num.textContent = i + 1;
     row.appendChild(num);
 
-    // Use 5 options only if key explicitly says E; otherwise 4
-    const useE = keys && keys[i] === 'E';
-    const opts = useE ? ['A','B','C','D','E'] : ['A','B','C','D'];
-    if (useE) row.classList.add('five');
+    const keyVal = hasKeys ? keys[i] : undefined;
 
-    opts.forEach(o => {
-      const btn = document.createElement('button');
-      btn.className = 'opt';
-      btn.textContent = o;
-      btn.dataset.o = o;
-      btn.addEventListener('click', () => pick(i, o));
-      row.appendChild(btn);
-    });
+    if (keyVal === 'Ano' || keyVal === 'Ne') {
+      // Yes/No question
+      row.classList.add('yesno');
+      ['Ano', 'Ne'].forEach(o => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.textContent = o;
+        btn.dataset.o = o;
+        btn.addEventListener('click', () => pick(i, o));
+        row.appendChild(btn);
+      });
+    } else if (hasKeys && (keyVal === null || !MCQ_OPTS.includes(keyVal))) {
+      // Open/text question (null = no key available, or unexpected value)
+      row.classList.add('open-q');
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.className = 'open-inp';
+      inp.placeholder = '…';
+      inp.autocomplete = 'off';
+      inp.setAttribute('spellcheck', 'false');
+      inp.addEventListener('input', () => pickText(i, inp.value.trim() || null));
+      row.appendChild(inp);
+    } else {
+      // MCQ: A/B/C/D (or +E if key says E)
+      const useE = keyVal === 'E';
+      const opts = useE ? ['A','B','C','D','E'] : ['A','B','C','D'];
+      if (useE) row.classList.add('five');
+      opts.forEach(o => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.textContent = o;
+        btn.dataset.o = o;
+        btn.addEventListener('click', () => pick(i, o));
+        row.appendChild(btn);
+      });
+    }
     elAnsGrid.appendChild(row);
   }
   updateAnsProg();
@@ -597,6 +637,13 @@ function pick(qi, opt) {
   saveProgress();
 }
 
+function pickText(qi, val) {
+  if (submitted) return;
+  userAnswers[qi] = val;
+  updateAnsProg();
+  saveProgress();
+}
+
 function updateAnsProg() {
   const n = userAnswers.filter(a => a !== null).length;
   elAnsProg.textContent = n + ' / ' + questionCount;
@@ -604,6 +651,7 @@ function updateAnsProg() {
 
 function lockGrid() {
   elAnsGrid.querySelectorAll('.opt').forEach(b => { b.disabled = true; });
+  elAnsGrid.querySelectorAll('.open-inp').forEach(inp => { inp.disabled = true; });
 }
 
 // ── SUBMIT ────────────────────────────────────────────────────────────────────
@@ -637,6 +685,17 @@ function colorGrid(keys) {
     if (!row) continue;
     const correct = keys[i];
     const given   = userAnswers[i];
+
+    if (row.classList.contains('open-q')) {
+      const inp = row.querySelector('.open-inp');
+      if (!inp) continue;
+      if (correct === null) continue; // no key → can't grade
+      const match = given && normAnsw(given) === normAnsw(correct);
+      inp.classList.add(match ? 'ok' : (given ? 'wrong' : ''));
+      if (!match && correct) inp.title = 'Správně: ' + correct;
+      continue;
+    }
+
     row.querySelectorAll('.opt').forEach(btn => {
       const o = btn.dataset.o;
       btn.classList.remove('sel');
@@ -647,11 +706,24 @@ function colorGrid(keys) {
   }
 }
 
+function normAnsw(s) {
+  return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+}
+
 function calcScore(keys) {
   if (!keys || !keys.length) return null;
   let n = 0;
   for (let i = 0; i < Math.min(questionCount, keys.length); i++) {
-    if (keys[i] !== null && userAnswers[i] === keys[i]) n++;
+    if (keys[i] === null) continue;
+    const correct = keys[i];
+    const given   = userAnswers[i];
+    if (!given) continue;
+    // Text answers: normalize before comparing
+    if (MCQ_OPTS.includes(correct) || correct === 'Ano' || correct === 'Ne') {
+      if (given === correct) n++;
+    } else {
+      if (normAnsw(given) === normAnsw(correct)) n++;
+    }
   }
   return n;
 }
@@ -833,9 +905,15 @@ function tryRestoreProgress() {
     for (let i = 0; i < questionCount; i++) {
       if (!userAnswers[i]) continue;
       const row = elAnsGrid.querySelector('[data-q="' + i + '"]');
-      if (row) row.querySelectorAll('.opt').forEach(b => {
-        b.classList.toggle('sel', b.dataset.o === userAnswers[i]);
-      });
+      if (!row) continue;
+      if (row.classList.contains('open-q')) {
+        const inp = row.querySelector('.open-inp');
+        if (inp) inp.value = userAnswers[i];
+      } else {
+        row.querySelectorAll('.opt').forEach(b => {
+          b.classList.toggle('sel', b.dataset.o === userAnswers[i]);
+        });
+      }
     }
     updateAnsProg();
     updateTimerDisp();

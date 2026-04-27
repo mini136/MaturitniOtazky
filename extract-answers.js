@@ -39,9 +39,10 @@ const BASE = path.join(__dirname, "assets", "cermat", "cj");
 const CATALOG = path.join(BASE, "catalog.json");
 const OUTPUT = path.join(BASE, "answers.json");
 
-// Try to load existing output so we can merge
+// Try to load existing output so we can merge (use --force to re-extract all)
+const force = process.argv.includes("--force");
 let existing = {};
-if (fs.existsSync(OUTPUT)) {
+if (!force && fs.existsSync(OUTPUT)) {
   try {
     existing = JSON.parse(fs.readFileSync(OUTPUT, "utf8"));
   } catch (_) {}
@@ -50,15 +51,13 @@ if (fs.existsSync(OUTPUT)) {
 const catalog = JSON.parse(fs.readFileSync(CATALOG, "utf8"));
 
 // CERMAT KSR PDFs use pdf-parse's tab-cell format:
-//   "N \tA \t1\n"  — question N has answer A worth 1 point
-// Lowercase d is used as option D in some years.
+//   "N \tA \t1\n"  — question N has answer A worth 1 point (MCQ)
+//   "N \tAno \t1\n" / "N \tNe \t1\n" — yes/no type
 // Compound/open questions have no letter answer — they get null in the array.
 function extractFromText(text) {
   const answers = {};
 
-  // Precise pattern: line starts with 1-2 digits, space+tab, single letter A-E
-  // (case insensitive), space+tab, then a digit (points value).
-  // The multiline flag ensures ^ matches after \n.
+  // Pattern 1: MCQ single letter A-E (case insensitive)
   const p1 = /^(\d{1,2}) \t([A-Ea-e]) \t\d/gm;
   let m;
   while ((m = p1.exec(text)) !== null) {
@@ -66,7 +65,16 @@ function extractFromText(text) {
     if (n >= 1 && n <= 32) answers[n] = m[2].toUpperCase();
   }
 
-  // If we got at least 8 MCQ answers, likely valid (many questions are open/compound)
+  // Pattern 2: Ano / Ne answers
+  const p2 = /^(\d{1,2}) \t(Ano|Ne) \t\d/gim;
+  while ((m = p2.exec(text)) !== null) {
+    const n = parseInt(m[1], 10);
+    if (n >= 1 && n <= 32 && !answers[n]) {
+      answers[n] = m[2].charAt(0).toUpperCase() + m[2].slice(1).toLowerCase();
+    }
+  }
+
+  // If we got at least 8 answers, likely valid (many questions are open/compound)
   const count = Object.keys(answers).length;
   if (count < 8) return null;
 
