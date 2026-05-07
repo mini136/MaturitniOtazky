@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Procvičování</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 800px; margin: 0 auto; padding: 24px 20px;
+            background: #f8f7ff; color: #1e293b; line-height: 1.6;
+        }
+        a.back-link {
+            display: inline-block; margin-bottom: 18px;
+            color: #6366f1; text-decoration: none; font-weight: 600; font-size: .95rem;
+        }
+        a.back-link:hover { text-decoration: underline; }
+
+        /* ── Password gate ── */
+        #quiz-gate {
+            position: fixed; inset: 0; background: rgba(15,15,35,.55);
+            display: flex; align-items: center; justify-content: center; z-index: 999;
+        }
+        #quiz-gate.hidden { display: none; }
+        .gate-card {
+            background: #fff; border-radius: 14px; padding: 36px 40px;
+            box-shadow: 0 8px 40px rgba(0,0,0,.18); width: 100%; max-width: 380px;
+        }
+        .gate-card h2 { margin: 0 0 6px; font-size: 1.25rem; color: #1e293b; }
+        .gate-card p  { margin: 0 0 18px; color: #64748b; font-size: .9rem; }
+        .gate-card input {
+            width: 100%; padding: 10px 13px; border: 1px solid #cbd5e1;
+            border-radius: 8px; font: inherit; font-size: 1rem;
+            margin-bottom: 12px;
+        }
+        .gate-card input:focus { outline: 2px solid #6366f1; border-color: #6366f1; }
+        .gate-card button {
+            width: 100%; padding: 11px; background: #6366f1; color: #fff;
+            border: none; border-radius: 8px; font: inherit; font-size: 1rem;
+            font-weight: 700; cursor: pointer; transition: background .15s;
+        }
+        .gate-card button:hover { background: #4f46e5; }
+        .gate-err { color: #dc2626; font-size: .88rem; margin-bottom: 10px; display: none; }
+
+        /* ── Topic header ── */
+        .topic-header {
+            background: #fff; border-radius: 12px; padding: 18px 22px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.07); margin-bottom: 22px;
+        }
+        .topic-header h1 {
+            margin: 0 0 4px; font-size: 1.2rem; color: #6366f1;
+        }
+        .topic-header p { margin: 0; color: #64748b; font-size: .88rem; }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-block; padding: 12px 28px; border: none; border-radius: 9px;
+            font: inherit; font-size: 1rem; font-weight: 700; cursor: pointer;
+            transition: background .15s, transform .1s; text-decoration: none;
+        }
+        .btn:active { transform: scale(.97); }
+        .btn-primary { background: #6366f1; color: #fff; }
+        .btn-primary:hover { background: #4f46e5; }
+        .btn-primary:disabled { background: #a5b4fc; cursor: not-allowed; transform: none; }
+        .btn-success { background: #16a34a; color: #fff; }
+        .btn-success:hover { background: #15803d; }
+        .btn-success:disabled { background: #86efac; cursor: not-allowed; transform: none; }
+        .btn-ghost { background: #e2e8f0; color: #475569; }
+        .btn-ghost:hover { background: #cbd5e1; }
+
+        /* ── Card ── */
+        .card {
+            background: #fff; border-radius: 12px; padding: 24px 26px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.07); margin-bottom: 18px;
+        }
+
+        /* ── States ── */
+        #state-idle { text-align: center; padding: 40px 20px; }
+        #state-idle .big-icon { font-size: 3rem; margin-bottom: 12px; }
+        #state-idle p { color: #64748b; margin-bottom: 24px; }
+
+        #state-loading { text-align: center; padding: 60px 20px; }
+        .spinner {
+            display: inline-block; width: 42px; height: 42px;
+            border: 4px solid #e0e7ff; border-top-color: #6366f1;
+            border-radius: 50%; animation: spin .8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #state-loading p { color: #64748b; margin-top: 14px; }
+
+        /* ── Question ── */
+        #state-question .question-text {
+            font-size: 1.18rem; font-weight: 600; color: #1e293b;
+            margin: 0 0 18px; line-height: 1.5;
+        }
+        .hints-toggle {
+            color: #6366f1; background: none; border: none; font: inherit;
+            font-size: .9rem; cursor: pointer; padding: 0; margin-bottom: 14px;
+            text-decoration: underline dotted;
+        }
+        .hints-list {
+            margin: 0 0 16px; padding: 12px 16px; background: #ede9fe;
+            border-radius: 8px; display: none;
+        }
+        .hints-list.visible { display: block; }
+        .hints-list li { margin-bottom: 4px; color: #4c1d95; font-size: .9rem; }
+        .answer-label {
+            display: block; font-weight: 600; margin-bottom: 8px; color: #475569;
+        }
+        #answer-input {
+            width: 100%; min-height: 130px; padding: 12px 14px;
+            border: 1.5px solid #cbd5e1; border-radius: 9px;
+            font: inherit; font-size: 1rem; resize: vertical;
+            transition: border-color .15s;
+        }
+        #answer-input:focus { outline: none; border-color: #6366f1; }
+        .question-actions {
+            display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;
+        }
+
+        /* ── Evaluating ── */
+        #state-evaluating { text-align: center; padding: 40px 20px; }
+        #state-evaluating p { color: #64748b; margin-top: 14px; }
+
+        /* ── Result ── */
+        .score-bar-wrap {
+            background: #e2e8f0; border-radius: 99px; height: 12px;
+            overflow: hidden; margin: 10px 0 6px;
+        }
+        .score-bar {
+            height: 100%; border-radius: 99px;
+            transition: width .6s ease;
+        }
+        .verdict-badge {
+            display: inline-block; padding: 4px 14px; border-radius: 99px;
+            font-size: .88rem; font-weight: 700; margin-bottom: 14px;
+        }
+        .verdict-ok   { background: #dcfce7; color: #166534; }
+        .verdict-half { background: #fef9c3; color: #854d0e; }
+        .verdict-bad  { background: #fee2e2; color: #991b1b; }
+        .feedback-text { color: #334155; margin-bottom: 14px; }
+        .missing-title { font-weight: 700; color: #64748b; font-size: .88rem; margin: 0 0 6px; }
+        .missing-list {
+            margin: 0 0 16px; padding-left: 18px; color: #475569; font-size: .9rem;
+        }
+        .missing-list li { margin-bottom: 3px; }
+        .model-answer-wrap {
+            background: #f1f5f9; border-radius: 8px; padding: 12px 16px; margin-bottom: 18px;
+        }
+        .model-answer-wrap summary {
+            cursor: pointer; font-weight: 600; color: #475569; font-size: .9rem;
+            list-style: none; user-select: none;
+        }
+        .model-answer-wrap summary::before { content: "▶ "; font-size: .75em; }
+        details[open] .model-answer-wrap summary::before { content: "▼ "; }
+        .model-answer-text { margin: 10px 0 0; color: #334155; font-size: .9rem; }
+        .result-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        /* ── Hidden ── */
+        .hidden { display: none !important; }
+
+        @media (max-width: 520px) {
+            body { padding: 14px 12px; }
+            .gate-card { padding: 24px 18px; }
+            .card { padding: 18px 16px; }
+            .btn { padding: 10px 18px; font-size: .95rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Password gate -->
+<div id="quiz-gate">
+    <div class="gate-card">
+        <h2>🔒 AI Procvičování</h2>
+        <p>Zadej heslo pro přístup k procvičovacím otázkám.</p>
+        <div class="gate-err" id="gate-err">Špatné heslo. Zkus to znovu.</div>
+        <input type="password" id="gate-pass" placeholder="Heslo" autofocus>
+        <button id="gate-btn">Odemknout</button>
+    </div>
+</div>
+
+<a class="back-link hidden" id="back-link" href="#">⬅ Zpět na teorii</a>
+
+<div class="topic-header">
+    <h1 id="topic-title">AI Procvičování</h1>
+    <p>Generování otázek pomocí umělé inteligence na míru pro toto téma.</p>
+</div>
+
+<!-- Idle state -->
+<div id="state-idle" class="card">
+    <div class="big-icon">🤖</div>
+    <p>AI vygeneruje otázku na základě obsahu tohoto tématu. Odpověz svými slovy a dostaneš okamžitou zpětnou vazbu.</p>
+    <button class="btn btn-primary" id="btn-generate">Vygenerovat otázku</button>
+</div>
+
+<!-- Loading state (generating question) -->
+<div id="state-loading" class="card hidden">
+    <div class="spinner"></div>
+    <p id="loading-msg">Generuji otázku…</p>
+</div>
+
+<!-- Question state -->
+<div id="state-question" class="card hidden">
+    <p class="question-text" id="question-text"></p>
+    <button class="hints-toggle hidden" id="hints-toggle">💡 Zobrazit nápovědy</button>
+    <ul class="hints-list" id="hints-list"></ul>
+    <label class="answer-label" for="answer-input">Tvoje odpověď:</label>
+    <textarea id="answer-input" placeholder="Piš sem svoji odpověď…"></textarea>
+    <div class="question-actions">
+        <button class="btn btn-success" id="btn-check">Zkontrolovat odpověď</button>
+        <button class="btn btn-ghost" id="btn-skip">Přeskočit</button>
+    </div>
+</div>
+
+<!-- Evaluating state -->
+<div id="state-evaluating" class="card hidden">
+    <div class="spinner"></div>
+    <p>Vyhodnocuji odpověď…</p>
+</div>
+
+<!-- Result state -->
+<div id="state-result" class="card hidden">
+    <div id="result-verdict"></div>
+    <div class="score-bar-wrap"><div class="score-bar" id="score-bar"></div></div>
+    <p id="score-label" style="font-size:.88rem;color:#64748b;margin:0 0 14px;"></p>
+    <p class="feedback-text" id="result-feedback"></p>
+    <div id="missing-wrap" class="hidden">
+        <p class="missing-title">Co chybělo / co doplnit:</p>
+        <ul class="missing-list" id="missing-list"></ul>
+    </div>
+    <details>
+        <div class="model-answer-wrap">
+            <summary>Vzorová odpověď</summary>
+            <p class="model-answer-text" id="model-answer-text"></p>
+        </div>
+    </details>
+    <div class="result-actions">
+        <button class="btn btn-primary" id="btn-next">Další otázka</button>
+        <a class="btn btn-ghost hidden" id="back-btn-result" href="#">Zpět na teorii</a>
+    </div>
+</div>
+
+<script>
+(function () {
+    /* ─── Config ─────────────────────────────────────────── */
+    var UNLOCK_KEY = 'quiz-unlocked';
+    var UNLOCK_TTL = 3600 * 1000;
+    var params     = new URLSearchParams(window.location.search);
+    var Q          = params.get('q') || '';     // e.g. "pv/01_Sprava_pameti"
+    var BACK       = params.get('back') || '';
+    var adminPass  = '';   // stored after unlock, reused for API calls
+
+    /* ─── Back links ─────────────────────────────────────── */
+    if (BACK) {
+        var bl = document.getElementById('back-link');
+        bl.href = BACK;
+        bl.classList.remove('hidden');
+        document.getElementById('back-btn-result').href = BACK;
+        document.getElementById('back-btn-result').classList.remove('hidden');
+    }
+
+    /* ─── Topic title ────────────────────────────────────── */
+    if (Q) {
+        var parts = Q.split('/');
+        var raw   = (parts[parts.length - 1] || Q).replace(/_/g, ' ').replace(/^\d+\s*/, '');
+        document.getElementById('topic-title').textContent = raw;
+        document.title = 'AI Procvičování: ' + raw;
+    }
+
+    /* ─── State helpers ─────────────────────────────────── */
+    var STATES = ['idle', 'loading', 'question', 'evaluating', 'result'];
+    function showState(name) {
+        STATES.forEach(function (s) {
+            var el = document.getElementById('state-' + s);
+            if (el) el.classList.toggle('hidden', s !== name);
+        });
+    }
+
+    /* ─── Gate ───────────────────────────────────────────── */
+    function isUnlocked() {
+        try {
+            var raw = sessionStorage.getItem(UNLOCK_KEY);
+            if (!raw) return false;
+            var d = JSON.parse(raw);
+            return Date.now() - d.t < UNLOCK_TTL && d.pass;
+        } catch (e) { return false; }
+    }
+
+    function setUnlocked(pass) {
+        adminPass = pass;
+        sessionStorage.setItem(UNLOCK_KEY, JSON.stringify({ t: Date.now(), pass: pass }));
+    }
+
+    function getStoredPass() {
+        try {
+            var raw = sessionStorage.getItem(UNLOCK_KEY);
+            if (!raw) return '';
+            return JSON.parse(raw).pass || '';
+        } catch (e) { return ''; }
+    }
+
+    async function verifyPassword(pass) {
+        try {
+            var r = await fetch('/api/admin/stats', {
+                headers: { 'X-Admin-Password': pass, 'Accept': 'application/json' }
+            });
+            return r.status === 200;
+        } catch (e) { return false; }
+    }
+
+    var gate  = document.getElementById('quiz-gate');
+    var gPass = document.getElementById('gate-pass');
+    var gBtn  = document.getElementById('gate-btn');
+    var gErr  = document.getElementById('gate-err');
+
+    function hideGate() { gate.classList.add('hidden'); }
+
+    async function tryUnlock() {
+        var pass = gPass.value;
+        if (!pass) return;
+        gBtn.disabled = true;
+        gBtn.textContent = 'Ověřuji…';
+        gErr.style.display = 'none';
+        var ok = await verifyPassword(pass);
+        gBtn.disabled = false;
+        gBtn.textContent = 'Odemknout';
+        if (ok) { setUnlocked(pass); hideGate(); }
+        else { gErr.style.display = 'block'; gPass.select(); }
+    }
+
+    gBtn.addEventListener('click', tryUnlock);
+    gPass.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryUnlock(); });
+
+    if (isUnlocked()) {
+        adminPass = getStoredPass();
+        hideGate();
+    }
+
+    /* ─── API helpers ────────────────────────────────────── */
+    function getPass() {
+        return adminPass || getStoredPass();
+    }
+
+    async function apiPost(url, body) {
+        var r = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Admin-Password': getPass(),
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+        if (!r.ok) throw new Error('api_error_' + r.status);
+        return r.json();
+    }
+
+    /* ─── State: current question data ──────────────────── */
+    var currentQuestion = null;
+
+    /* ─── Generate ───────────────────────────────────────── */
+    async function generateQuestion() {
+        if (!Q) { alert('Chybí parametr tématu.'); return; }
+        currentQuestion = null;
+        showState('loading');
+        document.getElementById('loading-msg').textContent = 'Generuji otázku…';
+        document.getElementById('answer-input').value = '';
+
+        try {
+            var data = await apiPost('/api/quiz/live/generate', { q: Q });
+            currentQuestion = data.question;
+            renderQuestion(data.question);
+            showState('question');
+        } catch (e) {
+            alert('Nepodařilo se vygenerovat otázku. Zkontroluj připojení k serveru.');
+            showState('idle');
+        }
+    }
+
+    function renderQuestion(q) {
+        document.getElementById('question-text').textContent = q.question || '';
+
+        /* Hints */
+        var hintsList  = document.getElementById('hints-list');
+        var hintsToggle = document.getElementById('hints-toggle');
+        hintsList.innerHTML = '';
+        if (Array.isArray(q.hints) && q.hints.length) {
+            q.hints.forEach(function (h) {
+                var li = document.createElement('li');
+                li.textContent = h;
+                hintsList.appendChild(li);
+            });
+            hintsToggle.classList.remove('hidden');
+            hintsList.classList.remove('visible');
+            hintsToggle.textContent = '💡 Zobrazit nápovědy';
+        } else {
+            hintsToggle.classList.add('hidden');
+        }
+    }
+
+    document.getElementById('hints-toggle').addEventListener('click', function () {
+        var list   = document.getElementById('hints-list');
+        var btn    = document.getElementById('hints-toggle');
+        var isOpen = list.classList.contains('visible');
+        list.classList.toggle('visible', !isOpen);
+        btn.textContent = isOpen ? '💡 Zobrazit nápovědy' : '🙈 Skrýt nápovědy';
+    });
+
+    /* ─── Evaluate ───────────────────────────────────────── */
+    async function evaluate() {
+        var answer = document.getElementById('answer-input').value.trim();
+        if (!answer) { document.getElementById('answer-input').focus(); return; }
+        if (!currentQuestion) return;
+
+        showState('evaluating');
+
+        try {
+            var data = await apiPost('/api/quiz/live/evaluate', {
+                question:    currentQuestion.question,
+                modelAnswer: currentQuestion.modelAnswer || '',
+                userAnswer:  answer,
+            });
+            renderResult(data.result, currentQuestion);
+            showState('result');
+        } catch (e) {
+            alert('Nepodařilo se vyhodnotit odpověď.');
+            showState('question');
+        }
+    }
+
+    function renderResult(r, q) {
+        /* Verdict badge */
+        var score   = Math.max(0, Math.min(100, Number(r.score) || 0));
+        var verdict = String(r.verdict || '');
+        var badgeCls = score >= 75 ? 'verdict-ok' : score >= 40 ? 'verdict-half' : 'verdict-bad';
+        var verdictEl = document.getElementById('result-verdict');
+        verdictEl.innerHTML = '<span class="verdict-badge ' + badgeCls + '">' + escHtml(verdict) + ' (' + score + ' / 100)</span>';
+
+        /* Score bar */
+        var bar = document.getElementById('score-bar');
+        bar.style.width = '0%';
+        bar.style.background = score >= 75 ? '#16a34a' : score >= 40 ? '#ca8a04' : '#dc2626';
+        setTimeout(function () { bar.style.width = score + '%'; }, 50);
+        document.getElementById('score-label').textContent = score + ' / 100 bodů';
+
+        /* Feedback */
+        document.getElementById('result-feedback').textContent = r.feedback || '';
+
+        /* Missing */
+        var missing = Array.isArray(r.missing) ? r.missing.filter(Boolean) : [];
+        var mWrap = document.getElementById('missing-wrap');
+        var mList = document.getElementById('missing-list');
+        if (missing.length) {
+            mList.innerHTML = missing.map(function (m) {
+                return '<li>' + escHtml(m) + '</li>';
+            }).join('');
+            mWrap.classList.remove('hidden');
+        } else {
+            mWrap.classList.add('hidden');
+        }
+
+        /* Model answer */
+        document.getElementById('model-answer-text').textContent = q.modelAnswer || '';
+    }
+
+    function escHtml(s) {
+        return String(s || '')
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    /* ─── Event wiring ───────────────────────────────────── */
+    document.getElementById('btn-generate').addEventListener('click', generateQuestion);
+    document.getElementById('btn-next').addEventListener('click', generateQuestion);
+    document.getElementById('btn-skip').addEventListener('click', generateQuestion);
+
+    document.getElementById('btn-check').addEventListener('click', evaluate);
+    document.getElementById('answer-input').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) evaluate();
+    });
+
+})();
+</script>
+</body>
+</html>

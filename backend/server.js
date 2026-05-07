@@ -4,6 +4,25 @@ const mysql = require("mysql2/promise");
 require("dotenv").config();
 
 const fs = require("fs");
+const { OpenAI } = require("openai");
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
+
+const SUBJECT_HTML_DIRS = {
+  pv: "maturitniOtazkyPv_html",
+  site: "maturitniOtazkySite",
+  spv: "maturitniOtazkySpv_html",
+  cs: "maturitniOtazkyCs_html",
+};
+
+function stripHtmlContent(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 10000);
+}
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 const ROOT_DIR = path.resolve(__dirname, "..");
@@ -261,6 +280,114 @@ app.get("/api/admin/pages", requireAdmin, (req, res) => {
   });
   pages.sort((a, b) => a.path.localeCompare(b.path, "cs"));
   return res.json({ pages });
+});
+
+/* ── Live quiz: generate one question ── */
+app.post("/api/quiz/live/generate", requireAdmin, async (req, res) => {
+  const q = String(req.body.q || "").trim();
+  const slashIdx = q.indexOf("/");
+  if (slashIdx < 1) return res.status(400).json({ error: "invalid_topic" });
+  const sub = q.slice(0, slashIdx);
+  const file = q.slice(slashIdx + 1);
+
+  if (!SUBJECT_HTML_DIRS[sub] || !file || file.includes("..")) {
+    return res.status(400).json({ error: "invalid_topic" });
+  }
+
+  const htmlDir = SUBJECT_HTML_DIRS[sub];
+  const filePath = path.join(ROOT_DIR, htmlDir, file + ".html");
+  if (!filePath.startsWith(ROOT_DIR + path.sep) && filePath !== ROOT_DIR) {
+    return res.status(403).json({ error: "forbidden" });
+  }
+
+  let content;
+  try {
+    content = stripHtmlContent(fs.readFileSync(filePath, "utf-8"));
+  } catch (e) {
+    return res.status(404).json({ error: "topic_not_found" });
+  }
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      temperature: 0.7,
+      max_tokens: 600,
+      messages: [
+        {
+          role: "system",
+          content:
+            "Jsi učitel připravující studenty na maturitu. Na základě obsahu tématu vygeneruj JEDNU otevřenou maturitní otázku.\n" +
+            "Odpověz POUZE validním JSON objektem (bez markdown obalení) v tomto formátu:\n" +
+            '{\n  "question": "text otázky",\n  "hints": ["nápověda1", "nápověda2"],\n  "modelAnswer": "vzorová odpověď (3-6 vět)"\n}\n' +
+            "Otázka musí ověřovat pochopení, ne jen zapamatování. Vše v češtině.",
+        },
+        {
+          role: "user",
+          content:
+            "Téma: " +
+            file.replace(/_/g, " ") +
+            "\n\nObsah materiálu:\n" +
+            content,
+        },
+      ],
+    });
+    let json = (completion.choices[0].message.content || "").trim();
+    json = json.replace(/^```json?\n?/i, "").replace(/\n?```$/i, "");
+    const question = JSON.parse(json);
+    return res.json({ question });
+  } catch (e) {
+    return res.status(500).json({ error: "generation_failed" });
+  }
+});
+
+/* ── Live quiz: evaluate an answer ── */
+app.post("/api/quiz/live/evaluate", requireAdmin, async (req, res) => {
+  const question = String(req.body.question || "")
+    .trim()
+    .slice(0, 1000);
+  const modelAnswer = String(req.body.modelAnswer || "")
+    .trim()
+    .slice(0, 2000);
+  const userAnswer = String(req.body.userAnswer || "")
+    .trim()
+    .slice(0, 2000);
+
+  if (!question || !userAnswer) {
+    return res.status(400).json({ error: "missing_fields" });
+  }
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      temperature: 0.3,
+      max_tokens: 500,
+      messages: [
+        {
+          role: "system",
+          content:
+            "Jsi přísný ale spravedlivý maturitní zkoušející. Ohodnoť studentovu odpověď.\n" +
+            "Odpověz POUZE validním JSON objektem (bez markdown obalení):\n" +
+            '{\n  "score": <0-100>,\n  "verdict": "Správně" | "Částečně správně" | "Špatně",\n  "feedback": "konkrétní zpětná vazba (2-4 věty)",\n  "missing": ["co chybělo - každá položka jako krátká fráze"]\n}',
+        },
+        {
+          role: "user",
+          content:
+            "Otázka: " +
+            question +
+            "\n\nVzorová odpověď: " +
+            modelAnswer +
+            "\n\nStudentova odpověď: " +
+            userAnswer,
+        },
+      ],
+    });
+    let json = (completion.choices[0].message.content || "").trim();
+    json = json.replace(/^```json?\n?/i, "").replace(/\n?```$/i, "");
+    const result = JSON.parse(json);
+    return res.json({ result });
+  } catch (e) {
+    return res.status(500).json({ error: "evaluation_failed" });
+  }
 });
 
 app.use(express.static(ROOT_DIR));

@@ -161,7 +161,7 @@
     });
   }
 
-  function getQuizUrl() {
+  function getSubAndFile() {
     var p = window.location.pathname;
     var parts = p.split("/");
     var file = parts[parts.length - 1].replace(/\.html$/i, "");
@@ -170,34 +170,73 @@
     if (/site/i.test(folder)) sub = "site";
     if (/spv/i.test(folder)) sub = "spv";
     if (/cs/i.test(folder)) sub = "cs";
+    return { sub: sub, file: file };
+  }
+
+  function getQuizUrl() {
+    var sf = getSubAndFile();
     var back = encodeURIComponent(window.location.href);
-    return "../assets/quiz.html?q=" + sub + "/" + file + "&back=" + back;
+    return "../assets/quiz.html?q=" + sf.sub + "/" + sf.file + "&back=" + back;
+  }
+
+  function getLiveQuizUrl() {
+    var sf = getSubAndFile();
+    var back = encodeURIComponent(window.location.href);
+    return (
+      "../assets/live-quiz.html?q=" + sf.sub + "/" + sf.file + "&back=" + back
+    );
   }
 
   function buildQuizButton(anchor) {
+    var isMobile = window.matchMedia("(max-width: 680px)").matches;
     var wrap = document.createElement("div");
-    wrap.style.cssText = "text-align:center;margin:30px 0 10px;";
-    var btn = document.createElement("a");
-    btn.href = getQuizUrl();
-    btn.style.cssText =
-      "display:inline-block;background:#6366f1;color:#fff;padding:14px 36px;" +
-      "border-radius:10px;font-size:1.15rem;font-weight:700;text-decoration:none;" +
-      "transition:background 0.15s;box-shadow:0 2px 8px rgba(99,102,241,0.3);";
-    btn.textContent = "📝 Procvičit tuto otázku";
-    btn.addEventListener("mouseenter", function () {
-      btn.style.background = "#4f46e5";
-    });
-    btn.addEventListener("mouseleave", function () {
-      btn.style.background = "#6366f1";
-    });
-    wrap.appendChild(btn);
-    anchor.insertAdjacentElement("beforebegin", wrap);
+    wrap.style.cssText =
+      "display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:30px 0 10px;";
 
-    if (window.matchMedia("(max-width: 680px)").matches) {
-      btn.style.display = "block";
-      btn.style.padding = "12px 14px";
-      btn.style.fontSize = "1rem";
+    function makeBtn(href, icon, label, bg, hoverBg) {
+      var btn = document.createElement("a");
+      btn.href = href;
+      btn.style.cssText =
+        "display:inline-block;background:" +
+        bg +
+        ";color:#fff;" +
+        "padding:" +
+        (isMobile ? "11px 18px" : "14px 28px") +
+        ";" +
+        "border-radius:10px;font-size:" +
+        (isMobile ? "1rem" : "1.1rem") +
+        ";" +
+        "font-weight:700;text-decoration:none;" +
+        "transition:background 0.15s;box-shadow:0 2px 8px rgba(0,0,0,0.15);";
+      btn.textContent = icon + " " + label;
+      btn.addEventListener("mouseenter", function () {
+        btn.style.background = hoverBg;
+      });
+      btn.addEventListener("mouseleave", function () {
+        btn.style.background = bg;
+      });
+      return btn;
     }
+
+    wrap.appendChild(
+      makeBtn(
+        getQuizUrl(),
+        "📝",
+        "Procvičit (předpřipravené)",
+        "#6366f1",
+        "#4f46e5",
+      ),
+    );
+    wrap.appendChild(
+      makeBtn(
+        getLiveQuizUrl(),
+        "🤖",
+        "AI Procvičování (live)",
+        "#0ea5e9",
+        "#0284c7",
+      ),
+    );
+    anchor.insertAdjacentElement("beforebegin", wrap);
   }
 
   function buildVisualAid(anchor) {
