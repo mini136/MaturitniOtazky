@@ -1,0 +1,128 @@
+{
+  "title": "Francis Scott Fitzgerald – Velký Gatsby",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně díla k jejich charakteristikám:",
+      "pairs": [
+        [
+          "Na prahu ráje",
+          "První román"
+        ],
+        [
+          "Krásní a prokletí",
+          "Druhý román"
+        ],
+        [
+          "Velký Gatsby",
+          "Nejznámější dílo"
+        ],
+        [
+          "Něžná je noc",
+          "Čtvrtý román"
+        ],
+        [
+          "Poslední magnát",
+          "Nedokončený, vydán posmrtně"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Francis Scott Fitzgerald byl součástí literárního směru zvaného Ztracená generace.",
+      "answer": true,
+      "explanation": "Fitzgerald patřil ke skupině spisovatelů, kteří reflektovali deziluzi po 1. světové válce, což je charakteristické pro Ztracenou generaci."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o Fitzgeraldově životě:",
+      "text": "Francis Scott Fitzgerald se narodil {{24. září 1896}} a zemřel {{21. prosince 1940}}.",
+      "answers": [
+        "24. září 1896",
+        "21. prosince 1940"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte následující události ze života Francise Scotta Fitzgeralda chronologicky:",
+      "items": [
+        "Narození ve St. Paulu, Minnesota",
+        "Studium na Princetonu",
+        "Vstup do armády",
+        "Vydání prvního románu Na prahu ráje",
+        "Sňatek se Zeldou Sayrovou",
+        "Publikace Velkého Gatsbyho",
+        "Vydání románu Něžná je noc",
+        "Smrt v Los Angeles"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní motivy Velkého Gatsbyho a jak se projevují v ději?",
+      "keywords": [
+        "Americký sen",
+        "láska",
+        "společenské rozdíly",
+        "Gatsby",
+        "Daisy"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte postavy z Velkého Gatsbyho k jejich charakteristikám:",
+      "pairs": [
+        [
+          "Jay Gatsby",
+          "Tajemný milionář"
+        ],
+        [
+          "Nick Carraway",
+          "Vypravěč příběhu"
+        ],
+        [
+          "Daisy Buchananová",
+          "Gatsbyho dávná láska"
+        ],
+        [
+          "Tom Buchanan",
+          "Manžel Daisy"
+        ],
+        [
+          "Jordan Bakerová",
+          "Přítelkyně Daisy"
+        ],
+        [
+          "Myrtle Wilsonová",
+          "Milostný poměr s Tomem"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Velký Gatsby byl poprvé publikován v roce 1925.",
+      "answer": true,
+      "explanation": "Velký Gatsby byl skutečně poprvé publikován v roce 1925, což je uvedeno v textu."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o literárním kontextu Velkého Gatsbyho:",
+      "text": "Velký Gatsby je považován za dílo z období {{Jazzového věku}} a je součástí literárního směru {{Ztracená generace}}.",
+      "answers": [
+        "Jazzového věku",
+        "Ztracená generace"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte následující události z děje Velkého Gatsbyho chronologicky:",
+      "items": [
+        "Nick Carraway se stěhuje na Long Island",
+        "Gatsby se snaží obnovit vztah s Daisy",
+        "Tragická nehoda",
+        "Následné události vedou k rozuzlení příběhu"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "title": "Karel Jaromír Erben – Kytice",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte díla Karla Jaromíra Erbena k jejich charakteristikám.",
+      "pairs": [
+        [
+          "Kytice",
+          "Sbírka balad čerpajících z lidových tradic"
+        ],
+        [
+          "Písně národní v Čechách",
+          "Sbírka lidových písní"
+        ],
+        [
+          "Prostonárodní české písně a říkadla",
+          "Rozšířená sbírka lidových písní"
+        ],
+        [
+          "Sto prostonárodních pohádek a pověstí slovanských",
+          "Čitanka slovanská"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Karel Jaromír Erben byl významnou postavou národního obrození.",
+      "answer": true,
+      "explanation": "Erben se podílel na obnově české kultury a jazyka, což je klíčový aspekt národního obrození."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu.",
+      "text": "Karel Jaromír Erben se narodil v roce {{1811}} a zemřel v roce {{1870}}.",
+      "answers": [
+        "1811",
+        "1870"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události ze života Karla Jaromíra Erbena chronologicky.",
+      "items": [
+        "Narozen v Miletíně",
+        "Studium na gymnáziu v Hradci Králové",
+        "Studium filozofie a práv v Praze",
+        "Zvolen aktuárem České učené společnosti nauk",
+        "Archivář města Prahy",
+        "První vydání sbírky Kytice",
+        "Zemřel v Praze"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Popište hlavní motivy balady 'Kytice' a jejich význam.",
+      "keywords": [
+        "láska",
+        "smrt",
+        "znovuzrození",
+        "matka",
+        "ochrana"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte postavy z balad k jejich příběhům.",
+      "pairs": [
+        [
+          "Matka",
+          "Kytice"
+        ],
+        [
+          "Vodník",
+          "Vodník"
+        ],
+        [
+          "Nevěsta",
+          "Svatební košile"
+        ],
+        [
+          "Polednice",
+          "Polednice"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Erbenova tvorba je charakterizována realistickým zobrazením městského života.",
+      "answer": false,
+      "explanation": "Erbenova tvorba se zaměřuje na mytologii a balady, nikoli na realistické zobrazení městského života."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu.",
+      "text": "Erbenova sbírka 'Kytice' byla poprvé vydána v roce {{1853}} a rozšířená verze vyšla v roce {{1861}}.",
+      "answers": [
+        "1853",
+        "1861"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní rozdíly mezi tvorbou Karla Jaromíra Erbena a Boženy Němcové?",
+      "keywords": [
+        "realismus",
+        "mytologie",
+        "balady",
+        "tradice",
+        "život"
+      ]
+    }
+  ]
+}

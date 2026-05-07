@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang='cs'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>17 – Karel Čapek – Bílá nemoc</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 980px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #7c2d12; border-bottom: 3px solid #ea580c; padding-bottom: 10px; }
+        h2 { color: #9a3412; border-bottom: 1px solid #fed7aa; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #c2410c; margin-top: 18px; }
+        nav { background: #fff7ed; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #c2410c; font-weight: 600; }
+        nav a:hover { text-decoration: underline; }
+        .note { background: #fff7ed; border-left: 4px solid #ea580c; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+        .quote { background: #fef3c7; border-left: 4px solid #d97706; padding: 12px 16px; margin: 16px 0; border-radius: 0 5px 5px 0; font-style: italic; }
+        .quote cite { display: block; margin-top: 8px; font-size: 0.9em; color: #92400e; font-style: normal; }
+        .keywords { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+        .keywords ul { margin: 0; padding-left: 20px; }
+        .keywords li { margin: 4px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #fed7aa; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #ea580c; color: white; }
+        tr:nth-child(even) { background: #fff7ed; }
+        .story-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fffbf5; padding: 14px 18px; margin: 14px 0; }
+        .story-card h3 { margin-top: 0; color: #9a3412; }
+        .story-card p { margin: 6px 0; }
+        .story-card .theme { font-size: 0.88em; color: #c2410c; font-weight: 600; }
+        .author-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fff7ed; padding: 14px 18px; margin: 14px 0; }
+        .author-card h3 { margin-top: 0; color: #7c2d12; }
+        .flash-wrap { display: grid; gap: 10px; }
+        .flash-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fffbf5; padding: 8px 12px; }
+        .flash-card summary { cursor: pointer; font-weight: 700; color: #9a3412; }
+        .flash-card p { margin: 10px 0 4px; }
+        .timeline { list-style: none; padding: 0; }
+        .timeline li { padding: 8px 0 8px 28px; border-left: 3px solid #ea580c; margin-left: 12px; position: relative; }
+        .timeline li::before { content: '●'; position: absolute; left: -10px; color: #ea580c; }
+        .timeline li strong { display: block; color: #7c2d12; }
+        @media print { nav, .flash-wrap { display: none; } }
+    </style>
+    <link rel='stylesheet' href='../assets/study.css'>
+</head>
+<body>
+    <nav>
+        <a href='index.html'>⬅ Zpět na obsah ČJ</a>
+        <a href='../index.html'>🏠 Hlavní rozcestník</a>
+    </nav>
+
+    <h1>17 – Karel Čapek – Bílá nemoc</h1>
+
+<div class='quote'>„Kdo chce zapalovat, musí sám hořet.“<cite>— Karel Čapek</cite></div>
+
+<h2>1. O autorovi – Karel Čapek</h2>
+<h3>Základní údaje</h3>
+<table>
+  <tr><th>Kategorie</th><th>Informace</th></tr>
+  <tr><td>Celé/vlastní jméno</td><td>Karel Antonín Čapek</td></tr>
+  <tr><td>Narozen</td><td>9. ledna 1890, Malé Svatoňovice</td></tr>
+  <tr><td>Zemřel</td><td>25. prosince 1938, Praha</td></tr>
+  <tr><td>Národnost/Jazyk</td><td>Česká</td></tr>
+  <tr><td>Profese</td><td>Spisovatel, dramatik, novinář</td></tr>
+  <tr><td>Hlavní díla</td><td>R.U.R., Válka s mloky, Krakatit</td></tr>
+  <tr><td>Literární směr</td><td>Meziválečná literatura, science fiction</td></tr>
+</table>
+<h3>Životní chronologie</h3>
+<ul class='timeline'>
+  <li><strong>1890</strong> Narození v Malých Svatoňovicích</li>
+  <li><strong>1915</strong> Dokončení studia na Univerzitě Karlově</li>
+  <li><strong>1921</strong> Začátek práce v Lidových novinách</li>
+  <li><strong>1925</strong> První předseda československého PEN klubu</li>
+  <li><strong>1935</strong> Sňatek s Olgou Scheinpflugovou</li>
+  <li><strong>1937</strong> Vydání Bílé nemoci</li>
+  <li><strong>1938</strong> Úmrtí v Praze</li>
+  <li><strong>1938</strong> Mnichovská dohoda a její vliv na Čapka</li>
+</ul>
+<h3>Charakter tvorby</h3>
+<div class='keywords'>
+  <ul>
+    <li>Science fiction a utopie</li>
+    <li>Politická a sociální kritika</li>
+    <li>Humanismus</li>
+    <li>Antifascismus</li>
+    <li>Pragmatický liberalismus</li>
+    <li>Vliv americké kultury</li>
+    <li>Inovace v dramatické formě</li>
+    <li>Filozofické otázky</li>
+  </ul>
+</div>
+
+<h2>2. Přehled tvorby</h2>
+<table>
+  <tr><th>Rok</th><th>Název</th><th>Poznámka</th></tr>
+  <tr><td>1920</td><td>R.U.R.</td><td>Drama, zavedení slova "robot"</td></tr>
+  <tr><td>1922</td><td>Krakatit</td><td>Román, varování před zneužitím vědy</td></tr>
+  <tr><td>1936</td><td>Válka s mloky</td><td>Román, alegorie na nacismus</td></tr>
+  <tr><td>1937</td><td>Bílá nemoc</td><td>Drama, kritika fašismu</td></tr>
+  <tr><td>1938</td><td>Matka</td><td>Drama, reakce na politické události</td></tr>
+  <tr><td>1938</td><td>Hovory s T. G. Masarykem</td><td>Rozhovory, politické a filozofické názory</td></tr>
+</table>
+
+<h2>3. Bílá nemoc – rozbor díla</h2>
+<div class='note'>Úvod k dílu</div>
+<h3>Základní informace</h3>
+<table>
+  <tr><th>Kategorie</th><th>Informace</th></tr>
+  <tr><td>Žánr</td><td>Drama</td></tr>
+  <tr><td>Rok vydání</td><td>1937</td></tr>
+  <tr><td>Téma</td><td>Varování před fašismem a válkou</td></tr>
+  <tr><td>Prostředí</td><td>Fiktivní země, nemocnice, politické prostředí</td></tr>
+  <tr><td>Vyprávěcí perspektiva</td><td>Dramatická forma</td></tr>
+  <tr><td>Jazyk originálu</td><td>Čeština</td></tr>
+  <tr><td>Filmová/divadelní zpracování</td><td>Divadelní inscenace</td></tr>
+</table>
+<h3>Hlavní postavy</h3>
+<div class='keywords'>
+  <ul>
+    <li>Dr. Galén</li>
+    <li>Maršál</li>
+    <li>Baron Krüg</li>
+    <li>Prof. Sigelius</li>
+    <li>Anetta</li>
+  </ul>
+</div>
+<h3>Obsah a děj</h3>
+<div class='story-card'>
+  <h3>Úvod</h3>
+  <p><strong>Děj:</strong> Na světě se šíří smrtelná nemoc, bílá nemoc, která postihuje lidi nad 40 let.</p>
+  <p><strong>Téma:</strong> Kritika společnosti a jejího přístupu k válce a nemoci.</p>
+  <p class='theme'>Klíčové: nemoc, společnost, strach</p>
+</div>
+<div class='story-card'>
+  <h3>Dr. Galén</h3>
+  <p><strong>Děj:</strong> Dr. Galén objeví lék, ale podmiňuje jeho použití mírem.</p>
+  <p><strong>Téma:</strong> Morální dilema a odpovědnost vědce.</p>
+  <p class='theme'>Klíčové: lék, mír, odpovědnost</p>
+</div>
+<div class='story-card'>
+  <h3>Maršál</h3>
+  <p><strong>Děj:</strong> Maršál plánuje válku, ale sám onemocní bílou nemocí.</p>
+  <p><strong>Téma:</strong> Moc a její zneužití.</p>
+  <p class='theme'>Klíčové: moc, válka, nemoc</p>
+</div>
+<div class='story-card'>
+  <h3>Tragický závěr</h3>
+  <p><strong>Děj:</strong> Dr. Galén je zabit davem, lék je ztracen.</p>
+  <p><strong>Téma:</strong> Ztráta naděje a důsledky fanatismu.</p>
+  <p class='theme'>Klíčové: fanatismus, tragédie, ztráta</p>
+</div>
+<h3>Jazykové a stylistické prostředky</h3>
+<table>
+  <tr><th>Prostředek</th><th>Příklad / popis</th></tr>
+  <tr><td>Symbolika</td><td>Bílá nemoc jako symbol zla</td></tr>
+  <tr><td>Ironie</td><td>Maršálova nemoc jako ironie jeho plánů</td></tr>
+  <tr><td>Dialogy</td><td>Intenzivní dialogy mezi postavami</td></tr>
+  <tr><td>Metafora</td><td>Nemoc jako metafora pro společenské problémy</td></tr>
+  <tr><td>Kontrast</td><td>Mezi chudými a mocnými</td></tr>
+  <tr><td>Aluze</td><td>Odkazy na současné politické události</td></tr>
+</table>
+
+<h2>4. Dobový literární kontext</h2>
+<div class='note'>Popis epochy a literárního proudu</div>
+<table>
+  <tr><th>Tendence / Směr</th><th>Popis</th></tr>
+  <tr><td>Meziválečná literatura</td><td>Reakce na první světovou válku</td></tr>
+  <tr><td>Science fiction</td><td>Využití vědeckých a technologických témat</td></tr>
+  <tr><td>Antifascismus</td><td>Kritika totalitních režimů</td></tr>
+  <tr><td>Humanismus</td><td>Důraz na lidské hodnoty a morálku</td></tr>
+</table>
+
+<h2>5. Soudobí a blízcí autoři</h2>
+<div class='author-card'>
+  <h3>Franz Kafka (1883–1924)</h3>
+  <p><strong>Dílo:</strong> Proměna, Proces</p>
+  <p><strong>Styl:</strong> Existencialismus, absurdno</p>
+  <p><strong>Srovnání s Karel Čapek:</strong> Oba se zabývají otázkami lidské existence a společnosti.</p>
+</div>
+<div class='author-card'>
+  <h3>Jaroslav Hašek (1883–1923)</h3>
+  <p><strong>Dílo:</strong> Osudy dobrého vojáka Švejka</p>
+  <p><strong>Styl:</strong> Satira, humor</p>
+  <p><strong>Srovnání s Karel Čapek:</strong> Hašek používá humor, Čapek vážnější tón.</p>
+</div>
+<div class='author-card'>
+  <h3>Thomas Mann (1875–1955)</h3>
+  <p><strong>Dílo:</strong> Kouzelný vrch, Smrt v Benátkách</p>
+  <p><strong>Styl:</strong> Realismus, psychologická hloubka</p>
+  <p><strong>Srovnání s Karel Čapek:</strong> Oba se věnují morálním a filozofickým otázkám.</p>
+</div>
+<div class='author-card'>
+  <h3>George Orwell (1903–1950)</h3>
+  <p><strong>Dílo:</strong> 1984, Farma zvířat</p>
+  <p><strong>Styl:</strong> Dystopie, politická satira</p>
+  <p><strong>Srovnání s Karel Čapek:</strong> Oba kritizují totalitní režimy.</p>
+</div>
+<h3>Srovnávací tabulka</h3>
+<table>
+  <tr><th>Autor</th><th>Téma</th><th>Styl</th><th>Kontext</th></tr>
+  <tr><td>Karel Čapek</td><td>Antifascismus</td><td>Science fiction</td><td>Meziválečná Evropa</td></tr>
+  <tr><td>Franz Kafka</td><td>Existencialismus</td><td>Absurdno</td><td>Rakousko-Uhersko</td></tr>
+  <tr><td>Jaroslav Hašek</td><td>Válka</td><td>Satira</td><td>První světová válka</td></tr>
+  <tr><td>Thomas Mann</td><td>Morálka</td><td>Realismus</td><td>Weimarská republika</td></tr>
+  <tr><td>George Orwell</td><td>Totalitarismus</td><td>Dystopie</td><td>Po druhé světové válce</td></tr>
+</table>
+
+<h2>6. Filmová / divadelní zpracování a recepce</h2>
+<div class='keywords'>
+  <ul>
+    <li>Divadelní inscenace</li>
+    <li>Kritika fašismu</li>
+    <li>Vliv na politické myšlení</li>
+    <li>Adaptace v různých zemích</li>
+  </ul>
+</div>
+
+<h2>7. Klíčové pojmy k zapamatování</h2>
+<div class='keywords'>
+  <ul>
+    <li>Bílá nemoc</li>
+    <li>Dr. Galén</li>
+    <li>Maršál</li>
+    <li>Antifascismus</li>
+    <li>Science fiction</li>
+    <li>Morální dilema</li>
+    <li>Válka</li>
+    <li>Humanismus</li>
+    <li>Symbolika</li>
+    <li>Ironie</li>
+  </ul>
+</div>
+
+<h2>8. Studijní kartičky</h2>
+<div class='flash-wrap'>
+  <details class='flash-card'><summary>Kdy se narodil Karel Čapek?</summary><p>9. ledna 1890</p></details>
+  <details class='flash-card'><summary>Jaké je celé jméno Karla Čapka?</summary><p>Karel Antonín Čapek</p></details>
+  <details class='flash-card'><summary>Jaké jsou hlavní motivy Bílé nemoci?</summary><p>Antifascismus, morální dilema, válka</p></details>
+  <details class='flash-card'><summary>Kdo je hlavní postavou Bílé nemoci?</summary><p>Dr. Galén</p></details>
+  <details class='flash-card'><summary>Jaký žánr je Bílá nemoc?</summary><p>Drama</p></details>
+  <details class='flash-card'><summary>Jaký je literární směr Karla Čapka?</summary><p>Meziválečná literatura, science fiction</p></details>
+  <details class='flash-card'><summary>Jaký je hlavní konflikt v Bílé nemoci?</summary><p>Morální dilema mezi mírem a válkou</p></details>
+  <details class='flash-card'><summary>Kdy byla vydána Bílá nemoc?</summary><p>1937</p></details>
+  <details class='flash-card'><summary>Jaké jsou hlavní postavy Bílé nemoci?</summary><p>Dr. Galén, Maršál, Baron Krüg</p></details>
+  <details class='flash-card'><summary>Jaký je styl Karla Čapka?</summary><p>Science fiction, politická a sociální kritika</p></details>
+</div>
+
+    <nav style='margin-top: 30px;'>
+        <a href='index.html'>⬅ Zpět na obsah ČJ</a>
+        <a href='../index.html'>🏠 Hlavní rozcestník</a>
+    </nav>
+</body>
+<script src='../assets/study.js'></script>
+</html>

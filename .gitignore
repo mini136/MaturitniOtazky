@@ -1,5 +1,6 @@
 node_modules/
 package-lock.json
+.env
 
 # Downloaded CERMAT PDFs (large binary files, regenerate with download-cermat-cj.js)
 assets/cermat/cj/*/

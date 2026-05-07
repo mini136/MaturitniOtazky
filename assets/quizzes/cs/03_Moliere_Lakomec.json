@@ -1,0 +1,110 @@
+{
+  "title": "Molière – Lakomec",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte postavy z Lakomce k jejich charakteristikám.",
+      "pairs": [
+        [
+          "Harpagon",
+          "lakomý vdovec"
+        ],
+        [
+          "Kleantes",
+          "syn Harpagona"
+        ],
+        [
+          "Eliška",
+          "dcera Harpagona"
+        ],
+        [
+          "Mariana",
+          "milenka Kleanta"
+        ],
+        [
+          "Valér",
+          "správce Harpagona"
+        ],
+        [
+          "Frosina",
+          "intrikánka"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Molière zemřel během představení své hry Lakomec.",
+      "answer": false,
+      "explanation": "Molière zemřel během představení hry Zdravý nemocný."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu.",
+      "text": "Molière, vlastním jménem {{Jean-Baptiste Poquelin}}, se narodil v roce {{1622}} v Paříži.",
+      "answers": [
+        "Jean-Baptiste Poquelin",
+        "1622"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události z Molièrova života chronologicky.",
+      "items": [
+        "Narození v Paříži",
+        "Založení Skvělého divadla",
+        "Připojení k divadelní společnosti Charlese Dufresna",
+        "Pozvání k představení před knížetem z Conti",
+        "Získání možnosti hrát v Paříži",
+        "Premiéra Lakomce",
+        "Smrt během představení Zdravého nemocného"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní rysy Molièrovy tvorby?",
+      "keywords": [
+        "kritika",
+        "mravů",
+        "satira",
+        "komedie"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Harpagon je hlavní postavou hry Lakomec.",
+      "answer": true,
+      "explanation": "Harpagon je hlavní postavou, kolem které se točí děj hry a která je symbolem lakoty."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu.",
+      "text": "Hra Lakomec byla poprvé uvedena v roce {{1668}} a kritizuje {{lakotu}}.",
+      "answers": [
+        "1668",
+        "lakotu"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaký literární směr reprezentuje Molière a jaké jsou jeho charakteristiky?",
+      "keywords": [
+        "klasicismus",
+        "rozum",
+        "řád",
+        "antika"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte dějství hry Lakomec podle jejich pořadí.",
+      "items": [
+        "Harpagon zakopává truhličku s penězi a plánuje sňatky svých dětí.",
+        "Kleantes se snaží získat půjčku, ale zjistí, že lichvářem je jeho otec.",
+        "Harpagon plánuje večeři s Marianou, Kleantes se jí vyznává.",
+        "Harpagon podezírá Kleanta, že miluje Marianu."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "title": "George Orwell – Farma zvířat",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaď postavy z Farmy zvířat k jejich rolím nebo symbolům.",
+      "pairs": [
+        [
+          "Major",
+          "ideový vůdce"
+        ],
+        [
+          "Napoleon",
+          "diktátor"
+        ],
+        [
+          "Kuliš",
+          "oponent Napoleona"
+        ],
+        [
+          "Pištík",
+          "propaganda"
+        ],
+        [
+          "Boxer",
+          "pracující lid"
+        ],
+        [
+          "Benjamin",
+          "pasivní intelektuál"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Farma zvířat je dystopický román.",
+      "answer": false,
+      "explanation": "Farma zvířat je alegorická novela, nikoliv dystopický román."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň chybějící informace o životě George Orwella.",
+      "text": "George Orwell se narodil {{25. června 1903}} v {{Motihari, Bengálsko}} a zemřel {{21. ledna 1950}} v {{Londýně}}.",
+      "answers": [
+        "25. června 1903",
+        "Motihari, Bengálsko",
+        "21. ledna 1950",
+        "Londýně"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaď události ze života George Orwella chronologicky.",
+      "items": [
+        "Narozen v Motihari, Bengálsko.",
+        "Začal pracovat pro Indickou imperiální policii v Barmě.",
+        "Odjel do Španělska jako reportér.",
+        "Vydal Farmu zvířat.",
+        "Zemřel na tuberkulózu."
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní témata Farmy zvířat a jak jsou v díle zpracována?",
+      "keywords": [
+        "kritika",
+        "totalitarismus",
+        "moc",
+        "zrada",
+        "ideály",
+        "satira",
+        "alegorie"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď literární pojmy k jejich definicím nebo příkladům z Farmy zvířat.",
+      "pairs": [
+        [
+          "Alegorie",
+          "Celý příběh jako metafora pro Sovětský svaz"
+        ],
+        [
+          "Ironie",
+          "Prasata se stávají jako lidé, které nahradila"
+        ],
+        [
+          "Symbolismus",
+          "Prasata jako politické vedení"
+        ],
+        [
+          "Satira",
+          "Kritika totalitních režimů"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "George Orwell podporoval demokratický socialismus.",
+      "answer": true,
+      "explanation": "Orwell ve svých dílech kritizoval totalitarismus a podporoval demokratický socialismus."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň chybějící informace o tvorbě George Orwella.",
+      "text": "Orwellova díla jako {{Farma zvířat}} a {{1984}} jsou známá pro svou {{kritiku totalitarismu}} a {{politickou angažovanost}}.",
+      "answers": [
+        "Farma zvířat",
+        "1984",
+        "kritiku totalitarismu",
+        "politickou angažovanost"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké historické události ovlivnily vznik Farmy zvířat?",
+      "keywords": [
+        "druhá světová válka",
+        "stalinská éra",
+        "Sovětský svaz",
+        "politické události"
+      ]
+    }
+  ]
+}

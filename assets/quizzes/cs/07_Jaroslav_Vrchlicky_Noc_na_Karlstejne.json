@@ -1,0 +1,121 @@
+{
+  "title": "Jaroslav Vrchlický – Noc na Karlštejně",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné informace k jednotlivým postavám z díla 'Noc na Karlštejně'.",
+      "pairs": [
+        [
+          "Karel IV.",
+          "zakazuje ženám vstup na Karlštejn"
+        ],
+        [
+          "Alžběta Pomořanská",
+          "převléká se za muže"
+        ],
+        [
+          "Pešek Hlavně",
+          "snaží se utajit přítomnost Alžběty"
+        ],
+        [
+          "Alena",
+          "pomáhá Peškovi s utajením"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Jaroslav Vrchlický byl členem skupiny lumírovců.",
+      "answer": true,
+      "explanation": "Jaroslav Vrchlický byl významným členem literární skupiny lumírovců, která se zaměřovala na podporu národního uvědomění a experimentování s formou."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu:",
+      "text": "Jaroslav Vrchlický se narodil {{17. února 1853}} v Lounech a zemřel {{9. září 1912}} v Domažlicích.",
+      "answers": [
+        "17. února 1853",
+        "9. září 1912"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte životní události Jaroslava Vrchlického chronologicky.",
+      "items": [
+        "Narozen v Lounech",
+        "Studium na gymnáziu ve Slaném",
+        "Maturita v Klatovech",
+        "Přestup na filozofickou fakultu v Praze",
+        "Práce jako tajemník rodiny Montecuccoli-Laderchi"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Popište hlavní téma hry 'Noc na Karlštejně'.",
+      "keywords": [
+        "zákaz",
+        "pobytu",
+        "žen",
+        "Karlštejn"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte díla Jaroslava Vrchlického k jejich žánrům.",
+      "pairs": [
+        [
+          "Noc na Karlštejně",
+          "Divadelní hra"
+        ],
+        [
+          "Z hlubin",
+          "Básnická sbírka"
+        ],
+        [
+          "Bar Kochba",
+          "Historické drama"
+        ],
+        [
+          "Do třetího a čtvrtého pokolení",
+          "Román"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Noc na Karlštejně byla poprvé vydána v roce 1884.",
+      "answer": true,
+      "explanation": "Divadelní hra 'Noc na Karlštejně' byla skutečně poprvé vydána v roce 1884."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu:",
+      "text": "Hlavní ženskou postavou v 'Noci na Karlštejně' je {{Alžběta Pomořanská}}, která se rozhodne porušit zákaz Karla IV.",
+      "answers": [
+        "Alžběta Pomořanská"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte dějové události z 'Noci na Karlštejně' podle jejich pořadí.",
+      "items": [
+        "Karel IV. zakazuje ženám vstup na Karlštejn",
+        "Alžběta se převléká za muže",
+        "Pešek a Alena se snaží utajit přítomnost Alžběty",
+        "Karel IV. odhalí Alžbětinu přítomnost a ruší zákaz"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaký vliv měl Jaroslav Vrchlický na českou literaturu?",
+      "keywords": [
+        "lumírovci",
+        "národní uvědomění",
+        "experimentování",
+        "forma"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "title": "Karel Čapek – Válka s mloky",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné informace k jednotlivým postavám z románu 'Válka s mloky'.",
+      "pairs": [
+        [
+          "Kapitán Van Toch",
+          "Objevitel inteligentních mloků"
+        ],
+        [
+          "G. H. Bondy",
+          "Podnikatel zapojený do obchodu s mloky"
+        ],
+        [
+          "Pan Povondra",
+          "Domovník, který pomohl rozšířit obchod s mloky"
+        ],
+        [
+          "Mloci",
+          "Inteligentní tvorové využívaní jako pracovní síla"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Karel Čapek byl prvním předsedou československého PEN klubu.",
+      "answer": true,
+      "explanation": "Karel Čapek se stal prvním předsedou československého PEN klubu v roce 1925."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do následujícího textu.",
+      "text": "Karel Čapek se narodil {{9. ledna 1890}} v {{Malých Svatoňovicích}} a zemřel {{25. prosince 1938}} v {{Praze}}.",
+      "answers": [
+        "9. ledna 1890",
+        "Malých Svatoňovicích",
+        "25. prosince 1938",
+        "Praze"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte následující události ze života Karla Čapka chronologicky.",
+      "items": [
+        "Narození v Malých Svatoňovicích",
+        "Dokončení studia filozofie na Univerzitě Karlově",
+        "Stal se dramaturgem Vinohradského divadla",
+        "Oženil se s Olgou Scheinpflugovou",
+        "Vydání románu Válka s mloky"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní motivy románu 'Válka s mloky'?",
+      "keywords": [
+        "kolonialismus",
+        "nacismus",
+        "lidská chamtivost",
+        "konflikt"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné literární směry k autorům.",
+      "pairs": [
+        [
+          "Karel Čapek",
+          "Meziválečná literatura, sci-fi, satira"
+        ],
+        [
+          "Franz Kafka",
+          "Existencialismus, absurdno"
+        ],
+        [
+          "George Orwell",
+          "Dystopie, politická satira"
+        ],
+        [
+          "H. G. Wells",
+          "Science fiction, sociální komentář"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Válka s mloky byla vydána v roce 1936.",
+      "answer": true,
+      "explanation": "Román 'Válka s mloky' byl skutečně vydán v roce 1936."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do následujícího textu.",
+      "text": "Válka s mloky je {{satirický}} {{sci-fi}} román, který kritizuje {{kolonialismus}} a {{nacismus}}.",
+      "answers": [
+        "satirický",
+        "sci-fi",
+        "kolonialismus",
+        "nacismus"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaký je vztah mezi Karlem Čapkem a Georgem Orwellem v kontextu jejich literární tvorby?",
+      "keywords": [
+        "kritika",
+        "totalitarismus",
+        "humor",
+        "satira"
+      ]
+    }
+  ]
+}

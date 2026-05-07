@@ -1,0 +1,121 @@
+{
+  "title": "Jan Neruda – Povídky malostranské",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné informace k jednotlivým postavám z Povídek malostranských:",
+      "pairs": [
+        [
+          "Paní Bavorová",
+          "Život obyvatel malostranského domu"
+        ],
+        [
+          "Pan Ryšánek",
+          "Dlouholetá nevraživost v hostinci"
+        ],
+        [
+          "Pan Schlegl",
+          "Smíření po nevraživosti"
+        ],
+        [
+          "Slečna Josefínka",
+          "Postava z malostranského domu"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Jan Neruda byl součástí literární skupiny Májovci.",
+      "answer": true,
+      "explanation": "Jan Neruda byl členem skupiny Májovci, která byla inspirována K. H. Máchou a zaměřovala se na realistické zobrazení života."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova v textu:",
+      "text": "Jan Neruda se narodil na {{Malé Straně}} v Praze a jeho dílo Povídky malostranské realisticky zobrazuje život {{měšťanů}}.",
+      "answers": [
+        "Malé Straně",
+        "měšťanů"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události ze života Jana Nerudy chronologicky:",
+      "items": [
+        "Narození na Malé Straně v Praze",
+        "Začátek studia na metropolitní škole u Sv. Víta",
+        "Studium na Akademickém gymnáziu",
+        "Vydání Povídek malostranských"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaký vliv mělo dílo Jana Nerudy na českou literaturu?",
+      "keywords": [
+        "realistické",
+        "zobrazení",
+        "kritika",
+        "společnosti"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte díla k jejich žánrům:",
+      "pairs": [
+        [
+          "Povídky malostranské",
+          "Prozaické dílo"
+        ],
+        [
+          "Balady a romance",
+          "Poezie"
+        ],
+        [
+          "Písně kosmické",
+          "Poezie"
+        ],
+        [
+          "Hřbitovní kvítí",
+          "Poezie"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Povídky malostranské byly vydány v roce 1878.",
+      "answer": true,
+      "explanation": "Povídky malostranské byly skutečně vydány v roce 1878, což je klíčový rok v Nerudově tvorbě."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova v textu:",
+      "text": "Jan Neruda byl známý pro svůj {{realistický}} styl a {{kritiku}} měšťanské společnosti.",
+      "answers": [
+        "realistický",
+        "kritiku"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte tyto autory podle jejich narození:",
+      "items": [
+        "Božena Němcová",
+        "Karolina Světlá",
+        "Jan Neruda",
+        "Vítězslav Hálek"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní motivy v Povídkách malostranských?",
+      "keywords": [
+        "měšťanstvo",
+        "přetvářka",
+        "vztahy",
+        "kritika"
+      ]
+    }
+  ]
+}

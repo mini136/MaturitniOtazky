@@ -1,0 +1,115 @@
+{
+  "title": "Ladislav Smoljak a Zdeněk Svěrák – Dobytí severního pólu",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné informace k autorům a jejich dílům.",
+      "pairs": [
+        [
+          "Zdeněk Svěrák",
+          "Narozen 28. března 1936"
+        ],
+        [
+          "Ladislav Smoljak",
+          "Zemřel 6. června 2010"
+        ],
+        [
+          "Dobytí severního pólu",
+          "Premiéra 1985"
+        ],
+        [
+          "Kolja",
+          "Oscar za nejlepší cizojazyčný film"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Hra Dobytí severního pólu je žánrově absurdní komedie.",
+      "answer": true,
+      "explanation": "Hra je označována jako absurdní komedie, což je potvrzeno v textu."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o hlavních postavách hry Dobytí severního pólu.",
+      "text": "Hlavní postavy jsou {{Karel Němec}}, {{Václav Poustka}}, {{Vojtěch Šofr}} a {{Varel Frištenský}}.",
+      "answers": [
+        "Karel Němec",
+        "Václav Poustka",
+        "Vojtěch Šofr",
+        "Varel Frištenský"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události v životě autorů podle časové posloupnosti.",
+      "items": [
+        "Narození Ladislava Smoljaka v Praze",
+        "Narození Zdeňka Svěráka v Praze",
+        "Založení Divadla Járy Cimrmana",
+        "Premiéra hry Dobytí severního pólu"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaký je význam fiktivní postavy Járy Cimrmana v tvorbě Smoljaka a Svěráka?",
+      "keywords": [
+        "fiktivní",
+        "postava",
+        "Cimrman",
+        "humor",
+        "parodie"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné literární směry k jejich popisům.",
+      "pairs": [
+        [
+          "Absurdní drama",
+          "Reakce na společenské a politické poměry"
+        ],
+        [
+          "Satira",
+          "Kritika společnosti a politiky"
+        ],
+        [
+          "Parodie",
+          "Humoristické napodobování žánrů"
+        ],
+        [
+          "České divadlo",
+          "Specifický humor a tradice"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Ladislav Smoljak a Zdeněk Svěrák spolupracovali na filmu Kolja.",
+      "answer": false,
+      "explanation": "Film Kolja je dílem Zdeňka Svěráka, ale Ladislav Smoljak na něm nespolupracoval."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o literárním kontextu.",
+      "text": "Tvorba Smoljaka a Svěráka je spojena s {{absurdním humorem}}, {{satirou}} a {{parodií}}.",
+      "answers": [
+        "absurdním humorem",
+        "satirou",
+        "parodií"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte následující díla podle roku jejich premiéry.",
+      "items": [
+        "Akt",
+        "Jáchyme, hoď ho do stroje!",
+        "Dobytí severního pólu",
+        "Kolja"
+      ]
+    }
+  ]
+}

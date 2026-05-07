@@ -1,0 +1,119 @@
+{
+  "title": "Ray Bradbury – 451 stupňů Fahrenheita",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné informace k jednotlivým událostem v životě Ray Bradburyho.",
+      "pairs": [
+        [
+          "1920",
+          "Narozen ve Waukeganu, Illinois"
+        ],
+        [
+          "1934",
+          "Rodina se přestěhovala do Los Angeles"
+        ],
+        [
+          "1950",
+          "Vydání Marťanské kroniky"
+        ],
+        [
+          "1953",
+          "Vydání románu 451 stupňů Fahrenheita"
+        ],
+        [
+          "2012",
+          "Zemřel v Los Angeles"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Ray Bradbury se zaměřoval na vědecké aspekty ve svých dílech.",
+      "answer": false,
+      "explanation": "Bradbury se zaměřoval na antiutopické vize, kritiku masových médií a společenskou kritiku, nikoli na vědecké aspekty."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu.",
+      "text": "Román 451 stupňů Fahrenheita byl vydán v roce {{1953}} a jeho hlavním tématem je {{cenzura}}.",
+      "answers": [
+        "1953",
+        "cenzura"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události z děje románu 451 stupňů Fahrenheita ve správném pořadí.",
+      "items": [
+        "Guy Montag pracuje jako požárník, který pálí knihy.",
+        "Montag ukradne knihy a začne je číst.",
+        "Jeho žena ho udá a Montag je nucen utéct.",
+        "Montag se přidává ke skupině vzdělanců, kteří si pamatují knihy."
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní motivy díla 451 stupňů Fahrenheita?",
+      "keywords": [
+        "cenzura",
+        "ztráta individuality",
+        "vliv médií"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné postavy k jejich rolím v románu 451 stupňů Fahrenheita.",
+      "pairs": [
+        [
+          "Guy Montag",
+          "Hlavní postava, požárník"
+        ],
+        [
+          "Clarissa McClellanová",
+          "Dívka, která přiměje Montaga přemýšlet"
+        ],
+        [
+          "Velitel Beatty",
+          "Montagův nadřízený"
+        ],
+        [
+          "Profesor Faber",
+          "Pomáhá Montagovi s knihami"
+        ],
+        [
+          "Mildred Montagová",
+          "Montagova žena"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "451 stupňů Fahrenheita je antiutopický román.",
+      "answer": true,
+      "explanation": "Román zobrazuje negativní vizi budoucnosti, kde je cenzura a ztráta individuality běžná."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu.",
+      "text": "Ray Bradbury je známý pro své dílo {{Marťanská kronika}} a {{451 stupňů Fahrenheita}}.",
+      "answers": [
+        "Marťanská kronika",
+        "451 stupňů Fahrenheita"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké literární prostředky používá Bradbury v románu 451 stupňů Fahrenheita?",
+      "keywords": [
+        "metafora",
+        "symbolika",
+        "ironie",
+        "aluze",
+        "kontrast"
+      ]
+    }
+  ]
+}

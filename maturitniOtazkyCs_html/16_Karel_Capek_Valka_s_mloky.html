@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang='cs'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>16 – Karel Čapek – Válka s mloky</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 980px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #7c2d12; border-bottom: 3px solid #ea580c; padding-bottom: 10px; }
+        h2 { color: #9a3412; border-bottom: 1px solid #fed7aa; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #c2410c; margin-top: 18px; }
+        nav { background: #fff7ed; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #c2410c; font-weight: 600; }
+        nav a:hover { text-decoration: underline; }
+        .note { background: #fff7ed; border-left: 4px solid #ea580c; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+        .quote { background: #fef3c7; border-left: 4px solid #d97706; padding: 12px 16px; margin: 16px 0; border-radius: 0 5px 5px 0; font-style: italic; }
+        .quote cite { display: block; margin-top: 8px; font-size: 0.9em; color: #92400e; font-style: normal; }
+        .keywords { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+        .keywords ul { margin: 0; padding-left: 20px; }
+        .keywords li { margin: 4px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #fed7aa; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #ea580c; color: white; }
+        tr:nth-child(even) { background: #fff7ed; }
+        .story-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fffbf5; padding: 14px 18px; margin: 14px 0; }
+        .story-card h3 { margin-top: 0; color: #9a3412; }
+        .story-card p { margin: 6px 0; }
+        .story-card .theme { font-size: 0.88em; color: #c2410c; font-weight: 600; }
+        .author-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fff7ed; padding: 14px 18px; margin: 14px 0; }
+        .author-card h3 { margin-top: 0; color: #7c2d12; }
+        .flash-wrap { display: grid; gap: 10px; }
+        .flash-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fffbf5; padding: 8px 12px; }
+        .flash-card summary { cursor: pointer; font-weight: 700; color: #9a3412; }
+        .flash-card p { margin: 10px 0 4px; }
+        .timeline { list-style: none; padding: 0; }
+        .timeline li { padding: 8px 0 8px 28px; border-left: 3px solid #ea580c; margin-left: 12px; position: relative; }
+        .timeline li::before { content: '●'; position: absolute; left: -10px; color: #ea580c; }
+        .timeline li strong { display: block; color: #7c2d12; }
+        @media print { nav, .flash-wrap { display: none; } }
+    </style>
+    <link rel='stylesheet' href='../assets/study.css'>
+</head>
+<body>
+    <nav>
+        <a href='index.html'>⬅ Zpět na obsah ČJ</a>
+        <a href='../index.html'>🏠 Hlavní rozcestník</a>
+    </nav>
+
+    <h1>16 – Karel Čapek – Válka s mloky</h1>
+
+<div class='quote'>„Člověk je tvor, který se neustále snaží přizpůsobit svět svým potřebám, ale zapomíná, že svět má své vlastní zákony.“<cite>— Karel Čapek</cite></div>
+
+<h2>1. O autorovi – Karel Čapek</h2>
+<h3>Základní údaje</h3>
+<table>
+  <tr><th>Kategorie</th><th>Informace</th></tr>
+  <tr><td>Celé/vlastní jméno</td><td>Karel Antonín Čapek</td></tr>
+  <tr><td>Narozen</td><td>9. ledna 1890, Malé Svatoňovice</td></tr>
+  <tr><td>Zemřel</td><td>25. prosince 1938, Praha</td></tr>
+  <tr><td>Národnost/Jazyk</td><td>Česká/čeština</td></tr>
+  <tr><td>Profese</td><td>Spisovatel, novinář, dramatik</td></tr>
+  <tr><td>Hlavní díla</td><td>R.U.R., Válka s mloky, Krakatit</td></tr>
+  <tr><td>Literární směr</td><td>Meziválečná literatura, sci-fi, satira</td></tr>
+</table>
+<h3>Životní chronologie</h3>
+<ul class='timeline'>
+  <li><strong>1890</strong> Narozen v Malých Svatoňovicích</li>
+  <li><strong>1915</strong> Dokončil studium filozofie na Univerzitě Karlově</li>
+  <li><strong>1921</strong> Stal se dramaturgem Vinohradského divadla</li>
+  <li><strong>1925</strong> První předseda československého PEN klubu</li>
+  <li><strong>1935</strong> Oženil se s Olgou Scheinpflugovou</li>
+  <li><strong>1936</strong> Vydání románu Válka s mloky</li>
+  <li><strong>1938</strong> Úmrtí v Praze</li>
+  <li><strong>1938</strong> Publikace úvahy "Jak to bylo" v Lidových novinách</li>
+</ul>
+<h3>Charakter tvorby</h3>
+<div class='keywords'>
+  <ul>
+    <li>Satira a kritika společnosti</li>
+    <li>Vědecko-fantastické prvky</li>
+    <li>Humanismus a demokracie</li>
+    <li>Opozice vůči totalitarismu</li>
+    <li>Filozofické otázky</li>
+  </ul>
+</div>
+
+<h2>2. Přehled tvorby</h2>
+<table>
+  <tr><th>Rok</th><th>Název</th><th>Poznámka</th></tr>
+  <tr><td>1920</td><td>R.U.R.</td><td>Drama, zavedení slova "robot"</td></tr>
+  <tr><td>1922</td><td>Krakatit</td><td>Román, sci-fi</td></tr>
+  <tr><td>1936</td><td>Válka s mloky</td><td>Román, satira</td></tr>
+  <tr><td>1937</td><td>Bílá nemoc</td><td>Drama, politická alegorie</td></tr>
+  <tr><td>1938</td><td>Matka</td><td>Drama, protiválečné</td></tr>
+  <tr><td>1938</td><td>Hovory s T. G. Masarykem</td><td>Rozhovory, filozofické</td></tr>
+</table>
+
+<h2>3. Válka s mloky – rozbor díla</h2>
+<div class='note'>Úvod k dílu</div>
+<h3>Základní informace</h3>
+<table>
+  <tr><th>Kategorie</th><th>Informace</th></tr>
+  <tr><td>Žánr</td><td>Satirický sci-fi román</td></tr>
+  <tr><td>Rok vydání</td><td>1936</td></tr>
+  <tr><td>Téma</td><td>Kolonialismus, nacismus, lidská chamtivost</td></tr>
+  <tr><td>Prostředí</td><td>Globální, oceány a pevniny</td></tr>
+  <tr><td>Vyprávěcí perspektiva</td><td>Třetí osoba, historický a novinářský styl</td></tr>
+  <tr><td>Jazyk originálu</td><td>Čeština</td></tr>
+  <tr><td>Filmová/divadelní zpracování</td><td>Rozhlasová adaptace, divadelní inscenace</td></tr>
+</table>
+<h3>Hlavní postavy</h3>
+<div class='keywords'>
+  <ul>
+    <li>Kapitán Van Toch</li>
+    <li>G. H. Bondy</li>
+    <li>Pan Povondra</li>
+    <li>Mloci (Andrias scheuchzeri)</li>
+  </ul>
+</div>
+<h3>Obsah a děj</h3>
+<div class='story-card'>
+  <h3>Objev mloků</h3>
+  <p><strong>Děj:</strong> Kapitán Van Toch objeví na ostrově Tana Masa inteligentní mloky a zahájí s nimi obchod.</p>
+  <p><strong>Téma:</strong> Využití a zneužití přírodních zdrojů.</p>
+  <p class='theme'>Klíčové: Objev, obchod, mloci</p>
+</div>
+<div class='story-card'>
+  <h3>Rozvoj mločí civilizace</h3>
+  <p><strong>Děj:</strong> Mloci se rozšíří po světě a začnou být využíváni jako levná pracovní síla.</p>
+  <p><strong>Téma:</strong> Kolonialismus a vykořisťování.</p>
+  <p class='theme'>Klíčové: Práce, rozvoj, vykořisťování</p>
+</div>
+<div class='story-card'>
+  <h3>Válka s mloky</h3>
+  <p><strong>Děj:</strong> Mloci se vzbouří a požadují rozšíření svého životního prostoru, což vede k válce s lidmi.</p>
+  <p><strong>Téma:</strong> Konflikt mezi civilizacemi.</p>
+  <p class='theme'>Klíčové: Válka, konflikt, expanze</p>
+</div>
+<h3>Jazykové a stylistické prostředky</h3>
+<table>
+  <tr><th>Prostředek</th><th>Příklad / popis</th></tr>
+  <tr><td>Satira</td><td>Kritika lidské společnosti a politiky</td></tr>
+  <tr><td>Ironie</td><td>Podtržení absurdit lidského chování</td></tr>
+  <tr><td>Parodie</td><td>Napodobení vědeckých textů</td></tr>
+  <tr><td>Metafora</td><td>Mloci jako symbol totalitarismu</td></tr>
+  <tr><td>Dialogy</td><td>Interakce mezi lidmi a mloky</td></tr>
+  <tr><td>Popis</td><td>Detailní líčení prostředí a situací</td></tr>
+</table>
+
+<h2>4. Dobový literární kontext</h2>
+<div class='note'>Popis epochy a literárního proudu</div>
+<table>
+  <tr><th>Tendence / Směr</th><th>Popis</th></tr>
+  <tr><td>Meziválečná literatura</td><td>Reflexe společenských a politických změn</td></tr>
+  <tr><td>Science fiction</td><td>Spekulace o budoucnosti a technologiích</td></tr>
+  <tr><td>Satira</td><td>Kritika společnosti a politiky</td></tr>
+  <tr><td>Humanismus</td><td>Zdůraznění lidských hodnot a práv</td></tr>
+</table>
+
+<h2>5. Soudobí a blízcí autoři</h2>
+<div class='author-card'>
+  <h3>Franz Kafka (1883–1924)</h3>
+  <p><strong>Dílo:</strong> Proměna, Proces</p>
+  <p><strong>Styl:</strong> Existencialismus, absurdno</p>
+  <p><strong>Srovnání s Karel Čapek:</strong> Oba autoři zkoumají lidskou existenci, ale Čapek více satiricky.</p>
+</div>
+<div class='author-card'>
+  <h3>George Orwell (1903–1950)</h3>
+  <p><strong>Dílo:</strong> 1984, Farma zvířat</p>
+  <p><strong>Styl:</strong> Dystopie, politická satira</p>
+  <p><strong>Srovnání s Karel Čapek:</strong> Oba kritizují totalitarismus, Čapek více humoristicky.</p>
+</div>
+<div class='author-card'>
+  <h3>Aldous Huxley (1894–1963)</h3>
+  <p><strong>Dílo:</strong> Konec civilizace</p>
+  <p><strong>Styl:</strong> Dystopie, filozofická próza</p>
+  <p><strong>Srovnání s Karel Čapek:</strong> Oba zkoumají budoucnost lidstva, Čapek s větším důrazem na satiru.</p>
+</div>
+<div class='author-card'>
+  <h3>H. G. Wells (1866–1946)</h3>
+  <p><strong>Dílo:</strong> Válka světů, Stroj času</p>
+  <p><strong>Styl:</strong> Science fiction, sociální komentář</p>
+  <p><strong>Srovnání s Karel Čapek:</strong> Oba využívají sci-fi k reflexi společnosti, Čapek více satiricky.</p>
+</div>
+<h3>Srovnávací tabulka</h3>
+<table>
+  <tr><th>Autor</th><th>Téma</th><th>Styl</th><th>Kontext</th></tr>
+  <tr><td>Karel Čapek</td><td>Kolonialismus, totalitarismus</td><td>Satira, sci-fi</td><td>Meziválečná Evropa</td></tr>
+  <tr><td>Franz Kafka</td><td>Absurdno, byrokracie</td><td>Existencialismus</td><td>Rakousko-Uhersko, První republika</td></tr>
+  <tr><td>George Orwell</td><td>Totalitarismus</td><td>Dystopie</td><td>Poválečná Británie</td></tr>
+  <tr><td>Aldous Huxley</td><td>Budoucnost lidstva</td><td>Dystopie</td><td>Meziválečná Británie</td></tr>
+  <tr><td>H. G. Wells</td><td>Technologie, společnost</td><td>Sci-fi</td><td>Viktoriánská Anglie</td></tr>
+</table>
+
+<h2>6. Filmová / divadelní zpracování a recepce</h2>
+<div class='keywords'>
+  <ul>
+    <li>Rozhlasová adaptace (1958)</li>
+    <li>Divadelní adaptace (1962, 1963)</li>
+    <li>Komiksová adaptace (1989)</li>
+    <li>Kulturní vliv na sci-fi žánr</li>
+  </ul>
+</div>
+
+<h2>7. Klíčové pojmy k zapamatování</h2>
+<div class='keywords'>
+  <ul>
+    <li>Satira</li>
+    <li>Kolonialismus</li>
+    <li>Nacismus</li>
+    <li>Vědecko-fantastická literatura</li>
+    <li>Humanismus</li>
+    <li>Meziválečná literatura</li>
+    <li>Válka s mloky</li>
+    <li>Karel Čapek</li>
+    <li>Andrias scheuchzeri</li>
+    <li>PEN klub</li>
+  </ul>
+</div>
+
+<h2>8. Studijní kartičky</h2>
+<div class='flash-wrap'>
+  <details class='flash-card'><summary>Kdy se narodil Karel Čapek?</summary><p>9. ledna 1890</p></details>
+  <details class='flash-card'><summary>Kde se narodil Karel Čapek?</summary><p>Malé Svatoňovice</p></details>
+  <details class='flash-card'><summary>Jaké je hlavní téma Války s mloky?</summary><p>Kolonialismus a nacismus</p></details>
+  <details class='flash-card'><summary>Kdo je hlavní postavou Války s mloky?</summary><p>Kapitán Van Toch</p></details>
+  <details class='flash-card'><summary>Jaký literární směr reprezentuje Karel Čapek?</summary><p>Meziválečná literatura, sci-fi, satira</p></details>
+  <details class='flash-card'><summary>Kdy vyšla Válka s mloky?</summary><p>1936</p></details>
+  <details class='flash-card'><summary>Jaký je jazyk originálu Války s mloky?</summary><p>Čeština</p></details>
+  <details class='flash-card'><summary>Jaké jsou hlavní postavy Války s mloky?</summary><p>Kapitán Van Toch, G. H. Bondy, Pan Povondra</p></details>
+  <details class='flash-card'><summary>Jaký je žánr Války s mloky?</summary><p>Satirický sci-fi román</p></details>
+  <details class='flash-card'><summary>Jaký je vztah mezi Karel Čapek a George Orwell?</summary><p>Oba kritizují totalitarismus, Čapek více humoristicky.</p></details>
+</div>
+
+    <nav style='margin-top: 30px;'>
+        <a href='index.html'>⬅ Zpět na obsah ČJ</a>
+        <a href='../index.html'>🏠 Hlavní rozcestník</a>
+    </nav>
+</body>
+<script src='../assets/study.js'></script>
+</html>

@@ -1,0 +1,103 @@
+{
+  "title": "Karel Čapek – Bílá nemoc",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně postavy k jejich rolím v díle 'Bílá nemoc':",
+      "pairs": [
+        [
+          "Dr. Galén",
+          "Objevitel léku"
+        ],
+        [
+          "Maršál",
+          "Plánuje válku"
+        ],
+        [
+          "Baron Krüg",
+          "Podnikatel"
+        ],
+        [
+          "Prof. Sigelius",
+          "Lékařský odborník"
+        ],
+        [
+          "Anetta",
+          "Vedlejší postava"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Karel Čapek byl prvním předsedou československého PEN klubu.",
+      "answer": true,
+      "explanation": "Karel Čapek skutečně zastával tuto funkci od roku 1925."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o životě Karla Čapka:",
+      "text": "Karel Čapek se narodil {{9. ledna 1890}} a zemřel {{25. prosince 1938}}.",
+      "answers": [
+        "9. ledna 1890",
+        "25. prosince 1938"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události z života Karla Čapka chronologicky:",
+      "items": [
+        "Narození v Malých Svatoňovicích",
+        "Dokončení studia na Univerzitě Karlově",
+        "Začátek práce v Lidových novinách",
+        "Sňatek s Olgou Scheinpflugovou",
+        "Úmrtí v Praze"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní motivy v díle 'Bílá nemoc'?",
+      "keywords": [
+        "antifascismus",
+        "morální dilema",
+        "válka"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Bílá nemoc byla vydána v roce 1938.",
+      "answer": false,
+      "explanation": "Bílá nemoc byla vydána v roce 1937."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o díle 'Bílá nemoc':",
+      "text": "Hlavní postavou je {{Dr. Galén}}, který objeví lék na {{bílou nemoc}}.",
+      "answers": [
+        "Dr. Galén",
+        "bílou nemoc"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte díla Karla Čapka podle roku vydání:",
+      "items": [
+        "R.U.R.",
+        "Krakatit",
+        "Válka s mloky",
+        "Bílá nemoc",
+        "Matka"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaký je literární směr Karla Čapka a jaké jsou jeho charakteristiky?",
+      "keywords": [
+        "meziválečná literatura",
+        "science fiction",
+        "politická kritika"
+      ]
+    }
+  ]
+}

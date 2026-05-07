@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang='cs'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>02 – William Shakespeare – Zkrocení zlé ženy</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 980px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #7c2d12; border-bottom: 3px solid #ea580c; padding-bottom: 10px; }
+        h2 { color: #9a3412; border-bottom: 1px solid #fed7aa; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #c2410c; margin-top: 18px; }
+        nav { background: #fff7ed; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #c2410c; font-weight: 600; }
+        nav a:hover { text-decoration: underline; }
+        .note { background: #fff7ed; border-left: 4px solid #ea580c; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+        .quote { background: #fef3c7; border-left: 4px solid #d97706; padding: 12px 16px; margin: 16px 0; border-radius: 0 5px 5px 0; font-style: italic; }
+        .quote cite { display: block; margin-top: 8px; font-size: 0.9em; color: #92400e; font-style: normal; }
+        .keywords { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+        .keywords ul { margin: 0; padding-left: 20px; }
+        .keywords li { margin: 4px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #fed7aa; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #ea580c; color: white; }
+        tr:nth-child(even) { background: #fff7ed; }
+        .story-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fffbf5; padding: 14px 18px; margin: 14px 0; }
+        .story-card h3 { margin-top: 0; color: #9a3412; }
+        .story-card p { margin: 6px 0; }
+        .story-card .theme { font-size: 0.88em; color: #c2410c; font-weight: 600; }
+        .author-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fff7ed; padding: 14px 18px; margin: 14px 0; }
+        .author-card h3 { margin-top: 0; color: #7c2d12; }
+        .flash-wrap { display: grid; gap: 10px; }
+        .flash-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fffbf5; padding: 8px 12px; }
+        .flash-card summary { cursor: pointer; font-weight: 700; color: #9a3412; }
+        .flash-card p { margin: 10px 0 4px; }
+        .timeline { list-style: none; padding: 0; }
+        .timeline li { padding: 8px 0 8px 28px; border-left: 3px solid #ea580c; margin-left: 12px; position: relative; }
+        .timeline li::before { content: '●'; position: absolute; left: -10px; color: #ea580c; }
+        .timeline li strong { display: block; color: #7c2d12; }
+        @media print { nav, .flash-wrap { display: none; } }
+    </style>
+    <link rel='stylesheet' href='../assets/study.css'>
+</head>
+<body>
+    <nav>
+        <a href='index.html'>⬅ Zpět na obsah ČJ</a>
+        <a href='../index.html'>🏠 Hlavní rozcestník</a>
+    </nav>
+
+    <h1>02 – William Shakespeare – Zkrocení zlé ženy</h1>
+
+<div class='quote'>„Celý svět je jeviště a všichni lidé na něm jen herci.“<cite>— William Shakespeare</cite></div>
+
+<h2>1. O autorovi – William Shakespeare</h2>
+<h3>Základní údaje</h3>
+<table>
+  <tr><th>Kategorie</th><th>Informace</th></tr>
+  <tr><td>Celé/vlastní jméno</td><td>William Shakespeare</td></tr>
+  <tr><td>Narozen</td><td>23. dubna 1564, Stratford nad Avonou</td></tr>
+  <tr><td>Zemřel</td><td>23. dubna 1616, Stratford nad Avonou</td></tr>
+  <tr><td>Národnost/Jazyk</td><td>Anglická/Angličtina</td></tr>
+  <tr><td>Profese</td><td>Básník, dramatik, herec</td></tr>
+  <tr><td>Hlavní díla</td><td>Hamlet, Othello, Král Lear, Macbeth, Zkrocení zlé ženy</td></tr>
+  <tr><td>Literární směr</td><td>Renesance</td></tr>
+</table>
+<h3>Životní chronologie</h3>
+<ul class='timeline'>
+  <li><strong>1564</strong> Narození ve Stratfordu nad Avonou</li>
+  <li><strong>1582</strong> Sňatek s Anne Hathawayovou</li>
+  <li><strong>1585</strong> Začátek kariéry v Londýně</li>
+  <li><strong>1590</strong> Napsání hry Zkrocení zlé ženy</li>
+  <li><strong>1603</strong> Herecký soubor přejmenován na Královskou společnost</li>
+  <li><strong>1613</strong> Odchod na odpočinek do Stratfordu</li>
+  <li><strong>1616</strong> Úmrtí ve Stratfordu nad Avonou</li>
+  <li><strong>1623</strong> Vydání Prvního folia</li>
+</ul>
+<h3>Charakter tvorby</h3>
+<div class='keywords'>
+  <ul>
+    <li>Renesanční humanismus</li>
+    <li>Psychologická hloubka postav</li>
+    <li>Blankvers</li>
+    <li>Komedie a tragédie</li>
+    <li>Historické hry</li>
+    <li>Tragikomedie</li>
+    <li>Jazykové hříčky</li>
+    <li>Ironie a metafory</li>
+  </ul>
+</div>
+
+<h2>2. Přehled tvorby</h2>
+<table>
+  <tr><th>Rok</th><th>Název</th><th>Poznámka</th></tr>
+  <tr><td>1590</td><td>Zkrocení zlé ženy</td><td>Komedie</td></tr>
+  <tr><td>1595</td><td>Romeo a Julie</td><td>Tragédie</td></tr>
+  <tr><td>1600</td><td>Hamlet</td><td>Tragédie</td></tr>
+  <tr><td>1603</td><td>Othello</td><td>Tragédie</td></tr>
+  <tr><td>1606</td><td>Macbeth</td><td>Tragédie</td></tr>
+  <tr><td>1611</td><td>Bouře</td><td>Tragikomedie</td></tr>
+</table>
+
+<h2>3. Zkrocení zlé ženy – rozbor díla</h2>
+<div class='note'>Úvod k dílu</div>
+<h3>Základní informace</h3>
+<table>
+  <tr><th>Kategorie</th><th>Informace</th></tr>
+  <tr><td>Žánr</td><td>Komedie</td></tr>
+  <tr><td>Rok vydání</td><td>1590–1591</td></tr>
+  <tr><td>Téma</td><td>Vztahy mezi muži a ženami</td></tr>
+  <tr><td>Prostředí</td><td>Padova, Itálie</td></tr>
+  <tr><td>Vyprávěcí perspektiva</td><td>Divadelní hra</td></tr>
+  <tr><td>Jazyk originálu</td><td>Angličtina</td></tr>
+  <tr><td>Filmová/divadelní zpracování</td><td>Různé adaptace, včetně filmu z roku 1967</td></tr>
+</table>
+<h3>Hlavní postavy</h3>
+<div class='keywords'>
+  <ul>
+    <li>Bianca</li>
+    <li>Kateřina</li>
+    <li>Petruchio</li>
+    <li>Lucentio</li>
+    <li>Gremio</li>
+  </ul>
+</div>
+<h3>Obsah a děj</h3>
+<div class='story-card'>
+  <h3>Úvod</h3>
+  <p><strong>Děj:</strong> Příběh začíná v Padově, kde žije bohatý kupec Baptista se svými dvěma dcerami.</p>
+  <p><strong>Téma:</strong> Rodinné vztahy a společenské konvence.</p>
+  <p class='theme'>Klíčové: Padova, Baptista, Bianca, Kateřina</p>
+</div>
+<div class='story-card'>
+  <h3>Setkání s Petruchiem</h3>
+  <p><strong>Děj:</strong> Petruchio přijíždí do Padovy a rozhodne se oženit s Kateřinou.</p>
+  <p><strong>Téma:</strong> Zkrocení a změna osobnosti.</p>
+  <p class='theme'>Klíčové: Petruchio, Kateřina, sňatek</p>
+</div>
+<div class='story-card'>
+  <h3>Zkrocení Kateřiny</h3>
+  <p><strong>Děj:</strong> Petruchio používá různé metody, aby zkrotil Kateřinu.</p>
+  <p><strong>Téma:</strong> Mocenské vztahy a manipulace.</p>
+  <p class='theme'>Klíčové: Zkrocení, manipulace, moc</p>
+</div>
+<div class='story-card'>
+  <h3>Vrchol a závěr</h3>
+  <p><strong>Děj:</strong> Kateřina se stává poslušnou manželkou a Petruchio vyhrává sázku.</p>
+  <p><strong>Téma:</strong> Společenské normy a role žen.</p>
+  <p class='theme'>Klíčové: Poslušnost, sázka, role žen</p>
+</div>
+<h3>Jazykové a stylistické prostředky</h3>
+<table>
+  <tr><th>Prostředek</th><th>Příklad / popis</th></tr>
+  <tr><td>Blankvers</td><td>Pětistopý nerýmovaný jambický verš</td></tr>
+  <tr><td>Repliky</td><td>Stylisticky výstižné a vybroušené</td></tr>
+  <tr><td>Jazykové hříčky</td><td>Hra se slovy a významy</td></tr>
+  <tr><td>Ironie</td><td>Využití ironie v dialozích</td></tr>
+  <tr><td>Metafory</td><td>Obrazné vyjádření</td></tr>
+  <tr><td>Expresivní výrazy</td><td>Citově zabarvené výrazy</td></tr>
+</table>
+
+<h2>4. Dobový literární kontext</h2>
+<div class='note'>Popis epochy a literárního proudu</div>
+<table>
+  <tr><th>Tendence / Směr</th><th>Popis</th></tr>
+  <tr><td>Renesance</td><td>Obnova antických ideálů a humanismu</td></tr>
+  <tr><td>Humanismus</td><td>Důraz na lidský rozum a individualitu</td></tr>
+  <tr><td>Divadelní rozkvět</td><td>Rozvoj divadelní kultury v Anglii</td></tr>
+  <tr><td>Reformace</td><td>Náboženské a společenské změny</td></tr>
+</table>
+
+<h2>5. Soudobí a blízcí autoři</h2>
+<div class='author-card'>
+  <h3>Christopher Marlowe (1564–1593)</h3>
+  <p><strong>Dílo:</strong> Doktor Faustus</p>
+  <p><strong>Styl:</strong> Tragédie, blankvers</p>
+  <p><strong>Srovnání s William Shakespeare:</strong> Oba využívali blankvers a psali tragédie.</p>
+</div>
+<div class='author-card'>
+  <h3>Ben Jonson (1572–1637)</h3>
+  <p><strong>Dílo:</strong> Volpone</p>
+  <p><strong>Styl:</strong> Satira, komedie</p>
+  <p><strong>Srovnání s William Shakespeare:</strong> Jonson se více zaměřoval na satiru, zatímco Shakespeare na psychologii postav.</p>
+</div>
+<div class='author-card'>
+  <h3>John Donne (1572–1631)</h3>
+  <p><strong>Dílo:</strong> Písně a sonety</p>
+  <p><strong>Styl:</strong> Metafyzická poezie</p>
+  <p><strong>Srovnání s William Shakespeare:</strong> Donne se soustředil na poezii, zatímco Shakespeare na drama.</p>
+</div>
+<div class='author-card'>
+  <h3>Edmund Spenser (1552–1599)</h3>
+  <p><strong>Dílo:</strong> Královna víl</p>
+  <p><strong>Styl:</strong> Epická poezie</p>
+  <p><strong>Srovnání s William Shakespeare:</strong> Spenser psal epickou poezii, zatímco Shakespeare se věnoval divadlu.</p>
+</div>
+<h3>Srovnávací tabulka</h3>
+<table>
+  <tr><th>Autor</th><th>Téma</th><th>Styl</th><th>Kontext</th></tr>
+  <tr><td>William Shakespeare</td><td>Vztahy, moc</td><td>Blankvers, drama</td><td>Renesance</td></tr>
+  <tr><td>Christopher Marlowe</td><td>Ambice, osud</td><td>Tragédie, blankvers</td><td>Renesance</td></tr>
+  <tr><td>Ben Jonson</td><td>Společenská kritika</td><td>Satira, komedie</td><td>Renesance</td></tr>
+  <tr><td>John Donne</td><td>Láska, smrt</td><td>Metafyzická poezie</td><td>Renesance</td></tr>
+  <tr><td>Edmund Spenser</td><td>Allegorie, ctnost</td><td>Epická poezie</td><td>Renesance</td></tr>
+</table>
+
+<h2>6. Filmová / divadelní zpracování a recepce</h2>
+<div class='keywords'>
+  <ul>
+    <li>Film 1967 s Elizabeth Taylor</li>
+    <li>Adaptace Kiss Me, Kate</li>
+    <li>Divadelní inscenace po celém světě</li>
+    <li>Kulturní vliv na genderové diskuse</li>
+    <li>Ocenění za inovativní přístupy</li>
+  </ul>
+</div>
+
+<h2>7. Klíčové pojmy k zapamatování</h2>
+<div class='keywords'>
+  <ul>
+    <li>Renesance</li>
+    <li>Blankvers</li>
+    <li>Komedie</li>
+    <li>Padova</li>
+    <li>Kateřina</li>
+    <li>Petruchio</li>
+    <li>Manipulace</li>
+    <li>Společenské konvence</li>
+    <li>Ironie</li>
+    <li>Jazykové hříčky</li>
+    <li>Psychologie postav</li>
+    <li>Divadelní inscenace</li>
+  </ul>
+</div>
+
+<h2>8. Studijní kartičky</h2>
+<div class='flash-wrap'>
+  <details class='flash-card'><summary>Kdy se narodil William Shakespeare?</summary><p>23. dubna 1564</p></details>
+  <details class='flash-card'><summary>Kde se odehrává děj Zkrocení zlé ženy?</summary><p>V Padově, Itálie</p></details>
+  <details class='flash-card'><summary>Jaký literární směr reprezentuje Shakespeare?</summary><p>Renesance</p></details>
+  <details class='flash-card'><summary>Kdo je hlavní ženskou postavou ve Zkrocení zlé ženy?</summary><p>Kateřina</p></details>
+  <details class='flash-card'><summary>Jaký verš používá Shakespeare ve svých hrách?</summary><p>Blankvers</p></details>
+  <details class='flash-card'><summary>Kdo je Petruchio?</summary><p>Veronský šlechtic, který si vezme Kateřinu</p></details>
+  <details class='flash-card'><summary>Jaké je hlavní téma Zkrocení zlé ženy?</summary><p>Vztahy mezi muži a ženami</p></details>
+  <details class='flash-card'><summary>Jaký je žánr Zkrocení zlé ženy?</summary><p>Komedie</p></details>
+  <details class='flash-card'><summary>Kdo napsal Královnu víl?</summary><p>Edmund Spenser</p></details>
+  <details class='flash-card'><summary>Jaký je styl Ben Jonsona?</summary><p>Satira, komedie</p></details>
+</div>
+
+    <nav style='margin-top: 30px;'>
+        <a href='index.html'>⬅ Zpět na obsah ČJ</a>
+        <a href='../index.html'>🏠 Hlavní rozcestník</a>
+    </nav>
+</body>
+<script src='../assets/study.js'></script>
+</html>

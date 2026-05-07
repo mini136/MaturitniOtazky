@@ -1,0 +1,120 @@
+{
+  "title": "Erich Maria Remarque – Na západní frontě klid",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně následující informace k Erichu Maria Remarquovi:",
+      "pairs": [
+        [
+          "Narozen",
+          "22. června 1898"
+        ],
+        [
+          "Zemřel",
+          "25. září 1970"
+        ],
+        [
+          "Hlavní dílo",
+          "Na západní frontě klid"
+        ],
+        [
+          "Literární směr",
+          "Realismus, protiválečná literatura"
+        ],
+        [
+          "Národnost",
+          "Německá"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Erich Maria Remarque emigroval do USA v roce 1939.",
+      "answer": true,
+      "explanation": "Remarque emigroval do USA v roce 1939 kvůli politické situaci v Evropě."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova v následujícím textu:",
+      "text": "Román Na západní frontě klid byl poprvé publikován v roce {{1928}} a jeho hlavní postavou je {{Pavel Bäumer}}.",
+      "answers": [
+        "1928",
+        "Pavel Bäumer"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte následující události z života Ericha Maria Remarqua chronologicky:",
+      "items": [
+        "Narozen v Osnabrücku",
+        "Odveden do první světové války",
+        "Publikace románu Na západní frontě klid",
+        "Emigrace do USA",
+        "Získání amerického občanství"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní motivy románu Na západní frontě klid?",
+      "keywords": [
+        "hrůzy války",
+        "ztracená generace",
+        "odcizení",
+        "psychické trauma"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte postavy k jejich charakteristikám v románu Na západní frontě klid:",
+      "pairs": [
+        [
+          "Pavel Bäumer",
+          "Hlavní postava a vypravěč"
+        ],
+        [
+          "Stanislaus Katczinsky",
+          "Přítel Pavla, zkušený voják"
+        ],
+        [
+          "Albert Kropp",
+          "Přítel Pavla, intelektuál"
+        ],
+        [
+          "Müller",
+          "Přítel Pavla, pragmatický"
+        ],
+        [
+          "Kemmerich",
+          "Přítel Pavla, umírá na frontě"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Román Na západní frontě klid je psán v ich-formě.",
+      "answer": true,
+      "explanation": "Román je vyprávěn z pohledu hlavní postavy Pavla Bäumera, což je typické pro ich-formu."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova v následujícím textu:",
+      "text": "Erich Maria Remarque je známý pro své {{protiválečné}} romány a realistické zobrazení {{války}}.",
+      "answers": [
+        "protiválečné",
+        "války"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte následující díla Ericha Maria Remarqua podle roku vydání:",
+      "items": [
+        "Domov snů",
+        "Na západní frontě klid",
+        "Cesta zpátky",
+        "Tři kamarádi"
+      ]
+    }
+  ]
+}

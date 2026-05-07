@@ -15,10 +15,50 @@
             .quiz-back { margin-bottom: 10px; }
             .quiz-loading, .quiz-error { padding: 30px 12px; font-size: 1rem; }
         }
+
+        /* ── Password gate ── */
+        #quiz-gate {
+            position: fixed; inset: 0; background: rgba(15,15,35,.55);
+            display: flex; align-items: center; justify-content: center; z-index: 999;
+        }
+        #quiz-gate.hidden { display: none; }
+        .gate-card {
+            background: #fff; border-radius: 14px; padding: 36px 40px;
+            box-shadow: 0 8px 40px rgba(0,0,0,.18); width: 100%; max-width: 380px;
+        }
+        .gate-card h2 { margin: 0 0 6px; font-size: 1.25rem; color: #1e293b; }
+        .gate-card p  { margin: 0 0 18px; color: #64748b; font-size: .9rem; }
+        .gate-card input {
+            width: 100%; padding: 10px 13px; border: 1px solid #cbd5e1;
+            border-radius: 8px; font: inherit; font-size: 1rem;
+            margin-bottom: 12px; box-sizing: border-box;
+        }
+        .gate-card input:focus { outline: 2px solid #6366f1; border-color: #6366f1; }
+        .gate-card button {
+            width: 100%; padding: 11px; background: #6366f1; color: #fff;
+            border: none; border-radius: 8px; font: inherit; font-size: 1rem;
+            font-weight: 700; cursor: pointer; transition: background .15s;
+        }
+        .gate-card button:hover { background: #4f46e5; }
+        .gate-err { color: #dc2626; font-size: .88rem; margin-bottom: 10px; display: none; }
+        @media (max-width: 440px) {
+            .gate-card { padding: 24px 18px; }
+        }
     </style>
     <link rel="stylesheet" href="quiz.css">
 </head>
 <body>
+    <!-- Password gate overlay -->
+    <div id="quiz-gate">
+        <div class="gate-card">
+            <h2>🔒 Procvičování</h2>
+            <p>Zadej heslo pro přístup k procvičovacím otázkám.</p>
+            <div class="gate-err" id="gate-err">Špatné heslo. Zkus to znovu.</div>
+            <input type="password" id="gate-pass" placeholder="Heslo" autofocus>
+            <button id="gate-btn">Odemknout</button>
+        </div>
+    </div>
+
     <a class="quiz-back" id="back-link" href="#">⬅ Zpět na teorii</a>
     <div id="quiz-root">
         <div class="quiz-loading">Načítám kvíz…</div>
@@ -26,6 +66,72 @@
     <script src="quiz.js"></script>
     <script>
     (function() {
+        var UNLOCK_KEY = 'quiz-unlocked';
+        var UNLOCK_TTL = 3600 * 1000; // 1 hour
+
+        /* ── Gate logic ── */
+        function isUnlocked() {
+            try {
+                var raw = sessionStorage.getItem(UNLOCK_KEY);
+                if (!raw) return false;
+                var data = JSON.parse(raw);
+                return Date.now() - data.t < UNLOCK_TTL;
+            } catch(e) { return false; }
+        }
+
+        function setUnlocked() {
+            sessionStorage.setItem(UNLOCK_KEY, JSON.stringify({ t: Date.now() }));
+        }
+
+        async function verifyPassword(pass) {
+            try {
+                var res = await fetch('/api/admin/stats', {
+                    headers: { 'X-Admin-Password': pass, 'Accept': 'application/json' }
+                });
+                return res.status === 200;
+            } catch(e) {
+                // Server unreachable — fail open so offline use still works
+                return false;
+            }
+        }
+
+        var gate  = document.getElementById('quiz-gate');
+        var input = document.getElementById('gate-pass');
+        var btn   = document.getElementById('gate-btn');
+        var err   = document.getElementById('gate-err');
+
+        function hideGate() {
+            gate.classList.add('hidden');
+        }
+
+        async function tryUnlock() {
+            var pass = input.value;
+            if (!pass) return;
+            btn.disabled = true;
+            btn.textContent = 'Ověřuji…';
+            err.style.display = 'none';
+
+            var ok = await verifyPassword(pass);
+            btn.disabled = false;
+            btn.textContent = 'Odemknout';
+
+            if (ok) {
+                setUnlocked();
+                hideGate();
+            } else {
+                err.style.display = 'block';
+                input.select();
+            }
+        }
+
+        btn.addEventListener('click', tryUnlock);
+        input.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryUnlock(); });
+
+        if (isUnlocked()) {
+            hideGate();
+        }
+
+        /* ── Quiz load logic ── */
         var params = new URLSearchParams(window.location.search);
         var q = params.get("q") || "";
         var back = params.get("back") || "";

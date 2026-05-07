@@ -1,0 +1,111 @@
+{
+  "title": "Jaroslav Hašek – Osudy dobrého vojáka Švejka za světové války",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně díla Jaroslava Haška k jejich charakteristikám.",
+      "pairs": [
+        [
+          "Osudy dobrého vojáka Švejka",
+          "Humoristický román"
+        ],
+        [
+          "Dějiny strany mírného pokroku v mezích zákona",
+          "Satira na politiku"
+        ],
+        [
+          "Májové výkřiky",
+          "Parodie lyrické poezie"
+        ],
+        [
+          "Na frontě",
+          "Druhý díl Švejka"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Jaroslav Hašek dokončil všechny díly Osudů dobrého vojáka Švejka.",
+      "answer": false,
+      "explanation": "Hašek zemřel v roce 1923 a čtvrtý díl Švejka zůstal nedokončený."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o životě Jaroslava Haška.",
+      "text": "Jaroslav Hašek se narodil {{30. dubna 1883}} v Praze a zemřel {{3. ledna 1923}} v Lipnici nad Sázavou.",
+      "answers": [
+        "30. dubna 1883",
+        "3. ledna 1923"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události ze života Jaroslava Haška chronologicky.",
+      "items": [
+        "Narozen v Praze",
+        "Účast na protiněmeckých nepokojích",
+        "Vydání parodie Májové výkřiky",
+        "Odveden do rakousko-uherské armády"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Popište hlavní téma Osudů dobrého vojáka Švejka.",
+      "keywords": [
+        "absurdnost",
+        "války",
+        "autority"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte postavy z Osudů dobrého vojáka Švejka k jejich rolím v příběhu.",
+      "pairs": [
+        [
+          "Josef Švejk",
+          "Hlavní postava"
+        ],
+        [
+          "Nadporučík Lukáš",
+          "Švejkův nadřízený"
+        ],
+        [
+          "Polní kurát Katz",
+          "Vojenský duchovní"
+        ],
+        [
+          "Hostinský Palivec",
+          "Majitel hospody"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Osudy dobrého vojáka Švejka byly zfilmovány a zdramatizovány.",
+      "answer": true,
+      "explanation": "Dílo bylo vícekrát zfilmováno a zdramatizováno, což svědčí o jeho kulturním vlivu."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o literárním kontextu Haškova díla.",
+      "text": "Jaroslav Hašek je známý pro svůj {{humorismus}} a {{satiru}}, které využívá k {{kritice}} autorit.",
+      "answers": [
+        "humorismus",
+        "satiru",
+        "kritice"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte díly Osudů dobrého vojáka Švejka podle jejich vydání.",
+      "items": [
+        "Osudy dobrého vojáka Švejka",
+        "Na frontě",
+        "Slavný výprask",
+        "Pokračování slavného výprasku"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "title": "Viktor Dyk – Krysař",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně díla k jejich žánrům:",
+      "pairs": [
+        [
+          "Krysař",
+          "Novela"
+        ],
+        [
+          "Zmoudření Dona Quijota",
+          "Drama"
+        ],
+        [
+          "Devátá vlna",
+          "Básnická sbírka"
+        ],
+        [
+          "Posel",
+          "Drama"
+        ],
+        [
+          "Milá sedmi loupežníků",
+          "Básnická sbírka"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Viktor Dyk byl signatářem Manifestu českých spisovatelů v roce 1917.",
+      "answer": true,
+      "explanation": "Viktor Dyk skutečně podepsal Manifest českých spisovatelů v roce 1917, což bylo významné politické gesto."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu:",
+      "text": "Viktor Dyk se narodil {{31. prosince 1877}} v {{Pšovce u Mělníka}}.",
+      "answers": [
+        "31. prosince 1877",
+        "Pšovce u Mělníka"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte životní události Viktora Dyka chronologicky:",
+      "items": [
+        "Narození v Pšovce u Mělníka",
+        "Začátek studia na pražském gymnáziu",
+        "Maturita a zápis na právnickou fakultu",
+        "Rozhodnutí nevěnovat se právu",
+        "Signatář Manifestu českých spisovatelů",
+        "Spoluzakladatel Československé národní demokracie",
+        "Úmrtí na Lopudu"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Popište hlavní téma novely Krysař a jeho význam.",
+      "keywords": [
+        "morální dilemata",
+        "osudovost",
+        "pomsta",
+        "spravedlnost"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Krysař je příběh zasazený do moderního města.",
+      "answer": false,
+      "explanation": "Krysař je zasazen do středověkého města Hammeln, což je klíčové pro atmosféru a symboliku příběhu."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu:",
+      "text": "Hlavní postavy novely Krysař jsou {{Krysař}}, {{Agnieszka}}, {{Sepp Jörgen}} a {{Starosta}}.",
+      "answers": [
+        "Krysař",
+        "Agnieszka",
+        "Sepp Jörgen",
+        "Starosta"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaký vliv měl literární směr anarchističtí buřiči na tvorbu Viktora Dyka?",
+      "keywords": [
+        "revolta",
+        "společnost",
+        "individualismus",
+        "nacionalismus"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "title": "Franz Kafka – Proměna",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně díla Franze Kafky k roku jejich vydání:",
+      "pairs": [
+        [
+          "Proměna",
+          "1915"
+        ],
+        [
+          "Proces",
+          "1925"
+        ],
+        [
+          "Zámek",
+          "1926"
+        ],
+        [
+          "Rozjímání",
+          "1912"
+        ],
+        [
+          "Amerika",
+          "1927"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Franz Kafka psal svá díla v češtině.",
+      "answer": false,
+      "explanation": "Franz Kafka psal svá díla v němčině."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o životě Franze Kafky:",
+      "text": "Franz Kafka se narodil {{3. července 1883}} v {{Praze}} a zemřel {{3. června 1924}} v {{Kierlingu}}.",
+      "answers": [
+        "3. července 1883",
+        "Praze",
+        "3. června 1924",
+        "Kierlingu"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události ze života Franze Kafky chronologicky:",
+      "items": [
+        "Narození v Praze",
+        "Dokončení studia práv",
+        "Publikace sbírky Rozjímání",
+        "Vydání Proměny",
+        "Smrt na tuberkulózu"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní motivy v novele Proměna?",
+      "keywords": [
+        "odcizení",
+        "proměna",
+        "izolace",
+        "rodina"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Gregor Samsa se v novele Proměna promění v obřího hmyzu.",
+      "answer": true,
+      "explanation": "Hlavní postava Gregor Samsa se probudí jako obří hmyz, což je klíčový moment novely."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o literárním kontextu Franze Kafky:",
+      "text": "Kafka je spojen s literárními směry jako {{existencialismus}} a {{modernismus}}.",
+      "answers": [
+        "existencialismus",
+        "modernismus"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně literární směry k jejich charakteristikám:",
+      "pairs": [
+        [
+          "Existencialismus",
+          "Otázky lidské existence a smyslu"
+        ],
+        [
+          "Modernismus",
+          "Inovace v literární formě a obsahu"
+        ],
+        [
+          "Surrealismus",
+          "Prolínání reality a snu"
+        ],
+        [
+          "Symbolismus",
+          "Využití symbolů k vyjádření myšlenek"
+        ]
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Popište, jaké vztahy má Gregor Samsa se svou rodinou v novele Proměna.",
+      "keywords": [
+        "napětí",
+        "izolace",
+        "nepochopení",
+        "odcizení"
+      ]
+    }
+  ]
+}

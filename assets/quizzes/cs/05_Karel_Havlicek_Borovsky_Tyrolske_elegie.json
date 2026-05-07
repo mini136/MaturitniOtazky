@@ -1,0 +1,123 @@
+{
+  "title": "Karel Havlíček Borovský – Tyrolské elegie",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně dílo k jeho charakteristice:",
+      "pairs": [
+        [
+          "Tyrolské elegie",
+          "Satira na rakouskou vládu"
+        ],
+        [
+          "Král Lávra",
+          "Báseň"
+        ],
+        [
+          "Křest svatého Vladimíra",
+          "Satirická báseň"
+        ],
+        [
+          "Obrazy z Rus",
+          "První tištěné dílo"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Karel Havlíček Borovský byl internován v Brixenu kvůli kritice rakouské vlády.",
+      "answer": true,
+      "explanation": "Havlíček byl internován v Brixenu za svou politickou angažovanost a kritiku rakouské vlády, což je hlavní téma Tyrolských elegií."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu:",
+      "text": "Karel Havlíček Borovský se narodil {{31. října 1821}} a zemřel {{29. července 1856}}.",
+      "answers": [
+        "31. října 1821",
+        "29. července 1856"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte následující události ze života Karla Havlíčka Borovského chronologicky:",
+      "items": [
+        "Narození v Borové u Přibyslavi",
+        "Přestěhování do Německého Brodu",
+        "Studium filosofie v Praze",
+        "Internace v Brixenu"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní motivy Tyrolských elegií?",
+      "keywords": [
+        "kritika",
+        "rakouská vláda",
+        "církev",
+        "nespravedlnost",
+        "izolace"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně autora k jeho charakteristice:",
+      "pairs": [
+        [
+          "Božena Němcová",
+          "Kritika společnosti, venkovský život"
+        ],
+        [
+          "Jan Neruda",
+          "Satira, městské prostředí"
+        ],
+        [
+          "Josef Kajetán Tyl",
+          "Romantismus, vlastenectví"
+        ],
+        [
+          "František Palacký",
+          "Historie, politika"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Tyrolské elegie byly poprvé vydány knižně v roce 1861.",
+      "answer": false,
+      "explanation": "Tyrolské elegie byly poprvé vydány časopisecky v roce 1861 a knižně až v roce 1870."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu:",
+      "text": "Hlavní postavy Tyrolských elegií jsou {{Karel Havlíček Borovský}}, {{rakouská policie}} a {{rodina Havlíčka}}.",
+      "answers": [
+        "Karel Havlíček Borovský",
+        "rakouská policie",
+        "rodina Havlíčka"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte následující díla Karla Havlíčka Borovského podle roku vydání:",
+      "items": [
+        "Obrazy z Rus",
+        "Tyrolské elegie",
+        "Král Lávra",
+        "Křest svatého Vladimíra"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaký literární směr reprezentuje Karel Havlíček Borovský a jaké jsou jeho hlavní rysy?",
+      "keywords": [
+        "realismus",
+        "kritika",
+        "společnost",
+        "politická angažovanost"
+      ]
+    }
+  ]
+}

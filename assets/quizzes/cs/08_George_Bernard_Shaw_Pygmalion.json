@@ -1,0 +1,116 @@
+{
+  "title": "George Bernard Shaw – Pygmalion",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně díla k jejich charakteristikám:",
+      "pairs": [
+        [
+          "Pygmalion",
+          "Nejznámější hra"
+        ],
+        [
+          "Člověk a nadčlověk",
+          "Filozofická komedie"
+        ],
+        [
+          "Svatá Jana",
+          "Historické drama"
+        ],
+        [
+          "Domy pana Sartoria",
+          "Debutová hra"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "George Bernard Shaw získal Nobelovu cenu za literaturu v roce 1925.",
+      "answer": true,
+      "explanation": "Shaw získal Nobelovu cenu za literaturu v roce 1925 za svůj přínos dramatické literatuře."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o životě George Bernarda Shawa:",
+      "text": "George Bernard Shaw se narodil {{26. července 1856}} v {{Dublinu}} a zemřel {{2. listopadu 1950}} v {{Anglii}}.",
+      "answers": [
+        "26. července 1856",
+        "Dublinu",
+        "2. listopadu 1950",
+        "Anglii"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události ze života George Bernarda Shawa chronologicky:",
+      "items": [
+        "Narozen v Dublinu",
+        "Přestěhoval se do Londýna",
+        "Debutoval hrou Domy pana Sartoria",
+        "Oženil se s Charlottou Payne-Townsendovou",
+        "Získal Nobelovu cenu za literaturu",
+        "Získal Oscara za scénář k filmu Pygmalion"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní motivy hry Pygmalion a jak se projevují v ději?",
+      "keywords": [
+        "proměna",
+        "společenské rozdíly",
+        "jazyk",
+        "identita"
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Hlavní ženskou postavou v Pygmalionu je Eliza Doolittle.",
+      "answer": true,
+      "explanation": "Eliza Doolittle je hlavní ženskou postavou, která prochází proměnou pod vedením Henryho Higginse."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o literárním kontextu:",
+      "text": "George Bernard Shaw byl známý pro svou {{satiru}} a {{realismus}}, a jeho díla často kritizovala {{společenské normy}}.",
+      "answers": [
+        "satiru",
+        "realismus",
+        "společenské normy"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správně postavy k jejich rolím v Pygmalionu:",
+      "pairs": [
+        [
+          "Henry Higgins",
+          "Profesor fonetiky"
+        ],
+        [
+          "Eliza Doolittle",
+          "Květinářka"
+        ],
+        [
+          "Colonel Pickering",
+          "Higginsův přítel"
+        ],
+        [
+          "Alfred Doolittle",
+          "Elizin otec"
+        ]
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaký vliv měl George Bernard Shaw na divadlo a film, zejména s ohledem na Pygmalion?",
+      "keywords": [
+        "kulturní vliv",
+        "My Fair Lady",
+        "Oscar",
+        "scénář"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "title": "William Shakespeare – Zkrocení zlé ženy",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte postavy k jejich rolím nebo charakteristikám.",
+      "pairs": [
+        [
+          "Kateřina",
+          "Hlavní ženská postava, která je zkrocena"
+        ],
+        [
+          "Petruchio",
+          "Veronský šlechtic, který si vezme Kateřinu"
+        ],
+        [
+          "Bianca",
+          "Mladší sestra Kateřiny"
+        ],
+        [
+          "Baptista",
+          "Otec Kateřiny a Biancy"
+        ],
+        [
+          "Lucentio",
+          "Nápadník Biancy"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "William Shakespeare se narodil a zemřel ve stejný den.",
+      "answer": true,
+      "explanation": "William Shakespeare se narodil 23. dubna 1564 a zemřel 23. dubna 1616."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu.",
+      "text": "Shakespeare je známý pro své použití {{blankvers}} a jeho dílo Zkrocení zlé ženy je považováno za {{komedie}}.",
+      "answers": [
+        "blankvers",
+        "komedie"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události ze života Williama Shakespeara chronologicky.",
+      "items": [
+        "Narození ve Stratfordu nad Avonou",
+        "Sňatek s Anne Hathawayovou",
+        "Začátek kariéry v Londýně",
+        "Napsání hry Zkrocení zlé ženy",
+        "Odchod na odpočinek do Stratfordu"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jaké jsou hlavní motivy hry Zkrocení zlé ženy?",
+      "keywords": [
+        "vztahy",
+        "muži",
+        "ženy",
+        "moc",
+        "manipulace"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte literární směry k jejich charakteristikám.",
+      "pairs": [
+        [
+          "Renesance",
+          "Obnova antických ideálů a humanismu"
+        ],
+        [
+          "Humanismus",
+          "Důraz na lidský rozum a individualitu"
+        ],
+        [
+          "Reformace",
+          "Náboženské a společenské změny"
+        ],
+        [
+          "Divadelní rozkvět",
+          "Rozvoj divadelní kultury v Anglii"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Zkrocení zlé ženy je tragédie.",
+      "answer": false,
+      "explanation": "Zkrocení zlé ženy je komedie, nikoli tragédie."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící slova do textu.",
+      "text": "Hra Zkrocení zlé ženy se odehrává v {{Padova}}, kde žije kupec {{Baptista}} se svými dcerami.",
+      "answers": [
+        "Padova",
+        "Baptista"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte následující Shakespearovy hry podle roku jejich vzniku.",
+      "items": [
+        "Zkrocení zlé ženy",
+        "Romeo a Julie",
+        "Hamlet",
+        "Othello",
+        "Macbeth"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Popište, jaké jazykové a stylistické prostředky Shakespeare používal ve svých hrách.",
+      "keywords": [
+        "blankvers",
+        "ironii",
+        "metafory",
+        "jazykové hříčky"
+      ]
+    }
+  ]
+}

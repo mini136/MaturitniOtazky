@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang='cs'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>04 – Karel Jaromír Erben – Kytice</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 980px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #7c2d12; border-bottom: 3px solid #ea580c; padding-bottom: 10px; }
+        h2 { color: #9a3412; border-bottom: 1px solid #fed7aa; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #c2410c; margin-top: 18px; }
+        nav { background: #fff7ed; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #c2410c; font-weight: 600; }
+        nav a:hover { text-decoration: underline; }
+        .note { background: #fff7ed; border-left: 4px solid #ea580c; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+        .quote { background: #fef3c7; border-left: 4px solid #d97706; padding: 12px 16px; margin: 16px 0; border-radius: 0 5px 5px 0; font-style: italic; }
+        .quote cite { display: block; margin-top: 8px; font-size: 0.9em; color: #92400e; font-style: normal; }
+        .keywords { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+        .keywords ul { margin: 0; padding-left: 20px; }
+        .keywords li { margin: 4px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #fed7aa; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #ea580c; color: white; }
+        tr:nth-child(even) { background: #fff7ed; }
+        .story-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fffbf5; padding: 14px 18px; margin: 14px 0; }
+        .story-card h3 { margin-top: 0; color: #9a3412; }
+        .story-card p { margin: 6px 0; }
+        .story-card .theme { font-size: 0.88em; color: #c2410c; font-weight: 600; }
+        .author-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fff7ed; padding: 14px 18px; margin: 14px 0; }
+        .author-card h3 { margin-top: 0; color: #7c2d12; }
+        .flash-wrap { display: grid; gap: 10px; }
+        .flash-card { border: 1px solid #fed7aa; border-radius: 8px; background: #fffbf5; padding: 8px 12px; }
+        .flash-card summary { cursor: pointer; font-weight: 700; color: #9a3412; }
+        .flash-card p { margin: 10px 0 4px; }
+        .timeline { list-style: none; padding: 0; }
+        .timeline li { padding: 8px 0 8px 28px; border-left: 3px solid #ea580c; margin-left: 12px; position: relative; }
+        .timeline li::before { content: '●'; position: absolute; left: -10px; color: #ea580c; }
+        .timeline li strong { display: block; color: #7c2d12; }
+        @media print { nav, .flash-wrap { display: none; } }
+    </style>
+    <link rel='stylesheet' href='../assets/study.css'>
+</head>
+<body>
+    <nav>
+        <a href='index.html'>⬅ Zpět na obsah ČJ</a>
+        <a href='../index.html'>🏠 Hlavní rozcestník</a>
+    </nav>
+
+    <h1>04 – Karel Jaromír Erben – Kytice</h1>
+
+<div class='quote'>„Kytice z pověstí národních je sbírka balad, které čerpají z lidových tradic a pověstí.“<cite>— Karel Jaromír Erben</cite></div>
+
+<h2>1. O autorovi – Karel Jaromír Erben</h2>
+<h3>Základní údaje</h3>
+<table>
+  <tr><th>Kategorie</th><th>Informace</th></tr>
+  <tr><td>Celé/vlastní jméno</td><td>Karel Jaromír Erben</td></tr>
+  <tr><td>Narozen</td><td>7. listopadu 1811, Miletín</td></tr>
+  <tr><td>Zemřel</td><td>21. listopadu 1870, Praha</td></tr>
+  <tr><td>Národnost/Jazyk</td><td>Česká</td></tr>
+  <tr><td>Profese</td><td>Historik, právník, archivář, spisovatel, básník, překladatel</td></tr>
+  <tr><td>Hlavní díla</td><td>Kytice, Písně národní v Čechách, Prostonárodní české písně a říkadla</td></tr>
+  <tr><td>Literární směr</td><td>Romantismus</td></tr>
+</table>
+<h3>Životní chronologie</h3>
+<ul class='timeline'>
+  <li><strong>1811</strong> Narozen v Miletíně</li>
+  <li><strong>1825</strong> Studium na gymnáziu v Hradci Králové</li>
+  <li><strong>1831</strong> Studium filozofie a práv v Praze</li>
+  <li><strong>1842</strong> Zvolen aktuárem České učené společnosti nauk</li>
+  <li><strong>1851</strong> Archivář města Prahy</li>
+  <li><strong>1853</strong> První vydání sbírky Kytice</li>
+  <li><strong>1864</strong> Ředitel pomocných úřadů pražských</li>
+  <li><strong>1870</strong> Zemřel v Praze</li>
+</ul>
+<h3>Charakter tvorby</h3>
+<div class='keywords'>
+  <ul>
+    <li>Inspirace lidovou slovesností</li>
+    <li>Romantické prvky</li>
+    <li>Historické a mytologické motivy</li>
+    <li>Baladická forma</li>
+    <li>Tematická hloubka a symbolika</li>
+  </ul>
+</div>
+
+<h2>2. Přehled tvorby</h2>
+<table>
+  <tr><th>Rok</th><th>Název</th><th>Poznámka</th></tr>
+  <tr><td>1842–1845</td><td>Písně národní v Čechách</td><td>Sbírka lidových písní</td></tr>
+  <tr><td>1853</td><td>Kytice z pověstí národních</td><td>První vydání</td></tr>
+  <tr><td>1861</td><td>Kytice z básní K. J. Erbena</td><td>Rozšířené vydání</td></tr>
+  <tr><td>1864</td><td>Prostonárodní české písně a říkadla</td><td>Rozšířená sbírka</td></tr>
+  <tr><td>1865</td><td>Sto prostonárodních pohádek a pověstí slovanských</td><td>Čitanka slovanská</td></tr>
+  <tr><td>1869</td><td>Vybrané báje a pověsti národní jiných větví slovanských</td><td>Výběr pověstí</td></tr>
+</table>
+
+<h2>3. Kytice – rozbor díla</h2>
+<div class='note'>Sbírka balad čerpajících z lidových tradic a pověstí, které zkoumají lidské osudy a morální dilemata.</div>
+<h3>Základní informace</h3>
+<table>
+  <tr><th>Kategorie</th><th>Informace</th></tr>
+  <tr><td>Žánr</td><td>Balady</td></tr>
+  <tr><td>Rok vydání</td><td>1853 (rozšířené vydání 1861)</td></tr>
+  <tr><td>Téma</td><td>Lidové pověsti, morální dilemata, osud</td></tr>
+  <tr><td>Prostředí</td><td>Česká krajina, mytologické prostředí</td></tr>
+  <tr><td>Vyprávěcí perspektiva</td><td>Třetí osoba</td></tr>
+  <tr><td>Jazyk originálu</td><td>Čeština</td></tr>
+  <tr><td>Filmová/divadelní zpracování</td><td>Kytice (2000), Svatební košile (1978)</td></tr>
+</table>
+<h3>Hlavní postavy</h3>
+<div class='keywords'>
+  <ul>
+    <li>Matka (Kytice)</li>
+    <li>Vodník (Vodník)</li>
+    <li>Svatební košile (nevěsta)</li>
+    <li>Polednice (Polednice)</li>
+  </ul>
+</div>
+<h3>Obsah a děj</h3>
+<div class='story-card'>
+  <h3>Kytice</h3>
+  <p><strong>Děj:</strong> Matka zemře a její děti ji oplakávají. Z jejího hrobu vyroste kytice, která je symbolem její lásky a ochrany.</p>
+  <p><strong>Téma:</strong> Láska a ochrana matky, smrt a znovuzrození.</p>
+  <p class='theme'>Klíčové: láska, smrt, znovuzrození</p>
+</div>
+<div class='story-card'>
+  <h3>Vodník</h3>
+  <p><strong>Děj:</strong> Dívka je unesena vodníkem a musí s ním žít pod vodou. Nakonec se pokusí o útěk, ale je potrestána.</p>
+  <p><strong>Téma:</strong> Osud, trest za neposlušnost, síla přírody.</p>
+  <p class='theme'>Klíčové: osud, trest, příroda</p>
+</div>
+<div class='story-card'>
+  <h3>Svatební košile</h3>
+  <p><strong>Děj:</strong> Dívka čeká na svého milého, který se vrací jako duch. Vydají se na cestu, která končí v hrobě.</p>
+  <p><strong>Téma:</strong> Láska až za hrob, smrt, věrnost.</p>
+  <p class='theme'>Klíčové: láska, smrt, věrnost</p>
+</div>
+<h3>Jazykové a stylistické prostředky</h3>
+<table>
+  <tr><th>Prostředek</th><th>Příklad / popis</th></tr>
+  <tr><td>Metafora</td><td>Kytice jako symbol lásky</td></tr>
+  <tr><td>Personifikace</td><td>Vodník jako živá bytost</td></tr>
+  <tr><td>Symbolika</td><td>Svatební košile jako symbol smrti</td></tr>
+  <tr><td>Ironie</td><td>Osudové zvraty v baladách</td></tr>
+  <tr><td>Rytmus</td><td>Pravidelný rytmus balad</td></tr>
+  <tr><td>Archaismy</td><td>Starobylý jazyk pro autenticitu</td></tr>
+</table>
+
+<h2>4. Dobový literární kontext</h2>
+<div class='note'>Romantismus v české literatuře se zaměřoval na národní identitu, lidové tradice a mytologii.</div>
+<table>
+  <tr><th>Tendence / Směr</th><th>Popis</th></tr>
+  <tr><td>Romantismus</td><td>Zdůraznění emocí, přírody a individuality</td></tr>
+  <tr><td>Národní obrození</td><td>Obnova českého jazyka a kultury</td></tr>
+  <tr><td>Folklorismus</td><td>Inspirace lidovou slovesností a tradicemi</td></tr>
+  <tr><td>Mytologizace</td><td>Využití mýtů a legend v literatuře</td></tr>
+</table>
+
+<h2>5. Soudobí a blízcí autoři</h2>
+<div class='author-card'>
+  <h3>Karel Hynek Mácha (1810–1836)</h3>
+  <p><strong>Dílo:</strong> Máj</p>
+  <p><strong>Styl:</strong> Romantismus, lyrika</p>
+  <p><strong>Srovnání s Karel Jaromír Erben:</strong> Oba autoři čerpali z romantismu, ale Mácha se více zaměřoval na lyriku a subjektivní prožitek.</p>
+</div>
+<div class='author-card'>
+  <h3>Božena Němcová (1820–1862)</h3>
+  <p><strong>Dílo:</strong> Babička</p>
+  <p><strong>Styl:</strong> Realismus, romantismus</p>
+  <p><strong>Srovnání s Karel Jaromír Erben:</strong> Němcová se zaměřovala na realistické zobrazení života, zatímco Erben na mytologii a balady.</p>
+</div>
+<div class='author-card'>
+  <h3>František Palacký (1798–1876)</h3>
+  <p><strong>Dílo:</strong> Dějiny národu českého v Čechách a v Moravě</p>
+  <p><strong>Styl:</strong> Historie, národní obrození</p>
+  <p><strong>Srovnání s Karel Jaromír Erben:</strong> Oba byli významnými postavami národního obrození, ale Palacký se věnoval historii, zatímco Erben literatuře.</p>
+</div>
+<div class='author-card'>
+  <h3>Jan Neruda (1834–1891)</h3>
+  <p><strong>Dílo:</strong> Povídky malostranské</p>
+  <p><strong>Styl:</strong> Realismus</p>
+  <p><strong>Srovnání s Karel Jaromír Erben:</strong> Neruda se zaměřoval na realistické zobrazení městského života, zatímco Erben na venkovské balady.</p>
+</div>
+<h3>Srovnávací tabulka</h3>
+<table>
+  <tr><th>Autor</th><th>Téma</th><th>Styl</th><th>Kontext</th></tr>
+  <tr><td>Karel Hynek Mácha</td><td>Láska, smrt</td><td>Romantismus</td><td>Národní obrození</td></tr>
+  <tr><td>Božena Němcová</td><td>Rodina, tradice</td><td>Realismus</td><td>Národní obrození</td></tr>
+  <tr><td>František Palacký</td><td>Dějiny</td><td>Historie</td><td>Národní obrození</td></tr>
+  <tr><td>Jan Neruda</td><td>Městský život</td><td>Realismus</td><td>19. století</td></tr>
+</table>
+
+<h2>6. Filmová / divadelní zpracování a recepce</h2>
+<div class='keywords'>
+  <ul>
+    <li>Kytice (2000) – filmová adaptace</li>
+    <li>Svatební košile (1978) – animovaný film</li>
+    <li>Hudební adaptace Dvořáka</li>
+    <li>Kulturní vliv na českou literaturu</li>
+  </ul>
+</div>
+
+<h2>7. Klíčové pojmy k zapamatování</h2>
+<div class='keywords'>
+  <ul>
+    <li>Romantismus</li>
+    <li>Národní obrození</li>
+    <li>Balada</li>
+    <li>Lidová slovesnost</li>
+    <li>Mytologie</li>
+    <li>Symbolika</li>
+    <li>Osud</li>
+    <li>Morální dilema</li>
+    <li>Folklorismus</li>
+    <li>Erbenova Kytice</li>
+  </ul>
+</div>
+
+<h2>8. Studijní kartičky</h2>
+<div class='flash-wrap'>
+  <details class='flash-card'><summary>Kdy se narodil Karel Jaromír Erben?</summary><p>7. listopadu 1811</p></details>
+  <details class='flash-card'><summary>Jaké je hlavní dílo Karla Jaromíra Erbena?</summary><p>Kytice z pověstí národních</p></details>
+  <details class='flash-card'><summary>Jaký literární směr reprezentuje Erben?</summary><p>Romantismus</p></details>
+  <details class='flash-card'><summary>Které dílo Erbena bylo inspirováno lidovou slovesností?</summary><p>Kytice</p></details>
+  <details class='flash-card'><summary>Jaké jsou hlavní motivy v Kytici?</summary><p>Lidové pověsti, osud, morální dilemata</p></details>
+  <details class='flash-card'><summary>Kdy bylo poprvé vydáno dílo Kytice?</summary><p>1853</p></details>
+  <details class='flash-card'><summary>Jaké jsou hlavní postavy v baladě Vodník?</summary><p>Vodník a dívka</p></details>
+  <details class='flash-card'><summary>Který autor je známý pro dílo Máj?</summary><p>Karel Hynek Mácha</p></details>
+  <details class='flash-card'><summary>Jaký je styl Boženy Němcové?</summary><p>Realismus, romantismus</p></details>
+  <details class='flash-card'><summary>Jaký je kulturní vliv Kytice?</summary><p>Inspirovala filmové a hudební adaptace</p></details>
+</div>
+
+    <nav style='margin-top: 30px;'>
+        <a href='index.html'>⬅ Zpět na obsah ČJ</a>
+        <a href='../index.html'>🏠 Hlavní rozcestník</a>
+    </nav>
+</body>
+<script src='../assets/study.js'></script>
+</html>

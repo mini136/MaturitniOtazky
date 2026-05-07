@@ -1,0 +1,128 @@
+{
+  "title": "Bohumil Hrabal – Ostře sledované vlaky",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné informace k jednotlivým postavám z novely 'Ostře sledované vlaky'.",
+      "pairs": [
+        [
+          "Miloš Hrma",
+          "Mladý železničář, hlavní hrdina"
+        ],
+        [
+          "Výpravčí Hubička",
+          "Kolega Miloše, známý pro své žertíky"
+        ],
+        [
+          "Přednosta Němeček",
+          "Nadřízený na stanici"
+        ],
+        [
+          "Máša",
+          "Milošova přítelkyně"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Bohumil Hrabal získal Oscara za filmovou adaptaci 'Ostře sledované vlaky'.",
+      "answer": false,
+      "explanation": "Oscar za nejlepší cizojazyčný film byl udělen režisérovi Jiřímu Menzelovi, nikoliv Hrabalovi."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o životě Bohumila Hrabala.",
+      "text": "Bohumil Hrabal se narodil {{28. března 1914}} v {{Židenicích}} a zemřel {{3. února 1997}} v {{Praze}}.",
+      "answers": [
+        "28. března 1914",
+        "Židenicích",
+        "3. února 1997",
+        "Praze"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události v životě Bohumila Hrabala chronologicky.",
+      "items": [
+        "Narozen v Židenicích",
+        "Začal studovat na gymnáziu v Brně",
+        "Odmatuoval na gymnáziu v Nymburce",
+        "Dokončil studium práv na Univerzitě Karlově",
+        "Oženil se s Eliškou Plevovou",
+        "Vydání novely Ostře sledované vlaky",
+        "Zemřel v Praze"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Popište hlavní motivy novely 'Ostře sledované vlaky'.",
+      "keywords": [
+        "dospívání",
+        "hrdinství",
+        "válka",
+        "identita"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte díla k jejich žánrům.",
+      "pairs": [
+        [
+          "Ostře sledované vlaky",
+          "Novela"
+        ],
+        [
+          "Postřižiny",
+          "Román"
+        ],
+        [
+          "Obsluhoval jsem anglického krále",
+          "Román"
+        ],
+        [
+          "Slavnosti sněženek",
+          "Povídky"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Bohumil Hrabal je představitelem existencialismu.",
+      "answer": false,
+      "explanation": "Hrabal je představitelem české poválečné literatury, která reflektuje válku a totalitu, nikoliv primárně existencialismu."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o filmové adaptaci 'Ostře sledované vlaky'.",
+      "text": "Film režíroval {{Jiří Menzel}} a získal {{Oscara}} za nejlepší cizojazyčný film v roce {{1968}}.",
+      "answers": [
+        "Jiří Menzel",
+        "Oscara",
+        "1968"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte klíčové události z děje novely 'Ostře sledované vlaky'.",
+      "items": [
+        "Miloš začíná pracovat na železniční stanici",
+        "Miloš se pokusí o sebevraždu",
+        "Miloš se rozhodne vyhodit do vzduchu muniční vlak",
+        "Miloš zahyne při akci"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Jakým způsobem Bohumil Hrabal využívá ironii ve svém díle?",
+      "keywords": [
+        "humor",
+        "tragické situace",
+        "kontrast",
+        "každodennost",
+        "válka"
+      ]
+    }
+  ]
+}

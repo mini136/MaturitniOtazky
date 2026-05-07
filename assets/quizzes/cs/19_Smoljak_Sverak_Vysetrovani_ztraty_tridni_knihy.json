@@ -1,0 +1,114 @@
+{
+  "title": "Ladislav Smoljak a Zdeněk Svěrák – Vyšetřování ztráty třídní knihy",
+  "questions": [
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné údaje k autorům a jejich dílům.",
+      "pairs": [
+        [
+          "Zdeněk Svěrák",
+          "28. března 1936"
+        ],
+        [
+          "Ladislav Smoljak",
+          "9. prosince 1931"
+        ],
+        [
+          "Vyšetřování ztráty třídní knihy",
+          "Absurdní komedie"
+        ],
+        [
+          "Kolja",
+          "Oscar za nejlepší cizojazyčný film"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Hra Vyšetřování ztráty třídní knihy byla první hrou Divadla Járy Cimrmana.",
+      "answer": false,
+      "explanation": "První hrou Divadla Járy Cimrmana byl Akt, Vyšetřování ztráty třídní knihy byla druhá hra."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o hlavních postavách ve hře.",
+      "text": "Hlavními postavami ve hře jsou {{Učitel}}, {{Ředitel školy}}, {{Inspektor}} a {{Zemský školní rada}}.",
+      "answers": [
+        "Učitel",
+        "Ředitel školy",
+        "Inspektor",
+        "Zemský školní rada"
+      ]
+    },
+    {
+      "type": "order",
+      "prompt": "Seřaďte události v životě autorů podle časové posloupnosti.",
+      "items": [
+        "Narození Ladislava Smoljaka",
+        "Narození Zdeňka Svěráka",
+        "Založení Divadla Járy Cimrmana",
+        "Premiéra hry Vyšetřování ztráty třídní knihy",
+        "Úmrtí Ladislava Smoljaka"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Popište hlavní téma hry Vyšetřování ztráty třídní knihy.",
+      "keywords": [
+        "absurdnost",
+        "byrokracie",
+        "hierarchie"
+      ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaďte správné literární směry k autorům.",
+      "pairs": [
+        [
+          "Václav Havel",
+          "Absurdní drama"
+        ],
+        [
+          "Bohumil Hrabal",
+          "Poetika všedního dne"
+        ],
+        [
+          "Milan Kundera",
+          "Filozofická próza"
+        ],
+        [
+          "Ladislav Smoljak a Zdeněk Svěrák",
+          "Absurdní komedie"
+        ]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Divadlo Járy Cimrmana bylo založeno v roce 1966.",
+      "answer": true,
+      "explanation": "Divadlo Járy Cimrmana bylo skutečně založeno v roce 1966."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplňte chybějící informace o charakteru tvorby autorů.",
+      "text": "Tvorba Smoljaka a Svěráka je charakterizována {{absurdním humorem}}, {{parodií}} a {{satirou}}.",
+      "answers": [
+        "absurdním humorem",
+        "parodií",
+        "satirou"
+      ]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětlete, jakým způsobem hra Vyšetřování ztráty třídní knihy kritizuje školní systém.",
+      "keywords": [
+        "kritika",
+        "školní systém",
+        "absurdní",
+        "byrokracie"
+      ]
+    }
+  ]
+}
