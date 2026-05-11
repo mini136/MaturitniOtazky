@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>02 - Grafy a řazení</title>
+    <title>02 - Algoritmizace — Grafy, Prohlédávání stavového prostoru, Řazení</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
         h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
@@ -32,7 +32,7 @@
 <body>
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
 
-    <h1>02 – Grafy, průchody grafem, řadicí algoritmy</h1>
+    <h1>02 – Algoritmizace — Grafy, Prohlédávání stavového prostoru, Řazení</h1>
 
     <div class="section-divider section-grafy">🔗 ČÁST 1 — Grafy</div>
     <h2>Reprezentace grafů</h2>
@@ -59,6 +59,18 @@
         <tr><td><strong>DFS</strong></td><td>Zásobník (LIFO) / rekurze</td><td>Detekce cyklů, topologické řazení</td><td>O(V+E)</td></tr>
         <tr><td><strong>Dijkstra</strong></td><td>Prioritní fronta</td><td>Nejkratší cesta (nezáporné váhy)</td><td>O((V+E) log V)</td></tr>
     </table>
+
+    <h2>Prohlédávání stavového prostoru</h2>
+    <p>Stavový prostor je množina všech možných stavů problému. Prohlédávání hledá cestu z počátečního stavu do cílového stavu (např. řešení hádanky, hrá ach, labyrint).</p>
+    <table>
+        <tr><th>Algoritmus</th><th>Strategie</th><th>Použití</th><th>Složitost</th></tr>
+        <tr><td><strong>BFS</strong></td><td>Šířka nejdříve (FIFO)</td><td>Nejkratší cesta v neohodnoceném stavovém prostoru</td><td>O(b<sup>d</sup>)</td></tr>
+        <tr><td><strong>DFS</strong></td><td>Hloubka nejdříve (LIFO)</td><td>Prohledání celého prostoru, backtracking</td><td>O(b<sup>m</sup>)</td></tr>
+        <tr><td><strong>A*</strong></td><td>Heuristika f(n)=g(n)+h(n)</td><td>Optimální cesta s heuristikou (GPS, hry)</td><td>O(b<sup>d</sup>)</td></tr>
+        <tr><td><strong>IDDFS</strong></td><td>Iterativní prohlubování DFS</td><td>Optimální paměť + optimální časová složitost</td><td>O(b<sup>d</sup>)</td></tr>
+    </table>
+    <p><strong>Pojmy:</strong> b = faktor větvení (počet následníků), d = hloubka řešení, m = maximální hloubka prostoru<br>
+    <strong>Příklady:</strong> 8-puzzle, labyrint, šachy (minmax), plánování trasy</p>
 
     <div class="section-divider section-razeni">🔃 ČÁST 3 — Řadicí algoritmy</div>
     <h2>Řadicí algoritmy</h2>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>07 - Datové typy a generika</title>
+    <title>07 - Datové typy, Generika, Výčtové typy, Struktury, Anotace, Operátory</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
         h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
@@ -33,7 +33,7 @@
 <body>
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
 
-    <h1>07 – Datové typy, generika, výčtové typy</h1>
+    <h1>07 – Datové typy, Generika, Výčtové datové typy, Struktury, Anotace, Operátory</h1>
 
     <div class="section-divider section-typy">🗂️ ČÁST 1 — Datové typy</div>
 
@@ -44,6 +44,16 @@
         <tr><td>Přiřazení</td><td>Kopie hodnoty</td><td>Kopie reference</td></tr>
         <tr><td>Příklady (C#)</td><td><code>int, bool, double, struct, enum</code></td><td><code>class, string, array, interface</code></td></tr>
         <tr><td>Default</td><td>0, false</td><td>null</td></tr>
+    </table>
+
+    <h2>Primitivní typy — srovnání jazyků</h2>
+    <table>
+        <tr><th>Typ</th><th>C#</th><th>Java</th><th>Python</th></tr>
+        <tr><td>Celé číslo</td><td><code>int</code> (32b), <code>long</code> (64b)</td><td><code>int</code>, <code>long</code></td><td><code>int</code> (neomezené)</td></tr>
+        <tr><td>Desetinné</td><td><code>float</code> (32b), <code>double</code> (64b)</td><td><code>float</code>, <code>double</code></td><td><code>float</code> (64b)</td></tr>
+        <tr><td>Znak</td><td><code>char</code></td><td><code>char</code></td><td><code>str</code> (1 znak)</td></tr>
+        <tr><td>Logická</td><td><code>bool</code></td><td><code>boolean</code></td><td><code>bool</code></td></tr>
+        <tr><td>Text</td><td><code>string</code></td><td><code>String</code></td><td><code>str</code></td></tr>
     </table>
 
     <div class="section-divider section-generika">🧬 ČÁST 2 — Generika</div>
@@ -57,6 +67,25 @@
         <li><strong>Python:</strong> <code>list[int]</code> (type hints, nevalidováno za běhu)</li>
     </ul>
 
+    <div class="code-desc"><strong>C# — generická třída</strong> — <code>Seznam&lt;T&gt;</code> funguje pro libovolný typ; kompilátor ověří typy při kompilaci.</div>
+    <pre><code>class Seznam&lt;T&gt; {
+    private T[] items = new T[10];
+    private int count = 0;
+    public void Pridej(T item) { items[count++] = item; }
+    public T Get(int i) =&gt; items[i];
+}
+var cisla = new Seznam&lt;int&gt;();
+var texty = new Seznam&lt;string&gt;();</code></pre>
+
+    <div class="code-desc"><strong>Java — generická třída</strong> — <code>Box&lt;T&gt;</code>; Java používá <em>type erasure</em> — za běhu je generický typ smazán.</div>
+    <pre><code>class Box&lt;T&gt; {
+    private T value;
+    public void set(T v) { value = v; }
+    public T get() { return value; }
+}
+Box&lt;Integer&gt; box = new Box&lt;&gt;();
+box.set(42);</code></pre>
+
     <h3>Omezení (Constraints) v C#</h3>
     <table>
         <tr><th>Constraint</th><th>Popis</th></tr>
@@ -68,15 +97,49 @@
 
     <div class="section-divider section-enum">📋 ČÁST 3 — Výčtové typy, Struktury, Anotace</div>
 
-    <h2>Enum a Struct</h2>
+    <h2>Enum (výčtové typy)</h2>
+    <table>
+        <tr><th>Jazyk</th><th>Příklad</th></tr>
+        <tr><td><strong>C#</strong></td><td><code>enum Den { Pondeli, Utery, Streda, Ctvrtek, Patek }</code></td></tr>
+        <tr><td><strong>Java</strong></td><td><code>enum Barva { CERVENA, ZELENA, MODRA }</code></td></tr>
+        <tr><td><strong>Python</strong></td><td><code>from enum import Enum<br>class Barva(Enum): CERVENA = 1; ZELENA = 2</code></td></tr>
+    </table>
+    <div class="note"><strong>C# [Flags]:</strong> Atribut <code>[Flags]</code> umožňuje bitové kombinace hodnot enumu: <code>var p = Opravneni.Cteni | Opravneni.Zapis</code></div>
+
+    <h2>Struct (struktury) — C#</h2>
     <ul>
-        <li><strong>Enum</strong> — pojmenované konstanty, v C# mohou mít <code>[Flags]</code> pro bitové kombinace</li>
-        <li><strong>Struct</strong> — lehký hodnotový typ, uložen na stacku, vhodný pro malá data</li>
+        <li><strong>Value type</strong> — uložen na stacku, kopíruje se při přiřazení (ne reference)</li>
+        <li>Vhodný pro malá data (souřadnice, barva, rozměr)</li>
+        <li>Nemůže dědit z jiné struct/class (ale může implementovat interface)</li>
+        <li>Může mít konstruktor, metody a přetížené operátory</li>
     </ul>
+    <pre><code>struct Bod { public int X, Y; }
+var b1 = new Bod { X = 1, Y = 2 };</code></pre>
+
+    <h2>Anotace a Atributy</h2>
+    <table>
+        <tr><th>Jazyk</th><th>Příklady</th><th>Účel</th></tr>
+        <tr><td><strong>Java</strong></td><td><code>@Override</code>, <code>@Deprecated</code>, <code>@SuppressWarnings</code></td><td>Metadata pro kompilátor a frameworky</td></tr>
+        <tr><td><strong>C#</strong></td><td><code>[Obsolete]</code>, <code>[Serializable]</code>, <code>[HttpGet]</code></td><td>Atributy — čteny za běhu přes Reflection</td></tr>
+        <tr><td><strong>Python</strong></td><td><code>@staticmethod</code>, <code>@property</code>, <code>def f(x: int) -&gt; str</code></td><td>Dekorátory + type hints (PEP 484)</td></tr>
+    </table>
 
     <div class="section-divider section-operatory">⚙️ ČÁST 4 — Operátory</div>
 
-    <h2>Ukázkový kód — C# (Enum, Struct, Generika, Operátory)</h2>
+    <h2>Typy operátorů</h2>
+    <table>
+        <tr><th>Typ</th><th>Operátory</th></tr>
+        <tr><td>Aritmetické</td><td><code>+ - * / % **</code></td></tr>
+        <tr><td>Porovnávací</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td></tr>
+        <tr><td>Logické</td><td><code>&amp;&amp;/and  ||/or  !/not</code></td></tr>
+        <tr><td>Bitové</td><td><code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code></td></tr>
+        <tr><td>Přiřazovací</td><td><code>= += -= *=</code></td></tr>
+        <tr><td>Ternární</td><td>C#/Java: <code>x ? a : b</code> &nbsp; Python: <code>a if x else b</code></td></tr>
+        <tr><td>Null-check (C#)</td><td><code>?.</code> (null-conditional) &nbsp; <code>??</code> (null-coalescing) &nbsp; <code>??=</code></td></tr>
+    </table>
+    <div class="note"><strong>Přetěžování operátorů:</strong> C# — <code>public static Bod operator +(Bod a, Bod b)</code> &nbsp;|&nbsp; Python — <code>__add__</code>, <code>__eq__</code>, <code>__lt__</code> &nbsp;|&nbsp; Java — <strong>nepodporuje</strong></div>
+
+    <h2>Ukázkový kód — C#</h2>
 
     <div class="code-desc"><strong>[Flags] Enum</strong> — bitové příznaky, umožňuje kombinovat více hodnot pomocí <code>|</code> operátoru.</div>
     <pre><code>[Flags]

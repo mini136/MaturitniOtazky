@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>22 - Vlákna a paralelismus</title>
+    <title>22 - Vlákna, Paralelní programování, Asynchronní metody, Concurrent design patterns</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
         h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
@@ -23,6 +23,7 @@
         .section-vlakna { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
         .section-concurrency { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
         .section-sync { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
+        .section-async { background: #e8daef; border-left: 6px solid #8e44ad; color: #4a235a; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -32,7 +33,7 @@
 <body>
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
 
-    <h1>22 – Vlákna a paralelismus</h1>
+    <h1>22 – Vlákna, Paralelní programování, Asynchronní metody, Concurrent design patterns</h1>
 
     <div class="section-divider section-vlakna">🧵 ČÁST 1 — Procesy a Vlákna</div>
     <h2>Proces vs Vlákno</h2>
@@ -164,6 +165,73 @@ if __name__ == "__main__":
         vstupy = [100_000, 200_000, 300_000, 400_000]
         vysledky = pool.map(cpu_narocna, vstupy)
         print(f"  Multiprocessing: {vysledky}")</code></pre>
+
+    <div class="section-divider section-async">⏱️ ČÁST 4 — Asynchronní metody a Concurrent design patterns</div>
+    <h2>Asynchronní metody (async/await)</h2>
+    <p>Asynchronní programování umožňuje spouštět operace bez blokování hlavního vlákna. Ideální pro I/O operace (síť, soubory, API).</p>
+    <table>
+        <tr><th>Koncept</th><th>Python</th><th>C#</th></tr>
+        <tr><td><strong>Asynchonní funkce</strong></td><td><code>async def f(): ...</code></td><td><code>async Task F() { ... }</code></td></tr>
+        <tr><td><strong>Await výsledku</strong></td><td><code>await asyncio.sleep(1)</code></td><td><code>await Task.Delay(1000)</code></td></tr>
+        <tr><td><strong>Spuštění</strong></td><td><code>asyncio.run(main())</code></td><td><code>await Task.WhenAll(t1, t2)</code></td></tr>
+        <tr><td><strong>Paralelní spuštění</strong></td><td><code>asyncio.gather(f1(), f2())</code></td><td><code>Task.WhenAll(T1, T2)</code></td></tr>
+    </table>
+    <p><strong>async/await vs vlákna:</strong> async je kooperativní multitasking (jedno vlákno, přepnutí na <code>await</code>), vlákna jsou preemptivní (OS rozhoduje o přepnutí). Async je vhodné pro I/O-bound úlohy, vlákna pro CPU-bound.</p>
+
+    <div class="code-desc"><strong>Python async/await</strong> — soubněžné stažení dat bez blokování (<code>asyncio.gather</code>). Event loop spravuje korutiny.</div>
+    <pre><code>import asyncio
+import time
+
+async def stahuj(url, delay):
+    print(f"  Start: {url}")
+    await asyncio.sleep(delay)  # simulace I/O (neblokujici)
+    print(f"  Hotovo: {url}")
+    return f"data z {url}"
+
+async def main():
+    start = time.time()
+    # Paralelni spusteni - vsechny bezi soucasne
+    vysledky = await asyncio.gather(
+        stahuj("api.example.com", 0.3),
+        stahuj("db.example.com", 0.2),
+        stahuj("cdn.example.com", 0.1),
+    )
+    print(f"  Cas: {time.time()-start:.2f}s (ne 0.6s!)")
+    return vysledky
+
+asyncio.run(main())</code></pre>
+
+    <div class="code-desc"><strong>C# async/await</strong> — asynchronní HTTP volání. <code>await</code> uvolní vlákno během čekání na odpověď.</div>
+    <pre><code>using System.Net.Http;
+
+async Task&lt;string&gt; StahujAsync(string url)
+{
+    using var client = new HttpClient();
+    return await client.GetStringAsync(url);  // neblokuje vlakno
+}
+
+async Task HlavniAsync()
+{
+    // Paralelni spusteni
+    var ukoly = new[]
+    {
+        StahujAsync("https://api1.example.com"),
+        StahujAsync("https://api2.example.com")
+    };
+    string[] vysledky = await Task.WhenAll(ukoly);
+    Console.WriteLine($"Stazeno {vysledky.Length} odpovedi");
+}</code></pre>
+
+    <h2>Concurrent design patterns</h2>
+    <table>
+        <tr><th>Vzor</th><th>Popis</th><th>Implementace</th></tr>
+        <tr><td><strong>Producer-Consumer</strong></td><td>Producent přidává úlohy, konzument je zpracovává</td><td><code>queue.Queue</code> (Python), <code>BlockingCollection</code> (C#)</td></tr>
+        <tr><td><strong>Thread Pool</strong></td><td>Pool předpřipravených vláken pro opakované úlohy</td><td><code>ThreadPoolExecutor</code>, <code>Task.Run</code></td></tr>
+        <tr><td><strong>Active Object</strong></td><td>Metody se spouštějí asynchronně v vlastním vlákně</td><td>Fronta požadavků + vlákno služby</td></tr>
+        <tr><td><strong>Monitor (Guarded Suspension)</strong></td><td>Vlákno čeká na splnění podmínky</td><td><code>Condition.wait()</code>, <code>Monitor.Wait()</code></td></tr>
+        <tr><td><strong>Read-Write Lock</strong></td><td>Více čtení současně, jeden zápis exkluzivně</td><td><code>threading.RLock</code>, <code>ReaderWriterLockSlim</code></td></tr>
+    </table>
+    <p><strong>Základní pravidlo:</strong> Producer-Consumer a Thread Pool jsou nejběžnější — Thread Pool (řeší práci více vlákny) + Producer-Consumer (odděluje produkci od spotřeby) jsou často kombinovány.</p>
 
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
     <script src="../assets/study.js"></script>

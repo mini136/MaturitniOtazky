@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>17 - ML: Příprava dat</title>
+    <title>17 - Strojové učení — Příprava dat, Chyby v datech a bias, Korelace a kauzalita</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
         h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
@@ -23,6 +23,7 @@
         .section-typy-ml { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
         .section-pipeline { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
         .section-normalizace { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
+        .section-bias { background: #f9ebea; border-left: 6px solid #c0392b; color: #78281f; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -32,7 +33,7 @@
 <body>
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
 
-    <h1>17 – ML: Příprava dat</h1>
+    <h1>17 – Strojové učení — Příprava dat, Chyby v datech a bias, Korelace a kauzalita</h1>
 
     <div class="section-divider section-typy-ml">🤖 ČÁST 1 — Typy strojového učení</div>
     <h2>Typy strojového učení</h2>
@@ -53,7 +54,29 @@
         <li><strong>Rozdělení</strong> — train/test split</li>
     </ol>
 
-    <div class="section-divider section-normalizace">📊 ČÁST 3 — Normalizace, Metriky, Overfitting</div>
+    <div class="section-divider section-bias">⚠️ ČÁST 3 — Chyby v datech, Bias, Korelace a kauzalita</div>
+    <h2>Chyby v datech a bias</h2>
+    <table>
+        <tr><th>Typ chyby</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><strong>Class imbalance</strong></td><td>Nerovnoměrné zastoupení tříd</td><td>99 % zdravých, 1 % nemocných — model říká vždy zdravý</td></tr>
+        <tr><td><strong>Sampling bias</strong></td><td>Vzorek neprezentuje celé populaci</td><td>Průzkum jen online — chybí starší generace</td></tr>
+        <tr><td><strong>Confirmation bias</strong></td><td>Výběr dat potvrzení předešlých představ</td><td>Testování modelu jen na příznivých datech</td></tr>
+        <tr><td><strong>Data leakage</strong></td><td>Testovací data ovlivňují trénink</td><td>Normalizace počítána na celém datasetu včetně testu</td></tr>
+        <tr><td><strong>Label noise</strong></td><td>Chybné labely</td><td>Špatně zklasifikované trénovací příklady</td></tr>
+    </table>
+    <p><strong>Řešení class imbalance:</strong> oversampling (SMOTE), undersampling, úprava váh tříd (<code>class_weight='balanced'</code>)</p>
+
+    <h2>Korelace a kauzalita</h2>
+    <table>
+        <tr><th>Pojem</th><th>Definice</th><th>Vzorec / Rozsah</th></tr>
+        <tr><td><strong>Pearsonův koeficient</strong></td><td>Lineární závislost dvou spojitých proměnných</td><td>r ∈ [−1, +1]</td></tr>
+        <tr><td><strong>Spearmanův koeficient</strong></td><td>Monovotní závislost (pořadí)</td><td>ρ ∈ [−1, +1]</td></tr>
+        <tr><td><strong>Korelace</strong></td><td>Statistické společné proměnní</td><td>Není příčinnost!</td></tr>
+        <tr><td><strong>Kauzalita</strong></td><td>Jedna proměnná způsobuje druhou</td><td>Vyžaduje experiment (RCT)</td></tr>
+    </table>
+    <p><strong>Klíčový princip:</strong> Korelace ≠ kauzalita. Příklad: prodeje zmrzliny korelují s utonutími (obě stoupá v létě), ale zmrzlina neutopení nezpůsobuje.</p>
+
+    <div class="section-divider section-normalizace">📊 ČÁST 4 — Normalizace, Metriky, Overfitting</div>
     <h2>Normalizace</h2>
     <table>
         <tr><th>Metoda</th><th>Vzorec</th><th>Rozsah</th></tr>
