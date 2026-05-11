@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-sdlc { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-agile { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-devops { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -30,6 +34,7 @@
 
     <h1>12 – Metodiky vývoje software, SDLC, Agile, Scrum</h1>
 
+    <div class="section-divider section-sdlc">📋 ČÁST 1 — SDLC a Vodopádový model</div>
     <h2>SDLC fáze</h2>
     <ol>
         <li><strong>Analýza požadavků</strong> — co má systém dělat</li>
@@ -40,6 +45,7 @@
         <li><strong>Údržba</strong></li>
     </ol>
 
+    <div class="section-divider section-agile">🔄 ČÁST 2 — Agilní metodiky (Scrum, Kanban)</div>
     <h2>Waterfall vs Agile</h2>
     <table>
         <tr><th></th><th>Waterfall</th><th>Agile</th></tr>
@@ -78,6 +84,7 @@
         <li>Continuous flow — bez pevných sprintů</li>
     </ul>
 
+    <div class="section-divider section-devops">🚀 ČÁST 3 — DevOps, CI/CD a Git</div>
     <h2>DevOps &amp; CI/CD</h2>
     <ul>
         <li><strong>CI</strong> (Continuous Integration) — automatický build + testy při každém commitu</li>

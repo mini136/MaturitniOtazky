@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-aktivace { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-architektura { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-trenink { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -29,8 +33,7 @@
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
 
     <h1>19 – ML: Neuronové sítě</h1>
-
-    <h2>Aktivační funkce</h2>
+    <div class="section-divider section-aktivace">🧠 ČÁST 1 — Neuron a Aktivacční funkce</div>    <h2>Aktivační funkce</h2>
     <table>
         <tr><th>Funkce</th><th>Vzorec</th><th>Použití</th></tr>
         <tr><td><strong>Sigmoid</strong></td><td>1 / (1 + e⁻ˣ)</td><td>Výstupní vrstva (binární)</td></tr>
@@ -39,6 +42,7 @@
         <tr><td><strong>Softmax</strong></td><td>eˣⁱ / Σeˣʲ</td><td>Výstupní vrstva (multi-class)</td></tr>
     </table>
 
+    <div class="section-divider section-architektura">🏗️ ČÁST 2 — Architektura sítě (vrstvy, typy)</div>
     <h2>Architektura sítě</h2>
     <ul>
         <li><strong>Input layer</strong> — počet neuronů = počet příznaků</li>
@@ -46,6 +50,7 @@
         <li><strong>Output layer</strong> — predikce (1 neuron = regrese/binární, N = multi-class)</li>
     </ul>
 
+    <div class="section-divider section-trenink">🎯 ČÁST 3 — Trénování (Forward/Backpropagation, optimalizace)</div>
     <h2>Forward &amp; Backpropagation</h2>
     <ol>
         <li><strong>Forward pass</strong> — vstup → váhy × vstupy + bias → aktivace → výstup</li>

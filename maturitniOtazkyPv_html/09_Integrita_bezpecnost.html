@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-integrita { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-bezpecnost { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-logovani { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -30,6 +34,7 @@
 
     <h1>09 – Integrita a bezpečnost dat, zpracování chyb</h1>
 
+    <div class="section-divider section-integrita">🛡️ ČÁST 1 — Integrita dat (ACID)</div>
     <h2>Datová integrita — ACID</h2>
     <table>
         <tr><th>Vlastnost</th><th>Popis</th></tr>
@@ -39,6 +44,7 @@
         <tr><td><strong>Durability</strong></td><td>Potvrzená data přežijí výpadek</td></tr>
     </table>
 
+    <div class="section-divider section-bezpecnost">🔒 ČÁST 2 — Bezpečnost (Autentizace, hrozby)</div>
     <h2>Autentizace vs Autorizace</h2>
     <ul>
         <li><strong>Autentizace</strong> — ověření identity (kdo jsi?): heslo, token, biometrie, 2FA</li>
@@ -54,6 +60,7 @@
         <tr><td><strong>Brute Force</strong></td><td>Zkoušení všech kombinací</td><td>Rate limiting, lockout</td></tr>
     </table>
 
+    <div class="section-divider section-logovani">📋 ČÁST 3 — Logování, Kontrola vstupů, Zpracování chyb</div>
     <h2>Logování</h2>
     <table>
         <tr><th>Úroveň</th><th>Použití</th></tr>

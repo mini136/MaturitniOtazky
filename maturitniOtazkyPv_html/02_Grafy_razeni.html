@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-grafy { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-pruchody { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-razeni { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -30,6 +34,7 @@
 
     <h1>02 – Grafy, průchody grafem, řadicí algoritmy</h1>
 
+    <div class="section-divider section-grafy">🔗 ČÁST 1 — Grafy</div>
     <h2>Reprezentace grafů</h2>
     <table>
         <tr><th>Reprezentace</th><th>Paměť</th><th>Výhody</th></tr>
@@ -46,6 +51,7 @@
         <li><strong>Strom</strong> — souvislý acyklický graf</li>
     </ul>
 
+    <div class="section-divider section-pruchody">🔍 ČÁST 2 — Průchody grafem (BFS, DFS, Dijkstra)</div>
     <h2>Průchody grafem</h2>
     <table>
         <tr><th>Algoritmus</th><th>Datová struktura</th><th>Použití</th><th>Složitost</th></tr>
@@ -54,6 +60,7 @@
         <tr><td><strong>Dijkstra</strong></td><td>Prioritní fronta</td><td>Nejkratší cesta (nezáporné váhy)</td><td>O((V+E) log V)</td></tr>
     </table>
 
+    <div class="section-divider section-razeni">🔃 ČÁST 3 — Řadicí algoritmy</div>
     <h2>Řadicí algoritmy</h2>
     <table>
         <tr><th>Algoritmus</th><th>Best</th><th>Average</th><th>Worst</th><th>Paměť</th><th>Stabilní</th></tr>

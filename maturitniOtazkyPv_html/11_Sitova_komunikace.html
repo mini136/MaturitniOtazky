@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-osi { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-tcpudp { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-socket { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -30,6 +34,33 @@
 
     <h1>11 – Síťová komunikace, sockety</h1>
 
+    <div class="section-divider section-osi">🌐 ČÁST 1 — Síťové modely (OSI, TCP/IP)</div>
+
+    <h2>OSI model (7 vrstev)</h2>
+    <table>
+        <tr><th>Vrstva</th><th>Název</th><th>Protokoly / Příklady</th></tr>
+        <tr><td><strong>7</strong></td><td><strong>Aplikační (Application)</strong></td><td>HTTP, HTTPS, FTP, DNS, SMTP, WebSocket</td></tr>
+        <tr><td><strong>6</strong></td><td><strong>Prezentační (Presentation)</strong></td><td>SSL/TLS, šifrování, komprese, kódování</td></tr>
+        <tr><td><strong>5</strong></td><td><strong>Relační (Session)</strong></td><td>Správa relací, NetBIOS, RPC</td></tr>
+        <tr><td><strong>4</strong></td><td><strong>Transportní (Transport)</strong></td><td>TCP, UDP — porty (0–65535)</td></tr>
+        <tr><td><strong>3</strong></td><td><strong>Síťová (Network)</strong></td><td>IP, ICMP, routery, IP adresy</td></tr>
+        <tr><td><strong>2</strong></td><td><strong>Linková (Data Link)</strong></td><td>Ethernet, MAC adresy, switche, rámce</td></tr>
+        <tr><td><strong>1</strong></td><td><strong>Fyzická (Physical)</strong></td><td>Kabely, WiFi, bitů bity, signál</td></tr>
+    </table>
+
+    <h2>TCP/IP model (4 vrstvy)</h2>
+    <table>
+        <tr><th>Vrstva TCP/IP</th><th>Odpovídá OSI</th><th>Protokoly</th></tr>
+        <tr><td><strong>Aplikační</strong></td><td>7 + 6 + 5</td><td>HTTP, DNS, FTP, SMTP, SSH</td></tr>
+        <tr><td><strong>Transportní</strong></td><td>4</td><td>TCP, UDP</td></tr>
+        <tr><td><strong>Internetová</strong></td><td>3</td><td>IP, ICMP, ARP</td></tr>
+        <tr><td><strong>Síťového přístupu</strong></td><td>2 + 1</td><td>Ethernet, WiFi, MAC</td></tr>
+    </table>
+
+    <div class="note"><strong>IP adresa + Port:</strong> IP identifikuje počítač, port identifikuje aplikaci (0–65535). Známé porty: HTTP=80, HTTPS=443, SSH=22, FTP=21, DNS=53</div>
+
+    <div class="section-divider section-tcpudp">📡 ČÁST 2 — TCP vs UDP</div>
+
     <h2>TCP vs UDP</h2>
     <table>
         <tr><th></th><th>TCP</th><th>UDP</th></tr>
@@ -38,6 +69,8 @@
         <tr><td>Rychlost</td><td>Pomalejší (overhead)</td><td>Rychlejší</td></tr>
         <tr><td>Použití</td><td>HTTP, SSH, email</td><td>DNS, video streaming, hry</td></tr>
     </table>
+
+    <div class="section-divider section-socket">🔌 ČÁST 3 — Berkeley Socket API</div>
 
     <h2>Berkeley Socket API</h2>
     <h3>Životní cyklus soketu</h3>

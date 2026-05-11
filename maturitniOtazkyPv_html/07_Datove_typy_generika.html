@@ -22,6 +22,11 @@
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+        .section-divider  { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-typy     { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-generika { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-enum     { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
+        .section-operatory{ background: #e8daef; border-left: 6px solid #8e44ad; color: #4a235a; }
     </style>
     <link rel="stylesheet" href="../assets/study.css">
 </head>
@@ -29,6 +34,8 @@
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
 
     <h1>07 – Datové typy, generika, výčtové typy</h1>
+
+    <div class="section-divider section-typy">🗂️ ČÁST 1 — Datové typy</div>
 
     <h2>Hodnotové vs Referenční typy</h2>
     <table>
@@ -38,6 +45,8 @@
         <tr><td>Příklady (C#)</td><td><code>int, bool, double, struct, enum</code></td><td><code>class, string, array, interface</code></td></tr>
         <tr><td>Default</td><td>0, false</td><td>null</td></tr>
     </table>
+
+    <div class="section-divider section-generika">🧬 ČÁST 2 — Generika</div>
 
     <h2>Generika</h2>
     <ul>
@@ -57,13 +66,17 @@
         <tr><td><code>where T : IComparable</code></td><td>Implementuje rozhraní</td></tr>
     </table>
 
+    <div class="section-divider section-enum">📋 ČÁST 3 — Výčtové typy, Struktury, Anotace</div>
+
     <h2>Enum a Struct</h2>
     <ul>
         <li><strong>Enum</strong> — pojmenované konstanty, v C# mohou mít <code>[Flags]</code> pro bitové kombinace</li>
         <li><strong>Struct</strong> — lehký hodnotový typ, uložen na stacku, vhodný pro malá data</li>
     </ul>
 
-    <h2>Ukázkový kód — C# (Enum, Struct, Generika)</h2>
+    <div class="section-divider section-operatory">⚙️ ČÁST 4 — Operátory</div>
+
+    <h2>Ukázkový kód — C# (Enum, Struct, Generika, Operátory)</h2>
 
     <div class="code-desc"><strong>[Flags] Enum</strong> — bitové příznaky, umožňuje kombinovat více hodnot pomocí <code>|</code> operátoru.</div>
     <pre><code>[Flags]

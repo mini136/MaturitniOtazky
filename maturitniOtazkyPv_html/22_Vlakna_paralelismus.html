@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-vlakna { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-concurrency { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-sync { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -30,6 +34,7 @@
 
     <h1>22 – Vlákna a paralelismus</h1>
 
+    <div class="section-divider section-vlakna">🧵 ČÁST 1 — Procesy a Vlákna</div>
     <h2>Proces vs Vlákno</h2>
     <table>
         <tr><th></th><th>Proces</th><th>Vlákno</th></tr>
@@ -39,12 +44,14 @@
         <tr><td>Izolace</td><td>Pád jednoho neovlivní ostatní</td><td>Pád vlákna = pád procesu</td></tr>
     </table>
 
+    <div class="section-divider section-concurrency">⚡ ČÁST 2 — Concurrency vs Parallelism</div>
     <h2>Concurrency vs Parallelism</h2>
     <ul>
         <li><strong>Concurrency</strong> — střídání úloh (i na 1 jádru), I/O-bound</li>
         <li><strong>Parallelism</strong> — skutečně současný běh na více jádrech, CPU-bound</li>
     </ul>
 
+    <div class="section-divider section-sync">🔐 ČÁST 3 — Synchronizace (Mutex, Semafor, Deadlock)</div>
     <h2>Synchronizační primitiva</h2>
     <table>
         <tr><th>Primitivum</th><th>Účel</th></tr>

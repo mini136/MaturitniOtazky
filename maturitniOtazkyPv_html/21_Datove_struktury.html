@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-linearni { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-nelinearni { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-hash { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -30,17 +34,50 @@
 
     <h1>21 – Datové struktury</h1>
 
-    <h2>Přehled</h2>
+    <div class="section-divider section-linearni">📋 ČÁST 1 — Lineární datové struktury</div>
+
+    <h2>Přehled lineárních struktur</h2>
     <table>
-        <tr><th>Struktura</th><th>Typ</th><th>Přístup</th><th>Použití</th></tr>
-        <tr><td><strong>Array</strong></td><td>Lineární</td><td>O(1) index</td><td>Rychlý přístup podle indexu</td></tr>
-        <tr><td><strong>Linked List</strong></td><td>Lineární</td><td>O(n) vyhledání</td><td>Časté vkládání/mazání</td></tr>
-        <tr><td><strong>Stack</strong></td><td>LIFO</td><td>O(1) push/pop</td><td>Závorky, undo, rekurze</td></tr>
-        <tr><td><strong>Queue</strong></td><td>FIFO</td><td>O(1) enqueue/dequeue</td><td>Tisk, BFS, buffery</td></tr>
-        <tr><td><strong>BST</strong></td><td>Nelineární</td><td>O(log n) průměrně</td><td>Seřazená data, vyhledávání</td></tr>
-        <tr><td><strong>Heap</strong></td><td>Nelineární</td><td>O(1) min/max</td><td>Prioritní fronta</td></tr>
-        <tr><td><strong>Hash tabulka</strong></td><td>—</td><td>O(1) průměrně</td><td>Slovníky, cache</td></tr>
+        <tr><th>Struktura</th><th>Typ</th><th>Vložení</th><th>Smazání</th><th>Přístup</th><th>Použití</th></tr>
+        <tr><td><strong>Array (pole)</strong></td><td>Sekvenční</td><td>O(n)</td><td>O(n)</td><td><strong>O(1)</strong> indexem</td><td>Rychlý indexový přístup</td></tr>
+        <tr><td><strong>Linked List</strong></td><td>Sekvenční</td><td>O(1) načátku</td><td>O(1) se znalostí uzlu</td><td>O(n) vyhl.</td><td>Časté vkládání/mazání</td></tr>
+        <tr><td><strong>Stack (zásobník)</strong></td><td>LIFO</td><td>O(1) push</td><td>O(1) pop</td><td>O(n) vyhl.</td><td>Závorky, undo, rekurze</td></tr>
+        <tr><td><strong>Queue (fronta)</strong></td><td>FIFO</td><td>O(1) enqueue</td><td>O(1) dequeue</td><td>O(n) vyhl.</td><td>Tisk, BFS, buffery</td></tr>
+        <tr><td><strong>Deque</strong></td><td>Oboustranná fronta</td><td>O(1) obě strany</td><td>O(1) obě strany</td><td>O(n) vyhl.</td><td>Sliding window, BFS/DFS</td></tr>
     </table>
+    <div class="note"><strong>Stack vs Queue:</strong> Stack = LIFO (poslední dovnitř, první ven) — jako hráda talochů. Queue = FIFO (první dovnitř, první ven) — jako fronta v obchodě.</div>
+
+    <div class="section-divider section-nelinearni">🌳 ČÁST 2 — Nelineární datové struktury</div>
+
+    <h2>Stromy a grafy</h2>
+    <table>
+        <tr><th>Struktura</th><th>Vlastnost</th><th>Přístup</th><th>Použití</th></tr>
+        <tr><td><strong>BST (Binární vyhledávací strom)</strong></td><td>Levý potomek &lt; kořen &lt; pravý</td><td>O(log n) průměrně</td><td>Seřazená data, vyhledávání</td></tr>
+        <tr><td><strong>AVL strom / Red-Black</strong></td><td>Samovyvažující BST</td><td>O(log n) vdy</td><td>Databazové indexy (B-tree)</td></tr>
+        <tr><td><strong>Heap (halda)</strong></td><td>Min/Max — rodič ≤ / ≥ potomci</td><td>O(1) min/max, O(log n) vložení</td><td>Prioritní fronta, Heap sort</td></tr>
+        <tr><td><strong>Trie</strong></td><td>Strom písmen</td><td>O(délka klíče)</td><td>Slovníky, autocomplete</td></tr>
+        <tr><td><strong>Graf</strong></td><td>Uzly + hrany (orientovaný/neorient.)</td><td>O(V+E) DFS/BFS</td><td>Mapy, sítě, závislosti</td></tr>
+    </table>
+    <div class="note"><strong>Heap vs BST:</strong> Heap zajiistí O(1) minimum/maximum a O(log n) vložení — ideální pro prioritní frontu. BST umožní vyhledávání a in-order procházení (seřazený výpis).</div>
+
+    <div class="section-divider section-hash">#️⃣ ČÁST 3 — Hashovací struktury</div>
+
+    <h2>HashMap a HashSet</h2>
+    <table>
+        <tr><th>Struktura</th><th>Ukládá</th><th>Průměrná složitost</th><th>Python</th></tr>
+        <tr><td><strong>HashMap / Dict</strong></td><td>klíč → hodnota</td><td>O(1) vložení/hledání</td><td><code>dict{}</code></td></tr>
+        <tr><td><strong>HashSet</strong></td><td>pouze klíče (unikátní)</td><td>O(1) vložení/hledání</td><td><code>set{}</code></td></tr>
+    </table>
+    <h2>Hashování a kolize</h2>
+    <table>
+        <tr><th>Pojem</th><th>Vysvětlení</th></tr>
+        <tr><td><strong>Hash funkce</strong></td><td>Mapuje klíč na index v poli — musí být deterministická a rychlá</td></tr>
+        <tr><td><strong>Kolize</strong></td><td>Dva klíče mají stejný hash index</td></tr>
+        <tr><td><strong>Řetězení (Chaining)</strong></td><td>Každý bucket je spojený seznam — kolize se řetězí</td></tr>
+        <tr><td><strong>Otevřené adresování</strong></td><td>Při kolizi se hledá další volný slot (linear probing)</td></tr>
+        <tr><td><strong>Load factor</strong></td><td>Poměr plňosti tabulky — při překročení se tabulka rozšíří (rehashing)</td></tr>
+    </table>
+    <div class="note"><strong>Worst case:</strong> Při špatné hash funkci může být HashMap O(n) — všechna data do jednoho bucketu. Vâ průměru je to O(1).</div>
 
     <h2>Ukázkový kód — Python</h2>
 

@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-pyramida { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-aaa { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-tdd { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -30,6 +34,7 @@
 
     <h1>20 – Testování software</h1>
 
+    <div class="section-divider section-pyramida">🧪 ČÁST 1 — Úrovně testování (pyramida)</div>
     <h2>Pyramida testování</h2>
     <table>
         <tr><th>Úroveň</th><th>Co testuje</th><th>Rychlost</th><th>Pokrytí</th></tr>
@@ -38,6 +43,7 @@
         <tr><td><strong>E2E testy</strong></td><td>Celý systém</td><td>Pomalé</td><td>Málo</td></tr>
     </table>
 
+    <div class="section-divider section-aaa">📝 ČÁST 2 — Principy testování (AAA, FIRST)</div>
     <h2>AAA pattern</h2>
     <ol>
         <li><strong>Arrange</strong> — příprava vstupů a prostředí</li>
@@ -54,6 +60,7 @@
         <li><strong>T</strong>imely — píší se včas (TDD: před kódem)</li>
     </ul>
 
+    <div class="section-divider section-tdd">🔄 ČÁST 3 — TDD, Dokumentace a nástroje</div>
     <h2>TDD cyklus</h2>
     <ol>
         <li><strong style="color: red;">RED</strong> — napiš test → selže</li>

@@ -19,6 +19,11 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-rekurze { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-brute { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-heuristiky { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
+        .section-np { background: #e8daef; border-left: 6px solid #8e44ad; color: #4a235a; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -30,6 +35,7 @@
 
     <h1>03 – Rekurze, brute force, heuristiky</h1>
 
+    <div class="section-divider section-rekurze">🔄 ČÁST 1 — Rekurze</div>
     <h2>Rekurze</h2>
     <h3>Princip</h3>
     <ul>
@@ -48,6 +54,7 @@
         <tr><td>Stromová</td><td>Více rekurzivních volání (Fibonacci)</td></tr>
     </table>
 
+    <div class="section-divider section-brute">💪 ČÁST 2 — Brute Force</div>
     <h2>Brute Force</h2>
     <ul>
         <li>Systematické prohledání <strong>všech</strong> možných řešení</li>
@@ -56,6 +63,7 @@
         <li>Použitelný pouze pro malé vstupy</li>
     </ul>
 
+    <div class="section-divider section-heuristiky">🧭 ČÁST 3 — Heuristiky</div>
     <h2>Heuristiky</h2>
     <ul>
         <li><strong>Greedy</strong> — v každém kroku vybere lokálně nejlepší volbu (negarantuje globální optimum)</li>
@@ -64,6 +72,7 @@
         <li><strong>Genetické algoritmy</strong> — evoluční přístup (populace, selekce, křížení, mutace)</li>
     </ul>
 
+    <div class="section-divider section-np">🎲 ČÁST 4 — NP-problémy a nedeterministické algoritmy</div>
     <h2>NP-kompletní problémy</h2>
     <table>
         <tr><th>Problém</th><th>Popis</th><th>Brute force</th></tr>

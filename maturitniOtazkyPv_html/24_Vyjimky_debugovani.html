@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-vyjimky { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-aserce { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-debug { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -30,6 +34,7 @@
 
     <h1>24 – Výjimky a debugování</h1>
 
+    <div class="section-divider section-vyjimky">⚠️ ČÁST 1 — Výjimky (Try-Catch-Finally, hierarchie)</div>
     <h2>Hierarchie výjimek (Python)</h2>
     <ul>
         <li><code>BaseException</code>
@@ -55,6 +60,7 @@
         <tr><td><code>finally</code></td><td>Provede se VŽDY (cleanup)</td></tr>
     </table>
 
+    <div class="section-divider section-aserce">✅ ČÁST 2 — Aserce (Assertions)</div>
     <h2>Assertions vs Exceptions</h2>
     <table>
         <tr><th></th><th>Assertion</th><th>Exception</th></tr>
@@ -63,6 +69,7 @@
         <tr><td>Použití</td><td>Invarianty, preconditions</td><td>Vstup uživatele, I/O</td></tr>
     </table>
 
+    <div class="section-divider section-debug">🔍 ČÁST 3 — Debugování a Logování</div>
     <h2>Logging vs Print</h2>
     <table>
         <tr><th></th><th>print()</th><th>logging</th></tr>

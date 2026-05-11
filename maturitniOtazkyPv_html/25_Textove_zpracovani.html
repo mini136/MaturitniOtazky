@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-kodovani { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-regex { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-parsovani { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -30,6 +34,7 @@
 
     <h1>25 – Textové zpracování a regulární výrazy</h1>
 
+    <div class="section-divider section-kodovani">📝 ČÁST 1 — Zpracování textu a kódování</div>
     <h2>Kódování textu</h2>
     <table>
         <tr><th>Kódování</th><th>Rozsah</th><th>Velikost znaku</th></tr>
@@ -38,6 +43,7 @@
         <tr><td><strong>UTF-16</strong></td><td>1 112 064 znaků (Unicode)</td><td>2 nebo 4 byty</td></tr>
     </table>
 
+    <div class="section-divider section-regex">🔍 ČÁST 2 — Regulární výrazy (Regex)</div>
     <h2>Regex metaznaky</h2>
     <table>
         <tr><th>Metaznak</th><th>Význam</th><th>Příklad</th></tr>
@@ -65,6 +71,31 @@
         <tr><td>Greedy</td><td><code>.*</code></td><td>Matchne co nejvíc</td></tr>
         <tr><td>Lazy</td><td><code>.*?</code></td><td>Matchne co nejméně</td></tr>
     </table>
+
+    <div class="section-divider section-parsovani">⚙️ ČÁST 3 — Parsování a Python re modul</div>
+
+    <h2>Python <code>re</code> modul</h2>
+    <table>
+        <tr><th>Funkce</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><code>re.search(p, s)</code></td><td>První výskyt kdekoliv</td><td><code>re.search(r'\d+', 'abc123')</code></td></tr>
+        <tr><td><code>re.match(p, s)</code></td><td>Pouze od začátku</td><td><code>re.match(r'\d+', '123abc')</code></td></tr>
+        <tr><td><code>re.findall(p, s)</code></td><td>Všechny výskyty (seznam)</td><td><code>re.findall(r'\d+', 'a1b2c3')</code> → ['1','2','3']</td></tr>
+        <tr><td><code>re.sub(p, r, s)</code></td><td>Nahrazení</td><td><code>re.sub(r'\s+', '_', 'hello world')</code></td></tr>
+        <tr><td><code>re.split(p, s)</code></td><td>Rozdělení</td><td><code>re.split(r'[,;]', 'a,b;c')</code></td></tr>
+        <tr><td><code>re.compile(p)</code></td><td>Kompilace pro znovupoužití</td><td><code>pat = re.compile(r'\d+')</code></td></tr>
+    </table>
+
+    <h2>Parsování formátů</h2>
+    <table>
+        <tr><th>Formát</th><th>Python modul</th><th>Použití</th></tr>
+        <tr><td>CSV</td><td><code>csv</code></td><td>Tabulková data, export/import</td></tr>
+        <tr><td>JSON</td><td><code>json</code></td><td>API odpovědi, konfigurace</td></tr>
+        <tr><td>XML/HTML</td><td><code>xml.etree</code>, <code>BeautifulSoup</code></td><td>Web scraping, SOAP</td></tr>
+        <tr><td>YAML</td><td><code>pyyaml</code></td><td>Docker, CI/CD konfigurace</td></tr>
+        <tr><td>INI/Config</td><td><code>configparser</code></td><td>Konfigurační soubory</td></tr>
+    </table>
+
+    <div class="note"><strong>Tokenizace:</strong> Rozklad textu na tokeny (slova, symboly, čísla) — základ pro kompilátory a NLP. Příklad: <code>"x = 5 + 3"</code> → <code>[IDENT, ASSIGN, NUM, PLUS, NUM]</code></div>
 
     <h2>Ukázkový kód — Python</h2>
 

@@ -19,6 +19,10 @@
         .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .important { background: #fab1a0; border-left: 4px solid #e17055; padding: 10px 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
         .code-desc { background: #dfe6e9; padding: 10px 15px; margin: 15px 0 5px 0; border-radius: 5px 5px 0 0; border-left: 4px solid #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-soubory { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-serializace { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-streamy { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -29,6 +33,22 @@
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
 
     <h1>16 – Soubory a serializace</h1>
+
+    <div class="section-divider section-soubory">📁 ČÁST 1 — Práce se soubory</div>
+
+    <h2>Práce se soubory</h2>
+    <table>
+        <tr><th>Mód</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><code>'r'</code></td><td>Čtení (soubor musí existovat)</td><td><code>open('f.txt', 'r')</code></td></tr>
+        <tr><td><code>'w'</code></td><td>Zápis (přepis souboru, vytvoří nový)</td><td><code>open('f.txt', 'w')</code></td></tr>
+        <tr><td><code>'a'</code></td><td>Přidání na konec (append)</td><td><code>open('f.txt', 'a')</code></td></tr>
+        <tr><td><code>'x'</code></td><td>Vytvoření (selže, když již existuje)</td><td><code>open('f.txt', 'x')</code></td></tr>
+        <tr><td><code>'rb'</code></td><td>Binární čtení</td><td><code>open('f.bin', 'rb')</code></td></tr>
+        <tr><td><code>'wb'</code></td><td>Binární zápis</td><td><code>open('f.bin', 'wb')</code></td></tr>
+    </table>
+    <div class="note"><strong>Best practice:</strong> Vždy používát <code>with open(...) as f:</code> — automaticky zavře soubor i při výjimce. Textový mód převádí konce řádků dle OS; binární mód ne.</div>
+
+    <div class="section-divider section-serializace">📄 ČÁST 2 — Formáty serializace</div>
 
     <h2>Formáty serializace</h2>
     <table>
@@ -42,6 +62,18 @@
     </table>
 
     <div class="important"><strong>Bezpečnost:</strong> Nikdy nedealujte <code>pickle.load()</code> z nedůvěryhodného zdroje — může spustit libovolný kód!</div>
+
+    <div class="section-divider section-streamy">🌊 ČÁST 3 — Streamy a kódování</div>
+
+    <h2>Streamy</h2>
+    <table>
+        <tr><th>Typ</th><th>Popis</th><th>Python</th></tr>
+        <tr><td><strong>Textový stream</strong></td><td>Čte/zapisuje text (str), převádí konce řádků</td><td><code>open('f.txt', 'r')</code></td></tr>
+        <tr><td><strong>Binární stream</strong></td><td>Čte/zapisuje bytes — žádné konverze</td><td><code>open('f.bin', 'rb')</code></td></tr>
+        <tr><td><strong>BytesIO</strong></td><td>Stream v paměti (ne soubor)</td><td><code>io.BytesIO()</code></td></tr>
+        <tr><td><strong>StringIO</strong></td><td>Textový stream v paměti</td><td><code>io.StringIO()</code></td></tr>
+    </table>
+    <div class="note"><strong>Kódování:</strong> Textové soubory v Python 3 otevřít vždy s <code>encoding='utf-8'</code>. Bez toho závisí na OS (Windows používá cp1250). Příklad: <code>open('f.txt', 'r', encoding='utf-8')</code></div>
 
     <h2>Ukázkový kód — Python</h2>
 
