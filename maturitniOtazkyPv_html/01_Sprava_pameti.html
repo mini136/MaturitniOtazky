@@ -22,6 +22,10 @@
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
+        .section-divider { margin: 40px 0 20px 0; padding: 12px 20px; border-radius: 6px; font-size: 1.2em; font-weight: bold; letter-spacing: 0.5px; }
+        .section-sprava   { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
+        .section-alokace  { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
+        .section-gc       { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
     </style>
     <link rel="stylesheet" href="../assets/study.css">
 </head>
@@ -29,6 +33,8 @@
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
 
     <h1>01 – Správa paměti, alokace paměti, garbage collector</h1>
+
+    <div class="section-divider section-sprava">📦 ČÁST 1 — Správa paměti</div>
 
     <h2>Paměťové segmenty programu</h2>
     <table>
@@ -47,6 +53,8 @@
         <tr><td>Null</td><td><code>NULL</code></td><td><code>null/None</code></td></tr>
         <tr><td>Bezpečnost</td><td>Nízká</td><td>Vysoká</td></tr>
     </table>
+
+    <div class="section-divider section-alokace">⚙️ ČÁST 2 — Alokace paměti</div>
 
     <h2>Alokace paměti</h2>
     <p>Alokace paměti = proces <strong>rezervace části paměti</strong> pro data programu za běhu.</p>
@@ -98,6 +106,8 @@ using var fs = new FileStream(...);  // IDisposable — Dispose() zavoláno auto
         <li><strong>Externí fragmentace</strong> — mezi alokovanými bloky vznikají malé díry, do nichž nový blok nevejde</li>
         <li>Řeší se <strong>memory compaction</strong> (GC přesouvá objekty) nebo <strong>memory pooling</strong> (předalokovaný pool bloků stejné velikosti)</li>
     </ul>
+
+    <div class="section-divider section-gc">🗑️ ČÁST 3 — Garbage Collector (GC)</div>
 
     <h2>Garbage Collector (GC)</h2>
 

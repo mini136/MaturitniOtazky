@@ -54,7 +54,7 @@ Ucitel ──── Student  (Učitel učí studenta)
 Celek **obsahuje** část, ale část může **existovat samostatně**.
 ```
 Třída ◇── Student    (Student může existovat bez třídy)
-Auto ◇── Motor       (Motor lze vymontovat)
+Auto ◇── Cestující   (Cestující existuje nezávisle na autě)
 ```
 
 ### Kompozice (has-a, silná)
