@@ -390,6 +390,57 @@ app.post("/api/quiz/live/evaluate", requireAdmin, async (req, res) => {
   }
 });
 
+/* ── Public: code evaluation by AI (student-facing) ── */
+app.post("/api/quiz/code/evaluate", async (req, res) => {
+  const code = String(req.body.code || "")
+    .trim()
+    .slice(0, 3000);
+  const prompt = String(req.body.prompt || "")
+    .trim()
+    .slice(0, 500);
+  const language = String(req.body.language || "python")
+    .trim()
+    .replace(/[^a-zA-Z0-9+#_\-\.]/g, "")
+    .slice(0, 30);
+
+  if (!code || !prompt) {
+    return res.status(400).json({ error: "missing_fields" });
+  }
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      temperature: 0.4,
+      max_tokens: 500,
+      messages: [
+        {
+          role: "system",
+          content:
+            "Jsi přátelský učitel programování. Zhodnoť kód studenta.\n" +
+            "Odpověz POUZE validním JSON objektem (bez markdown obalení):\n" +
+            '{\n  "score": <0-100>,\n  "verdict": "Správně" | "Částečně správně" | "Špatně",\n  "feedback": "konkrétní zpětná vazba v češtině (2-4 věty)",\n  "suggestions": ["tip na zlepšení 1", "tip 2"]\n}',
+        },
+        {
+          role: "user",
+          content:
+            "Jazyk: " +
+            language +
+            "\nZadání: " +
+            prompt +
+            "\n\nKód studenta:\n" +
+            code,
+        },
+      ],
+    });
+    let json = (completion.choices[0].message.content || "").trim();
+    json = json.replace(/^```json?\n?/i, "").replace(/\n?```$/i, "");
+    const result = JSON.parse(json);
+    return res.json({ result });
+  } catch (e) {
+    return res.status(500).json({ error: "evaluation_failed" });
+  }
+});
+
 app.use(express.static(ROOT_DIR));
 
 app.get("*", (req, res) => {

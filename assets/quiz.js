@@ -373,6 +373,123 @@
     };
   }
 
+  /* ── CODE renderer ── */
+  function renderCode(q, qEl) {
+    var lang = q.language || "python";
+
+    var header = document.createElement("div");
+    header.className = "code-header";
+    header.innerHTML =
+      '<span class="code-lang">' +
+      esc(lang) +
+      "</span>" +
+      (q.hints && q.hints.length
+        ? '<span class="code-hints">💡 ' +
+          q.hints.map(esc).join(" &middot; ") +
+          "</span>"
+        : "");
+    qEl.appendChild(header);
+
+    var ta = document.createElement("textarea");
+    ta.className = "code-editor";
+    ta.spellcheck = false;
+    ta.value = q.starterCode || "";
+    ta.setAttribute("data-lang", lang);
+    qEl.appendChild(ta);
+
+    var btnCheck = document.createElement("button");
+    btnCheck.type = "button";
+    btnCheck.className = "quiz-btn code-check-btn";
+    btnCheck.textContent = "🤖 Zkontrolovat kódem AI";
+    qEl.appendChild(btnCheck);
+
+    var aiFb = document.createElement("div");
+    aiFb.className = "code-ai-feedback";
+    qEl.appendChild(aiFb);
+
+    var aiResult = null;
+
+    btnCheck.addEventListener("click", function () {
+      var code = ta.value.trim();
+      if (!code) {
+        aiFb.innerHTML =
+          '<div class="code-ai-error">Nejprve napište kód.</div>';
+        return;
+      }
+      btnCheck.disabled = true;
+      btnCheck.textContent = "⏳ Kontroluji...";
+      aiFb.innerHTML =
+        '<div class="code-ai-loading">ChatGPT hodnotí váš kód…</div>';
+
+      fetch("/api/quiz/code/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: code,
+          prompt: q.task || q.prompt,
+          language: lang,
+        }),
+      })
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (data) {
+          if (data.error) throw new Error(data.error);
+          aiResult = data.result;
+          var cls =
+            aiResult.score >= 80
+              ? "ok"
+              : aiResult.score >= 40
+              ? "partial"
+              : "fail";
+          aiFb.innerHTML =
+            '<div class="code-ai-result ' +
+            cls +
+            '">' +
+            "<strong>" +
+            esc(aiResult.verdict) +
+            "</strong> (" +
+            aiResult.score +
+            "/100)<br>" +
+            '<span class="code-ai-fb-text">' +
+            esc(aiResult.feedback) +
+            "</span>" +
+            (aiResult.suggestions && aiResult.suggestions.length
+              ? '<ul class="code-ai-suggestions">' +
+                aiResult.suggestions
+                  .map(function (s) {
+                    return "<li>" + esc(s) + "</li>";
+                  })
+                  .join("") +
+                "</ul>"
+              : "") +
+            "</div>";
+          btnCheck.disabled = false;
+          btnCheck.textContent = "🤖 Zkontrolovat znovu";
+        })
+        .catch(function () {
+          aiFb.innerHTML =
+            '<div class="code-ai-error">Chyba při hodnocení. Zkus to znovu.</div>';
+          btnCheck.disabled = false;
+          btnCheck.textContent = "🤖 Zkontrolovat kódem AI";
+        });
+    });
+
+    return function evaluate() {
+      var fb = qEl.querySelector(".q-feedback");
+      if (!aiResult) {
+        fb.textContent =
+          "Nejprve zkontroluj kód tlačítkem 🤖 výše.";
+        return {
+          got: 0,
+          max: 10,
+          detail: "Nejprve zkontroluj kód tlačítkem výše.",
+        };
+      }
+      return { got: Math.round(aiResult.score / 10), max: 10, detail: "" };
+    };
+  }
+
   /* ── build entire quiz ── */
   function buildQuiz(data, anchor, standalone) {
     var section = document.createElement("section");
@@ -395,6 +512,7 @@
         order: "Řazení",
         trueFalse: "Pravda/Nepravda",
         open: "Otevřená",
+        code: "Psaní kódu",
       };
       qEl.innerHTML =
         '<div class="q-header"><span class="q-num">' +
@@ -422,6 +540,9 @@
           break;
         case "open":
           evalFn = renderOpen(q, qEl);
+          break;
+        case "code":
+          evalFn = renderCode(q, qEl);
           break;
         default:
           return;

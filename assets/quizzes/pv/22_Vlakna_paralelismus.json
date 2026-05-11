@@ -1,5 +1,5 @@
 {
-  "title": "Vlákna a paralelismus",
+  "title": "Vlákna, Paralelní programování, Asynchronní metody, Concurrent design patterns",
   "questions": [
     {
       "type": "match",
@@ -49,6 +49,42 @@
         ["Pád neovlivní ostatní", "Proces"],
         ["Levné na vytvoření", "Vlákno"]
       ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď concurrent design pattern k jeho popisu:",
+      "pairs": [
+        ["Producer-Consumer", "Jedno vlákno tvoří data, druhé je zpracovává — oddělení produkce od spotřeby"],
+        ["Thread Pool", "Pool předpřipravených vláken pro opakované úlohy — snižuje overhead vytváření"],
+        ["Active Object", "Metody se spouštějí asynchronně ve vlastním vlákně s frontou požadavků"],
+        ["Read-Write Lock", "Více čtení současně, jeden zápis exkluzivně"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Async/await v Pythonu (asyncio) umožňuje skutečné paralelní spuštění více funkcí na více CPU jádrech současně.",
+      "answer": false,
+      "explanation": "asyncio je kooperativní multitasking na jednom vlákně — funkce se střídají při await operacích, ale neběží skutečně paralelně. Pro paralelismus na více jádrech je třeba multiprocessing. asyncio je vhodné pro I/O-bound úlohy (síť, soubory)."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o asynchronním programování:",
+      "text": "Async funkce v Pythonu se definuje klíčovým slovem {{async}} def. Pro čekání na výsledek se používá {{await}}. Paralelní spuštění více korutin zajistí {{asyncio.gather}}. Async je vhodné pro {{I/O}}-bound úlohy, vlákna/procesy pro CPU-bound.",
+      "answers": ["async", "await", "asyncio.gather", "I/O"]
+    },
+    {
+      "type": "open",
+      "prompt": "Porovnej async/await s klasickými vlákny (threading). Kdy bys použil každý přístup a proč? Uveď příklady vhodných úloh.",
+      "keywords": ["I/O-bound", "CPU-bound", "GIL", "kooperativní", "preemptivní", "event loop", "asyncio", "overhead"]
+    },
+    {
+      "type": "code",
+      "prompt": "Implementuj asynchronní stahování dat v Pythonu",
+      "task": "Implementuj asynchronní funkci fetch_all() v Pythonu pomocí asyncio. Funkce musí zavolat fake_fetch() pro dvě URL souběžně (ne postupně) pomocí asyncio.gather() a vrátit seznam výsledků.",
+      "language": "python",
+      "starterCode": "import asyncio\n\nasync def fake_fetch(url):\n    await asyncio.sleep(0.1)\n    return f\"Data z {url}\"\n\nasync def fetch_all():\n    urls = ['https://api1.cz', 'https://api2.cz']\n    # Tvůj kód zde — stáhni obě URL souběžně\n    pass",
+      "hints": ["asyncio.gather() spouští korutiny souběžně", "await asyncio.gather(coro1, coro2) vrátí list výsledků", "Použij list comprehension pro vytvoření korutin"]
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "title": "ML: Příprava dat",
+  "title": "Strojové učení — Příprava dat, Chyby v datech a bias, Korelace a kauzalita",
   "questions": [
     {
       "type": "match",
@@ -46,6 +46,34 @@
       "statement": "Pearsonův korelační koeficient blízký 0 znamená, že mezi dvěma proměnnými neexistuje žádný vztah.",
       "answer": false,
       "explanation": "Pearsonův koeficient měří pouze lineární závislost. Hodnota blízká 0 znamená, že neexistuje lineární vztah, ale může existovat nelineární závislost (např. kvadratická)."
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď typ biasu/chyby v datech k jeho popisu:",
+      "pairs": [
+        ["Class imbalance", "Nerovnoměrné zastoupení tříd — model předpovídá vždy majoritní třídu"],
+        ["Sampling bias", "Vzorek dat nepředstavuje celou populaci"],
+        ["Data leakage", "Testovací data ovlivní trénink — model se 'naučí podvádět'"],
+        ["Label noise", "Chybně označené trénovací příklady"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Pokud prodeje zmrzliny a počet utopených silně korelují, konzumace zmrzliny způsobuje utonutí.",
+      "answer": false,
+      "explanation": "Korelace ≠ kauzalita. Obě proměnné jsou způsobeny třetím faktorem — horkem (létem). Skutečnou příčinnost lze prokázat pouze kontrolovaným experimentem (RCT). Toto je klasický příklad záměny korelace za příčinnost."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy o korelaci a chybách v datech:",
+      "text": "Pearsonův koeficient měří {{lineární}} závislost a nabývá hodnot od {{-1}} do +1. Spearmanův koeficient pracuje s {{pořadím}} hodnot. Nerovnoměrné zastoupení tříd se nazývá {{class imbalance}} a řeší se metodou SMOTE nebo úpravou vah.",
+      "answers": ["lineární", "-1", "pořadím", "class imbalance"]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi korelací a kauzalitou. Jak lze prokázat příčinnou závislost? Uveď příklad kdy korelace neznamená kauzalitu.",
+      "keywords": ["příčinnost", "korelace", "experiment", "RCT", "třetí faktor", "Pearson", "Spearman"]
     }
   ]
 }

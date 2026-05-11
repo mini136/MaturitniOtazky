@@ -1,5 +1,5 @@
 {
-  "title": "Grafy, průchody grafem, řadicí algoritmy",
+  "title": "Algoritmizace — Grafy, Prohledávání stavového prostoru, Řazení",
   "questions": [
     {
       "type": "match",
@@ -49,6 +49,42 @@
         ["Seznam hran", "O(E)"],
         ["BFS/DFS průchod", "O(V+E) časová složitost"]
       ]
+    },
+    {
+      "type": "match",
+      "prompt": "Přiřaď algoritmus prohledávání stavového prostoru k jeho strategii:",
+      "pairs": [
+        ["BFS", "Šířka nejdříve — nejkratší cesta v neohodnoceném prostoru"],
+        ["DFS", "Hloubka nejdříve — backtracking, detekce cyklů"],
+        ["A*", "Heuristika f(n) = g(n) + h(n) — optimální cesta"],
+        ["IDDFS", "Iterativní prohlubování DFS — optimální paměť i čas"]
+      ]
+    },
+    {
+      "type": "trueFalse",
+      "prompt": "Rozhodni a vysvětli proč:",
+      "statement": "Algoritmus A* vždy najde optimální cestu bez ohledu na heuristiku, kterou používá.",
+      "answer": false,
+      "explanation": "A* zaručuje optimální cestu pouze pokud je heuristika h(n) přípustná (admissible), tj. nikdy nepřeceňuje skutečné náklady na dosažení cíle. Nepřípustná heuristika může vést k suboptimálnímu řešení."
+    },
+    {
+      "type": "fill",
+      "prompt": "Doplň pojmy prohledávání stavového prostoru:",
+      "text": "Stavový prostor je množina všech možných {{stavů}} problému. BFS garantuje nalezení {{nejkratší}} cesty v neohodnoceném prostoru. Faktor větvení {{b}} určuje počet následníků každého uzlu. Složitost BFS je O(b{{^d}}), kde d je hloubka řešení.",
+      "answers": ["stavů", "nejkratší", "b", "^d"]
+    },
+    {
+      "type": "open",
+      "prompt": "Vysvětli rozdíl mezi prohledáváním grafem (BFS/DFS na grafu) a prohledáváním stavového prostoru. Uveď příklady použití stavového prostoru.",
+      "keywords": ["stav", "počáteční", "cílový", "přechod", "puzzle", "labyrint", "hra", "heuristika"]
+    },
+    {
+      "type": "code",
+      "prompt": "Implementuj BFS v Pythonu",
+      "task": "Implementuj funkci bfs(graph, start) v Pythonu. Parametr graph je slovník (adjacency list), start je počáteční uzel. Funkce vrátí seznam uzlů v pořadí, v jakém byly navštíveny (BFS — prohledávání do šířky).",
+      "language": "python",
+      "starterCode": "from collections import deque\n\ndef bfs(graph, start):\n    visited = set()\n    queue = deque()\n    result = []\n    # Tvůj kód zde\n    return result",
+      "hints": ["Přidej start do visited a queue", "Dokud queue není prázdná, odeber první prvek", "Přidej nenavštívené sousedy do fronty"]
     }
   ]
 }
