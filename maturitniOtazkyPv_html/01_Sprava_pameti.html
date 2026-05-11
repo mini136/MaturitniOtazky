@@ -48,14 +48,110 @@
         <tr><td>Bezpečnost</td><td>Nízká</td><td>Vysoká</td></tr>
     </table>
 
+    <h2>Alokace paměti</h2>
+    <p>Alokace paměti = proces <strong>rezervace části paměti</strong> pro data programu za běhu.</p>
+
+    <h3>Stack alokace</h3>
+    <ul>
+        <li>Probíhá <strong>automaticky</strong> při vstupu do funkce</li>
+        <li>Kompilátor dopředu zná velikost → rychlé, bez režie</li>
+        <li>Po návratu z funkce se paměť automaticky uvolní (posunutím stack pointeru)</li>
+        <li>Omezená velikost (typicky 1–8 MB) → <code>StackOverflowException</code> při přetečení</li>
+    </ul>
+    <pre><code>void Foo() {
+    int x = 42;        // stack: 4 bajty rezervovány automaticky
+    double d = 3.14;   // stack: 8 bajtů
+}                      // ← SP se vrátí, paměť "uvolněna"</code></pre>
+
+    <h3>Heap alokace</h3>
+    <ul>
+        <li>Explicitní žádost programu o blok paměti za běhu</li>
+        <li>Umožňuje <strong>dynamickou</strong> velikost a dobu života přesahující funkci</li>
+        <li>Pomalejší než stack — OS/runtime musí najít volný blok</li>
+    </ul>
+
+    <h4>C/C++ — manuální správa</h4>
+    <table>
+        <tr><th>Funkce</th><th>Popis</th></tr>
+        <tr><td><code>malloc(n)</code></td><td>Alokuje n bajtů, neinicializuje, vrací <code>void*</code></td></tr>
+        <tr><td><code>calloc(n, size)</code></td><td>Alokuje n×size bajtů, inicializuje nulami</td></tr>
+        <tr><td><code>realloc(ptr, n)</code></td><td>Změní velikost existujícího bloku</td></tr>
+        <tr><td><code>free(ptr)</code></td><td>Uvolní blok — <strong>musí</strong> být zavoláno ručně</td></tr>
+        <tr><td><code>new</code> / <code>delete</code></td><td>C++ operátory (volají konstruktor/destruktor)</td></tr>
+    </table>
+    <pre><code>int *arr = (int*)malloc(10 * sizeof(int));
+// ... použití ...
+free(arr);          // nutné, jinak memory leak
+arr = NULL;         // dobrá praxe — zamezí dangling pointer</code></pre>
+
+    <h4>C# / Java — správa přes runtime</h4>
+    <ul>
+        <li><code>new</code> alokuje na heapu, uvolnění zajistí <strong>Garbage Collector</strong></li>
+        <li>Programátor se nestará o <code>free</code> — ale musí uvolnit <strong>zdroje</strong> (soubory, spojení) přes <code>Dispose</code>/<code>using</code></li>
+    </ul>
+    <pre><code>var list = new List&lt;int&gt;();   // heap, GC uvolní až nebude dosažitelný
+using var fs = new FileStream(...);  // IDisposable — Dispose() zavoláno automaticky</code></pre>
+
+    <h3>Fragmentace paměti</h3>
+    <ul>
+        <li><strong>Interní fragmentace</strong> — alokovaný blok je větší, než je potřeba (nevyužité bajty uvnitř)</li>
+        <li><strong>Externí fragmentace</strong> — mezi alokovanými bloky vznikají malé díry, do nichž nový blok nevejde</li>
+        <li>Řeší se <strong>memory compaction</strong> (GC přesouvá objekty) nebo <strong>memory pooling</strong> (předalokovaný pool bloků stejné velikosti)</li>
+    </ul>
+
     <h2>Garbage Collector (GC)</h2>
 
+    <h3>Co je GC obecně</h3>
+    <p>Garbage Collector je <strong>součást runtime prostředí</strong>, která automaticky sleduje, které objekty na heapu jsou ještě <strong>dosažitelné</strong> (reachable) z kořenů programu (lokální proměnné, statické proměnné, registry CPU), a ty ostatní — nedosažitelné (unreachable) — uvolní.</p>
+    <p>Cíl: programátor <strong>nemusí volat <code>free</code></strong> — GC to udělá za něj, čímž eliminuje celé třídy chyb (memory leaks, dangling pointers, double-free).</p>
+    <div class="important">
+        <strong>Nevýhody GC:</strong>
+        <ul>
+            <li><strong>Stop-the-world pauzy</strong> — GC může na chvíli zastavit vlákna programu</li>
+            <li>Větší spotřeba paměti (objekty zůstávají déle, než jsou striktně potřeba)</li>
+            <li>Méně předvídatelný výkon (nelze říct přesně, kdy GC poběží)</li>
+        </ul>
+    </div>
+
     <h3>Algoritmy GC</h3>
+
+    <h4>Mark &amp; Sweep (základní princip)</h4>
+    <ol>
+        <li><strong>Mark</strong> — od kořenů projde graf referencí a označí vše dosažitelné</li>
+        <li><strong>Sweep</strong> — projde celý heap a uvolní vše neoznačené</li>
+    </ol>
+    <pre><code>Kořeny → A → B → C
+              ↘ D
+         E (nedosažitelný) ← sweep uvolní</code></pre>
+
+    <h4>Generační GC (C# .NET, Java JVM)</h4>
+    <p>Vychází z pozorování: <strong>většina objektů umírá mladá</strong> (short-lived).</p>
+    <table>
+        <tr><th>Generace</th><th>Obsah</th><th>Frekvence kolekce</th></tr>
+        <tr><td><strong>Gen 0</strong></td><td>Nově alokované objekty</td><td>Velmi časté (ms)</td></tr>
+        <tr><td><strong>Gen 1</strong></td><td>Objekty, které přežily Gen 0</td><td>Méně časté</td></tr>
+        <tr><td><strong>Gen 2</strong></td><td>Dlouhodobé objekty (statika, cache)</td><td>Zřídka</td></tr>
+    </table>
     <ul>
-        <li><strong>Mark &amp; Sweep</strong> — označí dosažitelné objekty, ostatní uvolní</li>
-        <li><strong>Generační GC</strong> — rozděluje objekty do generací (Gen0, Gen1, Gen2). Mladé objekty se kontrolují častěji.</li>
-        <li><strong>Reference Counting</strong> (Python) — počítá počet referencí na objekt, při 0 uvolní. Problém s cyklickými referencemi.</li>
+        <li>Kolekce Gen 0 je rychlá a levná — prochází jen malou část heapu</li>
+        <li>Objekty, které přežijí, jsou <strong>promoted</strong> do vyšší generace</li>
     </ul>
+
+    <h4>Reference Counting (Python, Swift, COM)</h4>
+    <ul>
+        <li>Každý objekt drží <strong>počítadlo referencí</strong> (<code>refcount</code>)</li>
+        <li>Při přiřazení se refcount zvýší, při uvolnění sníží</li>
+        <li>Při refcount == 0 → objekt okamžitě uvolněn</li>
+    </ul>
+    <pre><code>a = MyObj()   # refcount = 1
+b = a         # refcount = 2
+del a         # refcount = 1
+del b         # refcount = 0 → uvolněno ihned</code></pre>
+    <div class="note">
+        <strong>Problém — cyklické reference:</strong><br>
+        <code>a.next = b; b.prev = a</code> — oba mají refcount &gt; 0, ale jsou nedosažitelné.<br>
+        Python má doplňkový <strong>cyklický GC</strong> (modul <code>gc</code>), který cykly detekuje a uvolní.
+    </div>
 
     <h3>Memory Leaks (úniky paměti)</h3>
     <ul>
