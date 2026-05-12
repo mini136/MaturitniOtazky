@@ -487,6 +487,141 @@
     });
   }
 
+  /* ── AI explain on text selection ── */
+  function buildExplainFeature() {
+    // --- side panel ---
+    var panel = document.createElement("div");
+    panel.id = "explain-panel";
+    panel.innerHTML =
+      '<div class="explain-panel-header">' +
+      '<span class="explain-panel-title">🤖 AI Vysvětlení</span>' +
+      '<button type="button" class="explain-panel-close" id="explain-close" aria-label="Zavřít">✕</button>' +
+      "</div>" +
+      '<div class="explain-panel-body" id="explain-body">' +
+      '<p class="explain-placeholder">Vyber text na stránce a klikni na 💡 Vysvětlit.</p>' +
+      "</div>";
+    document.body.appendChild(panel);
+
+    panel.querySelector("#explain-close").addEventListener("click", function () {
+      panel.classList.remove("open");
+      tooltip.classList.remove("visible");
+    });
+
+    // --- floating tooltip ---
+    var tooltip = document.createElement("div");
+    tooltip.id = "explain-tooltip";
+    tooltip.innerHTML = '<button type="button" id="explain-btn">💡 Vysvětlit</button>';
+    document.body.appendChild(tooltip);
+
+    var lastSelection = "";
+
+    document.addEventListener("mouseup", function (e) {
+      // ignore clicks inside the panel or tooltip
+      if (panel.contains(e.target) || tooltip.contains(e.target)) return;
+
+      var sel = window.getSelection();
+      var text = sel ? sel.toString().trim() : "";
+
+      if (text.length < 3) {
+        tooltip.classList.remove("visible");
+        return;
+      }
+
+      lastSelection = text;
+
+      // position tooltip near the end of selection
+      var range = sel.getRangeAt(0);
+      var rect = range.getBoundingClientRect();
+      var scrollY = window.scrollY || document.documentElement.scrollTop;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft;
+
+      var top = rect.bottom + scrollY + 6;
+      var left = rect.left + scrollX + rect.width / 2;
+
+      tooltip.style.top = top + "px";
+      tooltip.style.left = left + "px";
+      tooltip.classList.add("visible");
+    });
+
+    // hide tooltip when clicking elsewhere
+    document.addEventListener("mousedown", function (e) {
+      if (!tooltip.contains(e.target) && !panel.contains(e.target)) {
+        tooltip.classList.remove("visible");
+      }
+    });
+
+    tooltip.querySelector("#explain-btn").addEventListener("click", function () {
+      tooltip.classList.remove("visible");
+      panel.classList.add("open");
+
+      var body = document.getElementById("explain-body");
+      body.innerHTML = '<div class="explain-loading">⏳ ChatGPT přemýšlí…</div>';
+
+      var pageTitle = (document.querySelector("h1") || document.querySelector("title") || { textContent: document.title }).textContent.trim();
+
+      fetch("/api/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: lastSelection.slice(0, 1500),
+          pageTitle: pageTitle.slice(0, 200),
+        }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data.error) throw new Error(data.error);
+          var exp = data.explanation || "";
+          body.innerHTML =
+            '<div class="explain-query">' +
+            '<strong>Vybraný text:</strong><br>' +
+            '<em class="explain-quote">' + safeText(lastSelection.slice(0, 200)) + (lastSelection.length > 200 ? "…" : "") + "</em>" +
+            "</div>" +
+            '<div class="explain-answer">' + formatExplanation(exp) + "</div>" +
+            '<button type="button" class="explain-more-btn" id="explain-more">🔁 Vysvětlit jinak</button>';
+
+          document.getElementById("explain-more").addEventListener("click", function () {
+            body.innerHTML = '<div class="explain-loading">⏳ Hledám jiné vysvětlení…</div>';
+            fetch("/api/explain", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                text: lastSelection.slice(0, 1500),
+                pageTitle: pageTitle.slice(0, 200),
+                rephrase: true,
+              }),
+            })
+              .then(function (r) { return r.json(); })
+              .then(function (d) {
+                if (d.error) throw new Error(d.error);
+                body.innerHTML =
+                  '<div class="explain-query"><strong>Vybraný text:</strong><br><em class="explain-quote">' +
+                  safeText(lastSelection.slice(0, 200)) + "</em></div>" +
+                  '<div class="explain-answer">' + formatExplanation(d.explanation || "") + "</div>";
+              })
+              .catch(function () {
+                body.innerHTML = '<div class="explain-error">Chyba při komunikaci s AI. Zkus to znovu.</div>';
+              });
+          });
+        })
+        .catch(function () {
+          body.innerHTML = '<div class="explain-error">Chyba při komunikaci s AI. Zkus to znovu.</div>';
+        });
+    });
+  }
+
+  function formatExplanation(text) {
+    // Basic markdown-ish: **bold**, newlines -> paragraphs
+    var safe = safeText(text);
+    safe = safe.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    safe = safe.replace(/`(.+?)`/g, '<code style="background:#f1f5f9;padding:1px 5px;border-radius:3px;font-size:.9em">$1</code>');
+    var paras = safe.split(/\n{2,}/);
+    return paras.map(function (p) {
+      var trimmed = p.trim();
+      if (!trimmed) return "";
+      return "<p>" + trimmed.replace(/\n/g, "<br>") + "</p>";
+    }).join("");
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     var path = window.location.pathname.toLowerCase();
     if (!path.endsWith(".html") || path.endsWith("/index.html")) {
@@ -511,5 +646,6 @@
       buildQuizButton(anchorBottom);
       buildComments(anchorBottom);
     }
+    buildExplainFeature();
   });
 })();

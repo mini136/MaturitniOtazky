@@ -390,6 +390,46 @@ app.post("/api/quiz/live/evaluate", requireAdmin, async (req, res) => {
   }
 });
 
+/* ── Public: AI explain selected text (student-facing) ── */
+app.post("/api/explain", async (req, res) => {
+  const text = String(req.body.text || "")
+    .trim()
+    .slice(0, 1500);
+  const pageTitle = String(req.body.pageTitle || "")
+    .trim()
+    .slice(0, 200);
+  const rephrase = !!req.body.rephrase;
+
+  if (!text) {
+    return res.status(400).json({ error: "missing_text" });
+  }
+
+  const systemPrompt = rephrase
+    ? "Jsi přátelský středoškolský učitel. Vysvětli pojem nebo text JINÝM způsobem než předtím — použij analogii, příklad z praxe nebo jiný přístup. Piš česky, stručně (3-6 vět). Odpovídej přímo, bez úvodu."
+    : "Jsi přátelský středoškolský učitel. Student vybral text z výukové stránky a nerozumí mu. Vysvětli ho jednoduše a srozumitelně — jako by student nic nevěděl. Piš česky, stručně (3-6 vět). Klidně použij příklad nebo analogii. Odpovídej přímo, bez úvodu.";
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      temperature: 0.5,
+      max_tokens: 400,
+      messages: [
+        { role: "system", content: systemPrompt },
+        {
+          role: "user",
+          content:
+            (pageTitle ? "Stránka: " + pageTitle + "\n\n" : "") +
+            "Vybraný text: " + text,
+        },
+      ],
+    });
+    const explanation = (completion.choices[0].message.content || "").trim();
+    return res.json({ explanation });
+  } catch (e) {
+    return res.status(500).json({ error: "explain_failed" });
+  }
+});
+
 /* ── Public: code evaluation by AI (student-facing) ── */
 app.post("/api/quiz/code/evaluate", async (req, res) => {
   const code = String(req.body.code || "")
