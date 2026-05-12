@@ -1,0 +1,244 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <defs>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#3b82f6"/>
+    </marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#ea580c"/>
+    </marker>
+    <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="760" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="600" y="35" font-family="Segoe UI,Arial" font-size="26" fill="#0f172a" font-weight="700" text-anchor="middle">Navrhove vzory (Design Patterns)</text>
+
+  <!-- ═══════════ CREATIONAL HEADER ═══════════ -->
+  <rect x="8" y="46" width="1184" height="28" rx="5" fill="#dbeafe"/>
+  <text x="600" y="66" font-family="Segoe UI,Arial" font-size="15" fill="#1e40af" font-weight="700" text-anchor="middle">CREATIONAL — vytvareni objektu (Singleton · Factory · Builder)</text>
+
+  <!-- ─── SINGLETON ─── cell: x=8 y=78 w=375 h=190 -->
+  <rect x="8" y="78" width="375" height="190" rx="8" fill="white" stroke="#93c5fd" stroke-width="2"/>
+  <text x="195" y="100" font-family="Segoe UI,Arial" font-size="14" fill="#1e40af" font-weight="700" text-anchor="middle">Singleton</text>
+  <!-- Two clients -->
+  <rect x="22" y="110" width="90" height="32" rx="5" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="67" y="131" font-family="Segoe UI,Arial" font-size="12" fill="#1d4ed8" text-anchor="middle">Client A</text>
+  <rect x="22" y="162" width="90" height="32" rx="5" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="67" y="183" font-family="Segoe UI,Arial" font-size="12" fill="#1d4ed8" text-anchor="middle">Client B</text>
+  <!-- Singleton box -->
+  <rect x="232" y="126" width="132" height="52" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="298" y="147" font-family="Segoe UI,Arial" font-size="13" fill="#1e3a8a" font-weight="700" text-anchor="middle">Database</text>
+  <text x="298" y="165" font-family="Segoe UI,Arial" font-size="10" fill="#3b82f6" text-anchor="middle">1 sdilena instance</text>
+  <!-- Arrows both to same box -->
+  <line x1="112" y1="126" x2="227" y2="148" stroke="#3b82f6" stroke-width="2" marker-end="url(#arb)"/>
+  <line x1="112" y1="178" x2="227" y2="162" stroke="#3b82f6" stroke-width="2" marker-end="url(#arb)"/>
+  <!-- Labels -->
+  <text x="195" y="222" font-family="Segoe UI,Arial" font-size="11" fill="#475569" text-anchor="middle">if _instance is None: create()</text>
+  <text x="195" y="239" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">globalni pristup · lazy init</text>
+  <text x="195" y="256" font-family="Segoe UI,Arial" font-size="10" fill="#94a3b8" text-anchor="middle">DB spojeni, konfigurace, logger</text>
+
+  <!-- ─── FACTORY ─── cell: x=413 y=78 w=375 h=190 -->
+  <rect x="413" y="78" width="375" height="190" rx="8" fill="white" stroke="#93c5fd" stroke-width="2"/>
+  <text x="600" y="100" font-family="Segoe UI,Arial" font-size="14" fill="#1e40af" font-weight="700" text-anchor="middle">Factory Method</text>
+  <!-- Factory box -->
+  <rect x="478" y="108" width="144" height="38" rx="5" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+  <text x="550" y="123" font-family="Segoe UI,Arial" font-size="12" fill="#1e3a8a" font-weight="700" text-anchor="middle">AnimalFactory</text>
+  <text x="550" y="139" font-family="Segoe UI,Arial" font-size="10" fill="#3b82f6" text-anchor="middle">createAnimal(type)</text>
+  <!-- Products -->
+  <rect x="418" y="183" width="80" height="30" rx="4" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="458" y="203" font-family="Segoe UI,Arial" font-size="12" fill="#1d4ed8" text-anchor="middle">Dog</text>
+  <rect x="510" y="183" width="80" height="30" rx="4" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="550" y="203" font-family="Segoe UI,Arial" font-size="12" fill="#1d4ed8" text-anchor="middle">Cat</text>
+  <rect x="602" y="183" width="80" height="30" rx="4" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="642" y="203" font-family="Segoe UI,Arial" font-size="12" fill="#1d4ed8" text-anchor="middle">Bird</text>
+  <!-- Arrows from factory to products -->
+  <line x1="492" y1="146" x2="458" y2="181" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#arb)"/>
+  <line x1="550" y1="146" x2="550" y2="181" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#arb)"/>
+  <line x1="608" y1="146" x2="642" y2="181" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#arb)"/>
+  <!-- Labels -->
+  <text x="600" y="233" font-family="Segoe UI,Arial" font-size="11" fill="#475569" text-anchor="middle">factory.createAnimal("dog") → Dog()</text>
+  <text x="600" y="250" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">klient zna jen rozhrani, ne konkretni tridu</text>
+  <text x="600" y="263" font-family="Segoe UI,Arial" font-size="10" fill="#94a3b8" text-anchor="middle">snadne rozsireni bez zmeny kodu klienta</text>
+
+  <!-- ─── BUILDER ─── cell: x=818 y=78 w=374 h=190 -->
+  <rect x="818" y="78" width="374" height="190" rx="8" fill="white" stroke="#93c5fd" stroke-width="2"/>
+  <text x="1005" y="100" font-family="Segoe UI,Arial" font-size="14" fill="#1e40af" font-weight="700" text-anchor="middle">Builder</text>
+  <!-- Vertical chain -->
+  <rect x="828" y="108" width="100" height="28" rx="5" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+  <text x="878" y="127" font-family="Segoe UI,Arial" font-size="12" fill="#1e3a8a" font-weight="700" text-anchor="middle">PizzaBuilder</text>
+  <line x1="878" y1="136" x2="878" y2="148" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arb)"/>
+  <rect x="828" y="150" width="100" height="24" rx="4" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="878" y="167" font-family="Segoe UI,Arial" font-size="11" fill="#1d4ed8" text-anchor="middle">.setSize("large")</text>
+  <line x1="878" y1="174" x2="878" y2="186" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arb)"/>
+  <rect x="828" y="188" width="100" height="24" rx="4" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="878" y="205" font-family="Segoe UI,Arial" font-size="11" fill="#1d4ed8" text-anchor="middle">.addTopping()</text>
+  <line x1="878" y1="212" x2="878" y2="224" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arb)"/>
+  <rect x="828" y="226" width="100" height="24" rx="4" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="878" y="243" font-family="Segoe UI,Arial" font-size="11" fill="#1d4ed8" text-anchor="middle">.build()</text>
+  <!-- Final product -->
+  <rect x="1050" y="158" width="118" height="58" rx="8" fill="#bfdbfe" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="1109" y="184" font-family="Segoe UI,Arial" font-size="14" fill="#1e3a8a" font-weight="700" text-anchor="middle">Pizza!</text>
+  <text x="1109" y="204" font-family="Segoe UI,Arial" font-size="11" fill="#3b82f6" text-anchor="middle">hotovy objekt</text>
+  <!-- Arrow from .build() to pizza -->
+  <line x1="928" y1="238" x2="1045" y2="192" stroke="#2563eb" stroke-width="2" marker-end="url(#arb)"/>
+  <!-- Labels -->
+  <text x="1005" y="246" font-family="Segoe UI,Arial" font-size="11" fill="#475569" text-anchor="middle">fluent interface — retezeni metod</text>
+  <text x="1005" y="260" font-family="Segoe UI,Arial" font-size="10" fill="#94a3b8" text-anchor="middle">vyhyba se telescoping konstruktoru</text>
+
+  <!-- ═══════════ STRUCTURAL HEADER ═══════════ -->
+  <rect x="8" y="276" width="1184" height="28" rx="5" fill="#fed7aa"/>
+  <text x="600" y="296" font-family="Segoe UI,Arial" font-size="15" fill="#c2410c" font-weight="700" text-anchor="middle">STRUCTURAL — struktura trid (Adapter · Decorator · Facade)</text>
+
+  <!-- ─── ADAPTER ─── cell: x=8 y=308 w=375 h=190 -->
+  <rect x="8" y="308" width="375" height="190" rx="8" fill="white" stroke="#fed7aa" stroke-width="2"/>
+  <text x="195" y="330" font-family="Segoe UI,Arial" font-size="14" fill="#c2410c" font-weight="700" text-anchor="middle">Adapter</text>
+  <!-- Boxes -->
+  <rect x="20" y="344" width="80" height="36" rx="5" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="60" y="367" font-family="Segoe UI,Arial" font-size="12" fill="#c2410c" text-anchor="middle">Client</text>
+  <rect x="152" y="344" width="88" height="36" rx="5" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+  <text x="196" y="367" font-family="Segoe UI,Arial" font-size="13" fill="#9a3412" font-weight="700" text-anchor="middle">Adapter</text>
+  <rect x="292" y="344" width="84" height="36" rx="5" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="334" y="360" font-family="Segoe UI,Arial" font-size="11" fill="#c2410c" text-anchor="middle">Legacy</text>
+  <text x="334" y="375" font-family="Segoe UI,Arial" font-size="11" fill="#c2410c" text-anchor="middle">Service</text>
+  <!-- Arrows -->
+  <line x1="100" y1="362" x2="147" y2="362" stroke="#ea580c" stroke-width="2" marker-end="url(#aro)"/>
+  <line x1="240" y1="362" x2="287" y2="362" stroke="#ea580c" stroke-width="2" marker-end="url(#aro)"/>
+  <!-- Method labels on arrows -->
+  <text x="123" y="356" font-family="Segoe UI,Arial" font-size="9" fill="#9a3412" text-anchor="middle">newAPI()</text>
+  <text x="263" y="356" font-family="Segoe UI,Arial" font-size="9" fill="#9a3412" text-anchor="middle">oldAPI()</text>
+  <!-- Description -->
+  <text x="195" y="414" font-family="Segoe UI,Arial" font-size="11" fill="#475569" text-anchor="middle">spojuje nekompatibilni rozhrani</text>
+  <text x="195" y="431" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">bez upravy zdrojoveho kodu Legacy</text>
+  <text x="195" y="448" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">prechod na novou knihovnu/API</text>
+  <text x="195" y="465" font-family="Segoe UI,Arial" font-size="10" fill="#94a3b8" text-anchor="middle">napr. Kafka → RabbitMQ bez zmeny klienta</text>
+  <text x="195" y="490" font-family="Segoe UI,Arial" font-size="10" fill="#94a3b8" text-anchor="middle">Adapter wraps a Legacy and translates calls</text>
+
+  <!-- ─── DECORATOR ─── cell: x=413 y=308 w=375 h=190 -->
+  <rect x="413" y="308" width="375" height="190" rx="8" fill="white" stroke="#fed7aa" stroke-width="2"/>
+  <text x="600" y="330" font-family="Segoe UI,Arial" font-size="14" fill="#c2410c" font-weight="700" text-anchor="middle">Decorator</text>
+  <!-- Nested wrapping boxes -->
+  <rect x="424" y="342" width="350" height="112" rx="6" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="438" y="360" font-family="Segoe UI,Arial" font-size="10" fill="#9a3412" font-weight="600">SugarDecorator (+cukr)</text>
+  <rect x="444" y="366" width="310" height="81" rx="5" fill="#fed7aa" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="458" y="384" font-family="Segoe UI,Arial" font-size="10" fill="#7c2d12" font-weight="600">MilkDecorator (+mleko)</text>
+  <rect x="464" y="389" width="270" height="49" rx="4" fill="#fdba74" stroke="#ea580c" stroke-width="2"/>
+  <text x="599" y="420" font-family="Segoe UI,Arial" font-size="14" fill="#7c2d12" font-weight="700" text-anchor="middle">Coffee (zaklad)</text>
+  <!-- Description -->
+  <text x="600" y="476" font-family="Segoe UI,Arial" font-size="11" fill="#475569" text-anchor="middle">dynamicke obalovani objektu za behu</text>
+  <text x="600" y="493" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">misto explozivni dedicnosti podtrid</text>
+
+  <!-- ─── FACADE ─── cell: x=818 y=308 w=374 h=190 -->
+  <rect x="818" y="308" width="374" height="190" rx="8" fill="white" stroke="#fed7aa" stroke-width="2"/>
+  <text x="1005" y="330" font-family="Segoe UI,Arial" font-size="14" fill="#c2410c" font-weight="700" text-anchor="middle">Facade</text>
+  <!-- Client -->
+  <rect x="826" y="344" width="72" height="36" rx="5" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="862" y="367" font-family="Segoe UI,Arial" font-size="12" fill="#c2410c" text-anchor="middle">Client</text>
+  <!-- Facade -->
+  <rect x="940" y="344" width="98" height="36" rx="5" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+  <text x="989" y="367" font-family="Segoe UI,Arial" font-size="13" fill="#9a3412" font-weight="700" text-anchor="middle">Facade</text>
+  <!-- Sub-systems -->
+  <rect x="1086" y="326" width="96" height="22" rx="4" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="1134" y="342" font-family="Segoe UI,Arial" font-size="10" fill="#c2410c" text-anchor="middle">Auth module</text>
+  <rect x="1086" y="352" width="96" height="22" rx="4" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="1134" y="368" font-family="Segoe UI,Arial" font-size="10" fill="#c2410c" text-anchor="middle">DB module</text>
+  <rect x="1086" y="378" width="96" height="22" rx="4" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="1134" y="394" font-family="Segoe UI,Arial" font-size="10" fill="#c2410c" text-anchor="middle">Cache module</text>
+  <!-- Arrows -->
+  <line x1="898" y1="362" x2="935" y2="362" stroke="#ea580c" stroke-width="2" marker-end="url(#aro)"/>
+  <line x1="1038" y1="354" x2="1081" y2="338" stroke="#ea580c" stroke-width="1.5" marker-end="url(#aro)"/>
+  <line x1="1038" y1="362" x2="1081" y2="363" stroke="#ea580c" stroke-width="1.5" marker-end="url(#aro)"/>
+  <line x1="1038" y1="370" x2="1081" y2="388" stroke="#ea580c" stroke-width="1.5" marker-end="url(#aro)"/>
+  <!-- Description -->
+  <text x="1005" y="425" font-family="Segoe UI,Arial" font-size="11" fill="#475569" text-anchor="middle">jednoducha vstupni brana do sloziteho systemu</text>
+  <text x="1005" y="442" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">klient vola jen facade, nezna vnitrek</text>
+  <text x="1005" y="459" font-family="Segoe UI,Arial" font-size="10" fill="#94a3b8" text-anchor="middle">HomeTheater.watchMovie() → interně N kroku</text>
+  <text x="1005" y="490" font-family="Segoe UI,Arial" font-size="10" fill="#94a3b8" text-anchor="middle">API Gateway, Service Locator</text>
+
+  <!-- ═══════════ BEHAVIORAL HEADER ═══════════ -->
+  <rect x="8" y="506" width="1184" height="28" rx="5" fill="#dcfce7"/>
+  <text x="600" y="526" font-family="Segoe UI,Arial" font-size="15" fill="#15803d" font-weight="700" text-anchor="middle">BEHAVIORAL — chovani objektu (Observer · Strategy · Command)</text>
+
+  <!-- ─── OBSERVER ─── cell: x=8 y=538 w=375 h=214 -->
+  <rect x="8" y="538" width="375" height="214" rx="8" fill="white" stroke="#bbf7d0" stroke-width="2"/>
+  <text x="195" y="560" font-family="Segoe UI,Arial" font-size="14" fill="#15803d" font-weight="700" text-anchor="middle">Observer</text>
+  <!-- Subject -->
+  <rect x="18" y="572" width="100" height="48" rx="5" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+  <text x="68" y="591" font-family="Segoe UI,Arial" font-size="12" fill="#14532d" font-weight="700" text-anchor="middle">Subject</text>
+  <text x="68" y="607" font-family="Segoe UI,Arial" font-size="10" fill="#166534" text-anchor="middle">emit("login")</text>
+  <!-- Observers -->
+  <rect x="255" y="556" width="108" height="27" rx="4" fill="#dcfce7" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="309" y="574" font-family="Segoe UI,Arial" font-size="11" fill="#14532d" text-anchor="middle">Logger</text>
+  <rect x="255" y="589" width="108" height="27" rx="4" fill="#dcfce7" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="309" y="607" font-family="Segoe UI,Arial" font-size="11" fill="#14532d" text-anchor="middle">Mailer</text>
+  <rect x="255" y="622" width="108" height="27" rx="4" fill="#dcfce7" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="309" y="640" font-family="Segoe UI,Arial" font-size="11" fill="#14532d" text-anchor="middle">Analytics</text>
+  <!-- Arrows from subject to each observer -->
+  <line x1="118" y1="582" x2="250" y2="568" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arg)"/>
+  <line x1="118" y1="593" x2="250" y2="603" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arg)"/>
+  <line x1="118" y1="608" x2="250" y2="634" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arg)"/>
+  <!-- Description -->
+  <text x="195" y="672" font-family="Segoe UI,Arial" font-size="11" fill="#475569" text-anchor="middle">publisher–subscriber model</text>
+  <text x="195" y="689" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">subscribe() / unsubscribe() / emit()</text>
+  <text x="195" y="706" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">volna vazba — Subject nezna Observer</text>
+  <text x="195" y="744" font-family="Segoe UI,Arial" font-size="10" fill="#94a3b8" text-anchor="middle">event system, React state, DOM listener</text>
+
+  <!-- ─── STRATEGY ─── cell: x=413 y=538 w=375 h=214 -->
+  <rect x="413" y="538" width="375" height="214" rx="8" fill="white" stroke="#bbf7d0" stroke-width="2"/>
+  <text x="600" y="560" font-family="Segoe UI,Arial" font-size="14" fill="#15803d" font-weight="700" text-anchor="middle">Strategy</text>
+  <!-- Context -->
+  <rect x="420" y="572" width="95" height="48" rx="5" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+  <text x="467" y="591" font-family="Segoe UI,Arial" font-size="12" fill="#14532d" font-weight="700" text-anchor="middle">Context</text>
+  <text x="467" y="609" font-family="Segoe UI,Arial" font-size="10" fill="#166534" text-anchor="middle">sort(data)</text>
+  <!-- Interface (dashed) -->
+  <rect x="553" y="572" width="100" height="48" rx="5" fill="#dcfce7" stroke="#22c55e" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="603" y="590" font-family="Segoe UI,Arial" font-size="11" fill="#14532d" font-weight="700" text-anchor="middle">&lt;&lt;ISortStrategy&gt;&gt;</text>
+  <text x="603" y="608" font-family="Segoe UI,Arial" font-size="10" fill="#15803d" text-anchor="middle">execute(data)</text>
+  <!-- Concrete strategies -->
+  <rect x="677" y="555" width="100" height="26" rx="4" fill="#f0fdf4" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="727" y="573" font-family="Segoe UI,Arial" font-size="11" fill="#14532d" text-anchor="middle">BubbleSort</text>
+  <rect x="677" y="586" width="100" height="26" rx="4" fill="#f0fdf4" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="727" y="604" font-family="Segoe UI,Arial" font-size="11" fill="#14532d" text-anchor="middle">QuickSort</text>
+  <rect x="677" y="617" width="100" height="26" rx="4" fill="#f0fdf4" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="727" y="635" font-family="Segoe UI,Arial" font-size="11" fill="#14532d" text-anchor="middle">MergeSort</text>
+  <!-- Arrows -->
+  <line x1="515" y1="595" x2="548" y2="595" stroke="#16a34a" stroke-width="2" marker-end="url(#arg)"/>
+  <line x1="653" y1="582" x2="672" y2="568" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arg)"/>
+  <line x1="653" y1="594" x2="672" y2="598" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arg)"/>
+  <line x1="653" y1="607" x2="672" y2="628" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arg)"/>
+  <!-- Description -->
+  <text x="600" y="666" font-family="Segoe UI,Arial" font-size="11" fill="#475569" text-anchor="middle">vymena algoritmu za behu programu</text>
+  <text x="600" y="683" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">ctx.setStrategy(new QuickSort())</text>
+  <text x="600" y="700" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">eliminuje if/else reteze</text>
+  <text x="600" y="744" font-family="Segoe UI,Arial" font-size="10" fill="#94a3b8" text-anchor="middle">platebni metody, validace, export formatu</text>
+
+  <!-- ─── COMMAND ─── cell: x=818 y=538 w=374 h=214 -->
+  <rect x="818" y="538" width="374" height="214" rx="8" fill="white" stroke="#bbf7d0" stroke-width="2"/>
+  <text x="1005" y="560" font-family="Segoe UI,Arial" font-size="14" fill="#15803d" font-weight="700" text-anchor="middle">Command</text>
+  <!-- Invoker -->
+  <rect x="826" y="572" width="88" height="48" rx="5" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+  <text x="870" y="591" font-family="Segoe UI,Arial" font-size="12" fill="#14532d" font-weight="700" text-anchor="middle">Invoker</text>
+  <text x="870" y="609" font-family="Segoe UI,Arial" font-size="10" fill="#166534" text-anchor="middle">Button/Menu</text>
+  <!-- Command interface (dashed) -->
+  <rect x="952" y="572" width="96" height="48" rx="5" fill="#dcfce7" stroke="#22c55e" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="1000" y="589" font-family="Segoe UI,Arial" font-size="11" fill="#14532d" font-weight="700" text-anchor="middle">&lt;&lt;Command&gt;&gt;</text>
+  <text x="1000" y="607" font-family="Segoe UI,Arial" font-size="10" fill="#15803d" text-anchor="middle">execute() / undo()</text>
+  <!-- Concrete command -->
+  <rect x="952" y="638" width="96" height="28" rx="4" fill="#f0fdf4" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="1000" y="657" font-family="Segoe UI,Arial" font-size="11" fill="#14532d" text-anchor="middle">SaveCommand</text>
+  <!-- Receiver -->
+  <rect x="1082" y="638" width="98" height="28" rx="4" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+  <text x="1131" y="657" font-family="Segoe UI,Arial" font-size="11" fill="#14532d" text-anchor="middle">File (Receiver)</text>
+  <!-- Arrows -->
+  <line x1="914" y1="595" x2="947" y2="595" stroke="#16a34a" stroke-width="2" marker-end="url(#arg)"/>
+  <line x1="1000" y1="620" x2="1000" y2="636" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arg)"/>
+  <line x1="1048" y1="652" x2="1077" y2="652" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arg)"/>
+  <!-- Description -->
+  <text x="1005" y="690" font-family="Segoe UI,Arial" font-size="11" fill="#475569" text-anchor="middle">akce jako objekt → undo/redo</text>
+  <text x="1005" y="707" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">fronta operaci, transakce</text>
+  <text x="1005" y="724" font-family="Segoe UI,Arial" font-size="11" fill="#64748b" font-style="italic" text-anchor="middle">Invoker nevi co command dela</text>
+  <text x="1005" y="744" font-family="Segoe UI,Arial" font-size="10" fill="#94a3b8" text-anchor="middle">textovy editor, DB transakce, task queue</text>
+</svg>

@@ -190,7 +190,14 @@
   function getCodeFillQuizUrl() {
     var sf = getSubAndFile();
     var back = encodeURIComponent(window.location.href);
-    return "../assets/quiz.html?q=" + sf.sub + "/" + sf.file + "&type=code-fill&back=" + back;
+    return (
+      "../assets/quiz.html?q=" +
+      sf.sub +
+      "/" +
+      sf.file +
+      "&type=code-fill&back=" +
+      back
+    );
   }
 
   function buildQuizButton(anchor) {
@@ -285,6 +292,11 @@
         title: "Rychlý diagram: Normalizace databáze",
         text: "Přehled 1NF/2NF/3NF v jedné infografice.",
         image: "sql_normalization.svg",
+      },
+      "pv/13_Navrhove_vzory": {
+        title: "Rychlý diagram: Návrhové vzory",
+        text: "Přehled 9 klíčových vzorů ve třech kategoriích: Creational (Singleton, Factory, Builder), Structural (Adapter, Decorator, Facade), Behavioral (Observer, Strategy, Command).",
+        image: "design_patterns.svg",
       },
       "pv/14_OOP_principy": {
         title: "Rychlý diagram: OOP principy",
