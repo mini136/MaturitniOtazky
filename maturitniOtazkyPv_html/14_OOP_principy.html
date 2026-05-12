@@ -35,36 +35,406 @@
     <h1>14 – Principy objektového programování, agregace a kompozice objektů</h1>
 
     <div class="section-divider section-pilire">🏛️ ČÁST 1 — 4 pilíře OOP</div>
-    <h2>4 pilíře OOP</h2>
+
+    <h2>Přehled 4 pilířů</h2>
     <table>
-        <tr><th>Pilíř</th><th>Popis</th></tr>
-        <tr><td><strong>Zapouzdření (Encapsulation)</strong></td><td>Skrytí vnitřního stavu, přístup přes metody/property</td></tr>
-        <tr><td><strong>Dědičnost (Inheritance)</strong></td><td>Přebírání vlastností od rodičovské třídy</td></tr>
-        <tr><td><strong>Polymorfismus</strong></td><td>Stejné rozhraní, různé chování</td></tr>
-        <tr><td><strong>Abstrakce</strong></td><td>Skrytí implementačních detailů za rozhraní</td></tr>
+        <tr><th>Pilíř</th><th>Klíčová myšlenka</th><th>Klíčové klíčové slovo</th></tr>
+        <tr><td><strong>Zapouzdření</strong></td><td>Skryj vnitřní stav, odhal jen to nutné</td><td><code>private</code>, getter/setter</td></tr>
+        <tr><td><strong>Dědičnost</strong></td><td>Potomek přebírá a rozšiřuje rodiče</td><td><code>extends</code> / <code>:</code></td></tr>
+        <tr><td><strong>Polymorfismus</strong></td><td>Stejné volání, různé chování podle typu</td><td><code>override</code>, <code>virtual</code></td></tr>
+        <tr><td><strong>Abstrakce</strong></td><td>Skryj složitost za rozhraní/abstraktní třídu</td><td><code>abstract</code>, <code>interface</code></td></tr>
     </table>
 
-    <div class="section-divider section-vztahy">🔗 ČÁST 2 — Vztahy mezi objekty (Agregace, Kompozice)</div>
+    <h2>1. Zapouzdření (Encapsulation)</h2>
+    <p>Vnitřní stav objektu je <strong>skrytý</strong> před okolím. Přístup k datům je možný jen přes veřejné metody nebo properties. Díky tomu lze validovat vstupy a chránit konzistenci objektu.</p>
+    <div class="note">
+        <strong>Modifikátory přístupu:</strong><br>
+        <code>public</code> — dostupné odkudkoliv &nbsp;|&nbsp;
+        <code>protected</code> — dostupné v třídě a potomcích &nbsp;|&nbsp;
+        <code>private</code> — dostupné jen uvnitř třídy<br>
+        V Pythonu: <code>_chraneny</code> (konvence), <code>__soukromy</code> (name mangling → <code>_Trida__soukromy</code>)
+    </div>
+    <div class="code-desc"><strong>Bankovní účet</strong> — <code>__zustatek</code> je soukromý, nelze ho nastavit přímo. Musíš projít metodou <code>vloz()</code> nebo <code>vyber()</code>, která provede validaci.</div>
+    <pre><code>class BankovniUcet:
+    def __init__(self, majitel, zustatek=0):
+        self._majitel = majitel      # protected (konvence)
+        self.__zustatek = zustatek   # private (name mangling)
+
+    @property
+    def zustatek(self):              # getter — cte hodnotu
+        return self.__zustatek
+
+    def vloz(self, castka):
+        if castka &lt;= 0:
+            raise ValueError("Castka musi byt kladna!")
+        self.__zustatek += castka
+
+    def vyber(self, castka):
+        if castka &gt; self.__zustatek:
+            raise ValueError("Nedostatek prostredku!")
+        self.__zustatek -= castka
+
+ucet = BankovniUcet("Alice", 1000)
+ucet.vloz(500)
+ucet.vyber(200)
+print(ucet.zustatek)   # 1300
+# ucet.__zustatek = 9999  ← AttributeError! (name mangling)
+</code></pre>
+
+    <h2>2. Dědičnost (Inheritance)</h2>
+    <p>Potomek (child class) <strong>přebírá</strong> atributy a metody rodiče (parent class) a může je rozšiřovat nebo přepisovat. Umožňuje znovupoužitelnost kódu a budování hierarchií tříd.</p>
+    <div class="note">
+        <strong>Klíčové pojmy:</strong><br>
+        <code>super().__init__()</code> — volání konstruktoru rodiče &nbsp;|&nbsp;
+        <strong>override</strong> — přepsání metody rodiče v potomkovi &nbsp;|&nbsp;
+        <strong>MRO</strong> (Method Resolution Order) — pořadí hledání metody při vícenásobné dědičnosti v Pythonu
+    </div>
+    <div class="code-desc"><strong>Hierarchie zvířat</strong> — <code>Zivocich</code> je základní třída. <code>Pes</code> dědí od ní, přidá <code>породu</code> a přepíše <code>zvuk()</code>. Vždy zavolej <code>super().__init__()</code> pro inicializaci rodiče.</div>
+    <pre><code>class Zivocich:
+    def __init__(self, jmeno, vek):
+        self.jmeno = jmeno
+        self.vek = vek
+
+    def info(self):
+        return f"{self.jmeno} ({self.vek} let)"
+
+    def zvuk(self):
+        return "..."
+
+class Pes(Zivocich):            # dedi od Zivocich
+    def __init__(self, jmeno, vek, pleme):
+        super().__init__(jmeno, vek)   # zavolej rodicovsky init
+        self.pleme = pleme
+
+    def zvuk(self):             # override metody rodiče
+        return "Haf!"
+
+    def info(self):             # rozsireni metody rodiče
+        return super().info() + f", pleme: {self.pleme}"
+
+class Kocka(Zivocich):
+    def zvuk(self): return "Mnau!"
+
+pes = Pes("Rex", 3, "Labrador")
+print(pes.info())   # Rex (3 let), pleme: Labrador
+print(pes.zvuk())   # Haf!
+print(isinstance(pes, Zivocich))  # True — pes IS-A Zivocich
+</code></pre>
+    <div class="important">⚠️ <strong>IS-A vs HAS-A:</strong> Dědičnost modeluje vztah <em>„je"</em> (Pes <em>je</em> Zvíře). Pokud vztah zní <em>„má"</em>, použij kompozici/agregaci místo dědičnosti.</div>
+
+    <h2>3. Polymorfismus</h2>
+    <p>Stejné volání metody se chová <strong>různě podle skutečného typu objektu</strong>. Umožňuje psát obecný kód, který funguje s různými typy.</p>
+    <div class="note">
+        <strong>Druhy polymorfismu:</strong><br>
+        <strong>Runtime (dynamický)</strong> — přepsání metody v potomkovi (<em>override</em>), rozhoduje se za běhu &nbsp;|&nbsp;
+        <strong>Compile-time (statický)</strong> — přetížení metody (<em>overloading</em>), různé parametry, v Pythonu není (duck typing)
+    </div>
+    <div class="code-desc"><strong>Geometrické tvary</strong> — funkce <code>plocha_info()</code> volá <code>plocha()</code> na libovolném tvaru. Nezajímá ji konkrétní typ — stačí, že objekt má metodu <code>plocha()</code>.</div>
+    <pre><code>from abc import ABC, abstractmethod
+import math
+
+class Tvar(ABC):
+    @abstractmethod
+    def plocha(self) -&gt; float: pass
+
+    @abstractmethod
+    def obvod(self) -&gt; float: pass
+
+    def popis(self):
+        return f"{type(self).__name__}: plocha={self.plocha():.2f}, obvod={self.obvod():.2f}"
+
+class Kruh(Tvar):
+    def __init__(self, r): self.r = r
+    def plocha(self): return math.pi * self.r ** 2
+    def obvod(self): return 2 * math.pi * self.r
+
+class Obdelnik(Tvar):
+    def __init__(self, a, b): self.a, self.b = a, b
+    def plocha(self): return self.a * self.b
+    def obvod(self): return 2 * (self.a + self.b)
+
+class Trojuhelnik(Tvar):
+    def __init__(self, a, v): self.a, self.v = a, v
+    def plocha(self): return 0.5 * self.a * self.v
+    def obvod(self): return 3 * self.a  # zjednoduseno
+
+# Polymorfismus — stejná funkce, různé chování
+tvary = [Kruh(5), Obdelnik(4, 6), Trojuhelnik(3, 4)]
+for t in tvary:
+    print(t.popis())
+# Kruh: plocha=78.54, obvod=31.42
+# Obdelnik: plocha=24.00, obvod=20.00
+# Trojuhelnik: plocha=6.00, obvod=9.00
+</code></pre>
+
+    <h2>4. Abstrakce</h2>
+    <p>Uživatel třídy vidí jen <strong>co objekt dělá</strong>, ne jak to dělá. Abstrakce se realizuje pomocí <strong>abstraktních tříd</strong> a <strong>rozhraní (interface)</strong>.</p>
+    <div class="note">
+        <strong>Abstraktní třída vs Interface:</strong><br>
+        <table>
+            <tr><th></th><th>Abstraktní třída</th><th>Interface</th></tr>
+            <tr><td>Může mít implementaci?</td><td>✅ Ano (konkrétní metody)</td><td>❌ Ne (jen signatury) — v Pythonu <code>ABC</code> s <code>@abstractmethod</code></td></tr>
+            <tr><td>Vícenásobná dědičnost?</td><td>Omezená (C#/Java: 1 třída)</td><td>✅ Ano (libovolně mnoho)</td></tr>
+            <tr><td>Kdy použít?</td><td>Sdílená implementace + přirozená hierarchie</td><td>Smlouva chování bez hierarchie</td></tr>
+        </table>
+    </div>
+    <div class="code-desc"><strong>Databázové připojení</strong> — <code>Database</code> je abstraktní třída definující kontrakt. Konkrétní implementace (<code>MySQL</code>, <code>SQLite</code>) skryjí detaily před kódem, který je volá.</div>
+    <pre><code>from abc import ABC, abstractmethod
+
+class Database(ABC):
+    """Abstraktni trida — definuje kontrakt"""
+    @abstractmethod
+    def connect(self, url: str): pass
+
+    @abstractmethod
+    def query(self, sql: str) -&gt; list: pass
+
+    def execute_safe(self, sql: str):   # konkretni sdilena metoda
+        if "DROP" in sql.upper():
+            raise PermissionError("DROP neni povolen!")
+        return self.query(sql)
+
+class MySQLDatabase(Database):
+    def connect(self, url): print(f"MySQL: pripojuji na {url}")
+    def query(self, sql): return [{"id": 1}]  # simulace
+
+class SQLiteDatabase(Database):
+    def connect(self, url): print(f"SQLite: oteviram {url}")
+    def query(self, sql): return [{"id": 2}]
+
+def inicializuj(db: Database, url: str):
+    db.connect(url)                          # nezajima nas typ
+    return db.execute_safe("SELECT * FROM users")
+
+db = MySQLDatabase()
+vysledky = inicializuj(db, "localhost:3306")
+# Stejnou funkci lze zavolat s SQLiteDatabase bez zmeny kodu
+</code></pre>
+
+    <div class="section-divider section-vztahy">🔗 ČÁST 2 — Vztahy mezi objekty</div>
+
     <h2>Vztahy mezi třídami</h2>
     <table>
-        <tr><th>Vztah</th><th>Popis</th><th>Příklad</th></tr>
-        <tr><td><strong>Asociace</strong></td><td>Volný vztah, mohou existovat nezávisle</td><td>Učitel ↔ Student</td></tr>
-        <tr><td><strong>Agregace</strong></td><td>"has-a", celek vlastní části (mohou existovat samostatně)</td><td>Tým → Hráči</td></tr>
-        <tr><td><strong>Kompozice</strong></td><td>"has-a", silná — části neexistují bez celku</td><td>Dům → Místnosti</td></tr>
+        <tr><th>Vztah</th><th>Typ vazby</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><strong>Asociace</strong></td><td>„používá"</td><td>Volný vztah, objekty existují nezávisle, jeden zná druhý</td><td>Učitel ↔ Student</td></tr>
+        <tr><td><strong>Závislost</strong></td><td>„závisí krátkodobě"</td><td>Objekt použije jiný jako parametr metody</td><td>Tiskárna → Dokument (jen při tisku)</td></tr>
+        <tr><td><strong>Agregace ◇</strong></td><td>„has-a" slabá</td><td>Celek obsahuje části, <em>části mohou existovat bez celku</em></td><td>Tým ◇ Hráči</td></tr>
+        <tr><td><strong>Kompozice ◆</strong></td><td>„has-a" silná</td><td>Celek vlastní části, <em>části zaniknou spolu s celkem</em></td><td>Dům ◆ Místnosti</td></tr>
+        <tr><td><strong>Dědičnost</strong></td><td>„is-a"</td><td>Potomek je specializací rodiče</td><td>Pes is-a Zvíře</td></tr>
     </table>
+
+    <div class="code-desc"><strong>Agregace vs Kompozice</strong> — Motor (kompozice) vzniká uvnitř Auta a zanikne s ním. Řidič (agregace) existuje nezávisle — auto ho jen „zná", ale nevlastní.</div>
+    <pre><code>class Motor:
+    def __init__(self, typ): self.typ = typ
+    def nastartuj(self): print(f"Motor {self.typ}: vrr!")
+
+class Ridic:
+    def __init__(self, jmeno): self.jmeno = jmeno
+
+class Auto:
+    def __init__(self, znacka, motor_typ, ridic=None):
+        self.znacka = znacka
+        self.motor = Motor(motor_typ)  # KOMPOZICE: motor vytvoren uvnitr
+        self.ridic = ridic             # AGREGACE: predany zvenci
+
+ridic = Ridic("Alice")
+auto1 = Auto("Skoda", "1.6 TSI", ridic)
+auto2 = Auto("BMW", "2.0 TDI", ridic)   # stejny ridic muze ridit vice aut
+
+auto1.motor.nastartuj()
+print(f"{auto1.znacka} ridi {auto1.ridic.jmeno}")
+
+del auto1        # motor zanikne s autem (kompozice)
+print(ridic.jmeno)  # "Alice" — ridic stale existuje (agregace)
+</code></pre>
 
     <div class="section-divider section-solid">📐 ČÁST 3 — SOLID principy</div>
-    <h2>SOLID principy</h2>
+
+    <h2>SOLID — přehled</h2>
     <table>
-        <tr><th>Princip</th><th>Význam</th></tr>
-        <tr><td><strong>S</strong> — Single Responsibility</td><td>Třída má jednu zodpovědnost</td></tr>
-        <tr><td><strong>O</strong> — Open/Closed</td><td>Otevřeno pro rozšíření, uzavřeno pro modifikaci</td></tr>
-        <tr><td><strong>L</strong> — Liskov Substitution</td><td>Potomek musí být zaměnitelný za rodiče</td></tr>
-        <tr><td><strong>I</strong> — Interface Segregation</td><td>Více malých rozhraní místo jednoho velkého</td></tr>
-        <tr><td><strong>D</strong> — Dependency Inversion</td><td>Závisej na abstrakci, ne na implementaci</td></tr>
+        <tr><th>Písmeno</th><th>Princip</th><th>Jednou větou</th></tr>
+        <tr><td><strong>S</strong></td><td>Single Responsibility</td><td>Třída má <em>jednu</em> zodpovědnost, jeden důvod ke změně</td></tr>
+        <tr><td><strong>O</strong></td><td>Open/Closed</td><td>Otevřeno pro rozšíření, uzavřeno pro modifikaci existujícího kódu</td></tr>
+        <tr><td><strong>L</strong></td><td>Liskov Substitution</td><td>Potomek musí být použitelný kdekoliv, kde se očekává rodič</td></tr>
+        <tr><td><strong>I</strong></td><td>Interface Segregation</td><td>Více malých rozhraní je lepší než jedno velké „tlusté"</td></tr>
+        <tr><td><strong>D</strong></td><td>Dependency Inversion</td><td>Závisej na abstrakci, ne na konkrétní implementaci</td></tr>
     </table>
 
-    <h2>Ukázkový kód — Python</h2>
+    <h3>S — Single Responsibility Principle (SRP)</h3>
+    <p>Každá třída by měla mít <strong>pouze jeden důvod ke změně</strong>. Pokud třída řeší více věcí najednou (business logika + ukládání + výstup), je těžko testovatelná a změna jedné části ovlivní ostatní.</p>
+    <div class="code-desc">❌ <strong>Špatně</strong> — třída <code>Student</code> dělá tři věci najednou: drží data, ukládá se a tiskne report. ✅ <strong>Správně</strong> — každá zodpovědnost má vlastní třídu.</div>
+    <pre><code># ❌ SRP poruseno — Student toho dela prilis
+class StudentSpatne:
+    def __init__(self, jmeno, znamky):
+        self.jmeno = jmeno
+        self.znamky = znamky
+    def uloz_do_db(self): ...        # zodpovednost 1: databaze
+    def tisk_report(self): ...       # zodpovednost 2: output
+    def vypocitej_prumer(self): ...  # zodpovednost 3: vypocty
+
+# ✅ SRP dodrzeno — kazda trida jednu zodpovednost
+class Student:
+    def __init__(self, jmeno, znamky):
+        self.jmeno = jmeno
+        self.znamky = znamky
+    def prumer(self):
+        return sum(self.znamky) / len(self.znamky)
+
+class StudentRepository:
+    def uloz(self, student): ...     # jen databaze
+    def nacti(self, jmeno): ...
+
+class StudentReport:
+    def tiskni(self, student):       # jen vystup
+        print(f"{student.jmeno}: prumer {student.prumer():.1f}")
+</code></pre>
+
+    <h3>O — Open/Closed Principle (OCP)</h3>
+    <p>Kód by měl být <strong>otevřen pro rozšíření</strong> (nová funkčnost přidáním nové třídy), ale <strong>uzavřen pro modifikaci</strong> (existující kód měnit co nejméně). Místo <code>if/elif</code> použij polymorfismus.</p>
+    <div class="code-desc">❌ Každý nový formát exportu vyžaduje úpravu třídy. ✅ Nový formát = nová třída, existující kód beze změny.</div>
+    <pre><code># ❌ OCP poruseno — pri pridani noveho formatu upravujes ExporterSpatne
+class ExporterSpatne:
+    def exportuj(self, data, format):
+        if format == "csv": ...
+        elif format == "json": ...
+        elif format == "xml": ...   # kazde pridani = zmena teto tridy
+
+# ✅ OCP dodrzeno
+class Exporter(ABC):
+    @abstractmethod
+    def exportuj(self, data) -&gt; str: pass
+
+class CSVExporter(Exporter):
+    def exportuj(self, data): return ",".join(str(x) for x in data)
+
+class JSONExporter(Exporter):
+    def exportuj(self, data):
+        import json; return json.dumps(data)
+
+# Novy format = nova trida, ExportService se nemeni
+class ExportService:
+    def __init__(self, exporter: Exporter):
+        self.exporter = exporter
+    def zpracuj(self, data):
+        return self.exporter.exportuj(data)
+</code></pre>
+
+    <h3>L — Liskov Substitution Principle (LSP)</h3>
+    <p>Pokud je <code>B</code> potomkem <code>A</code>, pak všude kde se používá <code>A</code>, lze použít <code>B</code> bez poruchy chování. Potomek nesmí <strong>zpřísnit podmínky</strong> ani <strong>zrušit chování</strong> rodiče.</p>
+    <div class="code-desc">Klasický příklad porušení: <code>Ctverec extends Obdelnik</code> — čtverec nemůže mít nezávisle nastavitelné strany, takže se chová jinak než obdélník.</div>
+    <pre><code># ❌ LSP poruseno — Ctverec nespravne dedi od Obdelniku
+class ObdelnikSpatne:
+    def set_sirka(self, s): self.sirka = s
+    def set_vyska(self, v): self.vyska = v
+    def plocha(self): return self.sirka * self.vyska
+
+class CtverecSpatne(ObdelnikSpatne):
+    def set_sirka(self, s):       # porusuje LSP: nastavuje OBE strany
+        self.sirka = s
+        self.vyska = s
+
+# Test: ocekavame ze set_sirka a set_vyska jsou nezavisle
+r = ObdelnikSpatne(); r.set_sirka(4); r.set_vyska(5)
+# Pro CtverecSpatne by plocha = 25 (ne 20) — surprising behavior!
+
+# ✅ LSP spravne — oddelene abstrakce
+class Tvar(ABC):
+    @abstractmethod
+    def plocha(self): pass
+
+class Obdelnik(Tvar):
+    def __init__(self, s, v): self.sirka, self.vyska = s, v
+    def plocha(self): return self.sirka * self.vyska
+
+class Ctverec(Tvar):           # vlastni hierachie, nezdedi od Obdelnik
+    def __init__(self, a): self.a = a
+    def plocha(self): return self.a ** 2
+</code></pre>
+
+    <h3>I — Interface Segregation Principle (ISP)</h3>
+    <p>Klienti by neměli být nuceni záviset na metodách, které nepoužívají. Raději <strong>více malých rozhraní</strong> než jedno velké „super-rozhraní".</p>
+    <pre><code># ❌ ISP poruseno — Tiskarna musi implementovat i fax a skener
+class MultifunkcniZarizeniSpatne(ABC):
+    @abstractmethod
+    def tiskni(self): pass
+    @abstractmethod
+    def skenuj(self): pass
+    @abstractmethod
+    def faxuj(self): pass
+
+class StavaTiskarna(MultifunkcniZarizeniSpatne):
+    def tiskni(self): print("Tisknu")
+    def skenuj(self): raise NotImplementedError   # ❌ vynucene!
+    def faxuj(self):  raise NotImplementedError   # ❌ vynucene!
+
+# ✅ ISP spravne — male oddelene interfacy
+class Tiskatelny(ABC):
+    @abstractmethod
+    def tiskni(self): pass
+
+class Skenovatelny(ABC):
+    @abstractmethod
+    def skenuj(self): pass
+
+class JenTiskarna(Tiskatelny):       # implementuje jen to, co umi
+    def tiskni(self): print("Tisknu")
+
+class MultiFunkce(Tiskatelny, Skenovatelny):   # kombinuje dle potreby
+    def tiskni(self): print("Tisknu")
+    def skenuj(self): print("Skenuji")
+</code></pre>
+
+    <h3>D — Dependency Inversion Principle (DIP)</h3>
+    <p>Vysokoúrovňové moduly by neměly záviset na nízkoúrovňových. Oba by měli záviset na <strong>abstrakcích</strong>. Abstrakce by neměly záviset na detailech — detaily závisí na abstrakcích.</p>
+    <div class="code-desc">Prakticky: injektujte závislosti přes konstruktor (Dependency Injection), ne vytvářejte instance přímo uvnitř třídy.</div>
+    <pre><code># ❌ DIP poruseno — vysokourovnovy modul zavisi na konkretni DB
+class ObjednavkaService:
+    def __init__(self):
+        self.db = MySQLDatabase()    # ❌ primo zavislost na MySQL
+
+# ✅ DIP spravne — zavisi na abstrakci
+class UlozisteSpatne(ABC):
+    @abstractmethod
+    def uloz(self, data): pass
+    @abstractmethod
+    def nacti(self, id): pass
+
+class MySQLUloziste(UlozisteSpatne):
+    def uloz(self, data): print(f"MySQL: ukladam {data}")
+    def nacti(self, id):  return {"id": id, "zdroj": "MySQL"}
+
+class InMemoryUloziste(UlozisteSpatne):  # pro testy
+    def __init__(self): self._data = {}
+    def uloz(self, data): self._data[data["id"]] = data
+    def nacti(self, id):  return self._data.get(id)
+
+class ObjednavkaService:
+    def __init__(self, uloziste: UlozisteSpatne):  # ✅ abstrakce
+        self.uloziste = uloziste   # Dependency Injection
+
+    def vytvor(self, objednavka):
+        self.uloziste.uloz(objednavka)
+
+# Produkce:
+svc = ObjednavkaService(MySQLUloziste())
+# Testy:
+svc_test = ObjednavkaService(InMemoryUloziste())
+</code></pre>
+
+    <h2>Shrnutí — co si zapamatovat</h2>
+    <div class="note">
+        <strong>4 pilíře OOP:</strong>
+        <ul>
+            <li><strong>Zapouzdření</strong> — soukromá data, veřejné metody. „Vím co umíš, ne jak to děláš uvnitř."</li>
+            <li><strong>Dědičnost</strong> — potomek je specializací rodiče (IS-A). Vždy volej <code>super().__init__()</code>.</li>
+            <li><strong>Polymorfismus</strong> — stejné volání, různý výsledek. Základ pro generický kód.</li>
+            <li><strong>Abstrakce</strong> — skryj složitost za rozhraní. Abstraktní třídy = sdílená implementace + kontrakt.</li>
+        </ul>
+        <strong>Vztahy:</strong> IS-A = dědičnost &nbsp;|&nbsp; HAS-A slabé = agregace (◇) &nbsp;|&nbsp; HAS-A silné = kompozice (◆)<br>
+        <strong>SOLID:</strong> S = jedna zodpovědnost &nbsp;|&nbsp; O = rozšiřuj, neměň &nbsp;|&nbsp; L = potomek neporuší chování &nbsp;|&nbsp; I = malá rozhraní &nbsp;|&nbsp; D = závisej na abstrakci
+    </div>
+
+    <h2>Ukázkový kód — kompletní příklad</h2>
 
     <div class="code-desc"><strong>Zapouzdření</strong> — <code>BankovniUcet</code> skrývá zůstatek (<code>__zustatek</code> = name mangling). Přístup jen přes metody <code>vloz()</code>, <code>vyber()</code> a property <code>zustatek</code>.</div>
     <pre><code>class BankovniUcet:
