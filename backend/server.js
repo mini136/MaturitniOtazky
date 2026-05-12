@@ -419,7 +419,8 @@ app.post("/api/explain", async (req, res) => {
           role: "user",
           content:
             (pageTitle ? "Stránka: " + pageTitle + "\n\n" : "") +
-            "Vybraný text: " + text,
+            "Vybraný text: " +
+            text,
         },
       ],
     });

@@ -440,8 +440,8 @@
             aiResult.score >= 80
               ? "ok"
               : aiResult.score >= 40
-              ? "partial"
-              : "fail";
+                ? "partial"
+                : "fail";
           aiFb.innerHTML =
             '<div class="code-ai-result ' +
             cls +
@@ -478,8 +478,7 @@
     return function evaluate() {
       var fb = qEl.querySelector(".q-feedback");
       if (!aiResult) {
-        fb.textContent =
-          "Nejprve zkontroluj kód tlačítkem 🤖 výše.";
+        fb.textContent = "Nejprve zkontroluj kód tlačítkem 🤖 výše.";
         return {
           got: 0,
           max: 10,

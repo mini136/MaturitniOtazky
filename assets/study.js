@@ -502,15 +502,18 @@
       "</div>";
     document.body.appendChild(panel);
 
-    panel.querySelector("#explain-close").addEventListener("click", function () {
-      panel.classList.remove("open");
-      tooltip.classList.remove("visible");
-    });
+    panel
+      .querySelector("#explain-close")
+      .addEventListener("click", function () {
+        panel.classList.remove("open");
+        tooltip.classList.remove("visible");
+      });
 
     // --- floating tooltip ---
     var tooltip = document.createElement("div");
     tooltip.id = "explain-tooltip";
-    tooltip.innerHTML = '<button type="button" id="explain-btn">💡 Vysvětlit</button>';
+    tooltip.innerHTML =
+      '<button type="button" id="explain-btn">💡 Vysvětlit</button>';
     document.body.appendChild(tooltip);
 
     var lastSelection = "";
@@ -550,76 +553,104 @@
       }
     });
 
-    tooltip.querySelector("#explain-btn").addEventListener("click", function () {
-      tooltip.classList.remove("visible");
-      panel.classList.add("open");
+    tooltip
+      .querySelector("#explain-btn")
+      .addEventListener("click", function () {
+        tooltip.classList.remove("visible");
+        panel.classList.add("open");
 
-      var body = document.getElementById("explain-body");
-      body.innerHTML = '<div class="explain-loading">⏳ ChatGPT přemýšlí…</div>';
+        var body = document.getElementById("explain-body");
+        body.innerHTML =
+          '<div class="explain-loading">⏳ ChatGPT přemýšlí…</div>';
 
-      var pageTitle = (document.querySelector("h1") || document.querySelector("title") || { textContent: document.title }).textContent.trim();
+        var pageTitle = (
+          document.querySelector("h1") ||
+          document.querySelector("title") || { textContent: document.title }
+        ).textContent.trim();
 
-      fetch("/api/explain", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text: lastSelection.slice(0, 1500),
-          pageTitle: pageTitle.slice(0, 200),
-        }),
-      })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (data.error) throw new Error(data.error);
-          var exp = data.explanation || "";
-          body.innerHTML =
-            '<div class="explain-query">' +
-            '<strong>Vybraný text:</strong><br>' +
-            '<em class="explain-quote">' + safeText(lastSelection.slice(0, 200)) + (lastSelection.length > 200 ? "…" : "") + "</em>" +
-            "</div>" +
-            '<div class="explain-answer">' + formatExplanation(exp) + "</div>" +
-            '<button type="button" class="explain-more-btn" id="explain-more">🔁 Vysvětlit jinak</button>';
-
-          document.getElementById("explain-more").addEventListener("click", function () {
-            body.innerHTML = '<div class="explain-loading">⏳ Hledám jiné vysvětlení…</div>';
-            fetch("/api/explain", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                text: lastSelection.slice(0, 1500),
-                pageTitle: pageTitle.slice(0, 200),
-                rephrase: true,
-              }),
-            })
-              .then(function (r) { return r.json(); })
-              .then(function (d) {
-                if (d.error) throw new Error(d.error);
-                body.innerHTML =
-                  '<div class="explain-query"><strong>Vybraný text:</strong><br><em class="explain-quote">' +
-                  safeText(lastSelection.slice(0, 200)) + "</em></div>" +
-                  '<div class="explain-answer">' + formatExplanation(d.explanation || "") + "</div>";
-              })
-              .catch(function () {
-                body.innerHTML = '<div class="explain-error">Chyba při komunikaci s AI. Zkus to znovu.</div>';
-              });
-          });
+        fetch("/api/explain", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: lastSelection.slice(0, 1500),
+            pageTitle: pageTitle.slice(0, 200),
+          }),
         })
-        .catch(function () {
-          body.innerHTML = '<div class="explain-error">Chyba při komunikaci s AI. Zkus to znovu.</div>';
-        });
-    });
+          .then(function (r) {
+            return r.json();
+          })
+          .then(function (data) {
+            if (data.error) throw new Error(data.error);
+            var exp = data.explanation || "";
+            body.innerHTML =
+              '<div class="explain-query">' +
+              "<strong>Vybraný text:</strong><br>" +
+              '<em class="explain-quote">' +
+              safeText(lastSelection.slice(0, 200)) +
+              (lastSelection.length > 200 ? "…" : "") +
+              "</em>" +
+              "</div>" +
+              '<div class="explain-answer">' +
+              formatExplanation(exp) +
+              "</div>" +
+              '<button type="button" class="explain-more-btn" id="explain-more">🔁 Vysvětlit jinak</button>';
+
+            document
+              .getElementById("explain-more")
+              .addEventListener("click", function () {
+                body.innerHTML =
+                  '<div class="explain-loading">⏳ Hledám jiné vysvětlení…</div>';
+                fetch("/api/explain", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    text: lastSelection.slice(0, 1500),
+                    pageTitle: pageTitle.slice(0, 200),
+                    rephrase: true,
+                  }),
+                })
+                  .then(function (r) {
+                    return r.json();
+                  })
+                  .then(function (d) {
+                    if (d.error) throw new Error(d.error);
+                    body.innerHTML =
+                      '<div class="explain-query"><strong>Vybraný text:</strong><br><em class="explain-quote">' +
+                      safeText(lastSelection.slice(0, 200)) +
+                      "</em></div>" +
+                      '<div class="explain-answer">' +
+                      formatExplanation(d.explanation || "") +
+                      "</div>";
+                  })
+                  .catch(function () {
+                    body.innerHTML =
+                      '<div class="explain-error">Chyba při komunikaci s AI. Zkus to znovu.</div>';
+                  });
+              });
+          })
+          .catch(function () {
+            body.innerHTML =
+              '<div class="explain-error">Chyba při komunikaci s AI. Zkus to znovu.</div>';
+          });
+      });
   }
 
   function formatExplanation(text) {
     // Basic markdown-ish: **bold**, newlines -> paragraphs
     var safe = safeText(text);
     safe = safe.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-    safe = safe.replace(/`(.+?)`/g, '<code style="background:#f1f5f9;padding:1px 5px;border-radius:3px;font-size:.9em">$1</code>');
+    safe = safe.replace(
+      /`(.+?)`/g,
+      '<code style="background:#f1f5f9;padding:1px 5px;border-radius:3px;font-size:.9em">$1</code>',
+    );
     var paras = safe.split(/\n{2,}/);
-    return paras.map(function (p) {
-      var trimmed = p.trim();
-      if (!trimmed) return "";
-      return "<p>" + trimmed.replace(/\n/g, "<br>") + "</p>";
-    }).join("");
+    return paras
+      .map(function (p) {
+        var trimmed = p.trim();
+        if (!trimmed) return "";
+        return "<p>" + trimmed.replace(/\n/g, "<br>") + "</p>";
+      })
+      .join("");
   }
 
   document.addEventListener("DOMContentLoaded", function () {
