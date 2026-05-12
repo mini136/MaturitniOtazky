@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď ACID vlastnost k jejímu popisu:",
       "pairs": [
-        ["Atomicity", "Transakce je celá nebo vůbec"],
-        ["Consistency", "Data zůstanou v konzistentním stavu"],
-        ["Isolation", "Transakce se navzájem neovlivňují"],
-        ["Durability", "Potvrzená data přežijí výpadek systému"]
+        [
+          "Atomicity",
+          "Transakce je celá nebo vůbec"
+        ],
+        [
+          "Consistency",
+          "Data zůstanou v konzistentním stavu"
+        ],
+        [
+          "Isolation",
+          "Transakce se navzájem neovlivňují"
+        ],
+        [
+          "Durability",
+          "Potvrzená data přežijí výpadek systému"
+        ]
       ]
     },
     {
@@ -22,16 +34,32 @@
       "type": "fill",
       "prompt": "Doplň bezpečnostní pojmy:",
       "text": "{{Autentizace}} ověřuje identitu uživatele (kdo jsi?), zatímco {{autorizace}} ověřuje oprávnění (co smíš?). Hesla by se měla ukládat jako hash s náhodným {{saltem}}, nikdy v plaintextu.",
-      "answers": ["Autentizace", "autorizace", "saltem"]
+      "answers": [
+        "Autentizace",
+        "autorizace",
+        "saltem"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď bezpečnostní útok k jeho obraně:",
       "pairs": [
-        ["SQL Injection", "Parametrizované dotazy"],
-        ["XSS (Cross-Site Scripting)", "Escapování výstupu"],
-        ["CSRF (Cross-Site Request Forgery)", "CSRF tokeny"],
-        ["Brute Force útok na hesla", "Rate limiting a account lockout"]
+        [
+          "SQL Injection",
+          "Parametrizované dotazy"
+        ],
+        [
+          "XSS (Cross-Site Scripting)",
+          "Escapování výstupu"
+        ],
+        [
+          "CSRF (Cross-Site Request Forgery)",
+          "CSRF tokeny"
+        ],
+        [
+          "Brute Force útok na hesla",
+          "Rate limiting a account lockout"
+        ]
       ]
     },
     {
@@ -48,7 +76,28 @@
     {
       "type": "open",
       "prompt": "Vysvětli strukturu try/except/else/finally v Pythonu. Kdy se provede blok 'else' a kdy 'finally'?",
-      "keywords": ["výjimka", "else", "finally", "bez chyby", "vždy", "cleanup"]
+      "keywords": [
+        "výjimka",
+        "else",
+        "finally",
+        "bez chyby",
+        "vždy",
+        "cleanup"
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu pro hashování hesel a bezpečné SQL dotazy:",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "import {{hashlib}}\nimport {{secrets}}\nimport sqlite3\n\n# Hashování hesla se solí\ndef hash_password(password: str) -> tuple[str, str]:\n    salt = secrets.{{token_hex}}(16)\n    pwd_hash = hashlib.{{sha256}}((salt + password).encode()).{{hexdigest}}()\n    return salt, pwd_hash\n\ndef verify_password(password: str, salt: str, stored_hash: str) -> bool:\n    pwd_hash = hashlib.sha256(({{salt}} + password).encode()).hexdigest()\n    return {{secrets}}.compare_digest(pwd_hash, stored_hash)\n\n# Bezpečný parametrizovaný SQL dotaz\ndef get_user(conn, username: str):\n    cursor = conn.{{cursor}}()\n    # NIKDY: f\"SELECT * FROM users WHERE name='{username}'\"  ← SQL injection!\n    cursor.execute(\"SELECT * FROM users WHERE name = ?\", ({{username}},))\n    return cursor.{{fetchone}}()"
+        },
+        {
+          "lang": "JavaScript (Node.js)",
+          "code": "const {{crypto}} = require('crypto');\nconst db = require('./db');   // parameterized query wrapper\n\n// Hashování hesla\nfunction hashPassword(password) {\n    const salt = crypto.{{randomBytes}}(16).toString('hex');\n    const hash = crypto.{{createHmac}}('sha256', salt)\n                       .update({{password}})\n                       .digest('hex');\n    return { salt, {{hash}} };\n}\n\nfunction verifyPassword(password, salt, storedHash) {\n    const hash = crypto.createHmac('sha256', {{salt}})\n                       .update(password)\n                       .digest('{{hex}}');\n    return crypto.{{timingSafeEqual}}(Buffer.from(hash), Buffer.from(storedHash));\n}\n\n// Bezpečný parametrizovaný dotaz\nasync function getUser(username) {\n    // Nikdy: `SELECT * FROM users WHERE name='${username}'`\n    return db.query('SELECT * FROM users WHERE name = ?', [{{username}}]);\n}"
+        }
+      ]
     }
   ]
 }

@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď aktivační funkci k její vlastnosti:",
       "pairs": [
-        ["ReLU — max(0, x)", "Nejčastější ve skrytých vrstvách, řeší vanishing gradient"],
-        ["Sigmoid — 1/(1+e⁻ˣ)", "Výstupní vrstva pro binární klasifikaci, rozsah (0,1)"],
-        ["Softmax", "Výstupní vrstva pro multi-class, pravděpodobnostní rozložení"],
-        ["Tanh", "Rozsah (-1, 1), používaná ve skrytých vrstvách"]
+        [
+          "ReLU — max(0, x)",
+          "Nejčastější ve skrytých vrstvách, řeší vanishing gradient"
+        ],
+        [
+          "Sigmoid — 1/(1+e⁻ˣ)",
+          "Výstupní vrstva pro binární klasifikaci, rozsah (0,1)"
+        ],
+        [
+          "Softmax",
+          "Výstupní vrstva pro multi-class, pravděpodobnostní rozložení"
+        ],
+        [
+          "Tanh",
+          "Rozsah (-1, 1), používaná ve skrytých vrstvách"
+        ]
       ]
     },
     {
@@ -26,7 +38,12 @@
       "type": "fill",
       "prompt": "Doplň pojmy architektury neuronové sítě:",
       "text": "Vstupní vrstva má počet neuronů rovný počtu {{příznaků}}. {{Skryté}} vrstvy extrahují příznaky z dat. Perceptron je nejjednodušší neuronová síť s {{jedním}} neuronem. Pro řešení nelineárních problémů jako XOR potřebujeme minimálně {{dvouvrstvou}} síť.",
-      "answers": ["příznaků", "Skryté", "jedním", "dvouvrstvou"]
+      "answers": [
+        "příznaků",
+        "Skryté",
+        "jedním",
+        "dvouvrstvou"
+      ]
     },
     {
       "type": "trueFalse",
@@ -38,7 +55,14 @@
     {
       "type": "open",
       "prompt": "Vysvětli princip backpropagation a proč je důležitý pro trénování neuronových sítí.",
-      "keywords": ["gradient", "řetězové pravidlo", "chain rule", "zpětná propagace", "aktualizace vah", "loss"]
+      "keywords": [
+        "gradient",
+        "řetězové pravidlo",
+        "chain rule",
+        "zpětná propagace",
+        "aktualizace vah",
+        "loss"
+      ]
     },
     {
       "type": "trueFalse",
@@ -46,6 +70,16 @@
       "statement": "Softmax funkce zajistí, že součet výstupních pravděpodobností všech tříd je roven 1.",
       "answer": true,
       "explanation": "Softmax normalizuje vektor logitů tak, že každý prvek je eˣⁱ / Σeˣʲ. Výsledkem jsou hodnoty v rozsahu (0,1), jejichž součet je přesně 1, což odpovídá pravděpodobnostnímu rozložení přes třídy."
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu pro tvorbu neuronové sítě v Keras/TensorFlow:",
+      "variants": [
+        {
+          "lang": "Python (Keras)",
+          "code": "import tensorflow as {{tf}}\nfrom tensorflow.keras import {{layers}}, models\nfrom tensorflow.keras.callbacks import EarlyStopping\n\n# Definice modelu\nmodel = models.{{Sequential}}([\n    layers.Dense(128, activation='{{relu}}', input_shape=(X_train.shape[1],)),\n    layers.{{Dropout}}(0.3),\n    layers.Dense(64, activation='relu'),\n    layers.Dropout({{0.2}}),\n    layers.Dense(1, activation='{{sigmoid}}')   # binární klasifikace\n])\n\n# Kompilace\nmodel.{{compile}}(\n    optimizer='adam',\n    loss='binary_{{crossentropy}}',\n    metrics=['{{accuracy}}']\n)\n\n# Trénink s early stopping\nes = EarlyStopping(monitor='val_loss', patience={{5}}, restore_best_weights=True)\nhistory = model.{{fit}}(\n    X_train, y_train,\n    validation_split={{0.2}},\n    epochs=100,\n    batch_size=32,\n    callbacks=[{{es}}]\n)\n\n# Vyhodnocení\nloss, acc = model.{{evaluate}}(X_test, y_test)\nprint(f\"Test acc: {{{acc}}:.3f}\")"
+        }
+      ]
     }
   ]
 }

@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď Scrum roli k její odpovědnosti:",
       "pairs": [
-        ["Product Owner", "Definuje priority a spravuje Product Backlog"],
-        ["Scrum Master", "Odstraňuje překážky a facilituje procesy"],
-        ["Dev Team", "Implementace — tým 3–9 lidí"],
-        ["Stakeholder", "Zadavatel požadavků, účastní se Sprint Review"]
+        [
+          "Product Owner",
+          "Definuje priority a spravuje Product Backlog"
+        ],
+        [
+          "Scrum Master",
+          "Odstraňuje překážky a facilituje procesy"
+        ],
+        [
+          "Dev Team",
+          "Implementace — tým 3–9 lidí"
+        ],
+        [
+          "Stakeholder",
+          "Zadavatel požadavků, účastní se Sprint Review"
+        ]
       ]
     },
     {
@@ -34,21 +46,58 @@
       "type": "fill",
       "prompt": "Doplň pojmy o Kanban a CI/CD:",
       "text": "Kanban používá vizuální tabuli a omezuje rozpracované úkoly pomocí {{WIP limitu}}. CI znamená {{Continuous Integration}} — automatický build a testy při každém commitu. CD znamená {{Continuous Delivery}} — automatické nasazení do produkce.",
-      "answers": ["WIP limitu", "Continuous Integration", "Continuous Delivery"]
+      "answers": [
+        "WIP limitu",
+        "Continuous Integration",
+        "Continuous Delivery"
+      ]
     },
     {
       "type": "open",
       "prompt": "Porovnej Scrum a Kanban. Jaké jsou hlavní rozdíly v přístupu k práci?",
-      "keywords": ["sprint", "iterace", "WIP limit", "continuous flow", "role", "ceremonie"]
+      "keywords": [
+        "sprint",
+        "iterace",
+        "WIP limit",
+        "continuous flow",
+        "role",
+        "ceremonie"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď Scrum ceremonii k jejímu účelu:",
       "pairs": [
-        ["Sprint Planning", "Výběr úkolů z backlogu do aktuálního sprintu"],
-        ["Daily Standup", "15min denní synchronizace týmu"],
-        ["Sprint Review", "Prezentace (demo) výsledků sprintu"],
-        ["Sprint Retrospective", "Reflexe — co zlepšit v dalším sprintu"]
+        [
+          "Sprint Planning",
+          "Výběr úkolů z backlogu do aktuálního sprintu"
+        ],
+        [
+          "Daily Standup",
+          "15min denní synchronizace týmu"
+        ],
+        [
+          "Sprint Review",
+          "Prezentace (demo) výsledků sprintu"
+        ],
+        [
+          "Sprint Retrospective",
+          "Reflexe — co zlepšit v dalším sprintu"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu demonstrující TDD cyklus (Red-Green-Refactor):",
+      "variants": [
+        {
+          "lang": "Python (unittest TDD)",
+          "code": "import {{unittest}}\n\n# 1. RED — napíšeme test, který selže\nclass TestCalculator({{unittest}}.TestCase):\n    def setUp(self):\n        self.calc = {{Calculator}}()\n\n    def test_add(self):\n        self.{{assertEqual}}(self.calc.add(2, 3), 5)\n\n    def test_divide_by_zero(self):\n        with self.{{assertRaises}}(ValueError):\n            self.calc.divide(10, {{0}})\n\n# 2. GREEN — minimální implementace aby testy prošly\nclass {{Calculator}}:\n    def add(self, a, b):\n        return {{a}} + b\n    def divide(self, a, b):\n        if b == {{0}}: raise ValueError(\"Division by zero\")\n        return a / {{b}}\n\nif __name__ == \"__main__\":\n    unittest.{{main}}()"
+        },
+        {
+          "lang": "JavaScript (Jest TDD)",
+          "code": "// 1. RED — test selže (Calculator ještě neexistuje)\nconst { {{Calculator}} } = require('./calculator');\n\n{{describe}}('Calculator', () => {\n    let calc;\n    {{beforeEach}}(() => { calc = new Calculator(); });\n\n    {{test}}('adds two numbers', () => {\n        expect(calc.add(2, 3)).{{toBe}}(5);\n    });\n\n    test('throws on divide by zero', () => {\n        expect(() => calc.{{divide}}(10, 0)).{{toThrow}}('Division by zero');\n    });\n});\n\n// 2. GREEN — implementace\nclass {{Calculator}} {\n    add(a, b) { return {{a}} + b; }\n    divide(a, b) {\n        if (b === {{0}}) throw new Error('Division by zero');\n        return a / b;\n    }\n}\nmodule.{{exports}} = { Calculator };"
+        }
       ]
     }
   ]

@@ -5,17 +5,34 @@
       "type": "match",
       "prompt": "Přiřaď algoritmus k jeho hlavnímu použití:",
       "pairs": [
-        ["Lineární regrese", "Predikce spojité hodnoty (cena, teplota)"],
-        ["Logistická regrese", "Binární klasifikace pomocí sigmoid funkce"],
-        ["KNN", "Klasifikace podle K nejbližších sousedů"],
-        ["SVM", "Hledání optimální dělicí roviny mezi třídami"]
+        [
+          "Lineární regrese",
+          "Predikce spojité hodnoty (cena, teplota)"
+        ],
+        [
+          "Logistická regrese",
+          "Binární klasifikace pomocí sigmoid funkce"
+        ],
+        [
+          "KNN",
+          "Klasifikace podle K nejbližších sousedů"
+        ],
+        [
+          "SVM",
+          "Hledání optimální dělicí roviny mezi třídami"
+        ]
       ]
     },
     {
       "type": "fill",
       "prompt": "Doplň metriky klasifikace:",
       "text": "Precision se počítá jako TP / (TP + {{FP}}) a měří přesnost pozitivních predikcí. Recall se počítá jako TP / (TP + {{FN}}) a měří úplnost. {{F1}} Score je harmonický průměr Precision a Recall. Pro regresi se používá metrika {{MSE}} (střední kvadratická chyba).",
-      "answers": ["FP", "FN", "F1", "MSE"]
+      "answers": [
+        "FP",
+        "FN",
+        "F1",
+        "MSE"
+      ]
     },
     {
       "type": "order",
@@ -38,16 +55,49 @@
     {
       "type": "open",
       "prompt": "Vysvětli, jak funguje logistická regrese a proč se nazývá 'regrese', když řeší klasifikaci.",
-      "keywords": ["sigmoid", "pravděpodobnost", "práh 0.5", "binární", "lineární kombinace", "log-odds"]
+      "keywords": [
+        "sigmoid",
+        "pravděpodobnost",
+        "práh 0.5",
+        "binární",
+        "lineární kombinace",
+        "log-odds"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď metriku k situaci, kde je nejdůležitější:",
       "pairs": [
-        ["Precision", "Spam filtr — nechceme označit dobrý email jako spam"],
-        ["Recall", "Diagnostika rakoviny — nechceme přehlédnout nemocného"],
-        ["Accuracy", "Vyvážený dataset s podobným počtem tříd"],
-        ["R²", "Hodnocení kvality regresního modelu"]
+        [
+          "Precision",
+          "Spam filtr — nechceme označit dobrý email jako spam"
+        ],
+        [
+          "Recall",
+          "Diagnostika rakoviny — nechceme přehlédnout nemocného"
+        ],
+        [
+          "Accuracy",
+          "Vyvážený dataset s podobným počtem tříd"
+        ],
+        [
+          "R²",
+          "Hodnocení kvality regresního modelu"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu pro trénování a vyhodnocení modelu ML:",
+      "variants": [
+        {
+          "lang": "Python (sklearn)",
+          "code": "from sklearn.linear_model import {{LogisticRegression}}\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import ({{accuracy_score}}, classification_report,\n                             confusion_matrix, {{roc_auc_score}})\nfrom sklearn.model_selection import cross_val_score\n\n# Logistická regrese\nlr = LogisticRegression(max_iter={{1000}})\nlr.{{fit}}(X_train, y_train)\ny_pred_lr = lr.{{predict}}(X_test)\nprint(\"LR Accuracy:\", accuracy_score(y_test, {{y_pred_lr}}))\n\n# Random Forest\nrf = {{RandomForestClassifier}}(n_estimators=100, random_state=42)\nrf.fit(X_train, {{y_train}})\ny_pred_rf = rf.predict({{X_test}})\n\n# Vyhodnocení\nprint(classification_report(y_test, {{y_pred_rf}}))\nprint(\"Confusion matrix:\\n\", confusion_matrix(y_test, y_pred_rf))\nauc = roc_auc_score(y_test, rf.{{predict_proba}}(X_test)[:, 1])\nprint(\"AUC-ROC:\", {{auc}})\n\n# Křížová validace\nscores = cross_val_score(rf, X_train, y_train, cv={{5}})\nprint(\"CV mean:\", scores.{{mean}}())"
+        },
+        {
+          "lang": "Python (LinearRegression)",
+          "code": "from sklearn.linear_model import {{LinearRegression}}\nfrom sklearn.metrics import {{mean_squared_error}}, r2_score\nimport numpy as np\n\n# Trénink\nmodel = LinearRegression()\nmodel.{{fit}}(X_train, y_train)\n\n# Predikce\ny_pred = model.{{predict}}(X_test)\n\n# Vyhodnocení regrese\nmse  = mean_squared_error(y_test, {{y_pred}})\nrmse = np.{{sqrt}}(mse)\nr2   = r2_score(y_test, y_pred)\n\nprint(f\"RMSE: {{{rmse}}:.3f}\")\nprint(f\"R²:   {{{r2}}:.3f}\")\nprint(f\"Koeficienty: {model.{{coef_}}}\")\nprint(f\"Intercept:   {model.{{intercept_}}}\")"
+        }
       ]
     }
   ]

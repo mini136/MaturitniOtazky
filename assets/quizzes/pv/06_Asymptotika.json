@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď asymptotickou notaci k jejímu významu:",
       "pairs": [
-        ["O (Big-O)", "Horní mez — worst case (nejvýše)"],
-        ["Ω (Omega)", "Dolní mez — best case (alespoň)"],
-        ["Θ (Theta)", "Přesná mez — tight bound (přesně)"],
-        ["Amortizovaná složitost", "Průměr přes sérii operací"]
+        [
+          "O (Big-O)",
+          "Horní mez — worst case (nejvýše)"
+        ],
+        [
+          "Ω (Omega)",
+          "Dolní mez — best case (alespoň)"
+        ],
+        [
+          "Θ (Theta)",
+          "Přesná mez — tight bound (přesně)"
+        ],
+        [
+          "Amortizovaná složitost",
+          "Průměr přes sérii operací"
+        ]
       ]
     },
     {
@@ -35,21 +47,58 @@
       "type": "fill",
       "prompt": "Doplň typické složitosti algoritmů:",
       "text": "Binární vyhledávání má složitost {{O(log n)}}, protože v každém kroku půlí prohledávaný interval. Dva vnořené cykly přes pole dávají {{O(n²)}}. Merge Sort má ve všech případech {{O(n log n)}}.",
-      "answers": ["O(log n)", "O(n²)", "O(n log n)"]
+      "answers": [
+        "O(log n)",
+        "O(n²)",
+        "O(n log n)"
+      ]
     },
     {
       "type": "open",
       "prompt": "Co je amortizovaná složitost? Vysvětli na příkladu list.append() v Pythonu.",
-      "keywords": ["průměr", "série operací", "realokace", "O(1)", "O(n)", "zdvojnásobení"]
+      "keywords": [
+        "průměr",
+        "série operací",
+        "realokace",
+        "O(1)",
+        "O(n)",
+        "zdvojnásobení"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď operaci/algoritmus k její typické složitosti:",
       "pairs": [
-        ["Přístup k prvku pole indexem", "O(1)"],
-        ["Binární vyhledávání", "O(log n)"],
-        ["Bubble Sort (worst case)", "O(n²)"],
-        ["Naivní rekurzivní Fibonacci", "O(2ⁿ)"]
+        [
+          "Přístup k prvku pole indexem",
+          "O(1)"
+        ],
+        [
+          "Binární vyhledávání",
+          "O(log n)"
+        ],
+        [
+          "Bubble Sort (worst case)",
+          "O(n²)"
+        ],
+        [
+          "Naivní rekurzivní Fibonacci",
+          "O(2ⁿ)"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části algoritmů s různou časovou složitostí:",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "# O(1) - konstantní přístup k prvku\ndef get_first(arr):\n    return arr[{{0}}]\n\n# O(log n) - binární vyhledávání\ndef binary_search(arr, target):\n    lo, hi = 0, len(arr) - {{1}}\n    while lo <= {{hi}}:\n        mid = (lo + {{hi}}) // 2\n        if arr[mid] == {{target}}: return mid\n        elif arr[mid] < target: lo = {{mid}} + 1\n        else: hi = mid - {{1}}\n    return -1\n\n# O(n) - lineární průchod\ndef linear_sum(arr):\n    total = {{0}}\n    for x in arr: total += {{x}}\n    return total\n\n# O(n²) - vnořené smyčky\ndef bubble_sort(arr):\n    n = len({{arr}})\n    for i in range(n):\n        for j in range(0, n - i - {{1}}):\n            if arr[j] > arr[j+{{1}}]:\n                arr[j], arr[j+1] = arr[{{j}}+1], arr[j]"
+        },
+        {
+          "lang": "JavaScript",
+          "code": "// O(log n) - binární vyhledávání\nfunction binarySearch(arr, target) {\n    let lo = 0, hi = arr.{{length}} - 1;\n    while (lo <= {{hi}}) {\n        const mid = Math.{{floor}}((lo + hi) / 2);\n        if (arr[mid] === target) return {{mid}};\n        else if (arr[mid] < target) lo = mid + {{1}};\n        else hi = {{mid}} - 1;\n    }\n    return {{-1}};\n}\n\n// O(n log n) - merge sort\nfunction mergeSort(arr) {\n    if (arr.length <= {{1}}) return arr;\n    const mid = Math.floor(arr.{{length}} / 2);\n    const left = mergeSort(arr.{{slice}}(0, mid));\n    const right = mergeSort(arr.slice({{mid}}));\n    return merge(left, {{right}});\n}"
+        }
       ]
     }
   ]

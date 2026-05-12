@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď paměťový segment k jeho popisu:",
       "pairs": [
-        ["Stack", "Lokální proměnné, LIFO, automatická alokace"],
-        ["Heap", "Dynamicky alokovaná paměť, spravuje GC nebo programátor"],
-        ["Data segment", "Globální a statické proměnné"],
-        ["Code segment", "Strojový kód programu (read-only)"]
+        [
+          "Stack",
+          "Lokální proměnné, LIFO, automatická alokace"
+        ],
+        [
+          "Heap",
+          "Dynamicky alokovaná paměť, spravuje GC nebo programátor"
+        ],
+        [
+          "Data segment",
+          "Globální a statické proměnné"
+        ],
+        [
+          "Code segment",
+          "Strojový kód programu (read-only)"
+        ]
       ]
     },
     {
@@ -22,32 +34,79 @@
       "type": "fill",
       "prompt": "Doplň klíčové pojmy o garbage collectoru:",
       "text": "Algoritmus {{Mark & Sweep}} nejprve označí dosažitelné objekty a poté uvolní neoznačené. Python používá {{Reference Counting}}, který počítá počet referencí a při dosažení nuly objekt uvolní. Problémem tohoto přístupu jsou {{cyklické reference}}, které řeší speciální modul gc.",
-      "answers": ["Mark & Sweep", "Reference Counting", "cyklické reference"]
+      "answers": [
+        "Mark & Sweep",
+        "Reference Counting",
+        "cyklické reference"
+      ]
     },
     {
       "type": "order",
       "prompt": "Seřaď generace GC v .NET od nejčastěji kontrolované po nejméně:",
-      "items": ["Gen0 — nově vytvořené objekty", "Gen1 — přežily jednu kolekci", "Gen2 — dlouhodobé objekty"]
+      "items": [
+        "Gen0 — nově vytvořené objekty",
+        "Gen1 — přežily jednu kolekci",
+        "Gen2 — dlouhodobé objekty"
+      ]
     },
     {
       "type": "open",
       "prompt": "Vysvětli rozdíl mezi operátory 'is' a '==' v Pythonu a uveď příklad, kdy dají různé výsledky.",
-      "keywords": ["identita", "reference", "hodnota", "id", "objekt"]
+      "keywords": [
+        "identita",
+        "reference",
+        "hodnota",
+        "id",
+        "objekt"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď jazyk ke způsobu správy paměti:",
       "pairs": [
-        ["C/C++", "Manuální správa (malloc/free, new/delete)"],
-        ["Java", "Generační GC v JVM"],
-        ["C#", "Generační GC v .NET CLR"],
-        ["Python", "Reference counting + cyklický GC"]
+        [
+          "C/C++",
+          "Manuální správa (malloc/free, new/delete)"
+        ],
+        [
+          "Java",
+          "Generační GC v JVM"
+        ],
+        [
+          "C#",
+          "Generační GC v .NET CLR"
+        ],
+        [
+          "Python",
+          "Reference counting + cyklický GC"
+        ]
       ]
     },
     {
       "type": "open",
       "prompt": "Co je IDisposable vzor v C# a proč nestačí spoléhat jen na GC? Kdy je potřeba deterministické uvolnění?",
-      "keywords": ["using", "Dispose", "unmanaged", "prostředky", "soubor", "spojení"]
+      "keywords": [
+        "using",
+        "Dispose",
+        "unmanaged",
+        "prostředky",
+        "soubor",
+        "spojení"
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu pro práci se zásobníkem (Stack):",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "class {{Stack}}:\n    def __init__(self):\n        self.{{items}} = []\n    def push(self, val):\n        self.items.{{append}}(val)\n    def pop(self):\n        if self.{{is_empty}}():\n            raise IndexError(\"Stack is empty\")\n        return self.items.{{pop}}()\n    def peek(self):\n        return self.items[{{-1}}]\n    def is_empty(self):\n        return len(self.items) == {{0}}"
+        },
+        {
+          "lang": "JavaScript",
+          "code": "class {{Stack}} {\n    constructor() {\n        this.{{items}} = [];\n    }\n    push(val) {\n        this.items.{{push}}(val);\n    }\n    pop() {\n        if (this.{{isEmpty}}()) throw new Error(\"Stack is empty\");\n        return this.items.{{pop}}();\n    }\n    peek() {\n        return this.items[this.items.{{length}} - 1];\n    }\n    isEmpty() {\n        return this.items.length === {{0}};\n    }\n}"
+        }
+      ]
     }
   ]
 }

@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď vlastnost k hodnotovým nebo referenčním typům v C#:",
       "pairs": [
-        ["Uložen na stacku, přiřazení vytváří kopii", "Hodnotový typ (struct, int, bool)"],
-        ["Uložen na heapu, přiřazení kopíruje referenci", "Referenční typ (class, string, array)"],
-        ["Default hodnota je 0 nebo false", "Hodnotový typ"],
-        ["Default hodnota je null", "Referenční typ"]
+        [
+          "Uložen na stacku, přiřazení vytváří kopii",
+          "Hodnotový typ (struct, int, bool)"
+        ],
+        [
+          "Uložen na heapu, přiřazení kopíruje referenci",
+          "Referenční typ (class, string, array)"
+        ],
+        [
+          "Default hodnota je 0 nebo false",
+          "Hodnotový typ"
+        ],
+        [
+          "Default hodnota je null",
+          "Referenční typ"
+        ]
       ]
     },
     {
@@ -22,7 +34,11 @@
       "type": "fill",
       "prompt": "Doplň pojmy o generikách a constraints v C#:",
       "text": "Constraint {{where T : class}} vyžaduje, aby T byl referenční typ. Constraint {{where T : new()}} vyžaduje bezparametrický konstruktor. Generika zajišťují {{typovou bezpečnost}} při kompilaci bez nutnosti castování.",
-      "answers": ["where T : class", "where T : new()", "typovou bezpečnost"]
+      "answers": [
+        "where T : class",
+        "where T : new()",
+        "typovou bezpečnost"
+      ]
     },
     {
       "type": "order",
@@ -37,16 +53,49 @@
     {
       "type": "open",
       "prompt": "Vysvětli, co je [Flags] atribut u enum v C# a jak fungují bitové kombinace hodnot.",
-      "keywords": ["bitový", "kombinace", "OR", "HasFlag", "příznaky", "mocniny dvou"]
+      "keywords": [
+        "bitový",
+        "kombinace",
+        "OR",
+        "HasFlag",
+        "příznaky",
+        "mocniny dvou"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď generický typ/kolekci k jazyku:",
       "pairs": [
-        ["List<T>, Dictionary<K,V>", "C#"],
-        ["List<T> (type erasure)", "Java"],
-        ["list[int] (type hints, nekontroluje se za běhu)", "Python"],
-        ["where T : IComparable", "C# constraint (omezení)"]
+        [
+          "List<T>, Dictionary<K,V>",
+          "C#"
+        ],
+        [
+          "List<T> (type erasure)",
+          "Java"
+        ],
+        [
+          "list[int] (type hints, nekontroluje se za běhu)",
+          "Python"
+        ],
+        [
+          "where T : IComparable",
+          "C# constraint (omezení)"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části generické třídy a typových anotací:",
+      "variants": [
+        {
+          "lang": "Python (TypeVar)",
+          "code": "from typing import {{TypeVar}}, Generic, List, Optional\n\nT = TypeVar('{{T}}')\n\nclass Stack({{Generic}}[T]):\n    def __init__(self) -> None:\n        self._items: List[{{T}}] = []\n    \n    def push(self, item: {{T}}) -> None:\n        self._items.append({{item}})\n    \n    def pop(self) -> {{T}}:\n        if not self._items:\n            raise IndexError(\"Stack underflow\")\n        return self._items.{{pop}}()\n    \n    def peek(self) -> Optional[{{T}}]:\n        return self._items[-1] if self._items else {{None}}"
+        },
+        {
+          "lang": "TypeScript",
+          "code": "class Stack<{{T}}> {\n    private items: {{T}}[] = [];\n    \n    push(item: {{T}}): void {\n        this.items.{{push}}(item);\n    }\n    \n    pop(): {{T}} {\n        if (this.{{isEmpty}}()) throw new Error(\"Stack underflow\");\n        return this.items.{{pop}}()!;\n    }\n    \n    peek(): {{T}} | undefined {\n        return this.items[this.items.{{length}} - 1];\n    }\n    \n    isEmpty(): boolean {\n        return this.items.{{length}} === 0;\n    }\n}\n\nconst numStack = new Stack<{{number}}>();\nnumStack.push(42);"
+        }
       ]
     }
   ]

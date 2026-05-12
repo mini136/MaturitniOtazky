@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď vlastnost ke správnému protokolu (TCP vs UDP):",
       "pairs": [
-        ["Spojované, 3-way handshake", "TCP"],
-        ["Bez spojení, bez garance doručení", "UDP"],
-        ["HTTP, SSH, email", "TCP (typické použití)"],
-        ["DNS, video streaming, online hry", "UDP (typické použití)"]
+        [
+          "Spojované, 3-way handshake",
+          "TCP"
+        ],
+        [
+          "Bez spojení, bez garance doručení",
+          "UDP"
+        ],
+        [
+          "HTTP, SSH, email",
+          "TCP (typické použití)"
+        ],
+        [
+          "DNS, video streaming, online hry",
+          "UDP (typické použití)"
+        ]
       ]
     },
     {
@@ -34,21 +46,59 @@
       "type": "fill",
       "prompt": "Doplň rozdíly mezi TCP a UDP sokety:",
       "text": "TCP soket se vytváří s typem {{SOCK_STREAM}} a používá connect/accept. UDP soket používá typ {{SOCK_DGRAM}} a místo send/recv používá {{sendto/recvfrom}}, kde se předává adresa příjemce.",
-      "answers": ["SOCK_STREAM", "SOCK_DGRAM", "sendto/recvfrom"]
+      "answers": [
+        "SOCK_STREAM",
+        "SOCK_DGRAM",
+        "sendto/recvfrom"
+      ]
     },
     {
       "type": "open",
       "prompt": "Jak funguje HTTP GET požadavek na nízké úrovni přes TCP soket? Jaké části má HTTP hlavička?",
-      "keywords": ["TCP", "soket", "GET", "Host", "hlavička", "tělo", "Connection"]
+      "keywords": [
+        "TCP",
+        "soket",
+        "GET",
+        "Host",
+        "hlavička",
+        "tělo",
+        "Connection"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď funkci Berkeley Socket API k její roli:",
       "pairs": [
-        ["bind()", "Přiřazení IP adresy a portu soketu (server)"],
-        ["listen()", "Přepnutí soketu do režimu naslouchání (server)"],
-        ["connect()", "Navázání spojení se serverem (klient)"],
-        ["accept()", "Přijetí příchozího spojení (server)"]
+        [
+          "bind()",
+          "Přiřazení IP adresy a portu soketu (server)"
+        ],
+        [
+          "listen()",
+          "Přepnutí soketu do režimu naslouchání (server)"
+        ],
+        [
+          "connect()",
+          "Navázání spojení se serverem (klient)"
+        ],
+        [
+          "accept()",
+          "Přijetí příchozího spojení (server)"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu pro síťovou komunikaci pomocí socketů:",
+      "variants": [
+        {
+          "lang": "Python (TCP server)",
+          "code": "import {{socket}}\nimport threading\n\ndef handle_client(conn, addr):\n    print(f\"Connected: {{{addr}}}\")\n    with {{conn}}:\n        while True:\n            data = conn.{{recv}}(1024)\n            if not data: break\n            conn.{{sendall}}(data.upper())   # echo uppercase\n\ndef start_server(host='0.0.0.0', port=9000):\n    with socket.socket(socket.{{AF_INET}}, socket.SOCK_STREAM) as s:\n        s.{{setsockopt}}(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)\n        s.{{bind}}((host, port))\n        s.{{listen}}(5)\n        print(f\"Listening on {host}:{{{port}}}\")\n        while True:\n            conn, addr = s.{{accept}}()\n            t = threading.Thread(target={{handle_client}}, args=(conn, addr))\n            t.{{start}}()"
+        },
+        {
+          "lang": "Python (HTTP requests)",
+          "code": "import {{requests}}\nimport json\n\nBASE = \"https://api.example.com\"\n\ndef get_user(user_id: int):\n    response = requests.{{get}}(f\"{BASE}/users/{{{user_id}}}\")\n    response.{{raise_for_status}}()   # throws on 4xx/5xx\n    return response.{{json}}()\n\ndef create_user(name: str, email: str):\n    payload = {\"name\": {{name}}, \"email\": email}\n    headers = {\"Content-Type\": \"application/{{json}}\"}\n    response = requests.{{post}}(f\"{BASE}/users\",\n                                json={{payload}},\n                                headers=headers)\n    response.raise_for_status()\n    return response.json()"
+        }
       ]
     }
   ]

@@ -5,17 +5,33 @@
       "type": "match",
       "prompt": "Přiřaď SOLID princip k jeho významu:",
       "pairs": [
-        ["Single Responsibility", "Třída má jednu zodpovědnost"],
-        ["Open/Closed", "Otevřeno pro rozšíření, uzavřeno pro modifikaci"],
-        ["Liskov Substitution", "Potomek musí být zaměnitelný za rodiče"],
-        ["Dependency Inversion", "Závisej na abstrakci, ne na implementaci"]
+        [
+          "Single Responsibility",
+          "Třída má jednu zodpovědnost"
+        ],
+        [
+          "Open/Closed",
+          "Otevřeno pro rozšíření, uzavřeno pro modifikaci"
+        ],
+        [
+          "Liskov Substitution",
+          "Potomek musí být zaměnitelný za rodiče"
+        ],
+        [
+          "Dependency Inversion",
+          "Závisej na abstrakci, ne na implementaci"
+        ]
       ]
     },
     {
       "type": "fill",
       "prompt": "Doplň pojmy týkající se vztahů mezi třídami:",
       "text": "Při {{kompozici}} části neexistují bez celku (např. Dům → Místnosti), zatímco při {{agregaci}} části mohou existovat samostatně (např. Tým → Hráči). Volný vztah, kde objekty existují zcela nezávisle, se nazývá {{asociace}}.",
-      "answers": ["kompozici", "agregaci", "asociace"]
+      "answers": [
+        "kompozici",
+        "agregaci",
+        "asociace"
+      ]
     },
     {
       "type": "order",
@@ -38,7 +54,14 @@
     {
       "type": "open",
       "prompt": "Vysvětli rozdíl mezi zapouzdřením a abstrakcí. Kdy použiješ které?",
-      "keywords": ["skrytí", "implementace", "rozhraní", "vnitřní stav", "přístup", "metody"]
+      "keywords": [
+        "skrytí",
+        "implementace",
+        "rozhraní",
+        "vnitřní stav",
+        "přístup",
+        "metody"
+      ]
     },
     {
       "type": "trueFalse",
@@ -46,6 +69,20 @@
       "statement": "Interface Segregation princip říká, že je lepší mít jedno velké univerzální rozhraní než několik malých specializovaných.",
       "answer": false,
       "explanation": "Je to naopak — ISP říká, že je lepší mít více malých rozhraní místo jednoho velkého. Třídy by neměly být nuceny implementovat metody, které nepotřebují."
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu demonstrujícího 4 principy OOP (enkapsulace, dědičnost, polymorfismus, abstrakce):",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "from abc import {{ABC}}, abstractmethod\n\n# Abstrakce + Enkapsulace\nclass {{Shape}}(ABC):\n    def __init__(self, color: str):\n        self.__color = {{color}}   # privátní atribut (enkapsulace)\n\n    @property\n    def color(self): return self.__{{color}}\n\n    @{{abstractmethod}}\n    def area(self) -> float: ...\n\n    @abstractmethod\n    def perimeter(self) -> float: ...\n\n# Dědičnost\nclass {{Circle}}(Shape):\n    def __init__(self, color: str, radius: float):\n        {{super}}().__init__(color)\n        self.radius = {{radius}}\n\n    def area(self): return 3.14159 * self.{{radius}} ** 2\n    def perimeter(self): return 2 * 3.14159 * self.radius\n\n# Polymorfismus\ndef print_shapes(shapes: list[{{Shape}}]):\n    for s in shapes:\n        print(f\"{s.color}: area={s.{{area}}():.2f}\")"
+        },
+        {
+          "lang": "Java",
+          "code": "// Abstrakce\npublic abstract class {{Shape}} {\n    private String color;    // enkapsulace\n    public Shape(String color) { this.{{color}} = color; }\n    public String getColor() { return {{color}}; }\n    public abstract double area();     // abstrakce\n    public abstract double perimeter();\n\n    // Polymorfismus\n    @Override\n    public String toString() {\n        return getClass().{{getSimpleName}}() + \"[\" + color + \"]\";\n    }\n}\n\n// Dědičnost\npublic class {{Circle}} extends Shape {\n    private double radius;\n    public Circle(String color, double radius) {\n        {{super}}(color);\n        this.radius = {{radius}};\n    }\n    @Override public double area() { return Math.PI * radius * {{radius}}; }\n    @Override public double perimeter() { return 2 * Math.{{PI}} * radius; }\n}"
+        }
+      ]
     }
   ]
 }

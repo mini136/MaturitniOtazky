@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď typ rekurze k jeho popisu:",
       "pairs": [
-        ["Přímá rekurze", "Funkce volá přímo samu sebe"],
-        ["Nepřímá rekurze", "A volá B, B volá A"],
-        ["Tail rekurze", "Rekurzivní volání je poslední operací — možná optimalizace"],
-        ["Stromová rekurze", "Více rekurzivních volání v jednom kroku (např. Fibonacci)"]
+        [
+          "Přímá rekurze",
+          "Funkce volá přímo samu sebe"
+        ],
+        [
+          "Nepřímá rekurze",
+          "A volá B, B volá A"
+        ],
+        [
+          "Tail rekurze",
+          "Rekurzivní volání je poslední operací — možná optimalizace"
+        ],
+        [
+          "Stromová rekurze",
+          "Více rekurzivních volání v jednom kroku (např. Fibonacci)"
+        ]
       ]
     },
     {
@@ -34,21 +46,58 @@
       "type": "fill",
       "prompt": "Doplň klíčové pojmy o rekurzi:",
       "text": "Každá rekurzivní funkce musí mít {{bázový případ}}, který zabraňuje nekonečnému volání. Každé volání vytváří nový {{stack frame}} na zásobníku. Naivní rekurzivní Fibonacci má složitost {{O(2ⁿ)}}, ale s memoizací dosáhneme O(n).",
-      "answers": ["bázový případ", "stack frame", "O(2ⁿ)"]
+      "answers": [
+        "bázový případ",
+        "stack frame",
+        "O(2ⁿ)"
+      ]
     },
     {
       "type": "open",
       "prompt": "Porovnej brute force a greedy přístup k problému batohu. Jaké jsou výhody a nevýhody každého?",
-      "keywords": ["optimální", "exponenciální", "rychlost", "lokální", "všechny kombinace", "O(2ⁿ)"]
+      "keywords": [
+        "optimální",
+        "exponenciální",
+        "rychlost",
+        "lokální",
+        "všechny kombinace",
+        "O(2ⁿ)"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď NP-kompletní problém k jeho brute force složitosti:",
       "pairs": [
-        ["Problém batohu", "O(2ⁿ) — všechny podmnožiny"],
-        ["TSP (obchodní cestující)", "O(n!) — všechny permutace"],
-        ["SAT (splnitelnost)", "O(2ⁿ) — všechny kombinace pravdivostních hodnot"],
-        ["Hill Climbing", "Heuristika — uvízne v lokálním maximu"]
+        [
+          "Problém batohu",
+          "O(2ⁿ) — všechny podmnožiny"
+        ],
+        [
+          "TSP (obchodní cestující)",
+          "O(n!) — všechny permutace"
+        ],
+        [
+          "SAT (splnitelnost)",
+          "O(2ⁿ) — všechny kombinace pravdivostních hodnot"
+        ],
+        [
+          "Hill Climbing",
+          "Heuristika — uvízne v lokálním maximu"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části rekurzivní funkce Fibonacci a generátoru permutací:",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "def fibonacci(n):\n    if n <= {{1}}:\n        return {{n}}\n    return fibonacci(n - {{1}}) + fibonacci({{n}} - 2)\n\ndef permutations(arr):\n    if len(arr) <= {{1}}:\n        return [{{arr}}]\n    result = []\n    for i, val in {{enumerate}}(arr):\n        rest = arr[:i] + arr[{{i}}+1:]\n        for perm in permutations({{rest}}):\n            result.append([val] + perm)\n    return result"
+        },
+        {
+          "lang": "JavaScript",
+          "code": "function fibonacci(n) {\n    if (n <= {{1}}) return {{n}};\n    return fibonacci(n - {{1}}) + fibonacci({{n}} - 2);\n}\n\nfunction permutations(arr) {\n    if (arr.length <= {{1}}) return [arr];\n    const result = [];\n    for (let i = 0; i < arr.{{length}}; i++) {\n        const rest = [...arr.slice(0, i), ...arr.slice({{i}} + 1)];\n        for (const perm of permutations({{rest}})) {\n            result.push([arr[{{i}}], ...perm]);\n        }\n    }\n    return result;\n}"
+        }
       ]
     }
   ]

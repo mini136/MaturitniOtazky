@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď architektonický vzor ke způsobu komunikace mezi komponentami:",
       "pairs": [
-        ["MVC", "Controller zprostředkovává mezi Model a View"],
-        ["MVP", "Presenter přímo řídí View"],
-        ["MVVM", "Data binding propojuje View a ViewModel"],
-        ["Vícevrstvá architektura", "Presentation → Business → Data Layer"]
+        [
+          "MVC",
+          "Controller zprostředkovává mezi Model a View"
+        ],
+        [
+          "MVP",
+          "Presenter přímo řídí View"
+        ],
+        [
+          "MVVM",
+          "Data binding propojuje View a ViewModel"
+        ],
+        [
+          "Vícevrstvá architektura",
+          "Presentation → Business → Data Layer"
+        ]
       ]
     },
     {
@@ -22,7 +34,11 @@
       "type": "fill",
       "prompt": "Doplň pojmy o MVC architektuře:",
       "text": "V MVC {{Model}} spravuje data a business logiku, {{View}} zobrazuje uživatelské rozhraní a {{Controller}} zprostředkovává komunikaci mezi nimi a zpracovává uživatelské vstupy.",
-      "answers": ["Model", "View", "Controller"]
+      "answers": [
+        "Model",
+        "View",
+        "Controller"
+      ]
     },
     {
       "type": "order",
@@ -38,16 +54,49 @@
     {
       "type": "open",
       "prompt": "Porovnej klient-server a P2P architekturu. Uveď příklady použití každé z nich.",
-      "keywords": ["centralizovaná", "decentralizovaná", "BitTorrent", "blockchain", "server", "uzel"]
+      "keywords": [
+        "centralizovaná",
+        "decentralizovaná",
+        "BitTorrent",
+        "blockchain",
+        "server",
+        "uzel"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď vlastnost k typu architektury (monolit vs mikroservisy):",
       "pairs": [
-        ["Nasazení celé aplikace najednou", "Monolit"],
-        ["Nezávislé služby s různými jazyky/DB", "Mikroservisy"],
-        ["Na začátku jednodušší vývoj", "Monolit"],
-        ["Škálování jednotlivých služeb zvlášť", "Mikroservisy"]
+        [
+          "Nasazení celé aplikace najednou",
+          "Monolit"
+        ],
+        [
+          "Nezávislé služby s různými jazyky/DB",
+          "Mikroservisy"
+        ],
+        [
+          "Na začátku jednodušší vývoj",
+          "Monolit"
+        ],
+        [
+          "Škálování jednotlivých služeb zvlášť",
+          "Mikroservisy"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části MVC architektury (Model-View-Controller):",
+      "variants": [
+        {
+          "lang": "Python (Flask MVC)",
+          "code": "# MODEL\nclass {{UserModel}}:\n    def __init__(self, db):\n        self.{{db}} = db\n    def get_user(self, user_id):\n        return self.db.query(\"SELECT * FROM users WHERE id = ?\", [{{user_id}}])\n    def create_user(self, name, email):\n        return self.db.{{execute}}(\"INSERT INTO users (name,email) VALUES (?,?)\", [name, email])\n\n# CONTROLLER\nclass {{UserController}}:\n    def __init__(self, model):\n        self.model = {{model}}\n    def show(self, user_id):\n        user = self.model.{{get_user}}(user_id)\n        return UserView.{{render}}(user)\n\n# VIEW\nclass UserView:\n    @staticmethod\n    def render({{user}}):\n        return f\"<h1>{user['name']}</h1><p>{user['{{email}}']}</p>\""
+        },
+        {
+          "lang": "JavaScript (Express MVC)",
+          "code": "// MODEL\nclass {{UserModel}} {\n    async getUser(id) {\n        return await db.{{query}}('SELECT * FROM users WHERE id = ?', [id]);\n    }\n    async createUser(name, email) {\n        return await db.{{execute}}('INSERT INTO users VALUES (?,?)', [name, email]);\n    }\n}\n\n// CONTROLLER\nclass {{UserController}} {\n    constructor(model) { this.model = {{model}}; }\n    async show(req, res) {\n        const user = await this.model.{{getUser}}(req.params.id);\n        res.{{render}}('user', { user });\n    }\n}\n\n// ROUTER (wiring)\nconst ctrl = new UserController(new UserModel());\nrouter.{{get}}('/users/:id', (req, res) => ctrl.show(req, res));"
+        }
       ]
     }
   ]

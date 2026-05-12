@@ -466,3 +466,72 @@
     font-size: 0.88rem;
     padding: 4px 0;
 }
+
+/* Code-fill type */
+.cf-lang-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+.cf-lang-badge {
+    background: #1e293b;
+    color: #7dd3fc;
+    font-family: monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+}
+.cf-hint {
+    color: #7c3aed;
+    font-size: 0.82rem;
+}
+.cf-code-block {
+    font-family: "Consolas", "Fira Code", "Courier New", monospace;
+    font-size: 0.9rem;
+    line-height: 2;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 2px solid #334155;
+    border-radius: 8px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 4px;
+}
+.cf-input {
+    display: inline-block;
+    background: #1e3a5f;
+    color: #fbbf24;
+    border: none;
+    border-bottom: 2px solid #6366f1;
+    border-radius: 3px 3px 0 0;
+    padding: 0 5px;
+    font: inherit;
+    font-size: 0.88rem;
+    outline: none;
+    vertical-align: baseline;
+    min-width: 40px;
+    transition: border-color 0.15s, background 0.15s;
+}
+.cf-input:focus {
+    border-bottom-color: #a5b4fc;
+    background: #263d5f;
+}
+.cf-input.correct {
+    border-bottom-color: #22c55e;
+    background: #14532d;
+    color: #86efac;
+}
+.cf-input.wrong {
+    border-bottom-color: #ef4444;
+    background: #450a0a;
+    color: #fca5a5;
+}
+.cf-given {
+    color: #4ade80;
+    font-weight: 600;
+}

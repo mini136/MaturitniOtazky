@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď návrhový vzor k jeho kategorii (GoF):",
       "pairs": [
-        ["Singleton, Factory, Builder", "Creational — vytváření objektů"],
-        ["Adapter, Decorator, Facade", "Structural — struktura tříd"],
-        ["Observer, Strategy, Command", "Behavioral — chování objektů"],
-        ["Prototype", "Creational — klonování existujícího objektu"]
+        [
+          "Singleton, Factory, Builder",
+          "Creational — vytváření objektů"
+        ],
+        [
+          "Adapter, Decorator, Facade",
+          "Structural — struktura tříd"
+        ],
+        [
+          "Observer, Strategy, Command",
+          "Behavioral — chování objektů"
+        ],
+        [
+          "Prototype",
+          "Creational — klonování existujícího objektu"
+        ]
       ]
     },
     {
@@ -22,7 +34,12 @@
       "type": "fill",
       "prompt": "Doplň klíčové vlastnosti návrhových vzorů:",
       "text": "{{Singleton}} zajišťuje jedinou instanci třídy v celé aplikaci. {{Factory}} vytváří objekty bez specifikace přesné třídy. {{Observer}} implementuje publisher-subscriber model, kde změna jednoho objektu notifikuje všechny {{odběratele}}.",
-      "answers": ["Singleton", "Factory", "Observer", "odběratele"]
+      "answers": [
+        "Singleton",
+        "Factory",
+        "Observer",
+        "odběratele"
+      ]
     },
     {
       "type": "order",
@@ -38,16 +55,35 @@
     {
       "type": "open",
       "prompt": "Vysvětli Strategy vzor a uveď příklad, kdy je vhodné ho použít místo if/else řetězu.",
-      "keywords": ["algoritmus", "zaměnitelný", "runtime", "rozhraní", "flexibilita", "if/else"]
+      "keywords": [
+        "algoritmus",
+        "zaměnitelný",
+        "runtime",
+        "rozhraní",
+        "flexibilita",
+        "if/else"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď návrhový vzor k praktickému příkladu použití:",
       "pairs": [
-        ["Singleton", "Konfigurace aplikace — jediná sdílená instance"],
-        ["Observer", "Event systém — notifikace při login události"],
-        ["Decorator", "Káva + mléko + cukr — dynamické přidávání vlastností"],
-        ["Strategy", "Výběr řadicího algoritmu za běhu programu"]
+        [
+          "Singleton",
+          "Konfigurace aplikace — jediná sdílená instance"
+        ],
+        [
+          "Observer",
+          "Event systém — notifikace při login události"
+        ],
+        [
+          "Decorator",
+          "Káva + mléko + cukr — dynamické přidávání vlastností"
+        ],
+        [
+          "Strategy",
+          "Výběr řadicího algoritmu za běhu programu"
+        ]
       ]
     },
     {
@@ -56,6 +92,20 @@
       "statement": "Builder vzor je vhodný, když objekt má mnoho volitelných parametrů a chceme se vyhnout konstruktoru s desítkami argumentů.",
       "answer": true,
       "explanation": "Builder odděluje konstrukci objektu od jeho reprezentace. Místo konstruktoru s mnoha parametry (telescoping constructor) používáme řetězení metod (fluent interface), které je čitelnější a flexibilnější."
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části návrhových vzorů Singleton a Observer:",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "# Singleton\nclass {{DatabaseConnection}}:\n    _instance = {{None}}\n\n    def __new__(cls):\n        if cls._instance is {{None}}:\n            cls._instance = super().__new__({{cls}})\n            cls._instance.connected = False\n        return cls.{{_instance}}\n\n    def connect(self, url: str):\n        self.{{connected}} = True\n\n# Observer\nclass {{EventEmitter}}:\n    def __init__(self):\n        self._listeners: dict = {}\n\n    def on(self, event: str, callback):\n        self._listeners.{{setdefault}}(event, []).append({{callback}})\n\n    def emit(self, event: str, *args):\n        for cb in self._listeners.get({{event}}, []):\n            cb(*{{args}})"
+        },
+        {
+          "lang": "TypeScript",
+          "code": "// Singleton\nclass {{DatabaseConnection}} {\n    private static {{instance}}: DatabaseConnection | null = null;\n    private constructor() {}\n\n    static getInstance(): {{DatabaseConnection}} {\n        if (!DatabaseConnection.{{instance}}) {\n            DatabaseConnection.instance = new {{DatabaseConnection}}();\n        }\n        return DatabaseConnection.{{instance}};\n    }\n}\n\n// Observer\ninterface {{Observer}} {\n    update(event: string, data: unknown): void;\n}\n\nclass EventEmitter {\n    private listeners = new Map<string, {{Observer}}[]>();\n\n    subscribe(event: string, obs: {{Observer}}) {\n        if (!this.listeners.{{has}}(event)) this.listeners.set(event, []);\n        this.listeners.get(event)!.{{push}}(obs);\n    }\n\n    emit(event: string, data: unknown) {\n        this.listeners.get({{event}})?.forEach(o => o.{{update}}(event, data));\n    }\n}"
+        }
+      ]
     }
   ]
 }

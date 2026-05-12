@@ -5,17 +5,34 @@
       "type": "match",
       "prompt": "Přiřaď synchronizační primitivum k jeho účelu:",
       "pairs": [
-        ["Lock (Mutex)", "Vzájemné vyloučení — jen jedno vlákno v kritické sekci"],
-        ["Semaphore", "Omezení počtu souběžných přístupů na N"],
-        ["Event", "Signalizace mezi vlákny"],
-        ["Queue (thread-safe)", "Bezpečná výměna dat mezi producentem a konzumentem"]
+        [
+          "Lock (Mutex)",
+          "Vzájemné vyloučení — jen jedno vlákno v kritické sekci"
+        ],
+        [
+          "Semaphore",
+          "Omezení počtu souběžných přístupů na N"
+        ],
+        [
+          "Event",
+          "Signalizace mezi vlákny"
+        ],
+        [
+          "Queue (thread-safe)",
+          "Bezpečná výměna dat mezi producentem a konzumentem"
+        ]
       ]
     },
     {
       "type": "fill",
       "prompt": "Doplň pojmy o vláknech a procesech:",
       "text": "Vlákna sdílejí {{paměť}} procesu, zatímco procesy mají vlastní adresní prostor. V CPythonu brání skutečnému paralelismu vláken mechanismus {{GIL}}. Pro CPU-bound úlohy je proto vhodné použít modul {{multiprocessing}}. Vzor, kde jedno vlákno vytváří data a druhé je zpracovává, se nazývá {{Producer-Consumer}}.",
-      "answers": ["paměť", "GIL", "multiprocessing", "Producer-Consumer"]
+      "answers": [
+        "paměť",
+        "GIL",
+        "multiprocessing",
+        "Producer-Consumer"
+      ]
     },
     {
       "type": "trueFalse",
@@ -38,26 +55,59 @@
     {
       "type": "open",
       "prompt": "Vysvětli rozdíl mezi concurrency a parallelism. Kdy použiješ vlákna a kdy procesy?",
-      "keywords": ["souběžnost", "střídání", "více jader", "I/O-bound", "CPU-bound", "GIL", "threading", "multiprocessing"]
+      "keywords": [
+        "souběžnost",
+        "střídání",
+        "více jader",
+        "I/O-bound",
+        "CPU-bound",
+        "GIL",
+        "threading",
+        "multiprocessing"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď vlastnost k procesu nebo vláknu:",
       "pairs": [
-        ["Vlastní adresní prostor", "Proces"],
-        ["Sdílí paměť", "Vlákno"],
-        ["Pád neovlivní ostatní", "Proces"],
-        ["Levné na vytvoření", "Vlákno"]
+        [
+          "Vlastní adresní prostor",
+          "Proces"
+        ],
+        [
+          "Sdílí paměť",
+          "Vlákno"
+        ],
+        [
+          "Pád neovlivní ostatní",
+          "Proces"
+        ],
+        [
+          "Levné na vytvoření",
+          "Vlákno"
+        ]
       ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď concurrent design pattern k jeho popisu:",
       "pairs": [
-        ["Producer-Consumer", "Jedno vlákno tvoří data, druhé je zpracovává — oddělení produkce od spotřeby"],
-        ["Thread Pool", "Pool předpřipravených vláken pro opakované úlohy — snižuje overhead vytváření"],
-        ["Active Object", "Metody se spouštějí asynchronně ve vlastním vlákně s frontou požadavků"],
-        ["Read-Write Lock", "Více čtení současně, jeden zápis exkluzivně"]
+        [
+          "Producer-Consumer",
+          "Jedno vlákno tvoří data, druhé je zpracovává — oddělení produkce od spotřeby"
+        ],
+        [
+          "Thread Pool",
+          "Pool předpřipravených vláken pro opakované úlohy — snižuje overhead vytváření"
+        ],
+        [
+          "Active Object",
+          "Metody se spouštějí asynchronně ve vlastním vlákně s frontou požadavků"
+        ],
+        [
+          "Read-Write Lock",
+          "Více čtení současně, jeden zápis exkluzivně"
+        ]
       ]
     },
     {
@@ -71,12 +121,26 @@
       "type": "fill",
       "prompt": "Doplň pojmy o asynchronním programování:",
       "text": "Async funkce v Pythonu se definuje klíčovým slovem {{async}} def. Pro čekání na výsledek se používá {{await}}. Paralelní spuštění více korutin zajistí {{asyncio.gather}}. Async je vhodné pro {{I/O}}-bound úlohy, vlákna/procesy pro CPU-bound.",
-      "answers": ["async", "await", "asyncio.gather", "I/O"]
+      "answers": [
+        "async",
+        "await",
+        "asyncio.gather",
+        "I/O"
+      ]
     },
     {
       "type": "open",
       "prompt": "Porovnej async/await s klasickými vlákny (threading). Kdy bys použil každý přístup a proč? Uveď příklady vhodných úloh.",
-      "keywords": ["I/O-bound", "CPU-bound", "GIL", "kooperativní", "preemptivní", "event loop", "asyncio", "overhead"]
+      "keywords": [
+        "I/O-bound",
+        "CPU-bound",
+        "GIL",
+        "kooperativní",
+        "preemptivní",
+        "event loop",
+        "asyncio",
+        "overhead"
+      ]
     },
     {
       "type": "code",
@@ -84,7 +148,25 @@
       "task": "Implementuj asynchronní funkci fetch_all() v Pythonu pomocí asyncio. Funkce musí zavolat fake_fetch() pro dvě URL souběžně (ne postupně) pomocí asyncio.gather() a vrátit seznam výsledků.",
       "language": "python",
       "starterCode": "import asyncio\n\nasync def fake_fetch(url):\n    await asyncio.sleep(0.1)\n    return f\"Data z {url}\"\n\nasync def fetch_all():\n    urls = ['https://api1.cz', 'https://api2.cz']\n    # Tvůj kód zde — stáhni obě URL souběžně\n    pass",
-      "hints": ["asyncio.gather() spouští korutiny souběžně", "await asyncio.gather(coro1, coro2) vrátí list výsledků", "Použij list comprehension pro vytvoření korutin"]
+      "hints": [
+        "asyncio.gather() spouští korutiny souběžně",
+        "await asyncio.gather(coro1, coro2) vrátí list výsledků",
+        "Použij list comprehension pro vytvoření korutin"
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu pro práci s vlákny a synchronizací:",
+      "variants": [
+        {
+          "lang": "Python (threading)",
+          "code": "import {{threading}}\nimport time\n\ncounter = 0\nlock = threading.{{Lock}}()\n\ndef increment(n: int):\n    global counter\n    for _ in range(n):\n        with {{lock}}:     # kritická sekce\n            counter += {{1}}\n\n# Spuštění více vláken\nthreads = []\nfor _ in range(5):\n    t = threading.{{Thread}}(target=increment, args=(10000,))\n    threads.{{append}}(t)\n    t.{{start}}()\n\nfor t in {{threads}}:\n    t.{{join}}()\n\nprint(\"Výsledek:\", {{counter}})   # vždy 50000\n\n# Producer-Consumer s frontou\nfrom queue import {{Queue}}\nq = Queue(maxsize={{10}})\n\ndef producer():\n    for i in range(20):\n        q.{{put}}(i)\n        time.sleep(0.01)\n\ndef consumer():\n    while True:\n        item = q.{{get}}()\n        if item is None: break\n        print(\"Zpracovávám:\", {{item}})\n        q.{{task_done}}()"
+        },
+        {
+          "lang": "Python (asyncio)",
+          "code": "import {{asyncio}}\nimport aiohttp\n\nasync def fetch(session, url: str) -> str:\n    async with session.{{get}}(url) as response:\n        return await response.{{text}}()\n\nasync def fetch_all(urls: list[str]) -> list[str]:\n    async with aiohttp.{{ClientSession}}() as session:\n        tasks = [fetch({{session}}, url) for url in urls]\n        return await asyncio.{{gather}}(*tasks)\n\nasync def {{main}}():\n    urls = [\"https://example.com\", \"https://python.org\"]\n    results = await {{fetch_all}}(urls)\n    for r in {{results}}:\n        print(r[:100])\n\nasyncio.{{run}}(main())"
+        }
+      ]
     }
   ]
 }

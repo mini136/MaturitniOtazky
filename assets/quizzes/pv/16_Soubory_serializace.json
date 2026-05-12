@@ -5,17 +5,34 @@
       "type": "match",
       "prompt": "Přiřaď formát serializace k jeho typickému použití:",
       "pairs": [
-        ["JSON", "API komunikace a konfigurace"],
-        ["CSV", "Tabulková data (export/import)"],
-        ["YAML", "Konfigurace Docker a Kubernetes"],
-        ["Pickle", "Binární serializace Python objektů (interní)"]
+        [
+          "JSON",
+          "API komunikace a konfigurace"
+        ],
+        [
+          "CSV",
+          "Tabulková data (export/import)"
+        ],
+        [
+          "YAML",
+          "Konfigurace Docker a Kubernetes"
+        ],
+        [
+          "Pickle",
+          "Binární serializace Python objektů (interní)"
+        ]
       ]
     },
     {
       "type": "fill",
       "prompt": "Doplň správné funkce a parametry pro práci se soubory v Pythonu:",
       "text": "Pro zápis JSON do souboru použijeme {{json.dump}}, pro načtení ze souboru {{json.load}}. Parametr {{ensure_ascii=False}} zajistí správný zápis českých znaků. Pro čtení CSV jako slovníků použijeme třídu {{DictReader}}.",
-      "answers": ["json.dump", "json.load", "ensure_ascii=False", "DictReader"]
+      "answers": [
+        "json.dump",
+        "json.load",
+        "ensure_ascii=False",
+        "DictReader"
+      ]
     },
     {
       "type": "trueFalse",
@@ -38,16 +55,48 @@
     {
       "type": "open",
       "prompt": "Proč je důležité používat 'with' statement při práci se soubory? Co se stane bez něj?",
-      "keywords": ["automatické zavření", "context manager", "výjimka", "únik prostředků", "finally"]
+      "keywords": [
+        "automatické zavření",
+        "context manager",
+        "výjimka",
+        "únik prostředků",
+        "finally"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď režim otevření souboru k jeho funkci:",
       "pairs": [
-        ["'w'", "Zápis — přepíše existující obsah"],
-        ["'r'", "Čtení — výchozí režim"],
-        ["'a'", "Přidání na konec souboru"],
-        ["'wb'", "Binární zápis"]
+        [
+          "'w'",
+          "Zápis — přepíše existující obsah"
+        ],
+        [
+          "'r'",
+          "Čtení — výchozí režim"
+        ],
+        [
+          "'a'",
+          "Přidání na konec souboru"
+        ],
+        [
+          "'wb'",
+          "Binární zápis"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu pro čtení/zápis souborů a serializaci JSON/CSV:",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "import {{json}}\nimport csv\nfrom pathlib import {{Path}}\nfrom dataclasses import dataclass, {{asdict}}\n\n@dataclass\nclass Student:\n    name: str\n    score: {{float}}\n\n# JSON serializace\ndef save_json(students: list[Student], path: str):\n    with open(path, 'w', encoding={{'\"utf-8\"'}}) as f:\n        json.{{dump}}([asdict(s) for s in students], f, ensure_ascii=False, indent=2)\n\ndef load_json(path: str) -> list[Student]:\n    with open(path, encoding='utf-8') as f:\n        data = json.{{load}}(f)\n    return [Student(**d) for d in {{data}}]\n\n# CSV zápis\ndef save_csv(students: list[Student], path: str):\n    with open(path, 'w', newline='', encoding='utf-8') as f:\n        writer = csv.{{DictWriter}}(f, fieldnames=['name', 'score'])\n        writer.{{writeheader}}()\n        writer.writerows([asdict(s) for s in {{students}}])"
+        },
+        {
+          "lang": "JavaScript (Node.js)",
+          "code": "const {{fs}} = require('fs');\nconst path = require('path');\n\n// Async čtení souboru\nasync function readJson(filePath) {\n    const raw = await fs.promises.{{readFile}}(filePath, 'utf-8');\n    return JSON.{{parse}}(raw);\n}\n\n// Async zápis souboru\nasync function writeJson(filePath, data) {\n    const json = JSON.{{stringify}}(data, null, 2);\n    await fs.promises.{{writeFile}}(filePath, json, 'utf-8');\n}\n\n// Stream čtení velkých souborů\nconst readline = require('{{readline}}');\nfunction processLargeFile(filePath, onLine) {\n    const rl = readline.{{createInterface}}({\n        input: fs.{{createReadStream}}(filePath),\n        crlfDelay: Infinity\n    });\n    rl.on('{{line}}', onLine);\n    return new Promise(resolve => rl.on('close', {{resolve}}));\n}"
+        }
       ]
     }
   ]

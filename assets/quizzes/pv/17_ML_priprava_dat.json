@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď typ strojového učení k jeho popisu:",
       "pairs": [
-        ["Supervised learning", "Data s labely — vstup X mapován na výstup y"],
-        ["Unsupervised learning", "Data bez labelů — clustering, redukce dimenzí"],
-        ["Reinforcement learning", "Agent se učí z odměn a trestů"],
-        ["Klasifikace", "Predikce diskrétní kategorie (supervised)"]
+        [
+          "Supervised learning",
+          "Data s labely — vstup X mapován na výstup y"
+        ],
+        [
+          "Unsupervised learning",
+          "Data bez labelů — clustering, redukce dimenzí"
+        ],
+        [
+          "Reinforcement learning",
+          "Agent se učí z odměn a trestů"
+        ],
+        [
+          "Klasifikace",
+          "Predikce diskrétní kategorie (supervised)"
+        ]
       ]
     },
     {
@@ -26,7 +38,11 @@
       "type": "fill",
       "prompt": "Doplň vzorce a pojmy normalizace:",
       "text": "Min-Max normalizace převádí hodnoty do rozsahu [0, 1] vzorcem (x − min) / ({{max}} − min). Z-score standardizace počítá (x − μ) / {{σ}}, kde μ je průměr a σ je směrodatná odchylka. Pro detekci odlehlých hodnot se používá metoda {{IQR}}.",
-      "answers": ["max", "σ", "IQR"]
+      "answers": [
+        "max",
+        "σ",
+        "IQR"
+      ]
     },
     {
       "type": "trueFalse",
@@ -38,7 +54,15 @@
     {
       "type": "open",
       "prompt": "Vysvětli, proč je důležité ošetřit chybějící hodnoty (imputace) před trénováním modelu a jaké metody imputace znáš.",
-      "keywords": ["průměr", "medián", "modus", "zkreslení", "chybějící", "NaN", "None"]
+      "keywords": [
+        "průměr",
+        "medián",
+        "modus",
+        "zkreslení",
+        "chybějící",
+        "NaN",
+        "None"
+      ]
     },
     {
       "type": "trueFalse",
@@ -51,10 +75,22 @@
       "type": "match",
       "prompt": "Přiřaď typ biasu/chyby v datech k jeho popisu:",
       "pairs": [
-        ["Class imbalance", "Nerovnoměrné zastoupení tříd — model předpovídá vždy majoritní třídu"],
-        ["Sampling bias", "Vzorek dat nepředstavuje celou populaci"],
-        ["Data leakage", "Testovací data ovlivní trénink — model se 'naučí podvádět'"],
-        ["Label noise", "Chybně označené trénovací příklady"]
+        [
+          "Class imbalance",
+          "Nerovnoměrné zastoupení tříd — model předpovídá vždy majoritní třídu"
+        ],
+        [
+          "Sampling bias",
+          "Vzorek dat nepředstavuje celou populaci"
+        ],
+        [
+          "Data leakage",
+          "Testovací data ovlivní trénink — model se 'naučí podvádět'"
+        ],
+        [
+          "Label noise",
+          "Chybně označené trénovací příklady"
+        ]
       ]
     },
     {
@@ -68,12 +104,35 @@
       "type": "fill",
       "prompt": "Doplň pojmy o korelaci a chybách v datech:",
       "text": "Pearsonův koeficient měří {{lineární}} závislost a nabývá hodnot od {{-1}} do +1. Spearmanův koeficient pracuje s {{pořadím}} hodnot. Nerovnoměrné zastoupení tříd se nazývá {{class imbalance}} a řeší se metodou SMOTE nebo úpravou vah.",
-      "answers": ["lineární", "-1", "pořadím", "class imbalance"]
+      "answers": [
+        "lineární",
+        "-1",
+        "pořadím",
+        "class imbalance"
+      ]
     },
     {
       "type": "open",
       "prompt": "Vysvětli rozdíl mezi korelací a kauzalitou. Jak lze prokázat příčinnou závislost? Uveď příklad kdy korelace neznamená kauzalitu.",
-      "keywords": ["příčinnost", "korelace", "experiment", "RCT", "třetí faktor", "Pearson", "Spearman"]
+      "keywords": [
+        "příčinnost",
+        "korelace",
+        "experiment",
+        "RCT",
+        "třetí faktor",
+        "Pearson",
+        "Spearman"
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu pro přípravu dat pro strojové učení:",
+      "variants": [
+        {
+          "lang": "Python (pandas + sklearn)",
+          "code": "import {{pandas}} as pd\nimport numpy as np\nfrom sklearn.preprocessing import {{StandardScaler}}, LabelEncoder\nfrom sklearn.model_selection import {{train_test_split}}\n\ndf = pd.read_csv('dataset.csv')\n\n# Ošetření chybějících hodnot\ndf['age'].{{fillna}}(df['age'].{{median}}(), inplace=True)\ndf.{{dropna}}(subset=['target'], inplace=True)\n\n# Kódování kategorií\nle = LabelEncoder()\ndf['gender'] = le.{{fit_transform}}(df['gender'])\n\n# Oddělení features a targetu\nX = df.{{drop}}(columns=['target'])\ny = df['{{target}}']\n\n# Rozdělení na train/test\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size={{0.2}}, random_state=42, stratify={{y}}\n)\n\n# Normalizace\nscaler = StandardScaler()\nX_train = scaler.{{fit_transform}}(X_train)\nX_test  = scaler.{{transform}}(X_test)"
+        }
+      ]
     }
   ]
 }

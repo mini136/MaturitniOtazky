@@ -5,17 +5,34 @@
       "type": "match",
       "prompt": "Přiřaď blok try-except struktury k jeho účelu:",
       "pairs": [
-        ["try", "Kód, který může vyhodit výjimku"],
-        ["except", "Zachycení a ošetření konkrétní výjimky"],
-        ["else", "Provede se jen pokud výjimka NENASTALA"],
-        ["finally", "Provede se VŽDY — cleanup kód"]
+        [
+          "try",
+          "Kód, který může vyhodit výjimku"
+        ],
+        [
+          "except",
+          "Zachycení a ošetření konkrétní výjimky"
+        ],
+        [
+          "else",
+          "Provede se jen pokud výjimka NENASTALA"
+        ],
+        [
+          "finally",
+          "Provede se VŽDY — cleanup kód"
+        ]
       ]
     },
     {
       "type": "fill",
       "prompt": "Doplň pojmy o výjimkách a debugování:",
       "text": "Vlastní výjimky dědí od třídy {{Exception}}. Pro zachování původní výjimky jako příčiny použijeme {{raise ... from e}}. Logging má 5 úrovní: DEBUG, INFO, {{WARNING}}, ERROR, CRITICAL. Pro automatický cleanup prostředků slouží {{context manager}} (with statement).",
-      "answers": ["Exception", "raise ... from e", "WARNING", "context manager"]
+      "answers": [
+        "Exception",
+        "raise ... from e",
+        "WARNING",
+        "context manager"
+      ]
     },
     {
       "type": "trueFalse",
@@ -38,16 +55,50 @@
     {
       "type": "open",
       "prompt": "Vysvětli rozdíl mezi logging a print() pro debugování. Proč je logging lepší v produkci?",
-      "keywords": ["úrovně", "DEBUG", "ERROR", "soubor", "konfigurace", "vypnutí", "formátování"]
+      "keywords": [
+        "úrovně",
+        "DEBUG",
+        "ERROR",
+        "soubor",
+        "konfigurace",
+        "vypnutí",
+        "formátování"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď techniku k jejímu účelu:",
       "pairs": [
-        ["assert", "Kontrola programátorských invariantů"],
-        ["raise", "Vyvolání výjimky při běhové chybě"],
-        ["traceback.print_exc()", "Výpis zásobníku volání při chybě"],
-        ["f'{x=}'", "Rychlý debug výpis proměnné s jejím názvem"]
+        [
+          "assert",
+          "Kontrola programátorských invariantů"
+        ],
+        [
+          "raise",
+          "Vyvolání výjimky při běhové chybě"
+        ],
+        [
+          "traceback.print_exc()",
+          "Výpis zásobníku volání při chybě"
+        ],
+        [
+          "f'{x=}'",
+          "Rychlý debug výpis proměnné s jejím názvem"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu pro ošetření výjimek a vlastní typy výjimek:",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "# Vlastní výjimky\nclass {{AppError}}(Exception):\n    def __init__(self, message: str, code: int = 500):\n        super().__init__({{message}})\n        self.code = {{code}}\n\nclass ValidationError({{AppError}}):\n    def __init__(self, field: str, message: str):\n        super().__init__(f\"Validation failed on '{{{field}}}': {message}\", code=400)\n        self.field = {{field}}\n\n# Ošetření výjimek\ndef process_user_input(data: dict):\n    try:\n        age = int(data.get(\"age\", \"\"))\n        if age < 0 or age > 150:\n            raise {{ValidationError}}(\"age\", \"must be 0-150\")\n        return {\"age\": {{age}}}\n    except {{ValueError}}:\n        raise ValidationError(\"age\", \"must be a number\")\n    except ValidationError:\n        {{raise}}   # re-raise beze změny\n    except Exception as e:\n        raise AppError(f\"Unexpected error: {e}\") from {{e}}\n    finally:\n        print(\"Zpracování dokončeno\")   # vždy se provede"
+        },
+        {
+          "lang": "Java",
+          "code": "// Vlastní výjimka\npublic class {{ValidationException}} extends RuntimeException {\n    private final String field;\n    public ValidationException(String field, String msg) {\n        {{super}}(msg);\n        this.{{field}} = field;\n    }\n    public String getField() { return {{field}}; }\n}\n\n// Ošetření výjimek\npublic int parseAge(String input) {\n    try {\n        int age = Integer.{{parseInt}}(input);\n        if (age < 0 || age > 150) {\n            throw new {{ValidationException}}(\"age\", \"must be 0-150\");\n        }\n        return {{age}};\n    } catch (NumberFormatException e) {\n        throw new ValidationException(\"age\", \"must be a number\");\n    } catch (ValidationException e) {\n        {{throw}} e;   // re-throw\n    } finally {\n        System.out.{{println}}(\"Zpracování dokončeno\");\n    }\n}"
+        }
       ]
     }
   ]

@@ -373,6 +373,100 @@
     };
   }
 
+  /* ── CODE-FILL renderer ── */
+  // JSON format: { type:"code-fill", prompt:"...", variants:[{lang:"Python", code:"...", answers:[...]}, ...] }
+  // All blanks are marked as {{token}} in code. On each render a random language variant
+  // is picked and a random 50-80% subset of tokens becomes blanks; the rest are shown in green.
+  function renderCodeFill(q, qEl) {
+    var variants = (q.variants || []).filter(function (v) {
+      return v.code;
+    });
+    if (!variants.length) return;
+
+    var variant = variants[Math.floor(Math.random() * variants.length)];
+    var lang = variant.lang || "Code";
+    var codeTemplate = variant.code || "";
+
+    // collect all {{token}} positions in order
+    var tokenRegex = /\{\{([^}]+)\}\}/g;
+    var allTokens = [];
+    var m;
+    while ((m = tokenRegex.exec(codeTemplate)) !== null) {
+      allTokens.push({ full: m[0], answer: m[1], offset: m.index });
+    }
+    if (!allTokens.length) return;
+
+    // randomly pick which tokens become blank (50-80%, min 2)
+    var pct = 0.5 + Math.random() * 0.3;
+    var numBlanks = Math.max(2, Math.min(allTokens.length, Math.round(allTokens.length * pct)));
+    var idxShuffled = shuffle(allTokens.map(function (_, i) { return i; }));
+    var blankSet = {};
+    idxShuffled.slice(0, numBlanks).forEach(function (i) { blankSet[i] = true; });
+
+    // language bar
+    var langBar = document.createElement("div");
+    langBar.className = "cf-lang-bar";
+    langBar.innerHTML =
+      '<span class="cf-lang-badge">' + esc(lang) + "</span>" +
+      '<span class="cf-hint">Doplň chybějící tokeny.</span>';
+    qEl.appendChild(langBar);
+
+    // code block with inline inputs
+    var pre = document.createElement("div");
+    pre.className = "cf-code-block";
+
+    var html = "";
+    var lastIdx = 0;
+    allTokens.forEach(function (tok, i) {
+      // raw text before token — preserve whitespace via esc then swap newlines
+      var before = codeTemplate.slice(lastIdx, tok.offset);
+      html += esc(before).replace(/\n/g, "<br>").replace(/ /g, "&nbsp;");
+      lastIdx = tok.offset + tok.full.length;
+
+      if (blankSet[i]) {
+        var w = Math.max(40, (tok.answer.length + 2) * 9);
+        html +=
+          '<input type="text" class="cf-input" data-answer="' +
+          esc(tok.answer) +
+          '" style="width:' + w + 'px" ' +
+          'spellcheck="false" autocomplete="off" placeholder="?">';
+      } else {
+        html += '<span class="cf-given">' + esc(tok.answer) + "</span>";
+      }
+    });
+    // remaining text after last token
+    var tail = codeTemplate.slice(lastIdx);
+    html += esc(tail).replace(/\n/g, "<br>").replace(/ /g, "&nbsp;");
+
+    pre.innerHTML = html;
+    qEl.appendChild(pre);
+
+    return function evaluate() {
+      var inputs = pre.querySelectorAll(".cf-input");
+      var score = 0;
+      var missing = [];
+      inputs.forEach(function (inp) {
+        var expected = norm(inp.dataset.answer);
+        var got = norm(inp.value);
+        if (got && (expected === got || expected.includes(got) || got.includes(expected))) {
+          score++;
+          inp.classList.add("correct");
+          inp.classList.remove("wrong");
+        } else {
+          inp.classList.add("wrong");
+          inp.classList.remove("correct");
+          inp.title = "Správně: " + inp.dataset.answer;
+          missing.push(inp.dataset.answer);
+        }
+      });
+      return {
+        got: score,
+        max: inputs.length,
+        detail: missing.length ? "Správně: " + missing.join(", ") : "",
+      };
+    };
+  }
+
   /* ── CODE renderer ── */
   function renderCode(q, qEl) {
     var lang = q.language || "python";
@@ -508,6 +602,7 @@
       var typeLabels = {
         match: "Přiřazování",
         fill: "Doplňování",
+        "code-fill": "Kódové doplňování",
         order: "Řazení",
         trueFalse: "Pravda/Nepravda",
         open: "Otevřená",
@@ -539,6 +634,9 @@
           break;
         case "open":
           evalFn = renderOpen(q, qEl);
+          break;
+        case "code-fill":
+          evalFn = renderCodeFill(q, qEl);
           break;
         case "code":
           evalFn = renderCode(q, qEl);

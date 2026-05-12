@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď CRUD operaci k odpovídajícímu SQL příkazu a HTTP metodě:",
       "pairs": [
-        ["Create", "INSERT INTO / POST"],
-        ["Read", "SELECT / GET"],
-        ["Update", "UPDATE / PUT nebo PATCH"],
-        ["Delete", "DELETE / DELETE"]
+        [
+          "Create",
+          "INSERT INTO / POST"
+        ],
+        [
+          "Read",
+          "SELECT / GET"
+        ],
+        [
+          "Update",
+          "UPDATE / PUT nebo PATCH"
+        ],
+        [
+          "Delete",
+          "DELETE / DELETE"
+        ]
       ]
     },
     {
@@ -22,7 +34,12 @@
       "type": "fill",
       "prompt": "Doplň pojmy o ORM:",
       "text": "V ORM vzoru se {{třída}} mapuje na tabulku v databázi, {{instance}} objektu odpovídá jednomu řádku a {{atribut}} odpovídá sloupci. ORM automaticky zabraňuje {{SQL injection}} díky parametrizovaným dotazům.",
-      "answers": ["třída", "instance", "atribut", "SQL injection"]
+      "answers": [
+        "třída",
+        "instance",
+        "atribut",
+        "SQL injection"
+      ]
     },
     {
       "type": "order",
@@ -38,16 +55,49 @@
     {
       "type": "open",
       "prompt": "Jaké jsou výhody a nevýhody použití ORM oproti přímému psaní SQL dotazů?",
-      "keywords": ["typová bezpečnost", "přenositelnost", "abstrakce", "N+1", "výkon", "složité dotazy"]
+      "keywords": [
+        "typová bezpečnost",
+        "přenositelnost",
+        "abstrakce",
+        "N+1",
+        "výkon",
+        "složité dotazy"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď přístup k databázi k jeho popisu:",
       "pairs": [
-        ["Přímé SQL", "Ruční psaní dotazů — plná kontrola"],
-        ["ORM", "Mapování objektů na tabulky — typové bezpečnost"],
-        ["Query Builder", "Programatické sestavení dotazů"],
-        ["Repository pattern", "Zapouzdřuje databázové operace do třídy"]
+        [
+          "Přímé SQL",
+          "Ruční psaní dotazů — plná kontrola"
+        ],
+        [
+          "ORM",
+          "Mapování objektů na tabulky — typové bezpečnost"
+        ],
+        [
+          "Query Builder",
+          "Programatické sestavení dotazů"
+        ],
+        [
+          "Repository pattern",
+          "Zapouzdřuje databázové operace do třídy"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části SQL dotazů a práce s databází v Pythonu:",
+      "variants": [
+        {
+          "lang": "SQL",
+          "code": "-- Vytvoření tabulek\nCREATE {{TABLE}} students (\n    id       INTEGER PRIMARY KEY {{AUTOINCREMENT}},\n    name     TEXT    NOT NULL,\n    email    TEXT    UNIQUE,\n    grade_id INTEGER {{REFERENCES}} grades(id)\n);\n\n-- JOIN dotaz\nSELECT s.name, g.label AS grade\nFROM {{students}} s\n{{JOIN}} grades g ON s.grade_id = {{g}}.id\nWHERE s.grade_id IS NOT {{NULL}}\nORDER BY s.name {{ASC}};\n\n-- Agregace\nSELECT grade_id, {{COUNT}}(*) AS num_students, {{AVG}}(score) AS avg_score\nFROM students\nGROUP BY {{grade_id}}\nHAVING COUNT(*) > {{5}};"
+        },
+        {
+          "lang": "Python (sqlite3)",
+          "code": "import {{sqlite3}}\n\nconn = sqlite3.connect('school.db')\nconn.{{row_factory}} = sqlite3.Row\n\ndef create_student(name: str, email: str, grade_id: int):\n    with {{conn}}:\n        conn.execute(\n            \"INSERT INTO students (name, email, grade_id) VALUES (?,?,?)\",\n            ({{name}}, email, grade_id)\n        )\n\ndef get_students_by_grade(grade_id: int):\n    cur = conn.{{cursor}}()\n    cur.execute(\n        \"SELECT * FROM students WHERE grade_id = ? ORDER BY name\",\n        ({{grade_id}},)\n    )\n    return cur.{{fetchall}}()\n\ndef update_grade(student_id: int, new_grade: int):\n    with conn:\n        conn.execute(\"UPDATE students SET grade_id = ? WHERE id = ?\",\n                     (new_grade, {{student_id}}))"
+        }
       ]
     }
   ]

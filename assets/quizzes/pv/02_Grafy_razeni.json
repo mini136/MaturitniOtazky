@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď algoritmus průchodu grafem k datové struktuře, kterou používá:",
       "pairs": [
-        ["BFS", "Fronta (FIFO)"],
-        ["DFS", "Zásobník (LIFO) / rekurze"],
-        ["Dijkstra", "Prioritní fronta (heap)"],
-        ["Topologické řazení", "DFS s post-order zpracováním"]
+        [
+          "BFS",
+          "Fronta (FIFO)"
+        ],
+        [
+          "DFS",
+          "Zásobník (LIFO) / rekurze"
+        ],
+        [
+          "Dijkstra",
+          "Prioritní fronta (heap)"
+        ],
+        [
+          "Topologické řazení",
+          "DFS s post-order zpracováním"
+        ]
       ]
     },
     {
@@ -33,31 +45,66 @@
       "type": "fill",
       "prompt": "Doplň vlastnosti řadicích algoritmů:",
       "text": "Merge Sort má složitost {{O(n log n)}} ve všech případech a je {{stabilní}}, ale potřebuje O(n) extra paměti. Bubble Sort má nejhorší složitost {{O(n²)}}, ale v nejlepším případě (seřazené pole) je O(n).",
-      "answers": ["O(n log n)", "stabilní", "O(n²)"]
+      "answers": [
+        "O(n log n)",
+        "stabilní",
+        "O(n²)"
+      ]
     },
     {
       "type": "open",
       "prompt": "Kdy je vhodné použít matici sousednosti a kdy seznam sousednosti pro reprezentaci grafu? Uveď příklady.",
-      "keywords": ["řídký", "hustý", "paměť", "O(V²)", "O(V+E)", "hrana"]
+      "keywords": [
+        "řídký",
+        "hustý",
+        "paměť",
+        "O(V²)",
+        "O(V+E)",
+        "hrana"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď reprezentaci grafu k její paměťové složitosti:",
       "pairs": [
-        ["Matice sousednosti", "O(V²)"],
-        ["Seznam sousednosti", "O(V+E)"],
-        ["Seznam hran", "O(E)"],
-        ["BFS/DFS průchod", "O(V+E) časová složitost"]
+        [
+          "Matice sousednosti",
+          "O(V²)"
+        ],
+        [
+          "Seznam sousednosti",
+          "O(V+E)"
+        ],
+        [
+          "Seznam hran",
+          "O(E)"
+        ],
+        [
+          "BFS/DFS průchod",
+          "O(V+E) časová složitost"
+        ]
       ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď algoritmus prohledávání stavového prostoru k jeho strategii:",
       "pairs": [
-        ["BFS", "Šířka nejdříve — nejkratší cesta v neohodnoceném prostoru"],
-        ["DFS", "Hloubka nejdříve — backtracking, detekce cyklů"],
-        ["A*", "Heuristika f(n) = g(n) + h(n) — optimální cesta"],
-        ["IDDFS", "Iterativní prohlubování DFS — optimální paměť i čas"]
+        [
+          "BFS",
+          "Šířka nejdříve — nejkratší cesta v neohodnoceném prostoru"
+        ],
+        [
+          "DFS",
+          "Hloubka nejdříve — backtracking, detekce cyklů"
+        ],
+        [
+          "A*",
+          "Heuristika f(n) = g(n) + h(n) — optimální cesta"
+        ],
+        [
+          "IDDFS",
+          "Iterativní prohlubování DFS — optimální paměť i čas"
+        ]
       ]
     },
     {
@@ -71,12 +118,26 @@
       "type": "fill",
       "prompt": "Doplň pojmy prohledávání stavového prostoru:",
       "text": "Stavový prostor je množina všech možných {{stavů}} problému. BFS garantuje nalezení {{nejkratší}} cesty v neohodnoceném prostoru. Faktor větvení {{b}} určuje počet následníků každého uzlu. Složitost BFS je O(b{{^d}}), kde d je hloubka řešení.",
-      "answers": ["stavů", "nejkratší", "b", "^d"]
+      "answers": [
+        "stavů",
+        "nejkratší",
+        "b",
+        "^d"
+      ]
     },
     {
       "type": "open",
       "prompt": "Vysvětli rozdíl mezi prohledáváním grafem (BFS/DFS na grafu) a prohledáváním stavového prostoru. Uveď příklady použití stavového prostoru.",
-      "keywords": ["stav", "počáteční", "cílový", "přechod", "puzzle", "labyrint", "hra", "heuristika"]
+      "keywords": [
+        "stav",
+        "počáteční",
+        "cílový",
+        "přechod",
+        "puzzle",
+        "labyrint",
+        "hra",
+        "heuristika"
+      ]
     },
     {
       "type": "code",
@@ -84,7 +145,25 @@
       "task": "Implementuj funkci bfs(graph, start) v Pythonu. Parametr graph je slovník (adjacency list), start je počáteční uzel. Funkce vrátí seznam uzlů v pořadí, v jakém byly navštíveny (BFS — prohledávání do šířky).",
       "language": "python",
       "starterCode": "from collections import deque\n\ndef bfs(graph, start):\n    visited = set()\n    queue = deque()\n    result = []\n    # Tvůj kód zde\n    return result",
-      "hints": ["Přidej start do visited a queue", "Dokud queue není prázdná, odeber první prvek", "Přidej nenavštívené sousedy do fronty"]
+      "hints": [
+        "Přidej start do visited a queue",
+        "Dokud queue není prázdná, odeber první prvek",
+        "Přidej nenavštívené sousedy do fronty"
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části algoritmu BFS pro prohledávání grafu:",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "from collections import {{deque}}\n\ndef bfs(graph, {{start}}):\n    visited = {{set}}()\n    queue = deque([start])\n    visited.{{add}}(start)\n    while {{queue}}:\n        node = queue.{{popleft}}()\n        for neighbor in graph[{{node}}]:\n            if neighbor not in {{visited}}:\n                visited.add(neighbor)\n                queue.append({{neighbor}})\n    return visited"
+        },
+        {
+          "lang": "JavaScript",
+          "code": "function bfs(graph, {{start}}) {\n    const {{visited}} = new Set([start]);\n    const queue = [{{start}}];\n    while (queue.{{length}}) {\n        const node = queue.{{shift}}();\n        for (const neighbor of graph[node]) {\n            if (!visited.{{has}}(neighbor)) {\n                visited.add({{neighbor}});\n                queue.push(neighbor);\n            }\n        }\n    }\n    return visited;\n}"
+        }
+      ]
     }
   ]
 }

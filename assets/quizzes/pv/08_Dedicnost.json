@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď pojem k jeho popisu v kontextu OOP dědičnosti:",
       "pairs": [
-        ["Overriding (přepisování)", "Potomek přepisuje metodu rodiče se stejnou signaturou — dynamický binding"],
-        ["Overloading (přetěžování)", "Více metod se stejným názvem ale různými parametry — statický binding"],
-        ["Abstraktní třída", "Může mít implementované metody i atributy, ale nelze vytvořit instanci"],
-        ["Interface", "Definuje kontrakt — pouze abstraktní metody, třída může implementovat více"]
+        [
+          "Overriding (přepisování)",
+          "Potomek přepisuje metodu rodiče se stejnou signaturou — dynamický binding"
+        ],
+        [
+          "Overloading (přetěžování)",
+          "Více metod se stejným názvem ale různými parametry — statický binding"
+        ],
+        [
+          "Abstraktní třída",
+          "Může mít implementované metody i atributy, ale nelze vytvořit instanci"
+        ],
+        [
+          "Interface",
+          "Definuje kontrakt — pouze abstraktní metody, třída může implementovat více"
+        ]
       ]
     },
     {
@@ -22,7 +34,11 @@
       "type": "fill",
       "prompt": "Doplň pojmy o dědičnosti:",
       "text": "Když v Javě potomek přepisuje metodu rodiče, používá se anotace {{@Override}}. O tom, která implementace se zavolá, rozhoduje {{dynamický binding}} za běhu programu. Kontrola typu za běhu se provádí pomocí klíčového slova {{instanceof}}.",
-      "answers": ["@Override", "dynamický binding", "instanceof"]
+      "answers": [
+        "@Override",
+        "dynamický binding",
+        "instanceof"
+      ]
     },
     {
       "type": "order",
@@ -37,16 +53,49 @@
     {
       "type": "open",
       "prompt": "Jaký je rozdíl mezi abstraktní třídou a rozhraním? Kdy použiješ jedno a kdy druhé?",
-      "keywords": ["atributy", "konstruktor", "implementace", "vícenásobná", "kontrakt", "společný kód"]
+      "keywords": [
+        "atributy",
+        "konstruktor",
+        "implementace",
+        "vícenásobná",
+        "kontrakt",
+        "společný kód"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď vlastnost k abstraktní třídě nebo interface:",
       "pairs": [
-        ["Může mít instance variables (atributy)", "Abstraktní třída"],
-        ["Může mít konstruktor", "Abstraktní třída"],
-        ["Třída může implementovat více najednou", "Interface"],
-        ["Od Java 8+ může mít default implementaci metod", "Interface"]
+        [
+          "Může mít instance variables (atributy)",
+          "Abstraktní třída"
+        ],
+        [
+          "Může mít konstruktor",
+          "Abstraktní třída"
+        ],
+        [
+          "Třída může implementovat více najednou",
+          "Interface"
+        ],
+        [
+          "Od Java 8+ může mít default implementaci metod",
+          "Interface"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části kódu demonstrujícího dědičnost a polymorfismus:",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "class {{Animal}}:\n    def __init__(self, name: str, sound: str):\n        self.{{name}} = name\n        self.sound = sound\n    def speak(self) -> str:\n        return f\"{self.{{name}}} says {self.sound}\"\n    def __repr__(self):\n        return f\"Animal({self.name!r})\"\n\nclass {{Dog}}(Animal):\n    def __init__(self, name: str):\n        {{super}}().__init__(name, \"Woof\")\n    def fetch(self, item: str) -> str:\n        return f\"{self.{{name}}} fetches {item}\"\n    def speak(self) -> str:     # override\n        return {{super}}().speak() + \"!\"\n\nclass Cat({{Animal}}):\n    def __init__(self, name: str):\n        super().__init__({{name}}, \"Meow\")\n    def purr(self) -> str:\n        return f\"{self.name} purrs...\""
+        },
+        {
+          "lang": "Java",
+          "code": "public abstract class {{Animal}} {\n    protected String name;\n    protected String sound;\n    public Animal(String name, String sound) {\n        this.{{name}} = name;\n        this.sound = {{sound}};\n    }\n    public String speak() {\n        return name + \" says \" + {{sound}};\n    }\n    public abstract String describe();\n}\n\npublic class {{Dog}} extends Animal {\n    public Dog(String name) {\n        {{super}}(name, \"Woof\");\n    }\n    @{{Override}}\n    public String describe() {\n        return \"Dog: \" + {{name}};\n    }\n    public String fetch(String item) {\n        return name + \" fetches \" + {{item}};\n    }\n}"
+        }
       ]
     }
   ]

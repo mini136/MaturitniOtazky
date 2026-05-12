@@ -5,10 +5,22 @@
       "type": "match",
       "prompt": "Přiřaď úroveň testování k tomu, co testuje:",
       "pairs": [
-        ["Unit testy", "Jednotlivé funkce a metody izolovaně"],
-        ["Integrační testy", "Spolupráce více komponent dohromady"],
-        ["E2E testy", "Celý systém z pohledu uživatele"],
-        ["Mocking", "Nahrazení reálné závislosti falešnou implementací"]
+        [
+          "Unit testy",
+          "Jednotlivé funkce a metody izolovaně"
+        ],
+        [
+          "Integrační testy",
+          "Spolupráce více komponent dohromady"
+        ],
+        [
+          "E2E testy",
+          "Celý systém z pohledu uživatele"
+        ],
+        [
+          "Mocking",
+          "Nahrazení reálné závislosti falešnou implementací"
+        ]
       ]
     },
     {
@@ -25,7 +37,12 @@
       "type": "fill",
       "prompt": "Doplň pojmy z testovacího patternu AAA:",
       "text": "V kroku {{Arrange}} připravíme vstupy a prostředí. V kroku {{Act}} provedeme testovanou operaci. V kroku {{Assert}} ověříme výsledek. Metoda {{setUp}} v unittest se volá před každým testem pro inicializaci.",
-      "answers": ["Arrange", "Act", "Assert", "setUp"]
+      "answers": [
+        "Arrange",
+        "Act",
+        "Assert",
+        "setUp"
+      ]
     },
     {
       "type": "trueFalse",
@@ -37,16 +54,50 @@
     {
       "type": "open",
       "prompt": "Vysvětli, co je mocking a proč ho potřebujeme při testování. Uveď příklad situace.",
-      "keywords": ["závislost", "izolace", "falešný objekt", "databáze", "Mock", "return_value", "assert_called"]
+      "keywords": [
+        "závislost",
+        "izolace",
+        "falešný objekt",
+        "databáze",
+        "Mock",
+        "return_value",
+        "assert_called"
+      ]
     },
     {
       "type": "match",
       "prompt": "Přiřaď FIRST princip k jeho významu:",
       "pairs": [
-        ["Fast", "Testy běží rychle"],
-        ["Independent", "Testy nezávisí na sobě navzájem"],
-        ["Repeatable", "Vždy stejný výsledek při opakovaném spuštění"],
-        ["Self-validating", "Automaticky ověří pass/fail bez manuální kontroly"]
+        [
+          "Fast",
+          "Testy běží rychle"
+        ],
+        [
+          "Independent",
+          "Testy nezávisí na sobě navzájem"
+        ],
+        [
+          "Repeatable",
+          "Vždy stejný výsledek při opakovaném spuštění"
+        ],
+        [
+          "Self-validating",
+          "Automaticky ověří pass/fail bez manuální kontroly"
+        ]
+      ]
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části unit testů a mocků:",
+      "variants": [
+        {
+          "lang": "Python (pytest + mock)",
+          "code": "import {{pytest}}\nfrom unittest.mock import {{patch}}, MagicMock\n\nclass UserService:\n    def __init__(self, db):\n        self.db = db\n    def get_user(self, uid: int):\n        user = self.db.query(\"SELECT * FROM users WHERE id=?\", [uid])\n        if not user: raise {{ValueError}}(f\"User {uid} not found\")\n        return user\n\n# Test s mockem\n@pytest.fixture\ndef mock_db():\n    return {{MagicMock}}()\n\ndef test_get_user_found(mock_db):\n    mock_db.query.{{return_value}} = {\"id\": 1, \"name\": \"Alice\"}\n    svc = UserService({{mock_db}})\n    user = svc.get_user(1)\n    assert user[\"name\"] == \"{{Alice}}\"\n    mock_db.query.{{assert_called_once}}()\n\ndef test_get_user_not_found(mock_db):\n    mock_db.query.return_value = {{None}}\n    svc = UserService(mock_db)\n    with pytest.{{raises}}(ValueError, match=\"not found\"):\n        svc.get_user({{999}})"
+        },
+        {
+          "lang": "JavaScript (Jest + mock)",
+          "code": "const { {{UserService}} } = require('./userService');\n\n{{describe}}('UserService', () => {\n    let mockDb;\n    let service;\n\n    {{beforeEach}}(() => {\n        mockDb = { query: {{jest}}.fn() };\n        service = new UserService({{mockDb}});\n    });\n\n    test('returns user when found', async () => {\n        mockDb.query.{{mockResolvedValue}}({ id: 1, name: 'Alice' });\n        const user = await service.{{getUser}}(1);\n        expect(user.name).{{toBe}}('Alice');\n        expect(mockDb.query).toHaveBeenCalledWith(\n            expect.{{stringContaining}}('WHERE id=?'), [1]\n        );\n    });\n\n    test('throws when not found', async () => {\n        mockDb.query.mockResolvedValue({{null}});\n        await expect(service.getUser(999)).{{rejects}}.toThrow('not found');\n    });\n});"
+        }
       ]
     }
   ]

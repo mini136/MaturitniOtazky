@@ -5,17 +5,34 @@
       "type": "match",
       "prompt": "Přiřaď datovou strukturu k jejímu principu přístupu:",
       "pairs": [
-        ["Stack (zásobník)", "LIFO — poslední dovnitř, první ven"],
-        ["Queue (fronta)", "FIFO — první dovnitř, první ven"],
-        ["BST (binární vyhledávací strom)", "Levý podstrom < kořen < pravý podstrom"],
-        ["Hash tabulka", "Klíč → hash funkce → index v poli"]
+        [
+          "Stack (zásobník)",
+          "LIFO — poslední dovnitř, první ven"
+        ],
+        [
+          "Queue (fronta)",
+          "FIFO — první dovnitř, první ven"
+        ],
+        [
+          "BST (binární vyhledávací strom)",
+          "Levý podstrom < kořen < pravý podstrom"
+        ],
+        [
+          "Hash tabulka",
+          "Klíč → hash funkce → index v poli"
+        ]
       ]
     },
     {
       "type": "fill",
       "prompt": "Doplň složitosti operací datových struktur:",
       "text": "Přístup k prvku pole podle indexu má složitost O({{1}}). Vyhledání v linked listu má složitost O({{n}}). Vyhledání v BST má průměrnou složitost O({{log n}}). Push a pop na stacku mají složitost O({{1}}).",
-      "answers": ["1", "n", "log n", "1"]
+      "answers": [
+        "1",
+        "n",
+        "log n",
+        "1"
+      ]
     },
     {
       "type": "order",
@@ -38,7 +55,15 @@
     {
       "type": "open",
       "prompt": "Vysvětli, jak funguje hash tabulka a jak se řeší kolize metodou chaining.",
-      "keywords": ["hash funkce", "bucket", "index", "linked list", "kolize", "chaining", "O(1)"]
+      "keywords": [
+        "hash funkce",
+        "bucket",
+        "index",
+        "linked list",
+        "kolize",
+        "chaining",
+        "O(1)"
+      ]
     },
     {
       "type": "trueFalse",
@@ -46,6 +71,20 @@
       "statement": "Stack se používá při kontrole správného párování závorek ve výrazu.",
       "answer": true,
       "explanation": "Při průchodu výrazem se otevírací závorky pushují na stack. Při uzavírací závorce se popne poslední otevírací a ověří, zda tvoří pár. Na konci musí být stack prázdný — jinak závorky nejsou správně spárované."
+    },
+    {
+      "type": "code-fill",
+      "prompt": "Doplň chybějící části implementace spojového seznamu (Linked List):",
+      "variants": [
+        {
+          "lang": "Python",
+          "code": "class {{Node}}:\n    def __init__(self, data):\n        self.{{data}} = data\n        self.{{next}} = None\n\nclass LinkedList:\n    def __init__(self):\n        self.{{head}} = None\n\n    def append(self, data):\n        new_node = Node({{data}})\n        if not self.head:\n            self.head = {{new_node}}\n            return\n        cur = self.{{head}}\n        while cur.{{next}}:\n            cur = cur.next\n        cur.next = {{new_node}}\n\n    def delete(self, data):\n        if not self.{{head}}: return\n        if self.head.data == {{data}}:\n            self.head = self.head.{{next}}\n            return\n        cur = self.head\n        while cur.next and cur.next.{{data}} != data:\n            cur = cur.{{next}}\n        if cur.next:\n            cur.{{next}} = cur.next.next"
+        },
+        {
+          "lang": "TypeScript",
+          "code": "class {{Node}}<T> {\n    data: T;\n    next: Node<{{T}}> | null = null;\n    constructor(data: {{T}}) { this.data = data; }\n}\n\nclass LinkedList<T> {\n    private head: {{Node}}<T> | null = null;\n\n    append(data: T): void {\n        const node = new Node({{data}});\n        if (!this.{{head}}) { this.head = node; return; }\n        let cur = this.{{head}};\n        while (cur.{{next}}) cur = cur.next;\n        cur.next = {{node}};\n    }\n\n    toArray(): T[] {\n        const result: T[] = [];\n        let cur = this.{{head}};\n        while (cur) { result.push(cur.{{data}}); cur = cur.next; }\n        return result;\n    }\n\n    delete(data: T): void {\n        if (!this.head) return;\n        if (this.head.data === {{data}}) { this.head = this.head.next; return; }\n        let cur = this.head;\n        while (cur.next && cur.next.data !== {{data}}) cur = cur.next;\n        if (cur.{{next}}) cur.next = cur.next.{{next}};\n    }\n}"
+        }
+      ]
     }
   ]
 }
