@@ -187,6 +187,12 @@
     );
   }
 
+  function getCodeFillQuizUrl() {
+    var sf = getSubAndFile();
+    var back = encodeURIComponent(window.location.href);
+    return "../assets/quiz.html?q=" + sf.sub + "/" + sf.file + "&type=code-fill&back=" + back;
+  }
+
   function buildQuizButton(anchor) {
     var isMobile = window.matchMedia("(max-width: 680px)").matches;
     var wrap = document.createElement("div");
@@ -234,6 +240,15 @@
         "AI Procvičování (live)",
         "#0ea5e9",
         "#0284c7",
+      ),
+    );
+    wrap.appendChild(
+      makeBtn(
+        getCodeFillQuizUrl(),
+        "💻",
+        "Kódové doplňování",
+        "#16a34a",
+        "#15803d",
       ),
     );
     anchor.insertAdjacentElement("beforebegin", wrap);

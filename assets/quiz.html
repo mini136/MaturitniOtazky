@@ -151,13 +151,29 @@
 
         var jsonUrl = "quizzes/" + q + ".json";
 
+        var typeFilter = params.get("type") || "";
+
         fetch(jsonUrl)
             .then(function(res) {
                 if (!res.ok) throw new Error("not_found");
                 return res.json();
             })
             .then(function(data) {
-                document.title = "Procvičování: " + data.title;
+                if (typeFilter) {
+                    data = Object.assign({}, data, {
+                        questions: (data.questions || []).filter(function(q) {
+                            return q.type === typeFilter;
+                        })
+                    });
+                    document.title = "Kódové doplňování: " + data.title;
+                } else {
+                    document.title = "Procvičování: " + data.title;
+                }
+                if (!data.questions || !data.questions.length) {
+                    document.getElementById("quiz-root").innerHTML =
+                        '<div class="quiz-error">Pro tuto otázku nejsou k dispozici kódové doplňovačky.</div>';
+                    return;
+                }
                 document.getElementById("quiz-root").innerHTML = "";
                 /* quiz.js exposes buildQuiz on window when loaded from quiz.html */
                 if (window.__quizBuild) {
