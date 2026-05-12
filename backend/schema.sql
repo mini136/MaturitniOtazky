@@ -27,3 +27,14 @@ IF NOT EXISTS comments
   KEY idx_created_at
 (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE IF NOT EXISTS chat_questions (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  topic_path VARCHAR(255) NOT NULL,
+  selected_text TEXT NOT NULL,
+  explanation TEXT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_cq_topic (topic_path),
+  KEY idx_cq_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;

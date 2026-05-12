@@ -514,6 +514,93 @@
     });
   }
 
+  /* ── Chat questions sidebar ── */
+  async function loadChatQuestions() {
+    var sidebar = document.getElementById("chat-sidebar");
+    if (!sidebar) return;
+    var body = sidebar.querySelector("#chat-sidebar-body");
+    if (!body) return;
+    var topic = getTopicKey();
+    if (!topic) return;
+    try {
+      var r = await fetch("/api/chat-questions?topic=" + encodeURIComponent(topic));
+      if (!r.ok) return;
+      var data = await r.json();
+      var questions = data.questions || [];
+      if (!questions.length) {
+        body.innerHTML =
+          '<p class="chat-sidebar-empty">Zatím žádné dotazy. Vyber text a klikni 💡 Vysvětlit.</p>';
+        return;
+      }
+      // Auto-open sidebar on desktop if there are saved questions
+      if (window.matchMedia("(min-width: 900px)").matches) {
+        sidebar.classList.add("open");
+        var btn = document.getElementById("chat-sidebar-float-btn");
+        if (btn) btn.classList.add("active");
+      }
+      body.innerHTML = questions
+        .map(function (q) {
+          var snippet = safeText(q.selectedText || "");
+          if (snippet.length > 120) snippet = snippet.slice(0, 120) + "…";
+          var exp = safeText(q.explanation || "").replace(/\n/g, "<br>");
+          var date = safeText(q.createdAt || "");
+          return (
+            '<div class="chat-item">' +
+            '<div class="chat-item-query">' +
+            snippet +
+            "</div>" +
+            '<details class="chat-item-details"><summary>Zobrazit odpověď</summary>' +
+            '<div class="chat-item-answer">' +
+            exp +
+            "</div></details>" +
+            '<div class="chat-item-date">' +
+            date +
+            "</div>" +
+            "</div>"
+          );
+        })
+        .join("");
+    } catch (e) {
+      /* silently fail */
+    }
+  }
+
+  function buildChatSidebar() {
+    var sidebar = document.createElement("div");
+    sidebar.id = "chat-sidebar";
+    sidebar.className = "chat-sidebar";
+    sidebar.innerHTML =
+      '<div class="chat-sidebar-header">' +
+      "<span>💬 Otázky z AI</span>" +
+      '<button type="button" class="chat-sidebar-close" id="chat-sidebar-close" aria-label="Zavřít">✕</button>' +
+      "</div>" +
+      '<div class="chat-sidebar-body" id="chat-sidebar-body">' +
+      '<p class="chat-sidebar-empty">Zatím žádné dotazy. Vyber text a klikni 💡 Vysvětlit.</p>' +
+      "</div>";
+    document.body.appendChild(sidebar);
+
+    var toggleBtn = document.createElement("button");
+    toggleBtn.id = "chat-sidebar-float-btn";
+    toggleBtn.className = "chat-sidebar-float-btn";
+    toggleBtn.innerHTML = "💬";
+    toggleBtn.setAttribute("aria-label", "Otázky z AI");
+    document.body.appendChild(toggleBtn);
+
+    toggleBtn.addEventListener("click", function () {
+      sidebar.classList.toggle("open");
+      toggleBtn.classList.toggle("active");
+    });
+    document.getElementById("chat-sidebar-close").addEventListener(
+      "click",
+      function () {
+        sidebar.classList.remove("open");
+        toggleBtn.classList.remove("active");
+      },
+    );
+
+    loadChatQuestions();
+  }
+
   /* ── AI explain on text selection ── */
   function buildExplainFeature() {
     // --- side panel ---
@@ -601,6 +688,7 @@
           body: JSON.stringify({
             text: lastSelection.slice(0, 1500),
             pageTitle: pageTitle.slice(0, 200),
+            topicPath: getTopicKey(),
           }),
         })
           .then(function (r) {
@@ -621,6 +709,9 @@
               formatExplanation(exp) +
               "</div>" +
               '<button type="button" class="explain-more-btn" id="explain-more">🔁 Vysvětlit jinak</button>';
+
+            // Refresh sidebar after a short delay so server saves first
+            setTimeout(loadChatQuestions, 700);
 
             document
               .getElementById("explain-more")
@@ -705,5 +796,6 @@
       buildComments(anchorBottom);
     }
     buildExplainFeature();
+    buildChatSidebar();
   });
 })();

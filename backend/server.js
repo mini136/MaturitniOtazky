@@ -399,6 +399,7 @@ app.post("/api/explain", async (req, res) => {
     .trim()
     .slice(0, 200);
   const rephrase = !!req.body.rephrase;
+  const topicPath = normalizeQuestionPath(req.body.topicPath);
 
   if (!text) {
     return res.status(400).json({ error: "missing_text" });
@@ -425,6 +426,13 @@ app.post("/api/explain", async (req, res) => {
       ],
     });
     const explanation = (completion.choices[0].message.content || "").trim();
+    // Save to DB (non-blocking, fire-and-forget)
+    if (!rephrase && topicPath) {
+      pool.query(
+        "INSERT INTO chat_questions (topic_path, selected_text, explanation) VALUES (?, ?, ?)",
+        [topicPath, text, explanation]
+      ).catch(() => {});
+    }
     return res.json({ explanation });
   } catch (e) {
     return res.status(500).json({ error: "explain_failed" });
@@ -482,12 +490,54 @@ app.post("/api/quiz/code/evaluate", async (req, res) => {
   }
 });
 
+/* ── Chat questions: save question ── */
+app.get("/api/chat-questions", async (req, res) => {
+  const topic = normalizeQuestionPath(req.query.topic);
+  if (!topic) return res.status(400).json({ error: "topic_required" });
+  try {
+    const [rows] = await pool.query(
+      `SELECT id, topic_path AS topicPath, selected_text AS selectedText, explanation,
+              DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS createdAt
+       FROM chat_questions
+       WHERE topic_path = ?
+       ORDER BY created_at DESC
+       LIMIT 100`,
+      [topic]
+    );
+    return res.json({ questions: rows });
+  } catch (err) {
+    return res.status(500).json({ error: "db_read_failed" });
+  }
+});
+
 app.use(express.static(ROOT_DIR));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(ROOT_DIR, "index.html"));
 });
 
-app.listen(PORT, () => {
-  console.log(`Maturitni web bezi na http://localhost:${PORT}`);
+async function initDb() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS chat_questions (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+        topic_path VARCHAR(255) NOT NULL,
+        selected_text TEXT NOT NULL,
+        explanation TEXT NOT NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        KEY idx_cq_topic (topic_path),
+        KEY idx_cq_created (created_at)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci
+    `);
+    console.log("DB schema OK");
+  } catch (err) {
+    console.error("DB init error:", err.message);
+  }
+}
+
+initDb().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Maturitni web bezi na http://localhost:${PORT}`);
+  });
 });

@@ -389,3 +389,136 @@ code {
         width: 100vw;
     }
 }
+
+/* ── AI Chat Questions Sidebar ── */
+.chat-sidebar {
+    position: fixed;
+    top: 60px;
+    right: -320px;
+    width: 300px;
+    max-height: calc(100vh - 80px);
+    background: #fff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px 0 0 12px;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.12);
+    overflow-y: auto;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 800;
+    display: flex;
+    flex-direction: column;
+}
+.chat-sidebar.open {
+    right: 0;
+}
+.chat-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 14px;
+    background: #eff6ff;
+    border-bottom: 1px solid #bfdbfe;
+    font-weight: 700;
+    color: #1e3a8a;
+    font-size: 0.95rem;
+    position: sticky;
+    top: 0;
+    flex-shrink: 0;
+}
+.chat-sidebar-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #475569;
+    font-size: 1rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+}
+.chat-sidebar-close:hover {
+    background: #dbeafe;
+}
+.chat-sidebar-body {
+    padding: 10px;
+    flex: 1;
+    overflow-y: auto;
+}
+.chat-sidebar-empty {
+    color: #94a3b8;
+    font-size: 0.86rem;
+    text-align: center;
+    padding: 24px 8px;
+}
+.chat-item {
+    background: #f8fbff;
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    padding: 9px 10px;
+    margin-bottom: 8px;
+    font-size: 0.86rem;
+}
+.chat-item-query {
+    font-weight: 600;
+    color: #1e40af;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+.chat-item-details summary {
+    cursor: pointer;
+    color: #6366f1;
+    font-size: 0.82rem;
+    user-select: none;
+}
+.chat-item-details summary:hover {
+    color: #4f46e5;
+}
+.chat-item-answer {
+    margin-top: 8px;
+    color: #334155;
+    font-size: 0.84rem;
+    line-height: 1.55;
+}
+.chat-item-date {
+    font-size: 0.76rem;
+    color: #94a3b8;
+    margin-top: 5px;
+}
+/* Floating toggle button */
+.chat-sidebar-float-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 18px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    z-index: 801;
+    transition: background 0.15s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.chat-sidebar-float-btn:hover,
+.chat-sidebar-float-btn.active {
+    background: #4f46e5;
+    transform: scale(1.07);
+}
+
+@media (max-width: 900px) {
+    .chat-sidebar {
+        top: auto;
+        bottom: 80px;
+        right: calc(-95vw - 20px);
+        width: min(95vw, 340px);
+        max-height: 65vh;
+        border-radius: 12px;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    }
+    .chat-sidebar.open {
+        right: 8px;
+    }
+}
