@@ -398,16 +398,27 @@
 
     // randomly pick which tokens become blank (50-80%, min 2)
     var pct = 0.5 + Math.random() * 0.3;
-    var numBlanks = Math.max(2, Math.min(allTokens.length, Math.round(allTokens.length * pct)));
-    var idxShuffled = shuffle(allTokens.map(function (_, i) { return i; }));
+    var numBlanks = Math.max(
+      2,
+      Math.min(allTokens.length, Math.round(allTokens.length * pct)),
+    );
+    var idxShuffled = shuffle(
+      allTokens.map(function (_, i) {
+        return i;
+      }),
+    );
     var blankSet = {};
-    idxShuffled.slice(0, numBlanks).forEach(function (i) { blankSet[i] = true; });
+    idxShuffled.slice(0, numBlanks).forEach(function (i) {
+      blankSet[i] = true;
+    });
 
     // language bar
     var langBar = document.createElement("div");
     langBar.className = "cf-lang-bar";
     langBar.innerHTML =
-      '<span class="cf-lang-badge">' + esc(lang) + "</span>" +
+      '<span class="cf-lang-badge">' +
+      esc(lang) +
+      "</span>" +
       '<span class="cf-hint">Doplň chybějící tokeny.</span>';
     qEl.appendChild(langBar);
 
@@ -428,7 +439,9 @@
         html +=
           '<input type="text" class="cf-input" data-answer="' +
           esc(tok.answer) +
-          '" style="width:' + w + 'px" ' +
+          '" style="width:' +
+          w +
+          'px" ' +
           'spellcheck="false" autocomplete="off" placeholder="?">';
       } else {
         html += '<span class="cf-given">' + esc(tok.answer) + "</span>";
@@ -448,7 +461,10 @@
       inputs.forEach(function (inp) {
         var expected = norm(inp.dataset.answer);
         var got = norm(inp.value);
-        if (got && (expected === got || expected.includes(got) || got.includes(expected))) {
+        if (
+          got &&
+          (expected === got || expected.includes(got) || got.includes(expected))
+        ) {
           score++;
           inp.classList.add("correct");
           inp.classList.remove("wrong");
