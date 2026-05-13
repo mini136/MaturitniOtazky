@@ -23,6 +23,9 @@
         .section-pyramida { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
         .section-aaa { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
         .section-tdd { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
+        .section-coverage { background: #e8daef; border-left: 6px solid #8e44ad; color: #4a235a; }
+        .section-pytest { background: #d1f2eb; border-left: 6px solid #1abc9c; color: #0e6655; }
+        .section-doc { background: #fef9e7; border-left: 6px solid #f1c40f; color: #7d6608; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -36,37 +39,74 @@
 
     <div class="section-divider section-pyramida">🧪 ČÁST 1 — Úrovně testování (pyramida)</div>
     <h2>Pyramida testování</h2>
+    <p>Testovací pyramida říká, jak velké zastoupení by měl mít každý typ testu. Dole základna = nejvíc testů, nahoře špička = nejméně testů.</p>
     <table>
-        <tr><th>Úroveň</th><th>Co testuje</th><th>Rychlost</th><th>Pokrytí</th></tr>
-        <tr><td><strong>Unit testy</strong></td><td>Jednotlivé funkce/metody</td><td>Rychlé</td><td>Mnoho testů</td></tr>
-        <tr><td><strong>Integrační testy</strong></td><td>Spolupráce komponent</td><td>Střední</td><td>Méně</td></tr>
-        <tr><td><strong>E2E testy</strong></td><td>Celý systém</td><td>Pomalé</td><td>Málo</td></tr>
+        <tr><th>Úroveň</th><th>Co testuje</th><th>Rychlost</th><th>Počet</th><th>Příklad nástroje</th></tr>
+        <tr><td><strong>Unit testy</strong></td><td>Jednotlivé funkce/metody izolovaně</td><td>Velmi rychlé (ms)</td><td>Nejvíc (~70 %)</td><td>unittest, pytest</td></tr>
+        <tr><td><strong>Integrační testy</strong></td><td>Spolupráce více komponent (DB, API)</td><td>Střední (sekundy)</td><td>Méně (~20 %)</td><td>pytest + TestClient</td></tr>
+        <tr><td><strong>E2E testy</strong></td><td>Celý systém z pohledu uživatele</td><td>Pomalé (minuty)</td><td>Málo (~10 %)</td><td>Selenium, Playwright</td></tr>
+    </table>
+    <div class="note">Proč pyramida a ne ledovec? Čím výš, tím dražší na údržbu, pomalejší a křehčí. Unit testy jsou nejrychlejší zpětná vazba pro vývojáře.</div>
+
+    <h2>Další typy testů</h2>
+    <table>
+        <tr><th>Typ</th><th>Popis</th></tr>
+        <tr><td><strong>Smoke test</strong></td><td>Základní sanity check po deployi — "web vůbec běží?"</td></tr>
+        <tr><td><strong>Regresní test</strong></td><td>Ověření, že opravená chyba se nevrátila (a stará funkce stále funguje)</td></tr>
+        <tr><td><strong>Zátěžový (load) test</strong></td><td>Chování pod velkým počtem uživatelů/požadavků</td></tr>
+        <tr><td><strong>Bezpečnostní test</strong></td><td>Penetrační testování, SQL injection, XSS, …</td></tr>
+        <tr><td><strong>Akceptační test (UAT)</strong></td><td>Zákazník ověří, že produkt splňuje požadavky</td></tr>
+    </table>
+
+    <h2>White-box vs Black-box testování</h2>
+    <table>
+        <tr><th></th><th>White-box</th><th>Black-box</th></tr>
+        <tr><td><strong>Znalost kódu</strong></td><td>Tester vidí zdrojový kód</td><td>Tester nezná implementaci</td></tr>
+        <tr><td><strong>Zaměření</strong></td><td>Větve, podmínky, cesty kódem</td><td>Vstupy → výstupy, chování</td></tr>
+        <tr><td><strong>Kdo</strong></td><td>Vývojář</td><td>QA, zákazník</td></tr>
+        <tr><td><strong>Příklady</strong></td><td>Unit testy, code coverage</td><td>UAT, E2E, exploratory testing</td></tr>
     </table>
 
     <div class="section-divider section-aaa">📝 ČÁST 2 — Principy testování (AAA, FIRST)</div>
     <h2>AAA pattern</h2>
+    <p>Každý unit test by měl být rozdělen do tří jasných fází:</p>
     <ol>
-        <li><strong>Arrange</strong> — příprava vstupů a prostředí</li>
-        <li><strong>Act</strong> — provedení testované operace</li>
-        <li><strong>Assert</strong> — ověření výsledku</li>
+        <li><strong>Arrange</strong> — příprava vstupů, objektů a prostředí (setUp)</li>
+        <li><strong>Act</strong> — provedení testované operace (jedno volání)</li>
+        <li><strong>Assert</strong> — ověření výsledku pomocí assert metod</li>
     </ol>
+    <div class="note">Každý test by měl testovat <strong>jednu věc</strong>. Pokud test selže, musí být ihned jasné co a proč.</div>
 
     <h2>FIRST princip</h2>
-    <ul>
-        <li><strong>F</strong>ast — testy běží rychle</li>
-        <li><strong>I</strong>ndependent — nezávisí na sobě</li>
-        <li><strong>R</strong>epeatable — vždy stejný výsledek</li>
-        <li><strong>S</strong>elf-validating — automaticky ověří pass/fail</li>
-        <li><strong>T</strong>imely — píší se včas (TDD: před kódem)</li>
-    </ul>
+    <table>
+        <tr><th>Písmeno</th><th>Anglicky</th><th>Co znamená</th></tr>
+        <tr><td><strong>F</strong></td><td>Fast</td><td>Testy běží rychle — feedback do sekund</td></tr>
+        <tr><td><strong>I</strong></td><td>Independent</td><td>Testy nezávisí na sobě, lze spustit v libovolném pořadí</td></tr>
+        <tr><td><strong>R</strong></td><td>Repeatable</td><td>Vždy stejný výsledek — žádná závislost na čase, síti, náhodě</td></tr>
+        <tr><td><strong>S</strong></td><td>Self-validating</td><td>Automaticky vyhodnotí pass/fail — žádné ruční porovnávání</td></tr>
+        <tr><td><strong>T</strong></td><td>Timely</td><td>Píší se včas — ideálně před kódem (TDD)</td></tr>
+    </table>
 
-    <div class="section-divider section-tdd">🔄 ČÁST 3 — TDD, Dokumentace a nástroje</div>
-    <h2>TDD cyklus</h2>
+    <div class="section-divider section-tdd">🔄 ČÁST 3 — TDD, Ukázkový kód a Test Doubles</div>
+    <h2>TDD cyklus (Red–Green–Refactor)</h2>
+    <p>Test-Driven Development = nejprve napsán test, pak teprve implementace. Cyklus se opakuje pro každou novou funkci.</p>
     <ol>
-        <li><strong style="color: red;">RED</strong> — napiš test → selže</li>
-        <li><strong style="color: green;">GREEN</strong> — napiš minimální kód → test projde</li>
-        <li><strong style="color: blue;">REFACTOR</strong> — vylepši kód (testy stále zelené)</li>
+        <li><strong style="color: red;">RED</strong> — napiš test → selže (funkce ještě neexistuje)</li>
+        <li><strong style="color: green;">GREEN</strong> — napiš <em>minimální</em> kód → test projde</li>
+        <li><strong style="color: blue;">REFACTOR</strong> — vylepši kód, odstraň duplikace (testy stále zelené)</li>
     </ol>
+    <div class="note"><strong>Výhody TDD:</strong> Nutí přemýšlet o rozhraní před implementací. Každý řádek kódu má svůj test. Refaktoring je bezpečný.</div>
+
+    <h2>Test Doubles (náhradní objekty)</h2>
+    <p>Když testovaná třída závisí na databázi, síti nebo jiné komponentě, používáme náhradní objekty pro izolaci:</p>
+    <table>
+        <tr><th>Typ</th><th>Popis</th><th>Příklad</th></tr>
+        <tr><td><strong>Dummy</strong></td><td>Objekt, který se předá, ale nikdy se nepoužije</td><td>Null objekt v parametru</td></tr>
+        <tr><td><strong>Stub</strong></td><td>Vrací předpřipravené odpovědi, nereaguje na jiné volání</td><td><code>return_value = 42</code></td></tr>
+        <tr><td><strong>Mock</strong></td><td>Ověřuje, že byly volány správné metody se správnými argumenty</td><td><code>assert_called_once_with(1)</code></td></tr>
+        <tr><td><strong>Spy</strong></td><td>Skutečný objekt, který si zaznamenává volání</td><td>Sledování bez nahrazení</td></tr>
+        <tr><td><strong>Fake</strong></td><td>Funkční, ale zjednodušená implementace (např. in-memory DB)</td><td>SQLite místo PostgreSQL</td></tr>
+    </table>
 
     <h2>Ukázkový kód — Python</h2>
 
@@ -194,6 +234,139 @@ class TestStudentManagerMock(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             manager.get_student_info(999)</code></pre>
+
+    <div class="section-divider section-coverage">📊 ČÁST 4 — Code Coverage a pytest</div>
+    <h2>Code Coverage (pokrytí kódem)</h2>
+    <p>Metrika vyjadřující, kolik procent kódu bylo spuštěno při testování.</p>
+    <table>
+        <tr><th>Typ pokrytí</th><th>Co měří</th></tr>
+        <tr><td><strong>Statement coverage</strong></td><td>Kolik řádků/příkazů bylo vykonáno</td></tr>
+        <tr><td><strong>Branch coverage</strong></td><td>Kolik větví (if/else, switch) bylo projito — silnější než statement</td></tr>
+        <tr><td><strong>Path coverage</strong></td><td>Všechny možné kombinace cest — velmi nákladné</td></tr>
+    </table>
+    <div class="important">100 % coverage neznamená 100 % správnost. Lze mít plné pokrytí a stále buggy testy. Coverage je nutná podmínka, ne postačující.</div>
+    <div class="note">Typický cíl v praxi: 80 % branch coverage. Kritické moduly (platby, bezpečnost): 90+ %.</div>
+
+    <h2>pytest — moderní testovací framework</h2>
+    <p>pytest je dnes nejpoužívanější Python testovací nástroj. Oproti <code>unittest</code> nepotřebuje třídy, píše se méně kódu.</p>
+
+    <div class="code-desc"><strong>Základní pytest testy</strong> — funkce začínající <code>test_</code> jsou automaticky nalezeny a spuštěny. Místo <code>assertEqual</code> se používá prostý <code>assert</code>.</div>
+    <pre><code># test_kalkulacka.py
+import pytest
+
+class Kalkulacka:
+    def secti(self, a, b): return a + b
+    def vydel(self, a, b):
+        if b == 0: raise ZeroDivisionError("Nelze delit nulou!")
+        return a / b
+
+# Jednoduchy test - zadna trida potreba
+def test_secti():
+    calc = Kalkulacka()
+    assert calc.secti(2, 3) == 5
+
+def test_vydel_nulou():
+    calc = Kalkulacka()
+    with pytest.raises(ZeroDivisionError):
+        calc.vydel(10, 0)
+
+# Spusteni: pytest test_kalkulacka.py -v</code></pre>
+
+    <div class="code-desc"><strong>pytest fixture</strong> — <code>@pytest.fixture</code> nahrazuje <code>setUp()</code>. Fixture se sdílí mezi testy a může mít různý scope (function, module, session).</div>
+    <pre><code">import pytest
+
+@pytest.fixture
+def kalkulacka():
+    """Fixture - vytvoří kalkulačku před každým testem"""
+    print("  [setup] vytvarim kalkulacku")
+    calc = Kalkulacka()
+    yield calc   # testovaci kod bezi tady
+    print("  [teardown] uklizim")
+
+def test_secti(kalkulacka):           # fixture se predava jako argument
+    assert kalkulacka.secti(10, 5) == 15
+
+def test_odecti(kalkulacka):
+    assert kalkulacka.secti(-1, 1) == 0</code></pre>
+
+    <div class="code-desc"><strong>@pytest.mark.parametrize</strong> — elegantní parametrizace bez subTest. Každá kombinace parametrů se zobrazí jako samostatný test v reportu.</div>
+    <pre><code">import pytest
+
+@pytest.mark.parametrize("a, b, ocekavano", [
+    (2,   3,    5),
+    (-1,  1,    0),
+    (0,   0,    0),
+    (100, -50,  50),
+])
+def test_secti_parametry(a, b, ocekavano):
+    calc = Kalkulacka()
+    assert calc.secti(a, b) == ocekavano
+
+# pytest test_kalkulacka.py -v
+# vypise 4 samostatne testy: test_secti_parametry[2-3-5], [(-1)-1-0], ...</code></pre>
+
+    <div class="section-divider section-doc">📖 ČÁST 5 — Dokumentace zdrojového kódu</div>
+    <h2>Docstring — dokumentační komentáře</h2>
+    <p>Docstring je string hned za definicí funkce/třídy/modulu. Python ho uloží do <code>__doc__</code> a nástroje ho čtou pro generování dokumentace.</p>
+    <table>
+        <tr><th>Styl</th><th>Použití</th><th>Popis</th></tr>
+        <tr><td><strong>Google style</strong></td><td>Args: / Returns: / Raises:</td><td>Čitelný, používá Google a mnoho projektů</td></tr>
+        <tr><td><strong>NumPy style</strong></td><td>Parameters / Returns / Notes</td><td>Vědecké projekty, pandas, numpy</td></tr>
+        <tr><td><strong>reStructuredText</strong></td><td>:param x: / :returns:</td><td>Sphinx dokumentace, starší styl</td></tr>
+    </table>
+
+    <div class="code-desc"><strong>Docstring + doctest</strong> — <code>doctest</code> umožňuje psát testy přímo do docstringu ve tvaru Python REPL. Spouštíme přes <code>python -m doctest</code> nebo pytest.</div>
+    <pre><code">def secti(a: float, b: float) -> float:
+    """Secte dve cisla a vrati jejich soucet.
+
+    Args:
+        a: Prvni scitanec.
+        b: Druhy scitanec.
+
+    Returns:
+        Soucet a + b jako float.
+
+    Raises:
+        TypeError: Pokud a nebo b neni cislo.
+
+    Examples:
+        >>> secti(2, 3)
+        5
+        >>> secti(-1, 1)
+        0
+        >>> secti(0.1, 0.2)  # doctest: +ELLIPSIS
+        0.3...
+    """
+    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+        raise TypeError(f"Ocekavano cislo, dostano: {type(a)}, {type(b)}")
+    return a + b
+
+# Spusteni doctestu:
+# python -m doctest soubor.py -v
+# nebo: pytest --doctest-modules</code></pre>
+
+    <div class="code-desc"><strong>Type hints a anotace</strong> — PEP 484 přidal do Pythonu typové anotace. Neovlivňují běh programu, ale IDE a linters (mypy) je kontrolují. Výrazně zlepšují čitelnost a dokumentují rozhraní.</div>
+    <pre><code">from typing import Optional, List
+
+def najdi_studenta(studenti: List[dict], id: int) -> Optional[dict]:
+    """Najde studenta podle ID.
+
+    Args:
+        studenti: Seznam slovniku se studenty.
+        id: ID hledaneho studenta.
+
+    Returns:
+        Slovnik se studentem nebo None, pokud student neexistuje.
+    """
+    for s in studenti:
+        if s.get("id") == id:
+            return s
+    return None
+
+# Priklad pouziti:
+data = [{"id": 1, "jmeno": "Alice"}, {"id": 2, "jmeno": "Bob"}]
+student = najdi_studenta(data, 1)     # Optional[dict] — muze byt None
+print(student["jmeno"] if student else "Nenalezen")  # Alice</code></pre>
 
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
     <script src="../assets/study.js"></script>
