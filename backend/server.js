@@ -512,6 +512,117 @@ app.get("/api/chat-questions", async (req, res) => {
   }
 });
 
+/* ── Public: AI random quiz – generate question ── */
+app.post("/api/quiz/ai-random/question", async (req, res) => {
+  const subject = String(req.body.subject || "pv").trim().toLowerCase();
+  if (!SUBJECT_HTML_DIRS[subject]) {
+    return res.status(400).json({ error: "invalid_subject" });
+  }
+
+  const htmlDir = SUBJECT_HTML_DIRS[subject];
+  const dirPath = path.join(ROOT_DIR, htmlDir);
+
+  let files;
+  try {
+    files = fs.readdirSync(dirPath).filter(
+      (f) => f.endsWith(".html") && f !== "index.html",
+    );
+  } catch (e) {
+    return res.status(500).json({ error: "dir_read_failed" });
+  }
+
+  if (files.length === 0) return res.status(404).json({ error: "no_topics" });
+
+  // avoid immediately repeating the same topic
+  const exclude = String(req.body.exclude || "");
+  let candidates = files.filter((f) => f !== exclude);
+  if (candidates.length === 0) candidates = files;
+
+  const file = candidates[Math.floor(Math.random() * candidates.length)];
+  const filePath = path.join(dirPath, file);
+
+  let content;
+  try {
+    content = stripHtmlContent(fs.readFileSync(filePath, "utf-8"));
+  } catch (e) {
+    return res.status(500).json({ error: "file_read_failed" });
+  }
+
+  const topicLabel = file.replace(".html", "").replace(/_/g, " ");
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      temperature: 0.8,
+      max_tokens: 600,
+      messages: [
+        {
+          role: "system",
+          content:
+            "Jsi učitel připravující studenty na maturitu z programování. Na základě obsahu tématu vygeneruj JEDNU otevřenou maturitní otázku.\n" +
+            "Odpověz POUZE validním JSON objektem (bez markdown obalení) v tomto formátu:\n" +
+            '{\n  "question": "text otázky",\n  "hints": ["nápověda1", "nápověda2", "nápověda3"],\n  "modelAnswer": "vzorová odpověď (3-6 vět)"\n}\n' +
+            "Otázka musí ověřovat pochopení, ne jen zapamatování. Vše v češtině.",
+        },
+        {
+          role: "user",
+          content: "Téma: " + topicLabel + "\n\nObsah materiálu:\n" + content,
+        },
+      ],
+    });
+    let json = (completion.choices[0].message.content || "").trim();
+    json = json.replace(/^```json?\n?/i, "").replace(/\n?```$/i, "");
+    const question = JSON.parse(json);
+    return res.json({ question, topic: file.replace(".html", ""), topicLabel });
+  } catch (e) {
+    return res.status(500).json({ error: "generation_failed" });
+  }
+});
+
+/* ── Public: AI random quiz – evaluate answer ── */
+app.post("/api/quiz/ai-random/evaluate", async (req, res) => {
+  const question = String(req.body.question || "").trim().slice(0, 1000);
+  const modelAnswer = String(req.body.modelAnswer || "").trim().slice(0, 2000);
+  const userAnswer = String(req.body.userAnswer || "").trim().slice(0, 2000);
+
+  if (!question || !userAnswer) {
+    return res.status(400).json({ error: "missing_fields" });
+  }
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      temperature: 0.3,
+      max_tokens: 500,
+      messages: [
+        {
+          role: "system",
+          content:
+            "Jsi přísný ale spravedlivý maturitní zkoušející. Ohodnoť studentovu odpověď.\n" +
+            "Odpověz POUZE validním JSON objektem (bez markdown obalení):\n" +
+            '{\n  "score": <0-100>,\n  "verdict": "Správně" | "Částečně správně" | "Špatně",\n  "feedback": "konkrétní zpětná vazba (2-4 věty)",\n  "missing": ["co chybělo - každá položka jako krátká fráze"]\n}',
+        },
+        {
+          role: "user",
+          content:
+            "Otázka: " +
+            question +
+            "\n\nVzorová odpověď: " +
+            modelAnswer +
+            "\n\nStudentova odpověď: " +
+            userAnswer,
+        },
+      ],
+    });
+    let json = (completion.choices[0].message.content || "").trim();
+    json = json.replace(/^```json?\n?/i, "").replace(/\n?```$/i, "");
+    const result = JSON.parse(json);
+    return res.json({ result });
+  } catch (e) {
+    return res.status(500).json({ error: "evaluation_failed" });
+  }
+});
+
 app.use(express.static(ROOT_DIR));
 
 app.get("*", (req, res) => {

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quiz — náhodné maturitní otázky</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e8f4ff 100%);
+            color: #1f2937;
+            padding: 24px 16px;
+        }
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+        nav {
+            margin-bottom: 20px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #2563eb;
+            font-size: 0.9rem;
+        }
+        nav a:hover { text-decoration: underline; }
+        h1 {
+            margin: 0 0 4px;
+            font-size: 1.7rem;
+            color: #0f172a;
+        }
+        .subtitle {
+            color: #64748b;
+            margin: 0 0 24px;
+            font-size: 0.95rem;
+        }
+
+        /* Subject selector */
+        .subject-picker {
+            background: #fff;
+            border: 1px solid #c7dcff;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+        .subject-picker h2 {
+            margin: 0 0 14px;
+            font-size: 1.05rem;
+            color: #1e3a8a;
+        }
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+        }
+        .subject-btn {
+            border: 2px solid #c7dcff;
+            border-radius: 10px;
+            padding: 12px 10px;
+            background: #f8fbff;
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e40af;
+            text-align: center;
+            transition: all 0.15s;
+        }
+        .subject-btn:hover { border-color: #2563eb; background: #eff6ff; }
+        .subject-btn.selected { border-color: #2563eb; background: #2563eb; color: #fff; }
+        .subject-btn .sub-icon { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+        .start-btn {
+            margin-top: 16px;
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: #fff;
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .start-btn:hover { background: #1d4ed8; }
+        .start-btn:disabled { background: #93c5fd; cursor: not-allowed; }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+        .stat-chip {
+            background: #fff;
+            border: 1px solid #dbeafe;
+            border-radius: 99px;
+            padding: 5px 14px;
+            font-size: 0.85rem;
+            color: #334155;
+        }
+        .stat-chip strong { color: #1e3a8a; }
+
+        /* Quiz card */
+        .quiz-card {
+            background: #fff;
+            border: 1px solid #c7dcff;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        .topic-badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 99px;
+            margin-bottom: 14px;
+        }
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #0f172a;
+            line-height: 1.55;
+            margin: 0 0 18px;
+        }
+
+        /* Hints */
+        .hints-toggle {
+            background: none;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            color: #2563eb;
+            font: inherit;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            cursor: pointer;
+            margin-bottom: 14px;
+        }
+        .hints-toggle:hover { background: #eff6ff; }
+        .hints-box {
+            background: #fefce8;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            display: none;
+        }
+        .hints-box.visible { display: block; }
+        .hints-box ul {
+            margin: 0;
+            padding-left: 18px;
+            color: #78350f;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Answer area */
+        .answer-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        textarea {
+            width: 100%;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 120px;
+            color: #1f2937;
+            transition: border-color 0.15s;
+        }
+        textarea:focus { outline: none; border-color: #2563eb; }
+        .submit-btn {
+            margin-top: 12px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #059669;
+            color: #fff;
+            font: inherit;
+            font-size: 0.97rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .submit-btn:hover { background: #047857; }
+        .submit-btn:disabled { background: #6ee7b7; cursor: not-allowed; }
+
+        /* Result */
+        .result-card {
+            background: #fff;
+            border: 1px solid #c7dcff;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 16px;
+        }
+        .score-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        .score-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .score-circle.good    { background: #d1fae5; color: #065f46; border: 3px solid #34d399; }
+        .score-circle.partial { background: #fef3c7; color: #92400e; border: 3px solid #fbbf24; }
+        .score-circle.bad     { background: #fee2e2; color: #991b1b; border: 3px solid #f87171; }
+        .verdict {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .feedback {
+            color: #374151;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            font-size: 0.93rem;
+        }
+        .missing-label {
+            font-weight: 600;
+            color: #b45309;
+            font-size: 0.88rem;
+            margin-bottom: 6px;
+        }
+        .missing-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+        .missing-tag {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            color: #78350f;
+            border-radius: 99px;
+            padding: 3px 10px;
+            font-size: 0.82rem;
+        }
+        .model-answer-toggle {
+            background: none;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            color: #2563eb;
+            font: inherit;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            cursor: pointer;
+            margin-bottom: 14px;
+        }
+        .model-answer-toggle:hover { background: #eff6ff; }
+        .model-answer-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            display: none;
+        }
+        .model-answer-box.visible { display: block; }
+        .model-answer-box p {
+            margin: 0;
+            color: #0c4a6e;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .next-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: #fff;
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .next-btn:hover { background: #1d4ed8; }
+
+        /* Spinner */
+        .spinner {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+        .spinner::before {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #bfdbfe;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 14px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Error */
+        .error-box {
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            border-radius: 10px;
+            padding: 16px;
+            color: #991b1b;
+            margin-bottom: 16px;
+        }
+
+        .hidden { display: none !important; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.35rem; }
+            .quiz-card, .result-card { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav><a href="../index.html">⬅ Zpět na rozcestník</a></nav>
+    <h1>🤖 AI Quiz</h1>
+    <p class="subtitle">AI generuje náhodné maturitní otázky z celého předmětu. Odpověz vlastními slovy a dostaneš okamžitou zpětnou vazbu.</p>
+
+    <!-- Subject picker -->
+    <div id="picker" class="subject-picker">
+        <h2>Vyber předmět</h2>
+        <div class="subject-grid">
+            <button class="subject-btn selected" data-subject="pv" onclick="selectSubject(this)">
+                <span class="sub-icon">💻</span>Programování (PV)
+            </button>
+            <button class="subject-btn" data-subject="site" onclick="selectSubject(this)">
+                <span class="sub-icon">🌐</span>Sítě
+            </button>
+            <button class="subject-btn" data-subject="spv" onclick="selectSubject(this)">
+                <span class="sub-icon">📚</span>SPV
+            </button>
+            <button class="subject-btn" data-subject="cs" onclick="selectSubject(this)">
+                <span class="sub-icon">✍️</span>Český jazyk
+            </button>
+        </div>
+        <button class="start-btn" id="start-btn" onclick="startQuiz()">Spustit quiz ▶</button>
+    </div>
+
+    <!-- Stats bar -->
+    <div id="stats-bar" class="stats-bar hidden">
+        <div class="stat-chip">Otázka <strong id="stat-num">1</strong></div>
+        <div class="stat-chip">Správně: <strong id="stat-ok">0</strong></div>
+        <div class="stat-chip">Částečně: <strong id="stat-partial">0</strong></div>
+        <div class="stat-chip">Špatně: <strong id="stat-bad">0</strong></div>
+        <div class="stat-chip">Průměr: <strong id="stat-avg">–</strong></div>
+    </div>
+
+    <!-- Spinner -->
+    <div id="spinner" class="spinner hidden">Generuji otázku…</div>
+
+    <!-- Error -->
+    <div id="error-box" class="error-box hidden"></div>
+
+    <!-- Quiz card -->
+    <div id="quiz-card" class="quiz-card hidden">
+        <div id="topic-badge" class="topic-badge"></div>
+        <p id="question-text" class="question-text"></p>
+        <button class="hints-toggle" onclick="toggleHints()">💡 Zobrazit nápovědu</button>
+        <div id="hints-box" class="hints-box">
+            <ul id="hints-list"></ul>
+        </div>
+        <label class="answer-label" for="answer-input">Tvoje odpověď:</label>
+        <textarea id="answer-input" placeholder="Napiš odpověď vlastními slovy…"></textarea>
+        <button class="submit-btn" id="submit-btn" onclick="submitAnswer()">Ohodnotit odpověď ✓</button>
+    </div>
+
+    <!-- Result card -->
+    <div id="result-card" class="result-card hidden">
+        <div class="score-row">
+            <div id="score-circle" class="score-circle"></div>
+            <div>
+                <div id="verdict-text" class="verdict"></div>
+            </div>
+        </div>
+        <p id="feedback-text" class="feedback"></p>
+        <div id="missing-section" class="hidden">
+            <div class="missing-label">Co chybělo:</div>
+            <div id="missing-list" class="missing-list"></div>
+        </div>
+        <button class="model-answer-toggle" onclick="toggleModelAnswer()">📖 Zobrazit vzorovou odpověď</button>
+        <div id="model-answer-box" class="model-answer-box">
+            <p id="model-answer-text"></p>
+        </div>
+        <button class="next-btn" onclick="nextQuestion()">Další otázka →</button>
+    </div>
+</div>
+
+<script>
+    let selectedSubject = 'pv';
+    let currentQuestion = null;
+    let currentTopic = '';
+    let stats = { num: 0, ok: 0, partial: 0, bad: 0, totalScore: 0 };
+
+    function selectSubject(btn) {
+        document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedSubject = btn.dataset.subject;
+    }
+
+    function startQuiz() {
+        document.getElementById('picker').classList.add('hidden');
+        document.getElementById('stats-bar').classList.remove('hidden');
+        loadQuestion();
+    }
+
+    function showSpinner(msg) {
+        document.getElementById('spinner').textContent = msg || 'Generuji otázku…';
+        document.getElementById('spinner').classList.remove('hidden');
+        document.getElementById('quiz-card').classList.add('hidden');
+        document.getElementById('result-card').classList.add('hidden');
+        document.getElementById('error-box').classList.add('hidden');
+    }
+
+    function showError(msg) {
+        const box = document.getElementById('error-box');
+        box.textContent = '⚠️ ' + msg;
+        box.classList.remove('hidden');
+        document.getElementById('spinner').classList.add('hidden');
+        document.getElementById('quiz-card').classList.add('hidden');
+        document.getElementById('result-card').classList.add('hidden');
+    }
+
+    async function loadQuestion() {
+        showSpinner('Generuji otázku…');
+        try {
+            const res = await fetch('/api/quiz/ai-random/question', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ subject: selectedSubject, exclude: currentTopic }),
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                showError('Nepodařilo se vygenerovat otázku: ' + (err.error || res.status));
+                return;
+            }
+            const data = await res.json();
+            currentQuestion = data.question;
+            currentTopic = data.topic;
+
+            // Update UI
+            document.getElementById('topic-badge').textContent = '📌 ' + data.topicLabel;
+            document.getElementById('question-text').textContent = data.question.question;
+
+            const hintsList = document.getElementById('hints-list');
+            hintsList.innerHTML = '';
+            (data.question.hints || []).forEach(h => {
+                const li = document.createElement('li');
+                li.textContent = h;
+                hintsList.appendChild(li);
+            });
+            document.getElementById('hints-box').classList.remove('visible');
+
+            document.getElementById('answer-input').value = '';
+            document.getElementById('submit-btn').disabled = false;
+
+            document.getElementById('spinner').classList.add('hidden');
+            document.getElementById('quiz-card').classList.remove('hidden');
+            document.getElementById('result-card').classList.add('hidden');
+
+            stats.num++;
+            updateStatsBar();
+        } catch (e) {
+            showError('Chyba sítě: ' + e.message);
+        }
+    }
+
+    function toggleHints() {
+        document.getElementById('hints-box').classList.toggle('visible');
+    }
+
+    function toggleModelAnswer() {
+        const box = document.getElementById('model-answer-box');
+        box.classList.toggle('visible');
+    }
+
+    async function submitAnswer() {
+        const answer = document.getElementById('answer-input').value.trim();
+        if (!answer) {
+            document.getElementById('answer-input').focus();
+            return;
+        }
+        document.getElementById('submit-btn').disabled = true;
+        showSpinner('Hodnotím odpověď…');
+
+        try {
+            const res = await fetch('/api/quiz/ai-random/evaluate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question: currentQuestion.question,
+                    modelAnswer: currentQuestion.modelAnswer,
+                    userAnswer: answer,
+                }),
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                showError('Hodnocení selhalo: ' + (err.error || res.status));
+                return;
+            }
+            const data = await res.json();
+            showResult(data.result);
+        } catch (e) {
+            showError('Chyba sítě: ' + e.message);
+        }
+    }
+
+    function showResult(result) {
+        const score = result.score || 0;
+        const verdict = result.verdict || '';
+
+        // Score circle
+        const circle = document.getElementById('score-circle');
+        circle.textContent = score + '%';
+        circle.className = 'score-circle ' + (score >= 70 ? 'good' : score >= 40 ? 'partial' : 'bad');
+
+        document.getElementById('verdict-text').textContent = verdict;
+        document.getElementById('feedback-text').textContent = result.feedback || '';
+
+        // Missing
+        const missingItems = result.missing || [];
+        const missingSection = document.getElementById('missing-section');
+        if (missingItems.length > 0) {
+            missingSection.classList.remove('hidden');
+            const list = document.getElementById('missing-list');
+            list.innerHTML = '';
+            missingItems.forEach(item => {
+                const tag = document.createElement('span');
+                tag.className = 'missing-tag';
+                tag.textContent = item;
+                list.appendChild(tag);
+            });
+        } else {
+            missingSection.classList.add('hidden');
+        }
+
+        // Model answer
+        document.getElementById('model-answer-text').textContent = currentQuestion.modelAnswer || '';
+        document.getElementById('model-answer-box').classList.remove('visible');
+
+        // Stats
+        stats.totalScore += score;
+        if (score >= 70) stats.ok++;
+        else if (score >= 40) stats.partial++;
+        else stats.bad++;
+        updateStatsBar();
+
+        document.getElementById('spinner').classList.add('hidden');
+        document.getElementById('quiz-card').classList.add('hidden');
+        document.getElementById('result-card').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        loadQuestion();
+    }
+
+    function updateStatsBar() {
+        document.getElementById('stat-num').textContent = stats.num;
+        document.getElementById('stat-ok').textContent = stats.ok;
+        document.getElementById('stat-partial').textContent = stats.partial;
+        document.getElementById('stat-bad').textContent = stats.bad;
+        const answered = stats.ok + stats.partial + stats.bad;
+        document.getElementById('stat-avg').textContent = answered > 0
+            ? Math.round(stats.totalScore / answered) + '%'
+            : '–';
+    }
+</script>
+</body>
+</html>
