@@ -53,7 +53,9 @@
         <tr><td><strong>Precision</strong></td><td>TP / (TP + FP) — přesnost pozitivních predikcí</td></tr>
         <tr><td><strong>Recall</strong></td><td>TP / (TP + FN) — úplnost</td></tr>
         <tr><td><strong>F1 Score</strong></td><td>2 × (Precision × Recall) / (Precision + Recall)</td></tr>
-        <tr><td><strong>MSE</strong></td><td>Střední kvadratická chyba (regrese)</td></tr>
+        <tr><td><strong>MAE</strong></td><td>Střední absolutní chyba — průměr |y − ŷ| (regrese, méně citlivá na odlehlé hodnoty než MSE)</td></tr>
+        <tr><td><strong>MSE</strong></td><td>Střední kvadratická chyba — průměr (y − ŷ)² (regrese, penalizuje velké chyby)</td></tr>
+        <tr><td><strong>RMSE</strong></td><td>√MSE — ve stejných jednotkách jako cílová proměnná (regrese)</td></tr>
         <tr><td><strong>R²</strong></td><td>Koeficient determinace (regrese)</td></tr>
     </table>
 
