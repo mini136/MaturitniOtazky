@@ -523,7 +523,9 @@
     var topic = getTopicKey();
     if (!topic) return;
     try {
-      var r = await fetch("/api/chat-questions?topic=" + encodeURIComponent(topic));
+      var r = await fetch(
+        "/api/chat-questions?topic=" + encodeURIComponent(topic),
+      );
       if (!r.ok) return;
       var data = await r.json();
       var questions = data.questions || [];
@@ -590,13 +592,12 @@
       sidebar.classList.toggle("open");
       toggleBtn.classList.toggle("active");
     });
-    document.getElementById("chat-sidebar-close").addEventListener(
-      "click",
-      function () {
+    document
+      .getElementById("chat-sidebar-close")
+      .addEventListener("click", function () {
         sidebar.classList.remove("open");
         toggleBtn.classList.remove("active");
-      },
-    );
+      });
 
     loadChatQuestions();
   }

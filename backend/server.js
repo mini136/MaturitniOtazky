@@ -428,10 +428,12 @@ app.post("/api/explain", async (req, res) => {
     const explanation = (completion.choices[0].message.content || "").trim();
     // Save to DB (non-blocking, fire-and-forget)
     if (!rephrase && topicPath) {
-      pool.query(
-        "INSERT INTO chat_questions (topic_path, selected_text, explanation) VALUES (?, ?, ?)",
-        [topicPath, text, explanation]
-      ).catch(() => {});
+      pool
+        .query(
+          "INSERT INTO chat_questions (topic_path, selected_text, explanation) VALUES (?, ?, ?)",
+          [topicPath, text, explanation],
+        )
+        .catch(() => {});
     }
     return res.json({ explanation });
   } catch (e) {
@@ -502,7 +504,7 @@ app.get("/api/chat-questions", async (req, res) => {
        WHERE topic_path = ?
        ORDER BY created_at DESC
        LIMIT 100`,
-      [topic]
+      [topic],
     );
     return res.json({ questions: rows });
   } catch (err) {
