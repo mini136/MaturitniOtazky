@@ -56,6 +56,7 @@
         <tr><td><strong>AVL strom / Red-Black</strong></td><td>Samovyvažující BST</td><td>O(log n) vdy</td><td>Databazové indexy (B-tree)</td></tr>
         <tr><td><strong>Heap (halda)</strong></td><td>Min/Max — rodič ≤ / ≥ potomci</td><td>O(1) min/max, O(log n) vložení</td><td>Prioritní fronta, Heap sort</td></tr>
         <tr><td><strong>Trie</strong></td><td>Strom písmen</td><td>O(délka klíče)</td><td>Slovníky, autocomplete</td></tr>
+        <tr><td><strong>TreeSet / TreeMap</strong></td><td>Red-Black strom (samovyvažující)</td><td>O(log n) vždy</td><td>Seřazená množina/mapa v Javě</td></tr>
         <tr><td><strong>Graf</strong></td><td>Uzly + hrany (orientovaný/neorient.)</td><td>O(V+E) DFS/BFS</td><td>Mapy, sítě, závislosti</td></tr>
     </table>
     <div class="note"><strong>Heap vs BST:</strong> Heap zajiistí O(1) minimum/maximum a O(log n) vložení — ideální pro prioritní frontu. BST umožní vyhledávání a in-order procházení (seřazený výpis).</div>
@@ -79,284 +80,237 @@
     </table>
     <div class="note"><strong>Worst case:</strong> Při špatné hash funkci může být HashMap O(n) — všechna data do jednoho bucketu. Vâ průměru je to O(1).</div>
 
-    <h2>Ukázkový kód — Python</h2>
+    <h2>Ukázkový kód — Java</h2>
 
-    <div class="code-desc"><strong>Stack — kontrola závorek</strong>. Zásobník (LIFO) pro párování otevíracích a zavíracích závorek. Pokud na konci není stack prázdný, závorky nejsou správně spárované.</div>
-    <pre><code>class Stack:
-    """Zasobnik (LIFO)"""
-    def __init__(self):
-        self._data = []
+    <div class="code-desc"><strong>Stack — kontrola závorek</strong>. V Javě používáme <code>Deque&lt;Character&gt;</code> jako zásobník (LIFO). <code>ArrayDeque</code> je rychlejší než starý <code>Stack</code>. Závorky párujeme při prohledávání vstupu.</div>
+    <pre><code>import java.util.ArrayDeque;
+import java.util.Deque;
 
-    def push(self, item):
-        self._data.append(item)
+public class KontrolaZavorek {
+    public static boolean kontroluj(String vyraz) {
+        Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
 
-    def pop(self):
-        if self.je_prazdny():
-            raise IndexError("Stack je prazdny!")
-        return self._data.pop()
+        for (char c : vyraz.toCharArray()) {
+            if (c == '(' || c == '[' || c == '{') {
+                stack.push(c);
+            } else if (c == ')' || c == ']' || c == '}') {
+                if (stack.isEmpty()) return false;
+                char top = stack.pop();
+                if ((c == ')' &amp;&amp; top != '(') ||
+                    (c == ']' &amp;&amp; top != '[') ||
+                    (c == '}' &amp;&amp; top != '{')) return false;
+            }
+        }
+        return stack.isEmpty();
+    }
 
-    def peek(self):
-        if self.je_prazdny():
-            raise IndexError("Stack je prazdny!")
-        return self._data[-1]
+    public static void main(String[] args) {
+        String[] testy = {"((1+2)*3)", "([{}])", "(()", "{[}]"};
+        for (String v : testy) {
+            System.out.println("'" + v + "': " + (kontroluj(v) ? "OK" : "CHYBA"));
+        }
+        // '((1+2)*3)': OK
+        // '([{}])':    OK
+        // '(()':       CHYBA
+        // '{[}]':      CHYBA
+    }
+}
+</code></pre>
 
-    def je_prazdny(self):
-        return len(self._data) == 0
+    <div class="code-desc"><strong>Queue — simulace tiskárny</strong>. Rozhraní <code>Queue&lt;E&gt;</code> s implementací <code>LinkedList</code>. <code>offer()</code> přidá na konec, <code>poll()</code> odebere ze začátku (FIFO).</div>
+    <pre><code>import java.util.LinkedList;
+import java.util.Queue;
 
-    def __len__(self):
-        return len(self._data)
+public class Tiskarna {
+    private Queue&lt;String&gt; fronta = new LinkedList&lt;&gt;();
 
-def kontrola_zavorek(vyraz):
-    """Kontrola sparovani zavorek pomoci stacku"""
-    stack = Stack()
-    pary = {')': '(', ']': '[', '}': '{'}
+    public void pridejUlohu(String dokument) {
+        fronta.offer(dokument);
+        System.out.println("Pridano: " + dokument);
+    }
 
-    for znak in vyraz:
-        if znak in '([{':
-            stack.push(znak)
-        elif znak in ')]}':
-            if stack.je_prazdny() or stack.pop() != pary[znak]:
-                return False
-    return stack.je_prazdny()
+    public void tiskni() {
+        while (!fronta.isEmpty()) {
+            System.out.println("Tisknu: " + fronta.poll());
+        }
+    }
 
-testy = ["((1+2)*3)", "([{}])", "(()", "{[}]", ""]
-for vyraz in testy:
-    print(f"  '{vyraz}': {'OK' if kontrola_zavorek(vyraz) else 'CHYBA'}")</code></pre>
+    public static void main(String[] args) {
+        Tiskarna t = new Tiskarna();
+        t.pridejUlohu("zprava.pdf");    // Pridano: zprava.pdf
+        t.pridejUlohu("faktura.pdf");
+        t.pridejUlohu("smlouva.doc");
+        t.tiskni();
+        // Tisknu: zprava.pdf   (FIFO poradi)
+        // Tisknu: faktura.pdf
+        // Tisknu: smlouva.doc
+    }
+}
+</code></pre>
 
-    <div class="code-desc"><strong>Queue — simulace tiskárny</strong>. Fronta (FIFO) zpracovává tiskové úlohy v pořadí, v jakém přišly.</div>
-    <pre><code>from collections import deque
+    <div class="code-desc"><strong>Linked List</strong> — generický spojový seznam. Každý uzel <code>Node&lt;T&gt;</code> drží data a odkaz na další uzel. Java má vestavěný <code>java.util.LinkedList</code>, zde ukázka vlastní implementace.</div>
+    <pre><code>public class SpojovySeznam&lt;T&gt; {
+    private static class Node&lt;T&gt; {
+        T data;
+        Node&lt;T&gt; next;
+        Node(T data) { this.data = data; }
+    }
 
-class Queue:
-    """Fronta (FIFO)"""
-    def __init__(self):
-        self._data = deque()
+    private Node&lt;T&gt; head;
 
-    def enqueue(self, item):
-        self._data.append(item)
+    public void pridejNaZacatek(T data) {
+        Node&lt;T&gt; novy = new Node&lt;&gt;(data);
+        novy.next = head;
+        head = novy;
+    }
 
-    def dequeue(self):
-        if self.je_prazdna():
-            raise IndexError("Queue je prazdna!")
-        return self._data.popleft()
+    public void pridejNaKonec(T data) {
+        Node&lt;T&gt; novy = new Node&lt;&gt;(data);
+        if (head == null) { head = novy; return; }
+        Node&lt;T&gt; aktualni = head;
+        while (aktualni.next != null) aktualni = aktualni.next;
+        aktualni.next = novy;
+    }
 
-    def je_prazdna(self):
-        return len(self._data) == 0
+    public void smaz(T data) {
+        if (head == null) return;
+        if (head.data.equals(data)) { head = head.next; return; }
+        Node&lt;T&gt; aktualni = head;
+        while (aktualni.next != null) {
+            if (aktualni.next.data.equals(data)) {
+                aktualni.next = aktualni.next.next;
+                return;
+            }
+            aktualni = aktualni.next;
+        }
+    }
 
-class Tiskarna:
-    def __init__(self):
-        self.fronta = Queue()
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Node&lt;T&gt; aktualni = head;
+        while (aktualni != null) {
+            sb.append(aktualni.data).append(" -&gt; ");
+            aktualni = aktualni.next;
+        }
+        return sb + "null";
+    }
 
-    def pridej_ulohu(self, dokument):
-        self.fronta.enqueue(dokument)
-        print(f"  Pridano: {dokument}")
+    public static void main(String[] args) {
+        SpojovySeznam&lt;Integer&gt; ll = new SpojovySeznam&lt;&gt;();
+        ll.pridejNaZacatek(2);
+        ll.pridejNaZacatek(1);    // 1 -&gt; 2 -&gt; null
+        ll.pridejNaKonec(3);      // 1 -&gt; 2 -&gt; 3 -&gt; null
+        System.out.println(ll);
+        ll.smaz(2);
+        System.out.println(ll);   // 1 -&gt; 3 -&gt; null
+    }
+}
+</code></pre>
 
-    def tiskni(self):
-        while not self.fronta.je_prazdna():
-            dok = self.fronta.dequeue()
-            print(f"  Tisknu: {dok}")
+    <div class="code-desc"><strong>BST (Binary Search Tree)</strong> — binární vyhledávací strom v Javě. Levý podstrom &lt; kořen &lt; pravý podstrom. In-order průchod vrátí prvky seřazené vzestupně.</div>
+    <pre><code>public class BST {
+    private static class Node {
+        int klic;
+        Node levy, pravy;
+        Node(int klic) { this.klic = klic; }
+    }
 
-tiskarna = Tiskarna()
-for doc in ["zprava.pdf", "faktura.pdf", "smlouva.doc"]:
-    tiskarna.pridej_ulohu(doc)
-tiskarna.tiskni()</code></pre>
+    private Node koren;
 
-    <div class="code-desc"><strong>Linked List</strong> — spojový seznam s operacemi <code>pridej</code>, <code>vloz</code>, <code>smaz</code>. Každý uzel (<code>Node</code>) obsahuje data a odkaz na další uzel.</div>
-    <pre><code>class Node:
-    def __init__(self, data):
-        self.data = data
-        self.next = None
+    public void vloz(int klic) { koren = vloz(koren, klic); }
 
-class LinkedList:
-    def __init__(self):
-        self.head = None
+    private Node vloz(Node uzel, int klic) {
+        if (uzel == null) return new Node(klic);
+        if (klic &lt; uzel.klic)      uzel.levy  = vloz(uzel.levy,  klic);
+        else if (klic &gt; uzel.klic) uzel.pravy = vloz(uzel.pravy, klic);
+        return uzel;
+    }
 
-    def pridej(self, data):
-        novy = Node(data)
-        novy.next = self.head
-        self.head = novy
+    public boolean hledej(int klic) { return hledej(koren, klic); }
 
-    def vloz_na_konec(self, data):
-        novy = Node(data)
-        if not self.head:
-            self.head = novy
-            return
-        aktualni = self.head
-        while aktualni.next:
-            aktualni = aktualni.next
-        aktualni.next = novy
+    private boolean hledej(Node uzel, int klic) {
+        if (uzel == null) return false;
+        if (klic == uzel.klic) return true;
+        return klic &lt; uzel.klic
+            ? hledej(uzel.levy,  klic)
+            : hledej(uzel.pravy, klic);
+    }
 
-    def smaz(self, data):
-        if not self.head: return
-        if self.head.data == data:
-            self.head = self.head.next
-            return
-        aktualni = self.head
-        while aktualni.next:
-            if aktualni.next.data == data:
-                aktualni.next = aktualni.next.next
-                return
-            aktualni = aktualni.next
+    public void inorder(Node uzel) {
+        if (uzel == null) return;
+        inorder(uzel.levy);
+        System.out.print(uzel.klic + " ");
+        inorder(uzel.pravy);
+    }
 
-    def __str__(self):
-        prvky = []
-        aktualni = self.head
-        while aktualni:
-            prvky.append(str(aktualni.data))
-            aktualni = aktualni.next
-        return " -&gt; ".join(prvky) + " -&gt; None"
+    public static void main(String[] args) {
+        BST bst = new BST();
+        for (int x : new int[]{5, 3, 7, 1, 4, 6, 8}) bst.vloz(x);
+        bst.inorder(bst.koren);   // 1 3 4 5 6 7 8  (serazene!)
+        System.out.println();
+        System.out.println(bst.hledej(4));  // true
+        System.out.println(bst.hledej(9));  // false
+    }
+}
+</code></pre>
 
-ll = LinkedList()
-for x in [3, 2, 1]:
-    ll.pridej(x)
-ll.vloz_na_konec(4)
-print(f"  {ll}")      # 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; None
-ll.smaz(2)
-print(f"  {ll}")      # 1 -&gt; 3 -&gt; 4 -&gt; None</code></pre>
+    <div class="code-desc"><strong>PriorityQueue (MinHeap)</strong> — Java <code>PriorityQueue</code> je MinHeap. <code>offer()</code> vloží v O(log n), <code>poll()</code> odebere minimum v O(log n), <code>peek()</code> přečte minimum v O(1).</div>
+    <pre><code>import java.util.PriorityQueue;
+import java.util.Comparator;
 
-    <div class="code-desc"><strong>BST (Binary Search Tree)</strong> — binární vyhledávací strom. Levý podstrom &lt; kořen &lt; pravý podstrom. Metoda <code>inorder()</code> vrací seřazené prvky.</div>
-    <pre><code>class BSTNode:
-    def __init__(self, klic):
-        self.klic = klic
-        self.levy = None
-        self.pravy = None
+public class HeapUkazka {
+    public static void main(String[] args) {
+        // MinHeap (vychozi chovani PriorityQueue)
+        PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+        for (int x : new int[]{5, 3, 7, 1, 4}) minHeap.offer(x);
 
-class BST:
-    def __init__(self):
-        self.koren = None
+        System.out.print("HeapSort (min): ");
+        while (!minHeap.isEmpty()) {
+            System.out.print(minHeap.poll() + " ");  // 1 3 4 5 7
+        }
 
-    def vloz(self, klic):
-        self.koren = self._vloz(self.koren, klic)
+        // MaxHeap - obraceny komparator
+        PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(Comparator.reverseOrder());
+        maxHeap.offer(5); maxHeap.offer(3); maxHeap.offer(7); maxHeap.offer(1);
+        System.out.println("\nMax: " + maxHeap.peek());   // 7
+        System.out.println("Poll: " + maxHeap.poll());    // 7 odebrano
+    }
+}
+</code></pre>
 
-    def _vloz(self, uzel, klic):
-        if uzel is None:
-            return BSTNode(klic)
-        if klic &lt; uzel.klic:
-            uzel.levy = self._vloz(uzel.levy, klic)
-        elif klic &gt; uzel.klic:
-            uzel.pravy = self._vloz(uzel.pravy, klic)
-        return uzel
+    <div class="code-desc"><strong>HashMap, HashSet a TreeSet</strong> — tři nejdůležitější kolekce pro práci s klíči/hodnotami. TreeSet je interně Red-Black strom, zajišťuje O(log n) a <strong>seřazené pořadí</strong> při iteraci.</div>
+    <pre><code>import java.util.*;
 
-    def hledej(self, klic):
-        return self._hledej(self.koren, klic)
+public class KolekceUkazka {
+    public static void main(String[] args) {
+        // HashMap: klic -&gt; hodnota, O(1) prumer, bez poradi
+        Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+        scores.put("Alice", 95);
+        scores.put("Bob",   87);
+        scores.put("Alice", 99);          // prepis existujiciho klice
+        System.out.println(scores.get("Alice"));          // 99
+        System.out.println(scores.containsKey("Bob"));    // true
+        scores.forEach((k, v) -&gt; System.out.println(k + ": " + v));
 
-    def _hledej(self, uzel, klic):
-        if uzel is None: return False
-        if klic == uzel.klic: return True
-        if klic &lt; uzel.klic: return self._hledej(uzel.levy, klic)
-        return self._hledej(uzel.pravy, klic)
+        // HashSet: pouze unikatni prvky, O(1), bez poradi
+        Set&lt;String&gt; hashSet = new HashSet&lt;&gt;(Arrays.asList("C", "A", "B", "A"));
+        System.out.println(hashSet);    // [A, B, C] - poporadi neni zaruceno
 
-    def inorder(self):
-        vysledek = []
-        self._inorder(self.koren, vysledek)
-        return vysledek
-
-    def _inorder(self, uzel, vysledek):
-        if uzel:
-            self._inorder(uzel.levy, vysledek)
-            vysledek.append(uzel.klic)
-            self._inorder(uzel.pravy, vysledek)
-
-bst = BST()
-for x in [5, 3, 7, 1, 4, 6, 8]:
-    bst.vloz(x)
-print(f"  Inorder: {bst.inorder()}")     # [1, 3, 4, 5, 6, 7, 8]
-print(f"  Hledam 4: {bst.hledej(4)}")    # True
-print(f"  Hledam 9: {bst.hledej(9)}")    # False</code></pre>
-
-    <div class="code-desc"><strong>MinHeap</strong> — binární halda s minimem na vrcholu. <code>push()</code> a <code>pop()</code> mají složitost O(log n). Používá se jako prioritní fronta.</div>
-    <pre><code>class MinHeap:
-    def __init__(self):
-        self.data = []
-
-    def push(self, val):
-        self.data.append(val)
-        self._bubble_up(len(self.data) - 1)
-
-    def pop(self):
-        if not self.data:
-            raise IndexError("Heap prazdny!")
-        min_val = self.data[0]
-        posledni = self.data.pop()
-        if self.data:
-            self.data[0] = posledni
-            self._sift_down(0)
-        return min_val
-
-    def _bubble_up(self, i):
-        while i &gt; 0:
-            rodic = (i - 1) // 2
-            if self.data[i] &lt; self.data[rodic]:
-                self.data[i], self.data[rodic] = self.data[rodic], self.data[i]
-                i = rodic
-            else:
-                break
-
-    def _sift_down(self, i):
-        n = len(self.data)
-        while True:
-            nejmensi = i
-            levy = 2*i + 1
-            pravy = 2*i + 2
-            if levy &lt; n and self.data[levy] &lt; self.data[nejmensi]:
-                nejmensi = levy
-            if pravy &lt; n and self.data[pravy] &lt; self.data[nejmensi]:
-                nejmensi = pravy
-            if nejmensi != i:
-                self.data[i], self.data[nejmensi] = self.data[nejmensi], self.data[i]
-                i = nejmensi
-            else:
-                break
-
-heap = MinHeap()
-for x in [5, 3, 7, 1, 4]:
-    heap.push(x)
-
-serazeno = []
-while heap.data:
-    serazeno.append(heap.pop())
-print(f"  Heap sort: {serazeno}")  # [1, 3, 4, 5, 7]</code></pre>
-
-    <div class="code-desc"><strong>Hash tabulka</strong> — implementace s řetězením (chaining) pro řešení kolizí. Každý bucket je seznam párů [klíč, hodnota].</div>
-    <pre><code>class HashTabulka:
-    """Hash tabulka s chainingem"""
-
-    def __init__(self, velikost=10):
-        self.velikost = velikost
-        self.tabulka = [[] for _ in range(velikost)]
-
-    def _hash(self, klic):
-        return hash(klic) % self.velikost
-
-    def vloz(self, klic, hodnota):
-        idx = self._hash(klic)
-        for par in self.tabulka[idx]:
-            if par[0] == klic:
-                par[1] = hodnota
-                return
-        self.tabulka[idx].append([klic, hodnota])
-
-    def najdi(self, klic):
-        idx = self._hash(klic)
-        for par in self.tabulka[idx]:
-            if par[0] == klic:
-                return par[1]
-        raise KeyError(f"Klic '{klic}' nenalezen")
-
-    def smaz(self, klic):
-        idx = self._hash(klic)
-        for i, par in enumerate(self.tabulka[idx]):
-            if par[0] == klic:
-                del self.tabulka[idx][i]
-                return
-        raise KeyError(f"Klic '{klic}' nenalezen")
-
-ht = HashTabulka()
-ht.vloz("alice", 95)
-ht.vloz("bob", 87)
-ht.vloz("charlie", 92)
-print(f"  alice: {ht.najdi('alice')}")    # 95
-ht.smaz("bob")
-print(f"  Tabulka: {[b for b in ht.tabulka if b]}")</code></pre>
+        // TreeSet: unikatni + serazene, O(log n), Red-Black strom
+        TreeSet&lt;Integer&gt; treeSet = new TreeSet&lt;&gt;();
+        treeSet.add(5); treeSet.add(1); treeSet.add(3);
+        treeSet.add(2); treeSet.add(1); // duplikat ignorovan
+        System.out.println(treeSet);            // [1, 2, 3, 5] - serazene!
+        System.out.println(treeSet.first());    // 1  - minimum O(log n)
+        System.out.println(treeSet.last());     // 5  - maximum O(log n)
+        System.out.println(treeSet.floor(4));   // 3  - nejvetsi &lt;= 4
+        System.out.println(treeSet.ceiling(2)); // 2  - nejmensi &gt;= 2
+        System.out.println(treeSet.headSet(3)); // [1, 2]     - prvky &lt; 3
+        System.out.println(treeSet.tailSet(3)); // [3, 5]     - prvky &gt;= 3
+    }
+}
+</code></pre>
 
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
     <script src="../assets/study.js"></script>
