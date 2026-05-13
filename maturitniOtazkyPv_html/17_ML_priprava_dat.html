@@ -215,6 +215,74 @@ def korelace(data, sl1, sl2):
 korelace(studenti, "hodiny_studia", "znamka")
 korelace(studenti, "predchozi_znamka", "znamka")</code></pre>
 
+    <h2>Příprava dat s pandas</h2>
+    <p>V praxi se místo ručních implementací používá knihovna <strong>pandas</strong> — stejné operace jsou stručnější a robustnější.</p>
+
+    <div class="code-desc"><strong>Načtení a základní průzkum dat</strong> — <code>pd.DataFrame()</code> vytvoří tabulkovou strukturu, <code>info()</code> ukáže typy sloupců a počet chybějících hodnot, <code>describe()</code> základní statistiky.</div>
+    <pre><code>import pandas as pd
+import numpy as np
+
+# Vytvoreni DataFrame (v praxi: pd.read_csv("data.csv"))
+data = {
+    "jmeno":          ["Alice","Bob","Charlie","Diana","Eva","Filip"],
+    "vek":            [20, None, 22, 19, None, 21],
+    "hodiny_studia":  [35.0, 10.0, None, 28.0, 5.0, 40.0],
+    "predchozi_znamka": [2.0, 4.0, 1.5, 3.0, 4.5, 1.0],
+    "znamka":         [1.5, 3.8, 2.0, 2.5, 4.2, 1.2],
+}
+df = pd.DataFrame(data)
+
+print(df.info())          # typy sloupcu + pocet non-null hodnot
+print(df.describe())      # mean, std, min, quartily, max
+print(df.isnull().sum())  # pocet NaN v kazdem sloupci</code></pre>
+
+    <div class="code-desc"><strong>Imputace chybějících hodnot</strong> — <code>fillna()</code> nahradí <code>NaN</code> zvolenou hodnotou. <code>mean()</code>/<code>median()</code> se počítají pouze z dostupných hodnot, <code>inplace=True</code> mění DataFrame přímo.</div>
+    <pre><code># Imputace - nahrazeni NaN
+df["hodiny_studia"].fillna(df["hodiny_studia"].mean(), inplace=True)   # mean
+df["vek"].fillna(df["vek"].median(), inplace=True)                     # median
+
+# Alternativa - mode (nejcastejsi hodnota)
+# df["jmeno"].fillna(df["jmeno"].mode()[0], inplace=True)
+
+print(df.isnull().sum())  # nyni 0 pro vsechny sloupce</code></pre>
+
+    <div class="code-desc"><strong>Detekce outlierů (IQR)</strong> — pandas vypočte kvartily přes <code>quantile()</code>, maska <code>~</code> invertuje podmínku a DataFrame se filtruje na čistá data.</div>
+    <pre><code># Detekce a odstraneni outlieru (IQR)
+Q1 = df["hodiny_studia"].quantile(0.25)
+Q3 = df["hodiny_studia"].quantile(0.75)
+IQR = Q3 - Q1
+dolni = Q1 - 1.5 * IQR
+horni = Q3 + 1.5 * IQR
+
+outliery = df[(df["hodiny_studia"] &lt; dolni) | (df["hodiny_studia"] &gt; horni)]
+print(f"Outliery: {len(outliery)}")
+
+df_clean = df[~((df["hodiny_studia"] &lt; dolni) | (df["hodiny_studia"] &gt; horni))]</code></pre>
+
+    <div class="code-desc"><strong>Normalizace (Min-Max a Z-score)</strong> — v pandas se dá napsat jako jednořádkový výraz. Pro produkci se používá <code>sklearn.preprocessing.MinMaxScaler</code> / <code>StandardScaler</code>, aby se parametry naučily jen na trénovacích datech.</div>
+    <pre><code># Min-Max normalizace
+df["hodiny_norm"] = (df["hodiny_studia"] - df["hodiny_studia"].min()) / \
+                    (df["hodiny_studia"].max() - df["hodiny_studia"].min())
+
+# Z-score standardizace
+df["predchozi_zscore"] = (df["predchozi_znamka"] - df["predchozi_znamka"].mean()) / \
+                          df["predchozi_znamka"].std()
+
+print(df[["hodiny_studia", "hodiny_norm", "predchozi_znamka", "predchozi_zscore"]])</code></pre>
+
+    <div class="code-desc"><strong>One-hot encoding</strong> — <code>pd.get_dummies()</code> automaticky najde unikátní kategorie a přidá binární sloupce. <code>drop_first=True</code> odstraní první kategorii (zabrání multikolinearitě).</div>
+    <pre><code># One-hot encoding kategorialnich sloupcu
+df_encoded = pd.get_dummies(df, columns=["jmeno"], drop_first=True)
+print(df_encoded.columns.tolist())</code></pre>
+
+    <div class="code-desc"><strong>Korelační matice</strong> — <code>corr()</code> vrátí Pearsonovy koeficienty pro všechny dvojice numerických sloupců najednou. Hodnoty blízké ±1 = silná korelace.</div>
+    <pre><code># Korelacni matice
+korelacni_matice = df[["vek","hodiny_studia","predchozi_znamka","znamka"]].corr()
+print(korelacni_matice)
+
+# Korelace jednoho sloupce s cilem
+print(df[["vek","hodiny_studia","predchozi_znamka"]].corrwith(df["znamka"]))</code></pre>
+
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
     <script src="../assets/study.js"></script>
 </body>
