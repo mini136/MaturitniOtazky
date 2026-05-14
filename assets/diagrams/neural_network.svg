@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" font-family="'Segoe UI',Arial,sans-serif">
+  <defs>
+    <marker id="nn-ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <polygon points="0,0 8,4 0,8" fill="#db2777"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="480" rx="14" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#14532d">Neuronová síť — architektura</text>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- CONNECTIONS (drawn first so neurons appear on top) -->
+  <!-- Input layer: I1(100,130) I2(100,230) I3(100,330)  -->
+  <!-- Hidden 1:  H1a(280,90)  H1b(280,185) H1c(280,280) H1d(280,375) -->
+  <!-- Hidden 2:  H2a(480,130) H2b(480,230) H2c(480,330) -->
+  <!-- Output:    O1(670,190)  O2(670,290)  -->
+  <!-- ══════════════════════════════════════════════════ -->
+
+  <!-- Input → Hidden1 -->
+  <line x1="122" y1="130" x2="258" y2="90"  stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="130" x2="258" y2="185" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="130" x2="258" y2="280" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="130" x2="258" y2="375" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="230" x2="258" y2="90"  stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="230" x2="258" y2="185" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="230" x2="258" y2="280" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="230" x2="258" y2="375" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="330" x2="258" y2="90"  stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="330" x2="258" y2="185" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="330" x2="258" y2="280" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="122" y1="330" x2="258" y2="375" stroke="#94a3b8" stroke-width="0.8"/>
+
+  <!-- Hidden1 → Hidden2 -->
+  <line x1="302" y1="90"  x2="458" y2="130" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="90"  x2="458" y2="230" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="90"  x2="458" y2="330" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="185" x2="458" y2="130" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="185" x2="458" y2="230" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="185" x2="458" y2="330" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="280" x2="458" y2="130" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="280" x2="458" y2="230" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="280" x2="458" y2="330" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="375" x2="458" y2="130" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="375" x2="458" y2="230" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="302" y1="375" x2="458" y2="330" stroke="#94a3b8" stroke-width="0.8"/>
+
+  <!-- Hidden2 → Output -->
+  <line x1="502" y1="130" x2="648" y2="190" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="502" y1="130" x2="648" y2="290" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="502" y1="230" x2="648" y2="190" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="502" y1="230" x2="648" y2="290" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="502" y1="330" x2="648" y2="190" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="502" y1="330" x2="648" y2="290" stroke="#94a3b8" stroke-width="0.8"/>
+
+  <!-- One highlighted connection (I2 → H1b) as "synapse / váha" example -->
+  <line x1="122" y1="230" x2="258" y2="185" stroke="#f59e0b" stroke-width="2.2"/>
+  <rect x="162" y="194" width="52" height="20" rx="5" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+  <text x="188" y="208" text-anchor="middle" font-size="11" font-weight="bold" fill="#92400e">w = 0.73</text>
+
+  <!-- ══════════ INPUT LAYER neurons ══════════ -->
+  <circle cx="100" cy="130" r="22" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="100" y="135" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d4ed8">x₁</text>
+
+  <circle cx="100" cy="230" r="22" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="100" y="235" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d4ed8">x₂</text>
+
+  <circle cx="100" cy="330" r="22" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="100" y="335" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d4ed8">x₃</text>
+
+  <!-- ══════════ HIDDEN LAYER 1 neurons ══════════ -->
+  <circle cx="280" cy="90"  r="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="280" y="95"  text-anchor="middle" font-size="11" fill="#5b21b6">h₁</text>
+  <circle cx="280" cy="185" r="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="280" y="190" text-anchor="middle" font-size="11" fill="#5b21b6">h₂</text>
+  <circle cx="280" cy="280" r="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="280" y="285" text-anchor="middle" font-size="11" fill="#5b21b6">h₃</text>
+  <circle cx="280" cy="375" r="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="280" y="380" text-anchor="middle" font-size="11" fill="#5b21b6">h₄</text>
+
+  <!-- ══════════ HIDDEN LAYER 2 neurons ══════════ -->
+  <circle cx="480" cy="130" r="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="480" y="135" text-anchor="middle" font-size="11" fill="#5b21b6">h₁</text>
+  <circle cx="480" cy="230" r="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="480" y="235" text-anchor="middle" font-size="11" fill="#5b21b6">h₂</text>
+  <circle cx="480" cy="330" r="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="480" y="335" text-anchor="middle" font-size="11" fill="#5b21b6">h₃</text>
+
+  <!-- ══════════ OUTPUT LAYER neurons ══════════ -->
+  <circle cx="670" cy="190" r="25" fill="#fce7f3" stroke="#db2777" stroke-width="2.5"/>
+  <text x="670" y="187" text-anchor="middle" font-size="13" font-weight="bold" fill="#be185d">ŷ₁</text>
+  <text x="670" y="202" text-anchor="middle" font-size="9"  fill="#9d174d">výstup</text>
+
+  <circle cx="670" cy="290" r="25" fill="#fce7f3" stroke="#db2777" stroke-width="2.5"/>
+  <text x="670" y="287" text-anchor="middle" font-size="13" font-weight="bold" fill="#be185d">ŷ₂</text>
+  <text x="670" y="302" text-anchor="middle" font-size="9"  fill="#9d174d">výstup</text>
+
+  <!-- ══════════ LAYER LABEL BOXES ══════════ -->
+  <!-- Input layer label -->
+  <rect x="58" y="418" width="85" height="44" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="100" y="436" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af">Input layer</text>
+  <text x="100" y="452" text-anchor="middle" font-size="10" fill="#3b82f6">Vstupní vrstva</text>
+  <text x="100" y="464" text-anchor="middle" font-size="9"  fill="#3b82f6">(příznaky / features)</text>
+
+  <!-- Hidden 1 label -->
+  <rect x="234" y="418" width="93" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="280" y="436" text-anchor="middle" font-size="11" font-weight="bold" fill="#5b21b6">Hidden layer 1</text>
+  <text x="280" y="452" text-anchor="middle" font-size="10" fill="#7c3aed">Skrytá vrstva 1</text>
+  <text x="280" y="464" text-anchor="middle" font-size="9"  fill="#7c3aed">(extrakce příznaků)</text>
+
+  <!-- Hidden 2 label -->
+  <rect x="434" y="418" width="93" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="480" y="436" text-anchor="middle" font-size="11" font-weight="bold" fill="#5b21b6">Hidden layer 2</text>
+  <text x="480" y="452" text-anchor="middle" font-size="10" fill="#7c3aed">Skrytá vrstva 2</text>
+  <text x="480" y="464" text-anchor="middle" font-size="9"  fill="#7c3aed">(abstrakce)</text>
+
+  <!-- Output label -->
+  <rect x="629" y="418" width="82" height="44" rx="8" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+  <text x="670" y="436" text-anchor="middle" font-size="11" font-weight="bold" fill="#be185d">Output layer</text>
+  <text x="670" y="452" text-anchor="middle" font-size="10" fill="#db2777">Výstupní vrstva</text>
+  <text x="670" y="464" text-anchor="middle" font-size="9"  fill="#db2777">(predikce třídy)</text>
+
+  <!-- ══════════ ANNOTATION CALLOUTS ══════════ -->
+  <!-- "Synapse / váha" callout pointing at the highlighted orange connection -->
+  <line x1="195" y1="172" x2="192" y2="207" stroke="#d97706" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="120" y="152" width="140" height="20" rx="5" fill="#fef9c3" stroke="#fbbf24" stroke-width="1"/>
+  <text x="190" y="166" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#78350f">← synapse / váha (weight)</text>
+
+  <!-- "neuron" callout pointing at H1b -->
+  <line x1="280" y1="163" x2="340" y2="138" stroke="#7c3aed" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="338" y="124" width="76" height="18" rx="5" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1"/>
+  <text x="376" y="137" text-anchor="middle" font-size="10" font-weight="bold" fill="#5b21b6">neuron (uzel)</text>
+
+  <!-- "aktivační funkce" callout on H2b -->
+  <line x1="480" y1="208" x2="540" y2="180" stroke="#7c3aed" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="538" y="165" width="148" height="18" rx="5" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1"/>
+  <text x="612" y="178" text-anchor="middle" font-size="10" font-weight="bold" fill="#5b21b6">f(Σwᵢxᵢ+b) = aktivační fn.</text>
+
+  <!-- Forward pass arrow along top -->
+  <line x1="135" y1="52" x2="640" y2="52" stroke="#059669" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#nn-ar)"/>
+  <text x="387" y="46" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#059669">→ Forward pass (dopředný průchod) →</text>
+
+  <!-- Backprop arrow along bottom of network -->
+  <defs>
+    <marker id="nn-ab2" viewBox="0 0 8 8" refX="1" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <polygon points="8,0 0,4 8,8" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <line x1="640" y1="62" x2="135" y2="62" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#nn-ab2)"/>
+  <text x="387" y="76" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#dc2626">← Backpropagation (zpětný průchod — úprava vah) ←</text>
+</svg>

@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 415" font-family="'Segoe UI',Arial,sans-serif">
+  <defs>
+    <marker id="n-ab" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <polygon points="0,0 8,4 0,8" fill="#3b82f6"/>
+    </marker>
+    <marker id="n-ac" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <polygon points="0,0 8,4 0,8" fill="#0284c7"/>
+    </marker>
+    <marker id="n-ag" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <polygon points="0,0 8,4 0,8" fill="#16a34a"/>
+    </marker>
+    <marker id="n-ao" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <polygon points="0,0 8,4 0,8" fill="#d97706"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="415" rx="14" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#0c4a6e">Umělý neuron (Perceptron)</text>
+
+  <!-- ══════════ INPUT NODES ══════════ -->
+  <circle cx="82" cy="100" r="27" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="82" y="106" text-anchor="middle" font-size="16" font-weight="bold" fill="#1d4ed8">x₁</text>
+
+  <circle cx="82" cy="195" r="27" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="82" y="201" text-anchor="middle" font-size="16" font-weight="bold" fill="#1d4ed8">x₂</text>
+
+  <circle cx="82" cy="290" r="27" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="82" y="296" text-anchor="middle" font-size="16" font-weight="bold" fill="#1d4ed8">x₃</text>
+
+  <!-- ══════════ BIAS NODE ══════════ -->
+  <circle cx="218" cy="348" r="23" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="218" y="354" text-anchor="middle" font-size="15" font-weight="bold" fill="#92400e">b</text>
+
+  <!-- ══════════ LINES: inputs → Σ ══════════ -->
+  <!-- x1 (82,100) → Σ (395,195): unit≈(0.951,0.307), start=(109,108), end=(352,165) -->
+  <line x1="109" y1="108" x2="350" y2="166" stroke="#3b82f6" stroke-width="2" marker-end="url(#n-ab)"/>
+  <!-- x2 (82,195) → Σ (395,195): horizontal, start=(109,195), end=(368,195) -->
+  <line x1="109" y1="195" x2="367" y2="195" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#n-ab)"/>
+  <!-- x3 (82,290) → Σ (395,195): unit≈(0.951,-0.307), start=(109,282), end=(350,224) -->
+  <line x1="109" y1="282" x2="350" y2="224" stroke="#3b82f6" stroke-width="2" marker-end="url(#n-ab)"/>
+  <!-- b (218,348) → Σ (395,195): dashed, unit≈(0.756,-0.655), start=(235,333), end=(363,229) -->
+  <line x1="235" y1="333" x2="361" y2="230" stroke="#d97706" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#n-ao)"/>
+
+  <!-- ══════════ WEIGHT LABELS ══════════ -->
+  <rect x="186" y="122" width="46" height="21" rx="5" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="209" y="137" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">w₁</text>
+
+  <rect x="196" y="182" width="46" height="21" rx="5" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="219" y="197" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">w₂</text>
+
+  <rect x="186" y="242" width="46" height="21" rx="5" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="209" y="257" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">w₃</text>
+
+  <!-- ══════════ SUMMATION CIRCLE ══════════ -->
+  <circle cx="395" cy="195" r="54" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/>
+  <text x="395" y="189" text-anchor="middle" font-size="30" font-weight="bold" fill="#0369a1">Σ</text>
+  <text x="395" y="209" text-anchor="middle" font-size="11.5" fill="#0369a1">Σ(wᵢ · xᵢ) + b</text>
+
+  <!-- ══════════ Σ → f(x) ══════════ -->
+  <line x1="449" y1="195" x2="502" y2="195" stroke="#0284c7" stroke-width="2.5" marker-end="url(#n-ac)"/>
+  <text x="476" y="188" text-anchor="middle" font-size="10" fill="#0369a1">net</text>
+
+  <!-- ══════════ ACTIVATION FUNCTION BOX ══════════ -->
+  <rect x="506" y="164" width="142" height="62" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5"/>
+  <text x="577" y="188" text-anchor="middle" font-size="14" font-weight="bold" fill="#15803d">f (net)</text>
+  <text x="577" y="204" text-anchor="middle" font-size="10.5" fill="#166534">Aktivační funkce</text>
+  <text x="577" y="218" text-anchor="middle" font-size="10" fill="#166534">ReLU / Sigmoid / Tanh</text>
+
+  <!-- ══════════ f(x) → OUTPUT ══════════ -->
+  <line x1="648" y1="195" x2="694" y2="195" stroke="#16a34a" stroke-width="2.5" marker-end="url(#n-ag)"/>
+
+  <!-- ══════════ OUTPUT CIRCLE ══════════ -->
+  <circle cx="728" cy="195" r="33" fill="#fce7f3" stroke="#db2777" stroke-width="2.5"/>
+  <text x="728" y="191" text-anchor="middle" font-size="19" font-weight="bold" fill="#be185d">ŷ</text>
+  <text x="728" y="207" text-anchor="middle" font-size="10" fill="#9d174d">výstup</text>
+
+  <!-- ══════════ ANNOTATION LABELS ══════════ -->
+
+  <!-- Vstupy -->
+  <text x="82" y="343" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af">Vstupy</text>
+  <text x="82" y="357" text-anchor="middle" font-size="10" fill="#3b82f6">(inputs)</text>
+
+  <!-- Váhy = synapse -->
+  <text x="198" y="305" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af">Váhy (w)</text>
+  <text x="198" y="319" text-anchor="middle" font-size="10" fill="#3b82f6">= synapse</text>
+  <text x="198" y="331" text-anchor="middle" font-size="10" fill="#3b82f6">(weights)</text>
+
+  <!-- Bias -->
+  <text x="218" y="385" text-anchor="middle" font-size="11" font-weight="bold" fill="#78350f">Bias (b)</text>
+  <text x="218" y="398" text-anchor="middle" font-size="10" fill="#a16207">posunutí prahové hodnoty</text>
+
+  <!-- Soma -->
+  <text x="395" y="265" text-anchor="middle" font-size="11" font-weight="bold" fill="#0c4a6e">Soma (vážený součet)</text>
+  <text x="395" y="278" text-anchor="middle" font-size="10" fill="#0284c7">(weighted sum + bias)</text>
+
+  <!-- Aktivační funkce -->
+  <text x="577" y="243" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">Aktivační funkce</text>
+  <text x="577" y="256" text-anchor="middle" font-size="10" fill="#16a34a">zavádí nelinearitu sítě</text>
+
+  <!-- Výstup -->
+  <text x="728" y="248" text-anchor="middle" font-size="11" font-weight="bold" fill="#be185d">Výstup</text>
+  <text x="728" y="261" text-anchor="middle" font-size="10" fill="#db2777">(output / predikce)</text>
+</svg>
