@@ -16,7 +16,7 @@
   <!-- Input layer: I1(100,130) I2(100,230) I3(100,330)  -->
   <!-- Hidden 1:  H1a(280,90)  H1b(280,185) H1c(280,280) H1d(280,375) -->
   <!-- Hidden 2:  H2a(480,130) H2b(480,230) H2c(480,330) -->
-  <!-- Output:    O1(670,190)  O2(670,290)  -->
+  <!-- Output:    O1(670,230)  -->
   <!-- ══════════════════════════════════════════════════ -->
 
   <!-- Input → Hidden1 -->
@@ -48,12 +48,9 @@
   <line x1="302" y1="375" x2="458" y2="330" stroke="#94a3b8" stroke-width="0.8"/>
 
   <!-- Hidden2 → Output -->
-  <line x1="502" y1="130" x2="648" y2="190" stroke="#94a3b8" stroke-width="0.8"/>
-  <line x1="502" y1="130" x2="648" y2="290" stroke="#94a3b8" stroke-width="0.8"/>
-  <line x1="502" y1="230" x2="648" y2="190" stroke="#94a3b8" stroke-width="0.8"/>
-  <line x1="502" y1="230" x2="648" y2="290" stroke="#94a3b8" stroke-width="0.8"/>
-  <line x1="502" y1="330" x2="648" y2="190" stroke="#94a3b8" stroke-width="0.8"/>
-  <line x1="502" y1="330" x2="648" y2="290" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="502" y1="130" x2="645" y2="230" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="502" y1="230" x2="645" y2="230" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="502" y1="330" x2="645" y2="230" stroke="#94a3b8" stroke-width="0.8"/>
 
   <!-- One highlighted connection (I2 → H1b) as "synapse / váha" example -->
   <line x1="122" y1="230" x2="258" y2="185" stroke="#f59e0b" stroke-width="2.2"/>
@@ -89,13 +86,9 @@
   <text x="480" y="335" text-anchor="middle" font-size="11" fill="#5b21b6">h₃</text>
 
   <!-- ══════════ OUTPUT LAYER neurons ══════════ -->
-  <circle cx="670" cy="190" r="25" fill="#fce7f3" stroke="#db2777" stroke-width="2.5"/>
-  <text x="670" y="187" text-anchor="middle" font-size="13" font-weight="bold" fill="#be185d">ŷ₁</text>
-  <text x="670" y="202" text-anchor="middle" font-size="9"  fill="#9d174d">výstup</text>
-
-  <circle cx="670" cy="290" r="25" fill="#fce7f3" stroke="#db2777" stroke-width="2.5"/>
-  <text x="670" y="287" text-anchor="middle" font-size="13" font-weight="bold" fill="#be185d">ŷ₂</text>
-  <text x="670" y="302" text-anchor="middle" font-size="9"  fill="#9d174d">výstup</text>
+  <circle cx="670" cy="230" r="25" fill="#fce7f3" stroke="#db2777" stroke-width="2.5"/>
+  <text x="670" y="226" text-anchor="middle" font-size="13" font-weight="bold" fill="#be185d">ŷ</text>
+  <text x="670" y="241" text-anchor="middle" font-size="9"  fill="#9d174d">výstup</text>
 
   <!-- ══════════ LAYER LABEL BOXES ══════════ -->
   <!-- Input layer label -->
