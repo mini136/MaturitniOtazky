@@ -514,7 +514,9 @@ app.get("/api/chat-questions", async (req, res) => {
 
 /* ── Public: AI random quiz – generate question ── */
 app.post("/api/quiz/ai-random/question", async (req, res) => {
-  const subject = String(req.body.subject || "pv").trim().toLowerCase();
+  const subject = String(req.body.subject || "pv")
+    .trim()
+    .toLowerCase();
   if (!SUBJECT_HTML_DIRS[subject]) {
     return res.status(400).json({ error: "invalid_subject" });
   }
@@ -524,9 +526,9 @@ app.post("/api/quiz/ai-random/question", async (req, res) => {
 
   let files;
   try {
-    files = fs.readdirSync(dirPath).filter(
-      (f) => f.endsWith(".html") && f !== "index.html",
-    );
+    files = fs
+      .readdirSync(dirPath)
+      .filter((f) => f.endsWith(".html") && f !== "index.html");
   } catch (e) {
     return res.status(500).json({ error: "dir_read_failed" });
   }
@@ -581,9 +583,15 @@ app.post("/api/quiz/ai-random/question", async (req, res) => {
 
 /* ── Public: AI random quiz – evaluate answer ── */
 app.post("/api/quiz/ai-random/evaluate", async (req, res) => {
-  const question = String(req.body.question || "").trim().slice(0, 1000);
-  const modelAnswer = String(req.body.modelAnswer || "").trim().slice(0, 2000);
-  const userAnswer = String(req.body.userAnswer || "").trim().slice(0, 2000);
+  const question = String(req.body.question || "")
+    .trim()
+    .slice(0, 1000);
+  const modelAnswer = String(req.body.modelAnswer || "")
+    .trim()
+    .slice(0, 2000);
+  const userAnswer = String(req.body.userAnswer || "")
+    .trim()
+    .slice(0, 2000);
 
   if (!question || !userAnswer) {
     return res.status(400).json({ error: "missing_fields" });
