@@ -36,6 +36,14 @@
 
     <div class="section-divider section-linearni">📋 ČÁST 1 — Lineární datové struktury</div>
 
+    <h2>Přehled všech struktur z otázky</h2>
+    <a href="../assets/diagrams/datove_struktury.svg" target="_blank" style="display:block;margin:16px 0;text-align:center;">
+        <img src="../assets/diagrams/datove_struktury.svg"
+             alt="Přehled datových struktur: pole, spojený seznam, zásobník, fronta, BST, halda"
+             style="max-width:100%;height:auto;border-radius:12px;border:2px solid #cbd5e1;box-shadow:0 4px 16px rgba(0,0,0,0.12);cursor:zoom-in;"/>
+        <div style="margin-top:6px;font-size:0.85rem;color:#64748b;">Klikni pro zobrazení v plné velikosti 🔍</div>
+    </a>
+
     <h2>Přehled lineárních struktur</h2>
     <table>
         <tr><th>Struktura</th><th>Typ</th><th>Vložení</th><th>Smazání</th><th>Přístup</th><th>Použití</th></tr>
@@ -49,15 +57,11 @@
 
     <div class="section-divider section-nelinearni">🌳 ČÁST 2 — Nelineární datové struktury</div>
 
-    <h2>Stromy a grafy</h2>
+    <h2>Stromy a halda</h2>
     <table>
         <tr><th>Struktura</th><th>Vlastnost</th><th>Přístup</th><th>Použití</th></tr>
         <tr><td><strong>BST (Binární vyhledávací strom)</strong></td><td>Levý potomek &lt; kořen &lt; pravý</td><td>O(log n) průměrně</td><td>Seřazená data, vyhledávání</td></tr>
-        <tr><td><strong>AVL strom / Red-Black</strong></td><td>Samovyvažující BST</td><td>O(log n) vdy</td><td>Databazové indexy (B-tree)</td></tr>
         <tr><td><strong>Heap (halda)</strong></td><td>Min/Max — rodič ≤ / ≥ potomci</td><td>O(1) min/max, O(log n) vložení</td><td>Prioritní fronta, Heap sort</td></tr>
-        <tr><td><strong>Trie</strong></td><td>Strom písmen</td><td>O(délka klíče)</td><td>Slovníky, autocomplete</td></tr>
-        <tr><td><strong>TreeSet / TreeMap</strong></td><td>Red-Black strom (samovyvažující)</td><td>O(log n) vždy</td><td>Seřazená množina/mapa v Javě</td></tr>
-        <tr><td><strong>Graf</strong></td><td>Uzly + hrany (orientovaný/neorient.)</td><td>O(V+E) DFS/BFS</td><td>Mapy, sítě, závislosti</td></tr>
     </table>
     <div class="note"><strong>Heap vs BST:</strong> Heap zajiistí O(1) minimum/maximum a O(log n) vložení — ideální pro prioritní frontu. BST umožní vyhledávání a in-order procházení (seřazený výpis).</div>
 

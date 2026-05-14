@@ -1,0 +1,403 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 820" font-family="'Segoe UI',Arial,sans-serif">
+
+  <!-- Background -->
+  <rect width="1100" height="820" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="550" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e293b">Přehled datových struktur</text>
+  <text x="550" y="58" text-anchor="middle" font-size="12" fill="#64748b">Pole · Spojový seznam · Zásobník · Fronta · Binární strom (BST) · Halda (MinHeap)</text>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  1. POLE (Array)  — top-left                            -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <rect x="30" y="75" width="490" height="145" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="275" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">1 — Pole (Array)</text>
+  <text x="275" y="113" text-anchor="middle" font-size="10" fill="#3b82f6">Sekvenční, pevná paměť, přístup indexem O(1)</text>
+
+  <!-- index row -->
+  <text x="50"  y="140" font-size="10" fill="#94a3b8">index:</text>
+  <text x="95"  y="140" text-anchor="middle" font-size="10" fill="#64748b">0</text>
+  <text x="155" y="140" text-anchor="middle" font-size="10" fill="#64748b">1</text>
+  <text x="215" y="140" text-anchor="middle" font-size="10" fill="#64748b">2</text>
+  <text x="275" y="140" text-anchor="middle" font-size="10" fill="#64748b">3</text>
+  <text x="335" y="140" text-anchor="middle" font-size="10" fill="#64748b">4</text>
+  <text x="395" y="140" text-anchor="middle" font-size="10" fill="#64748b">5</text>
+  <text x="455" y="140" text-anchor="middle" font-size="10" fill="#64748b">6</text>
+
+  <!-- cells -->
+  <rect x="68"  y="147" width="54" height="36" rx="4" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="128" y="147" width="54" height="36" rx="4" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="188" y="147" width="54" height="36" rx="4" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="248" y="147" width="54" height="36" rx="4" fill="#93c5fd" stroke="#2563eb" stroke-width="2"/>
+  <rect x="308" y="147" width="54" height="36" rx="4" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="368" y="147" width="54" height="36" rx="4" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="428" y="147" width="54" height="36" rx="4" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/>
+
+  <text x="95"  y="171" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e40af">12</text>
+  <text x="155" y="171" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e40af">7</text>
+  <text x="215" y="171" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e40af">3</text>
+  <text x="275" y="171" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e3a8a">45</text>
+  <text x="335" y="171" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e40af">9</text>
+  <text x="395" y="171" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e40af">21</text>
+  <text x="455" y="171" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e40af">6</text>
+
+  <!-- index[3] highlight arrow -->
+  <line x1="275" y1="183" x2="275" y2="202" stroke="#1d4ed8" stroke-width="1.5" marker-end="url(#arr-b)"/>
+  <text x="275" y="215" text-anchor="middle" font-size="10" fill="#1d4ed8">arr[3] = 45 → O(1)</text>
+
+  <!-- legend badges -->
+  <rect x="40"  y="194" width="90" height="16" rx="4" fill="#dbeafe"/>
+  <text x="85"  y="205" text-anchor="middle" font-size="9" fill="#1d4ed8">vložení: O(n)</text>
+  <rect x="140" y="194" width="90" height="16" rx="4" fill="#dbeafe"/>
+  <text x="185" y="205" text-anchor="middle" font-size="9" fill="#1d4ed8">mazání: O(n)</text>
+  <rect x="240" y="194" width="100" height="16" rx="4" fill="#93c5fd"/>
+  <text x="290" y="205" text-anchor="middle" font-size="9" font-weight="bold" fill="#1e40af">přístup indexem: O(1)</text>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  2. SPOJOVÝ SEZNAM  — top-right                         -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <rect x="580" y="75" width="490" height="145" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="825" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">2 — Spojový seznam (Linked List)</text>
+  <text x="825" y="113" text-anchor="middle" font-size="10" fill="#16a34a">Každý uzel drží data + odkaz na další uzel</text>
+
+  <!-- head label -->
+  <text x="622" y="155" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">HEAD</text>
+  <line x1="622" y1="158" x2="622" y2="165" stroke="#15803d" stroke-width="1.5"/>
+
+  <!-- nodes -->
+  <!-- node 1 -->
+  <rect x="598" y="165" width="60" height="34" rx="4" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="628" y1="165" x2="628" y2="199" stroke="#16a34a" stroke-width="0.7" stroke-dasharray="2,2"/>
+  <text x="613" y="187" font-size="12" font-weight="bold" fill="#14532d">10</text>
+  <text x="632" y="183" font-size="8" fill="#166534">next</text>
+  <text x="632" y="193" font-size="9" fill="#15803d">●→</text>
+
+  <!-- arrow -->
+  <line x1="660" y1="182" x2="680" y2="182" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arr-g)"/>
+
+  <!-- node 2 -->
+  <rect x="682" y="165" width="60" height="34" rx="4" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="712" y1="165" x2="712" y2="199" stroke="#16a34a" stroke-width="0.7" stroke-dasharray="2,2"/>
+  <text x="697" y="187" font-size="12" font-weight="bold" fill="#14532d">25</text>
+  <text x="716" y="183" font-size="8" fill="#166534">next</text>
+  <text x="716" y="193" font-size="9" fill="#15803d">●→</text>
+  <line x1="744" y1="182" x2="764" y2="182" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arr-g)"/>
+
+  <!-- node 3 (highlighted) -->
+  <rect x="766" y="165" width="60" height="34" rx="4" fill="#4ade80" stroke="#16a34a" stroke-width="2"/>
+  <line x1="796" y1="165" x2="796" y2="199" stroke="#16a34a" stroke-width="0.7" stroke-dasharray="2,2"/>
+  <text x="781" y="187" font-size="12" font-weight="bold" fill="#14532d">37</text>
+  <text x="800" y="183" font-size="8" fill="#166534">next</text>
+  <text x="800" y="193" font-size="9" fill="#15803d">●→</text>
+  <line x1="828" y1="182" x2="848" y2="182" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arr-g)"/>
+
+  <!-- node 4 -->
+  <rect x="850" y="165" width="60" height="34" rx="4" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="880" y1="165" x2="880" y2="199" stroke="#16a34a" stroke-width="0.7" stroke-dasharray="2,2"/>
+  <text x="865" y="187" font-size="12" font-weight="bold" fill="#14532d">8</text>
+  <text x="884" y="183" font-size="8" fill="#166534">next</text>
+  <text x="884" y="193" font-size="9" fill="#15803d">●→</text>
+  <line x1="912" y1="182" x2="932" y2="182" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arr-g)"/>
+
+  <!-- null -->
+  <rect x="934" y="170" width="36" height="24" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+  <text x="952" y="186" text-anchor="middle" font-size="10" font-weight="bold" fill="#64748b">null</text>
+
+  <!-- callout for node 3 insertion -->
+  <line x1="796" y1="199" x2="796" y2="215" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="796" y="228" text-anchor="middle" font-size="9" fill="#15803d">vložení O(1) ← znáš uzel</text>
+
+  <!-- legend badges -->
+  <rect x="590"  y="194" width="90" height="16" rx="4" fill="#bbf7d0"/>
+  <text x="635"  y="205" text-anchor="middle" font-size="9" fill="#15803d">vložení: O(1)*</text>
+  <rect x="690"  y="194" width="90" height="16" rx="4" fill="#bbf7d0"/>
+  <text x="735"  y="205" text-anchor="middle" font-size="9" fill="#15803d">mazání: O(1)*</text>
+  <rect x="790"  y="194" width="110" height="16" rx="4" fill="#dcfce7"/>
+  <text x="845"  y="205" text-anchor="middle" font-size="9" fill="#15803d">přístup: O(n) vyhl.</text>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  3. ZÁSOBNÍK (Stack / LIFO)  — middle-left              -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <rect x="30" y="238" width="230" height="210" rx="10" fill="#faf5ff" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="145" y="259" text-anchor="middle" font-size="13" font-weight="bold" fill="#7e22ce">3 — Zásobník (Stack)</text>
+  <text x="145" y="273" text-anchor="middle" font-size="10" fill="#9333ea">LIFO — Last In, First Out</text>
+
+  <!-- stack container -->
+  <rect x="80" y="283" width="130" height="140" rx="6" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="5,3"/>
+
+  <!-- stack items from bottom -->
+  <rect x="88" y="385" width="114" height="30" rx="4" fill="#e9d5ff" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="145" y="405" text-anchor="middle" font-size="12" fill="#6b21a8">A</text>
+  <rect x="88" y="350" width="114" height="30" rx="4" fill="#d8b4fe" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="145" y="370" text-anchor="middle" font-size="12" fill="#6b21a8">B</text>
+  <rect x="88" y="315" width="114" height="30" rx="4" fill="#c084fc" stroke="#7c3aed" stroke-width="2"/>
+  <text x="145" y="332" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">C</text>
+
+  <!-- TOP label & push/pop arrows -->
+  <text x="210" y="325" font-size="9" font-weight="bold" fill="#7e22ce">← TOP</text>
+  <text x="55"  y="325" font-size="9" fill="#9333ea">push</text>
+  <text x="55"  y="338" font-size="9" fill="#9333ea">pop ↕</text>
+
+  <!-- open top indicator -->
+  <text x="145" y="302" text-anchor="middle" font-size="9" fill="#a855f7">↑ otevřeno nahoře</text>
+
+  <!-- badges -->
+  <rect x="40"  y="426" width="82" height="14" rx="4" fill="#ede9fe"/>
+  <text x="81"  y="436" text-anchor="middle" font-size="8" fill="#7e22ce">push/pop: O(1)</text>
+  <rect x="130" y="426" width="82" height="14" rx="4" fill="#ede9fe"/>
+  <text x="171" y="436" text-anchor="middle" font-size="8" fill="#7e22ce">peek: O(1)</text>
+
+  <text x="145" y="455" text-anchor="middle" font-size="9" fill="#7e22ce">Použití: undo, závorky, rekurze</text>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  4. FRONTA (Queue / FIFO)  — middle-center              -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <rect x="280" y="238" width="340" height="210" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="450" y="259" text-anchor="middle" font-size="13" font-weight="bold" fill="#c2410c">4 — Fronta (Queue)</text>
+  <text x="450" y="273" text-anchor="middle" font-size="10" fill="#ea580c">FIFO — First In, First Out</text>
+
+  <!-- queue cells -->
+  <rect x="295" y="288" width="64" height="38" rx="5" fill="#fed7aa" stroke="#f97316" stroke-width="2"/>
+  <text x="327" y="312" text-anchor="middle" font-size="13" font-weight="bold" fill="#7c2d12">P1</text>
+  <text x="327" y="282" text-anchor="middle" font-size="9" font-weight="bold" fill="#c2410c">FRONT</text>
+  <line x1="327" y1="284" x2="327" y2="290" stroke="#c2410c" stroke-width="1.2"/>
+
+  <rect x="367" y="288" width="64" height="38" rx="5" fill="#fdba74" stroke="#f97316" stroke-width="1.5"/>
+  <text x="399" y="312" text-anchor="middle" font-size="13" font-weight="bold" fill="#7c2d12">P2</text>
+
+  <rect x="439" y="288" width="64" height="38" rx="5" fill="#fdba74" stroke="#f97316" stroke-width="1.5"/>
+  <text x="471" y="312" text-anchor="middle" font-size="13" font-weight="bold" fill="#7c2d12">P3</text>
+
+  <rect x="511" y="288" width="64" height="38" rx="5" fill="#fdba74" stroke="#f97316" stroke-width="1.5"/>
+  <text x="543" y="312" text-anchor="middle" font-size="13" font-weight="bold" fill="#7c2d12">P4</text>
+  <text x="543" y="282" text-anchor="middle" font-size="9" font-weight="bold" fill="#c2410c">BACK</text>
+  <line x1="543" y1="284" x2="543" y2="290" stroke="#c2410c" stroke-width="1.2"/>
+
+  <!-- arrows -->
+  <!-- dequeue arrow left -->
+  <line x1="270" y1="307" x2="293" y2="307" stroke="#ef4444" stroke-width="2" marker-end="url(#arr-r)"/>
+  <text x="258" y="303" text-anchor="middle" font-size="9" fill="#ef4444">de-</text>
+  <text x="258" y="313" text-anchor="middle" font-size="9" fill="#ef4444">queue</text>
+
+  <!-- enqueue arrow right -->
+  <line x1="577" y1="307" x2="598" y2="307" stroke="#22c55e" stroke-width="2" marker-end="url(#arr-g)"/>
+  <text x="610" y="303" text-anchor="middle" font-size="9" fill="#22c55e">en-</text>
+  <text x="610" y="313" text-anchor="middle" font-size="9" fill="#22c55e">queue</text>
+
+  <!-- description -->
+  <text x="450" y="350" text-anchor="middle" font-size="10" fill="#ea580c">P1 byl první → odchází první (dequeue)</text>
+  <text x="450" y="364" text-anchor="middle" font-size="10" fill="#ea580c">Nové přichází zezadu (enqueue)</text>
+
+  <!-- badges -->
+  <rect x="295" y="375" width="105" height="14" rx="4" fill="#fed7aa"/>
+  <text x="347" y="385" text-anchor="middle" font-size="8" fill="#c2410c">enqueue/dequeue: O(1)</text>
+  <rect x="410" y="375" width="90" height="14" rx="4" fill="#fed7aa"/>
+  <text x="455" y="385" text-anchor="middle" font-size="8" fill="#c2410c">hledání: O(n)</text>
+
+  <text x="450" y="415" text-anchor="middle" font-size="9" fill="#c2410c">Použití: tiskárna, BFS, buffery, zpracování úloh</text>
+  <text x="450" y="430" text-anchor="middle" font-size="9" fill="#c2410c">Java: Queue&lt;E&gt; / ArrayDeque / LinkedList</text>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  5. BST (Binární strom)  — bottom-left                  -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <rect x="30" y="470" width="490" height="330" rx="10" fill="#fef9c3" stroke="#eab308" stroke-width="1.5"/>
+  <text x="275" y="492" text-anchor="middle" font-size="13" font-weight="bold" fill="#713f12">5 — Binární vyhledávací strom (BST)</text>
+  <text x="275" y="508" text-anchor="middle" font-size="10" fill="#a16207">Levý podstrom &lt; kořen &lt; pravý podstrom · O(log n) průměrně</text>
+
+  <!-- BST nodes — root=50 -->
+  <!-- level 0: 50 -->
+  <circle cx="275" cy="545" r="22" fill="#fde047" stroke="#ca8a04" stroke-width="2.5"/>
+  <text x="275" y="551" text-anchor="middle" font-size="14" font-weight="bold" fill="#713f12">50</text>
+  <text x="275" y="523" text-anchor="middle" font-size="9" fill="#a16207">kořen (root)</text>
+
+  <!-- edges level 0→1 -->
+  <line x1="258" y1="560" x2="195" y2="592" stroke="#ca8a04" stroke-width="1.8"/>
+  <line x1="292" y1="560" x2="355" y2="592" stroke="#ca8a04" stroke-width="1.8"/>
+
+  <!-- level 1: 30, 70 -->
+  <circle cx="185" cy="608" r="20" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+  <text x="185" y="614" text-anchor="middle" font-size="13" font-weight="bold" fill="#713f12">30</text>
+
+  <circle cx="365" cy="608" r="20" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+  <text x="365" y="614" text-anchor="middle" font-size="13" font-weight="bold" fill="#713f12">70</text>
+
+  <!-- edges level 1→2 -->
+  <line x1="170" y1="622" x2="125" y2="650" stroke="#ca8a04" stroke-width="1.5"/>
+  <line x1="200" y1="622" x2="240" y2="650" stroke="#ca8a04" stroke-width="1.5"/>
+  <line x1="350" y1="622" x2="310" y2="650" stroke="#ca8a04" stroke-width="1.5"/>
+  <line x1="380" y1="622" x2="420" y2="650" stroke="#ca8a04" stroke-width="1.5"/>
+
+  <!-- level 2: 20, 40, 60, 80 -->
+  <circle cx="115" cy="663" r="18" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5"/>
+  <text x="115" y="669" text-anchor="middle" font-size="12" fill="#713f12">20</text>
+
+  <circle cx="250" cy="663" r="18" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5"/>
+  <text x="250" y="669" text-anchor="middle" font-size="12" fill="#713f12">40</text>
+
+  <!-- highlighted search path: 50→70→60 -->
+  <circle cx="305" cy="663" r="18" fill="#fde047" stroke="#d97706" stroke-width="2.5"/>
+  <text x="305" y="669" text-anchor="middle" font-size="12" font-weight="bold" fill="#713f12">60</text>
+
+  <circle cx="430" cy="663" r="18" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5"/>
+  <text x="430" y="669" text-anchor="middle" font-size="12" fill="#713f12">80</text>
+
+  <!-- search path highlight lines -->
+  <line x1="275" y1="523" x2="275" y2="523" stroke="none"/>
+  <!-- arrow: hledám 60: 50→70 (right) already drawn -->
+  <!-- arrow 70→60 (left) already drawn -->
+  <!-- callout search path -->
+  <text x="370" y="640" font-size="9" fill="#d97706">hledám 60:</text>
+  <text x="370" y="652" font-size="9" fill="#d97706">50&lt;60→vpravo</text>
+  <text x="370" y="664" font-size="9" fill="#d97706">70&gt;60→vlevo ✓</text>
+
+  <!-- level 3 partial -->
+  <line x1="102" y1="676" x2="75" y2="698" stroke="#e5e7eb" stroke-width="1"/>
+  <circle cx="68" cy="706" r="14" fill="#f9fafb" stroke="#d1d5db" stroke-width="1"/>
+  <text x="68" cy="711" text-anchor="middle" dy="4" font-size="10" fill="#9ca3af">10</text>
+
+  <line x1="128" y1="676" x2="152" y2="698" stroke="#e5e7eb" stroke-width="1"/>
+  <circle cx="158" cy="706" r="14" fill="#f9fafb" stroke="#d1d5db" stroke-width="1"/>
+  <text x="158" cy="711" text-anchor="middle" dy="4" font-size="10" fill="#9ca3af">25</text>
+
+  <!-- badges -->
+  <rect x="40"  y="718" width="90" height="14" rx="4" fill="#fde68a"/>
+  <text x="85"  y="728" text-anchor="middle" font-size="8" font-weight="bold" fill="#92400e">hledání: O(log n)</text>
+  <rect x="140" y="718" width="90" height="14" rx="4" fill="#fde68a"/>
+  <text x="185" y="728" text-anchor="middle" font-size="8" font-weight="bold" fill="#92400e">vložení: O(log n)</text>
+  <rect x="240" y="718" width="90" height="14" rx="4" fill="#fde68a"/>
+  <text x="285" y="728" text-anchor="middle" font-size="8" font-weight="bold" fill="#92400e">inorder = seřazeno</text>
+  <rect x="340" y="718" width="140" height="14" rx="4" fill="#fef3c7"/>
+  <text x="410" y="728" text-anchor="middle" font-size="8" fill="#92400e">Java: TreeSet / TreeMap (Red-Black)</text>
+
+  <text x="275" y="750" text-anchor="middle" font-size="9" fill="#a16207">Inorder průchod (L→kořen→R): 20 · 30 · 40 · 50 · 60 · 70 · 80 → seřazený výstup!</text>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  6. HALDA (MinHeap)  — bottom-right                     -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <rect x="580" y="238" width="490" height="562" rx="10" fill="#fff1f2" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="825" y="259" text-anchor="middle" font-size="13" font-weight="bold" fill="#9f1239">6 — Halda / Heap (MinHeap)</text>
+  <text x="825" y="275" text-anchor="middle" font-size="10" fill="#e11d48">Každý rodič ≤ oba potomci · kořen = minimum · O(1) min, O(log n) push/pop</text>
+
+  <!-- heap tree nodes -->
+  <!-- root: 1 -->
+  <circle cx="825" cy="312" r="24" fill="#fda4af" stroke="#e11d48" stroke-width="2.5"/>
+  <text x="825" y="318" text-anchor="middle" font-size="15" font-weight="bold" fill="#881337">1</text>
+  <text x="825" y="290" text-anchor="middle" font-size="9" font-weight="bold" fill="#e11d48">ROOT = minimum</text>
+  <text x="855" y="306" font-size="9" fill="#e11d48">← peek O(1)</text>
+
+  <!-- edges 0→1 -->
+  <line x1="806" y1="330" x2="736" y2="362" stroke="#e11d48" stroke-width="1.8"/>
+  <line x1="844" y1="330" x2="914" y2="362" stroke="#e11d48" stroke-width="1.8"/>
+
+  <!-- level 1: 3, 2 -->
+  <circle cx="725" cy="377" r="21" fill="#fecdd3" stroke="#f43f5e" stroke-width="2"/>
+  <text x="725" y="383" text-anchor="middle" font-size="14" font-weight="bold" fill="#881337">3</text>
+
+  <circle cx="925" cy="377" r="21" fill="#fecdd3" stroke="#f43f5e" stroke-width="2"/>
+  <text x="925" y="383" text-anchor="middle" font-size="14" font-weight="bold" fill="#881337">2</text>
+
+  <!-- edges 1→2 -->
+  <line x1="710" y1="392" x2="655" y2="420" stroke="#f43f5e" stroke-width="1.5"/>
+  <line x1="740" y1="392" x2="790" y2="420" stroke="#f43f5e" stroke-width="1.5"/>
+  <line x1="910" y1="392" x2="870" y2="420" stroke="#f43f5e" stroke-width="1.5"/>
+  <line x1="940" y1="392" x2="988" y2="420" stroke="#f43f5e" stroke-width="1.5"/>
+
+  <!-- level 2: 9, 7, 5, 4 -->
+  <circle cx="645" cy="433" r="19" fill="#ffe4e6" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="645" y="439" text-anchor="middle" font-size="13" fill="#881337">9</text>
+
+  <circle cx="800" cy="433" r="19" fill="#ffe4e6" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="800" y="439" text-anchor="middle" font-size="13" fill="#881337">7</text>
+
+  <circle cx="860" cy="433" r="19" fill="#ffe4e6" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="860" y="439" text-anchor="middle" font-size="13" fill="#881337">5</text>
+
+  <circle cx="998" cy="433" r="19" fill="#ffe4e6" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="998" y="439" text-anchor="middle" font-size="13" fill="#881337">4</text>
+
+  <!-- invariant arrows -->
+  <text x="825" y="472" text-anchor="middle" font-size="9" fill="#e11d48">Heap-vlastnost: 1 ≤ 3, 2 · 3 ≤ 9, 7 · 2 ≤ 5, 4 ✓</text>
+
+  <!-- array representation -->
+  <text x="825" y="498" text-anchor="middle" font-size="10" font-weight="bold" fill="#9f1239">Halda je uložena v poli (in-place):</text>
+  <!-- cells for array rep -->
+  <rect x="605" y="507" width="44" height="30" rx="4" fill="#fda4af" stroke="#e11d48" stroke-width="2"/>
+  <text x="627" y="527" text-anchor="middle" font-size="13" font-weight="bold" fill="#881337">1</text>
+  <text x="627" y="504" text-anchor="middle" font-size="9" fill="#64748b">0</text>
+
+  <rect x="653" y="507" width="44" height="30" rx="4" fill="#fecdd3" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="675" y="527" text-anchor="middle" font-size="13" font-weight="bold" fill="#881337">3</text>
+  <text x="675" y="504" text-anchor="middle" font-size="9" fill="#64748b">1</text>
+
+  <rect x="701" y="507" width="44" height="30" rx="4" fill="#fecdd3" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="723" y="527" text-anchor="middle" font-size="13" font-weight="bold" fill="#881337">2</text>
+  <text x="723" y="504" text-anchor="middle" font-size="9" fill="#64748b">2</text>
+
+  <rect x="749" y="507" width="44" height="30" rx="4" fill="#ffe4e6" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="771" y="527" text-anchor="middle" font-size="13" font-weight="bold" fill="#881337">9</text>
+  <text x="771" y="504" text-anchor="middle" font-size="9" fill="#64748b">3</text>
+
+  <rect x="797" y="507" width="44" height="30" rx="4" fill="#ffe4e6" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="819" y="527" text-anchor="middle" font-size="13" font-weight="bold" fill="#881337">7</text>
+  <text x="819" y="504" text-anchor="middle" font-size="9" fill="#64748b">4</text>
+
+  <rect x="845" y="507" width="44" height="30" rx="4" fill="#ffe4e6" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="867" y="527" text-anchor="middle" font-size="13" font-weight="bold" fill="#881337">5</text>
+  <text x="867" y="504" text-anchor="middle" font-size="9" fill="#64748b">5</text>
+
+  <rect x="893" y="507" width="44" height="30" rx="4" fill="#ffe4e6" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="915" y="527" text-anchor="middle" font-size="13" font-weight="bold" fill="#881337">4</text>
+  <text x="915" y="504" text-anchor="middle" font-size="9" fill="#64748b">6</text>
+
+  <!-- array index formulas -->
+  <text x="825" y="555" text-anchor="middle" font-size="9" fill="#9f1239">Pro uzel i: levý potomek = 2i+1 · pravý = 2i+2 · rodič = ⌊(i-1)/2⌋</text>
+
+  <!-- push simulation -->
+  <text x="825" y="578" text-anchor="middle" font-size="10" font-weight="bold" fill="#9f1239">Push(0) — vkládám menší prvek → sift-up:</text>
+  <!-- show 0 bubbling up -->
+  <circle cx="680" cy="610" r="15" fill="#fb7185" stroke="#e11d48" stroke-width="2"/>
+  <text x="680" y="616" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">0</text>
+  <text x="700" y="607" font-size="9" fill="#e11d48">přidáno na konec</text>
+  <line x1="696" y1="610" x2="720" y2="610" stroke="#e11d48" stroke-width="1.2" marker-end="url(#arr-r)"/>
+  <circle cx="740" cy="610" r="15" fill="#fb7185" stroke="#e11d48" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="740" y="616" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">0</text>
+  <line x1="756" y1="610" x2="780" y2="610" stroke="#e11d48" stroke-width="1.2" marker-end="url(#arr-r)"/>
+  <text x="800" y="607" font-size="9" fill="#e11d48">porovná s rodičem</text>
+  <text x="800" y="619" font-size="9" fill="#e11d48">0 &lt; rodič → swap ↑</text>
+  <text x="800" y="631" font-size="9" fill="#e11d48">opakuje → O(log n)</text>
+
+  <!-- badges -->
+  <rect x="594" y="648" width="100" height="14" rx="4" fill="#fda4af"/>
+  <text x="644" y="658" text-anchor="middle" font-size="8" font-weight="bold" fill="#9f1239">peek min: O(1)</text>
+  <rect x="702" y="648" width="100" height="14" rx="4" fill="#fecdd3"/>
+  <text x="752" y="658" text-anchor="middle" font-size="8" fill="#9f1239">push/poll: O(log n)</text>
+  <rect x="810" y="648" width="110" height="14" rx="4" fill="#ffe4e6"/>
+  <text x="865" y="658" text-anchor="middle" font-size="8" fill="#9f1239">Java: PriorityQueue&lt;E&gt;</text>
+  <rect x="928" y="648" width="124" height="14" rx="4" fill="#ffe4e6"/>
+  <text x="990" y="658" text-anchor="middle" font-size="8" fill="#9f1239">Použití: Dijkstra, HeapSort, prio-fronta</text>
+
+  <!-- VS BST note -->
+  <rect x="594" y="668" width="460" height="28" rx="6" fill="#fef2f2" stroke="#fca5a5" stroke-width="1"/>
+  <text x="824" y="681" text-anchor="middle" font-size="9" fill="#9f1239">⚡ Heap vs BST: Heap = rychlý min/max O(1), BST = seřazený výpis + hledání O(log n)</text>
+  <text x="824" y="692" text-anchor="middle" font-size="9" fill="#9f1239">MaxHeap: Comparator.reverseOrder() v Javě · MinHeap je výchozí PriorityQueue</text>
+
+  <!-- ════ MARKERS ════ -->
+  <defs>
+    <marker id="arr-b" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <polygon points="0,0 8,4 0,8" fill="#2563eb"/>
+    </marker>
+    <marker id="arr-g" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <polygon points="0,0 8,4 0,8" fill="#16a34a"/>
+    </marker>
+    <marker id="arr-r" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <polygon points="0,0 8,4 0,8" fill="#ef4444"/>
+    </marker>
+    <marker id="arr-o" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <polygon points="0,0 8,4 0,8" fill="#f97316"/>
+    </marker>
+  </defs>
+
+  <!-- Bottom legend -->
+  <rect x="30" y="800" width="1040" height="16" rx="5" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="550" y="812" text-anchor="middle" font-size="9" fill="#475569">🔵 Pole O(1) index · 🟢 Spojový seznam O(1) přidání · 🟣 Zásobník LIFO · 🟠 Fronta FIFO · 🟡 BST O(log n) hledání · 🔴 Halda O(1) min / O(log n) push</text>
+</svg>
