@@ -631,6 +631,104 @@ app.post("/api/quiz/ai-random/evaluate", async (req, res) => {
   }
 });
 
+/* ── Build in-memory full-text search index ── */
+const SEARCH_INDEX = [];
+
+function buildSearchIndex() {
+  const catalogPath = path.join(ROOT_DIR, "assets", "questions-catalog.json");
+  let catalog = [];
+  try {
+    catalog = JSON.parse(fs.readFileSync(catalogPath, "utf-8"));
+  } catch (e) {}
+
+  const catalogMap = Object.create(null);
+  catalog.forEach((item) => {
+    catalogMap[item.path] = item.title;
+  });
+
+  const dirs = [
+    { dir: "maturitniOtazkyPv_html", source: "pv" },
+    { dir: "maturitniOtazkySite", source: "site" },
+    { dir: "maturitniOtazkySpv_html", source: "spv" },
+    { dir: "maturitniOtazkyCs_html", source: "cs" },
+  ];
+
+  dirs.forEach(({ dir, source }) => {
+    const fullDir = path.join(ROOT_DIR, dir);
+    let files;
+    try {
+      files = fs
+        .readdirSync(fullDir)
+        .filter((f) => f.endsWith(".html") && f !== "index.html");
+    } catch (e) {
+      return;
+    }
+    files.forEach((file) => {
+      const filePath = path.join(fullDir, file);
+      const itemPath = dir + "/" + file;
+      let html;
+      try {
+        html = fs.readFileSync(filePath, "utf-8");
+      } catch (e) {
+        return;
+      }
+      const text = stripHtmlContent(html);
+      const title =
+        catalogMap[itemPath] || file.replace(".html", "").replace(/_/g, " ");
+      SEARCH_INDEX.push({ path: itemPath, source, title, text });
+    });
+  });
+}
+
+buildSearchIndex();
+
+function normSearch(s) {
+  return String(s || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+/* ── Public: full-text search across all questions ── */
+app.get("/api/search", (req, res) => {
+  const raw = String(req.query.q || "")
+    .trim()
+    .slice(0, 200);
+  if (!raw) return res.json({ results: [] });
+
+  const q = normSearch(raw);
+  const results = [];
+
+  for (const item of SEARCH_INDEX) {
+    const normText = normSearch(item.text);
+    const normTitle = normSearch(item.title);
+    const textIdx = normText.indexOf(q);
+    const titleMatch = normTitle.includes(q);
+
+    if (textIdx === -1 && !titleMatch) continue;
+
+    let snippet = "";
+    if (textIdx !== -1) {
+      const start = Math.max(0, textIdx - 80);
+      const end = Math.min(item.text.length, textIdx + q.length + 120);
+      snippet =
+        (start > 0 ? "…" : "") +
+        item.text.slice(start, end).trim() +
+        (end < item.text.length ? "…" : "");
+    }
+
+    results.push({
+      title: item.title,
+      path: item.path,
+      source: item.source,
+      snippet,
+    });
+    if (results.length >= 50) break;
+  }
+
+  return res.json({ results });
+});
+
 app.use(express.static(ROOT_DIR));
 
 app.get("*", (req, res) => {

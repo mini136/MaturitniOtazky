@@ -124,14 +124,31 @@
         }
         .search-item {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            flex-direction: column;
+            gap: 4px;
             text-decoration: none;
             border: 1px solid #dbeafe;
             border-radius: 8px;
             padding: 9px 10px;
             color: #1f2937;
             background: #f8fbff;
+        }
+        .search-item-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-snippet {
+            font-size: 0.82rem;
+            color: #475569;
+            line-height: 1.45;
+            padding-left: 42px;
+        }
+        .search-snippet mark {
+            background: #fef08a;
+            color: #1e3a5f;
+            border-radius: 2px;
+            padding: 0 1px;
         }
         .search-item:hover {
             border-color: #2563eb;

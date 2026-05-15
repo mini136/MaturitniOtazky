@@ -159,7 +159,36 @@
     return top.concat(rest).slice(0, 5);
   }
 
-  function renderResults(target, items) {
+  function escapeHtml(s) {
+    return String(s || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function highlightSnippet(snippet, query) {
+    if (!snippet) return "";
+    var escaped = escapeHtml(snippet);
+    if (!query) return escaped;
+    var normQ = norm(query);
+    var result = "";
+    var normEscaped = escaped
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+    var pos = 0;
+    var i;
+    while ((i = normEscaped.indexOf(normQ, pos)) !== -1) {
+      result += escaped.slice(pos, i);
+      result += "<mark>" + escaped.slice(i, i + query.length) + "</mark>";
+      pos = i + query.length;
+    }
+    result += escaped.slice(pos);
+    return result;
+  }
+
+  function renderResults(target, items, query) {
     if (!items.length) {
       target.innerHTML =
         '<div class="search-empty">Nenalezeno. Zkus jine slovo.</div>';
@@ -168,16 +197,24 @@
 
     target.innerHTML = items
       .map(function (item) {
+        var snippetHtml = item.snippet
+          ? '<span class="search-snippet">' +
+            highlightSnippet(item.snippet, query || "") +
+            "</span>"
+          : "";
         return (
           '<a class="search-item" href="' +
-          item.path +
+          escapeHtml(item.path) +
           '">' +
+          '<div class="search-item-header">' +
           '<span class="search-badge">' +
           badge(item.source) +
           "</span>" +
           '<span class="search-title">' +
-          item.title +
+          escapeHtml(item.title) +
           "</span>" +
+          "</div>" +
+          snippetHtml +
           "</a>"
         );
       })
@@ -202,7 +239,7 @@
       } catch (e) {
         statsMap = Object.create(null);
       }
-      renderResults(result, catalog.slice(0, 12));
+      renderResults(result, catalog.slice(0, 12), "");
       renderRepeat(repeatList, pickRepeatSet(catalog, statsMap));
     } catch (e) {
       result.innerHTML =
@@ -216,20 +253,44 @@
       });
     }
 
+    var searchDebounce = null;
+
     input.addEventListener("input", function () {
-      var q = norm(input.value);
-      if (!q) {
-        renderResults(result, catalog.slice(0, 12));
+      var rawQ = input.value.trim();
+      var q = norm(rawQ);
+
+      clearTimeout(searchDebounce);
+
+      if (!rawQ) {
+        renderResults(result, catalog.slice(0, 12), "");
         return;
       }
 
-      var filtered = catalog
-        .filter(function (item) {
-          return norm(item.title).includes(q) || norm(item.path).includes(q);
-        })
-        .slice(0, 50);
+      if (rawQ.length < 2) {
+        var filtered = catalog
+          .filter(function (item) {
+            return norm(item.title).includes(q) || norm(item.path).includes(q);
+          })
+          .slice(0, 50);
+        renderResults(result, filtered, rawQ);
+        return;
+      }
 
-      renderResults(result, filtered);
+      result.innerHTML = '<div class="search-empty">Hledám…</div>';
+
+      searchDebounce = setTimeout(async function () {
+        try {
+          var res = await fetch("/api/search?q=" + encodeURIComponent(rawQ), {
+            headers: { Accept: "application/json" },
+          });
+          if (!res.ok) throw new Error("search_failed");
+          var data = await res.json();
+          renderResults(result, data.results || [], rawQ);
+        } catch (e) {
+          result.innerHTML =
+            '<div class="search-empty">Chyba při hledání.</div>';
+        }
+      }, 300);
     });
   });
 })();
