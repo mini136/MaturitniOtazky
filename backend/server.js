@@ -157,6 +157,11 @@ function requireAdmin(req, res, next) {
   next();
 }
 
+/* ── Auth check (no DB) ── */
+app.get("/api/auth/check", requireAdmin, (req, res) => {
+  return res.json({ ok: true });
+});
+
 /* ── Admin: all comments summary ── */
 app.get("/api/admin/comments", requireAdmin, async (req, res) => {
   try {

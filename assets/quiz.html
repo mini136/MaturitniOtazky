@@ -85,7 +85,7 @@
 
         async function verifyPassword(pass) {
             try {
-                var res = await fetch('/api/admin/stats', {
+                var res = await fetch('/api/auth/check', {
                     headers: { 'X-Admin-Password': pass, 'Accept': 'application/json' }
                 });
                 return res.status === 200;

@@ -303,7 +303,7 @@
 
     async function verifyPassword(pass) {
         try {
-            var r = await fetch('/api/admin/stats', {
+            var r = await fetch('/api/auth/check', {
                 headers: { 'X-Admin-Password': pass, 'Accept': 'application/json' }
             });
             return r.status === 200;
