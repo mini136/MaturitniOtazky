@@ -416,7 +416,7 @@
 <script>
     let selectedSubject = 'pv';
     let currentQuestion = null;
-    let currentTopic = '';
+    let recentTopics = [];   // posledních max 20 témat – AI je neopakuje
     let stats = { num: 0, ok: 0, partial: 0, bad: 0, totalScore: 0 };
 
     function selectSubject(btn) {
@@ -426,6 +426,7 @@
     }
 
     function startQuiz() {
+        recentTopics = [];
         document.getElementById('picker').classList.add('hidden');
         document.getElementById('stats-bar').classList.remove('hidden');
         loadQuestion();
@@ -454,7 +455,7 @@
             const res = await fetch('/api/quiz/ai-random/question', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subject: selectedSubject, exclude: currentTopic }),
+                body: JSON.stringify({ subject: selectedSubject, exclude: recentTopics }),
             });
             if (!res.ok) {
                 const err = await res.json().catch(() => ({}));
@@ -463,7 +464,8 @@
             }
             const data = await res.json();
             currentQuestion = data.question;
-            currentTopic = data.topic;
+            recentTopics.push(data.topic);
+            if (recentTopics.length > 20) recentTopics.shift();
 
             // Update UI
             document.getElementById('topic-badge').textContent = '📌 ' + data.topicLabel;

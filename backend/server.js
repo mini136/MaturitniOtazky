@@ -540,9 +540,14 @@ app.post("/api/quiz/ai-random/question", async (req, res) => {
 
   if (files.length === 0) return res.status(404).json({ error: "no_topics" });
 
-  // avoid immediately repeating the same topic
-  const exclude = String(req.body.exclude || "");
-  let candidates = files.filter((f) => f !== exclude);
+  // avoid repeating the last 20 topics
+  const rawExclude = req.body.exclude;
+  const excludeSet = new Set(
+    Array.isArray(rawExclude)
+      ? rawExclude
+      : rawExclude ? [String(rawExclude)] : []
+  );
+  let candidates = files.filter((f) => !excludeSet.has(f.replace(".html", "")));
   if (candidates.length === 0) candidates = files;
 
   const file = candidates[Math.floor(Math.random() * candidates.length)];
