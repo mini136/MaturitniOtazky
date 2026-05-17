@@ -44,3 +44,24 @@ IF NOT EXISTS chat_questions
   KEY idx_cq_created
 (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE
+IF NOT EXISTS ai_quiz_attempts
+(
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  subject VARCHAR(20) NOT NULL,
+  topic VARCHAR(255) NOT NULL,
+  question TEXT NOT NULL,
+  user_answer TEXT NOT NULL,
+  score TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  verdict VARCHAR(50) NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY
+(id),
+  KEY idx_aqa_subject
+(subject),
+  KEY idx_aqa_topic
+(topic),
+  KEY idx_aqa_created
+(created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;

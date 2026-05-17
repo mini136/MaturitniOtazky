@@ -198,6 +198,38 @@ app.get("/api/admin/stats", requireAdmin, async (req, res) => {
   }
 });
 
+/* ── Admin: AI quiz attempt stats ── */
+app.get("/api/admin/quiz-attempts", requireAdmin, async (req, res) => {
+  const limit = Math.min(parseInt(req.query.limit || "100", 10), 500);
+  const subject = req.query.subject ? String(req.query.subject).trim().slice(0, 20) : null;
+  try {
+    const where = subject ? "WHERE subject = ?" : "";
+    const params = subject ? [subject, limit] : [limit];
+    const [rows] = await pool.query(
+      `SELECT id, subject, topic, question, user_answer AS userAnswer, score, verdict,
+              DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') AS createdAt
+       FROM ai_quiz_attempts
+       ${where}
+       ORDER BY created_at DESC
+       LIMIT ?`,
+      params
+    );
+    const [totals] = await pool.query(
+      `SELECT subject,
+              COUNT(*) AS total,
+              ROUND(AVG(score)) AS avgScore,
+              SUM(verdict='Správně') AS correct,
+              SUM(verdict='Špatně') AS wrong
+       FROM ai_quiz_attempts
+       GROUP BY subject
+       ORDER BY total DESC`
+    );
+    return res.json({ attempts: rows, totals });
+  } catch (err) {
+    return res.status(500).json({ error: "db_read_failed" });
+  }
+});
+
 /* ── Admin: delete comment ── */
 app.delete("/api/admin/comments/:id", requireAdmin, async (req, res) => {
   const id = parseInt(req.params.id, 10);
@@ -545,7 +577,9 @@ app.post("/api/quiz/ai-random/question", async (req, res) => {
   const excludeSet = new Set(
     Array.isArray(rawExclude)
       ? rawExclude
-      : rawExclude ? [String(rawExclude)] : []
+      : rawExclude
+        ? [String(rawExclude)]
+        : [],
   );
   let candidates = files.filter((f) => !excludeSet.has(f.replace(".html", "")));
   if (candidates.length === 0) candidates = files;
@@ -602,6 +636,12 @@ app.post("/api/quiz/ai-random/evaluate", async (req, res) => {
   const userAnswer = String(req.body.userAnswer || "")
     .trim()
     .slice(0, 2000);
+  const subject = String(req.body.subject || "")
+    .trim()
+    .slice(0, 20);
+  const topic = String(req.body.topic || "")
+    .trim()
+    .slice(0, 255);
 
   if (!question || !userAnswer) {
     return res.status(400).json({ error: "missing_fields" });
@@ -635,6 +675,13 @@ app.post("/api/quiz/ai-random/evaluate", async (req, res) => {
     let json = (completion.choices[0].message.content || "").trim();
     json = json.replace(/^```json?\n?/i, "").replace(/\n?```$/i, "");
     const result = JSON.parse(json);
+    // Save attempt to DB (fire-and-forget)
+    if (subject && topic) {
+      pool.query(
+        "INSERT INTO ai_quiz_attempts (subject, topic, question, user_answer, score, verdict) VALUES (?, ?, ?, ?, ?, ?)",
+        [subject, topic, question, userAnswer, result.score || 0, result.verdict || ""]
+      ).catch(() => {});
+    }
     return res.json({ result });
   } catch (e) {
     return res.status(500).json({ error: "evaluation_failed" });

@@ -520,6 +520,8 @@
                     question: currentQuestion.question,
                     modelAnswer: currentQuestion.modelAnswer,
                     userAnswer: answer,
+                    subject: selectedSubject,
+                    topic: recentTopics[recentTopics.length - 1] || '',
                 }),
             });
             if (!res.ok) {
