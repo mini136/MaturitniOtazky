@@ -23,6 +23,7 @@
         .section-slozitosti { background: #d6eaf8; border-left: 6px solid #2980b9; color: #1a5276; }
         .section-hashing { background: #d5f5e3; border-left: 6px solid #27ae60; color: #1d6233; }
         .section-razeni23 { background: #fdebd0; border-left: 6px solid #e67e22; color: #784212; }
+        .section-set { background: #e8daef; border-left: 6px solid #8e44ad; color: #4a235a; }
         @media print { body { font-size: 11pt; } h1 { font-size: 18pt; } h2 { font-size: 14pt; } pre { font-size: 9pt; } }
         nav { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
@@ -213,6 +214,142 @@ print(f"  OpenAddr:    {[x for x in oa.tabulka if x]}")</code></pre>
 data = list(range(0, 1000, 2))  # [0, 2, 4, ..., 998]
 idx, kroky = binarni_hledani(data, 742)
 print(f"  Hledam 742 v {len(data)} prvcich: index={idx}, kroky={kroky}")</code></pre>
+
+    <div class="section-divider section-set">🔷 ČÁST 4 — Set a HashSet</div>
+
+    <h2>Set (množina)</h2>
+    <p>
+        <strong>Set</strong> je datová struktura, která uchovává <strong>unikátní prvky</strong> — každý prvek se může vyskytovat nejvýše jednou.
+        Nepodporuje indexaci (nelze přistupovat prvkem pomocí <code>set[0]</code>) a <strong>nezaručuje pořadí</strong> prvků.
+    </p>
+    <table>
+        <tr><th>Vlastnost</th><th>Set (HashSet)</th><th>TreeSet (SortedSet)</th></tr>
+        <tr><td>Unikátní prvky</td><td>✔</td><td>✔</td></tr>
+        <tr><td>Seřazeno</td><td>✘ (libovolné pořadí)</td><td>✔ (vzestupně)</td></tr>
+        <tr><td>Implementace</td><td>Hash tabulka</td><td>BST (Red-Black Tree)</td></tr>
+        <tr><td>Vyhledání</td><td>O(1) průměr</td><td>O(log n)</td></tr>
+        <tr><td>Vložení</td><td>O(1) průměr</td><td>O(log n)</td></tr>
+        <tr><td>Smazání</td><td>O(1) průměr</td><td>O(log n)</td></tr>
+        <tr><td>Nejhorší případ</td><td>O(n) — kolize</td><td>O(log n)</td></tr>
+    </table>
+
+    <h2>HashSet</h2>
+    <p>
+        <strong>HashSet</strong> je implementace setu pomocí <strong>hash tabulky</strong>.
+        Každý vkládaný prvek je nejprve zahashován — výsledný hash určí, do kterého bucketu prvek patří.
+        Před vložením se ověří, zda prvek v bucketu již neexistuje (zamezení duplicit).
+    </p>
+    <ul>
+        <li>Pořadí prvků <strong>není zaručeno</strong> — závisí na hash funkci a velikosti tabulky.</li>
+        <li>Prvky musí být <strong>hashovatelné</strong> (v Pythonu: čísla, řetězce, tuply; ne listy ani slovníky).</li>
+        <li>Při překročení load factoru (~0.75) proběhne <strong>rehash</strong> — tabulka se zvětší (typicky 2×) a prvky se přerozdělí.</li>
+        <li>Vhodné pro rychlé testování členství (<code>in</code>), mazání duplicit a množinové operace.</li>
+    </ul>
+
+    <div class="note">
+        <strong>HashSet vs HashMap/Dictionary:</strong> HashSet ukládá pouze klíče (bez hodnot), HashMap ukládá páry klíč–hodnota.
+        V Pythonu je <code>set</code> odpovídá HashSetu, <code>dict</code> odpovídá HashMapě.
+    </div>
+
+    <h3>Množinové operace</h3>
+    <table>
+        <tr><th>Operace</th><th>Python</th><th>Popis</th><th>Složitost</th></tr>
+        <tr><td>Sjednocení (∪)</td><td><code>a | b</code></td><td>Prvky v A nebo B</td><td>O(m+n)</td></tr>
+        <tr><td>Průnik (∩)</td><td><code>a &amp; b</code></td><td>Prvky v A i B</td><td>O(min(m,n))</td></tr>
+        <tr><td>Rozdíl (−)</td><td><code>a - b</code></td><td>Prvky v A, ale ne v B</td><td>O(m)</td></tr>
+        <tr><td>Symetrický rozdíl</td><td><code>a ^ b</code></td><td>Prvky jen v A nebo jen v B</td><td>O(m+n)</td></tr>
+        <tr><td>Podmnožina</td><td><code>a &lt;= b</code></td><td>A ⊆ B</td><td>O(m)</td></tr>
+    </table>
+
+    <div class="code-desc"><strong>Set a HashSet v Pythonu</strong> — základní operace, testování členství, množinové operace a odstraňování duplicit.</div>
+    <pre><code># Vytvoreni setu
+cisla = {3, 1, 4, 1, 5, 9, 2, 6, 5}
+print(f"Set: {cisla}")          # duplicity odstrany, napr. {1, 2, 3, 4, 5, 6, 9}
+print(f"Pocet: {len(cisla)}")   # 7 (ne 9)
+
+# Testovani clenství — O(1)
+print(f"Je 5 v setu? {5 in cisla}")   # True
+print(f"Je 7 v setu? {7 in cisla}")   # False
+
+# Pridani a odebrani
+cisla.add(7)       # O(1)
+cisla.discard(9)   # O(1) — nevyhodi chybu kdyz prvek chybi
+cisla.remove(4)    # O(1) — vyhodi KeyError kdyz prvek chybi
+
+# Mnozinove operace
+a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+
+print(f"Sjednoceni:          {a | b}")    # {1, 2, 3, 4, 5, 6}
+print(f"Prunik:              {a & b}")    # {3, 4}
+print(f"Rozdil (a-b):        {a - b}")    # {1, 2}
+print(f"Symetricky rozdil:   {a ^ b}")    # {1, 2, 5, 6}
+
+# Odstraneni duplicit ze seznamu
+seznam = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3]
+bez_duplikatu = list(set(seznam))
+print(f"Bez duplikat: {sorted(bez_duplikatu)}")   # [1, 2, 3, 4, 5, 6, 9]</code></pre>
+
+    <div class="code-desc"><strong>Vlastní implementace HashSetu</strong> — ukázka principu: hash funkce, buckety, kontrola duplicit a rehash.</div>
+    <pre><code>class HashSet:
+    def __init__(self, kapacita=8):
+        self.kapacita = kapacita
+        self.buckety = [[] for _ in range(kapacita)]
+        self.pocet = 0
+
+    def _hash(self, prvek):
+        return hash(prvek) % self.kapacita
+
+    def pridej(self, prvek):
+        if self.pocet / self.kapacita >= 0.75:
+            self._rehash()
+        idx = self._hash(prvek)
+        if prvek not in self.buckety[idx]:      # zabrani duplikatum
+            self.buckety[idx].append(prvek)
+            self.pocet += 1
+
+    def obsahuje(self, prvek):
+        idx = self._hash(prvek)
+        return prvek in self.buckety[idx]       # O(1) prumer
+
+    def odeber(self, prvek):
+        idx = self._hash(prvek)
+        if prvek in self.buckety[idx]:
+            self.buckety[idx].remove(prvek)
+            self.pocet -= 1
+
+    def _rehash(self):
+        stare_buckety = self.buckety
+        self.kapacita *= 2
+        self.buckety = [[] for _ in range(self.kapacita)]
+        self.pocet = 0
+        for bucket in stare_buckety:
+            for prvek in bucket:
+                self.pridej(prvek)
+
+    def __repr__(self):
+        prvky = [p for b in self.buckety for p in b]
+        return f"HashSet({prvky})"
+
+# Pouziti
+hs = HashSet()
+for hodnota in [5, 3, 8, 3, 1, 5, 9]:
+    hs.pridej(hodnota)           # 3 a 5 se ulozi jen jednou
+
+print(hs)                        # HashSet([1, 3, 5, 8, 9]) (poradi zavisi na hashi)
+print(f"Obsahuje 3? {hs.obsahuje(3)}")   # True
+print(f"Obsahuje 7? {hs.obsahuje(7)}")   # False
+hs.odeber(3)
+print(f"Po odebrani 3: {hs.obsahuje(3)}")  # False</code></pre>
+
+    <div class="important">
+        <strong>Kdy použít Set / HashSet?</strong><br>
+        ✔ Potřebuji rychle zjistit, zda prvek existuje (<code>in</code>).<br>
+        ✔ Chci odstranit duplicity ze sbírky.<br>
+        ✔ Provádím množinové operace (průnik, sjednocení…).<br>
+        ✘ Potřebuji pořadí prvků → použij <code>sorted(set(...))</code> nebo <code>SortedSet</code> (TreeSet).<br>
+        ✘ Potřebuji přistupovat k prvkům přes index → použij <code>list</code>.
+    </div>
 
     <nav><a href="index.html">⬅ Zpět na obsah</a></nav>
     <script src="../assets/study.js"></script>
