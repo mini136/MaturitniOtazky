@@ -37,35 +37,66 @@
 
     <h2>MVC / MVP / MVVM</h2>
     <table>
-        <tr><th>Vzor</th><th>Komponenty</th><th>Komunikace</th><th>Použití</th></tr>
-        <tr><td><strong>MVC</strong></td><td>Model, View, Controller</td><td>Controller zprostředkovává</td><td>Web (Django, Rails, ASP.NET)</td></tr>
-        <tr><td><strong>MVP</strong></td><td>Model, View, Presenter</td><td>Presenter řídí View</td><td>Android, WinForms</td></tr>
-        <tr><td><strong>MVVM</strong></td><td>Model, View, ViewModel</td><td>Data binding</td><td>WPF, Vue.js, Angular</td></tr>
+        <tr><th>Vzor</th><th>Role komponent</th><th>Tok komunikace</th><th>Výhody / nevýhody</th><th>Typické použití</th></tr>
+        <tr>
+            <td><strong>MVC</strong></td>
+            <td><strong>Model</strong> = data + business logika, <strong>View</strong> = zobrazení, <strong>Controller</strong> = reakce na vstupy uživatele</td>
+            <td>Uživatel pracuje s View → Controller mění Model → View se překreslí podle stavu Modelu</td>
+            <td>+ Jasné oddělení odpovědností, dobré pro web; − U větších aplikací mohou kontrolery příliš narůstat</td>
+            <td>Server-side weby (Django, Rails, ASP.NET MVC)</td>
+        </tr>
+        <tr>
+            <td><strong>MVP</strong></td>
+            <td><strong>Presenter</strong> obsahuje většinu prezentační logiky, <strong>View</strong> je „pasivní“</td>
+            <td>View předá akci Presenteru → Presenter načte/změní Model → Presenter řekne View, co má zobrazit</td>
+            <td>+ Snadnější testování prezentační logiky; − Více „lepidla“ mezi vrstvami (větší množství kódu)</td>
+            <td>Desktop/mobile UI (WinForms, starší Android)</td>
+        </tr>
+        <tr>
+            <td><strong>MVVM</strong></td>
+            <td><strong>ViewModel</strong> připravuje data pro UI, <strong>View</strong> je napojené přes data binding</td>
+            <td>View je svázané s ViewModelem (binding) → změna dat se promítá automaticky oběma směry</td>
+            <td>+ Méně ručního propojování UI a logiky, reaktivní přístup; − Složitější debug bindingu</td>
+            <td>WPF, moderní frontend frameworky (Angular, Vue konceptuálně)</td>
+        </tr>
     </table>
-
-    <h2>Vícevrstvá architektura</h2>
     <ul>
-        <li><strong>Presentation Layer</strong> — uživatelské rozhraní</li>
-        <li><strong>Business Layer</strong> — aplikační logika</li>
-        <li><strong>Data Layer</strong> — přístup k datům</li>
+        <li><strong>Kdy použít MVC:</strong> když chceš jednoduché a přehledné oddělení dat, logiky a prezentace.</li>
+        <li><strong>Kdy použít MVP:</strong> když chceš maximalizovat testovatelnost prezentační vrstvy.</li>
+        <li><strong>Kdy použít MVVM:</strong> když framework podporuje binding a aplikace je hodně UI-orientovaná.</li>
     </ul>
+
+    <h2>Vícevrstvá architektura (Multitier / N-tier)</h2>
+    <ul>
+        <li><strong>Presentation Layer</strong> — UI, validace vstupů, práce s uživatelem.</li>
+        <li><strong>Application/Business Layer</strong> — aplikační pravidla, use-cases, orchestruje tok operací.</li>
+        <li><strong>Data Access Layer</strong> — komunikace s databází, ORM/repozitáře, transakce.</li>
+        <li><strong>Data Layer</strong> — databáze, souborová úložiště, externí systémy.</li>
+    </ul>
+    <p><strong>Typický tok požadavku:</strong> UI přijme požadavek → business vrstva rozhodne, co se má stát → data access vrstva provede čtení/zápis → výsledek se vrací zpět uživateli.</p>
+    <p><strong>Hlavní přínos:</strong> oddělení odpovědností, lepší údržba a testování. <strong>Riziko:</strong> příliš mnoho vrstev může přinést zbytečnou režii a složitost.</p>
 
     <h2>Monolitická vs Mikroservisní architektura</h2>
     <table>
-        <tr><th></th><th>Monolit</th><th>Mikroservisy</th></tr>
-        <tr><td>Nasazení</td><td>Celá aplikace najednou</td><td>Nezávislé služby</td></tr>
-        <tr><td>Škálování</td><td>Celá aplikace</td><td>Jednotlivé služby</td></tr>
-        <tr><td>Technologie</td><td>Jeden stack</td><td>Různé jazyky/DB</td></tr>
-        <tr><td>Složitost</td><td>Na začátku jednodušší</td><td>Síťová komunikace, orchestrace</td></tr>
+        <tr><th>Oblast</th><th>Monolit</th><th>Mikroservisy</th></tr>
+        <tr><td>Nasazení</td><td>Celá aplikace jako jeden balík</td><td>Každá služba se nasazuje samostatně</td></tr>
+        <tr><td>Škálování</td><td>Škáluje se celý systém</td><td>Škálují se jen přetížené služby</td></tr>
+        <tr><td>Technologie</td><td>Obvykle jeden stack</td><td>Každá služba může mít jiný jazyk/DB</td></tr>
+        <tr><td>Data</td><td>Často jedna sdílená DB</td><td>Každá služba ideálně vlastní data</td></tr>
+        <tr><td>Složitost provozu</td><td>Jednodušší monitoring i deploy</td><td>Vyšší nároky: observabilita, orchestrace, síťová odolnost</td></tr>
+        <tr><td>Vhodné pro</td><td>Menší/střední projekty, menší tým, rychlý start</td><td>Velké systémy, více týmů, požadavek na nezávislý vývoj</td></tr>
     </table>
+    <p><strong>Důležité:</strong> mikroservisy nejsou automaticky lepší. Vyplatí se až když přínosy (nezávislé nasazení, škálování, oddělené týmy) převáží provozní komplexitu.</p>
 
     <div class="section-divider section-klientserver">🌐 ČÁST 2 — Komunikace klient-server</div>
 
     <h2>Klient-Server, P2P</h2>
     <ul>
-        <li><strong>Klient-Server</strong> — klient (požadavky) ↔ server (odpovědi), centralizovaná správa</li>
-        <li><strong>P2P (Peer-to-Peer)</strong> — každý uzel je klient i server (BitTorrent, blockchain)</li>
+        <li><strong>Klient-Server</strong> — klient posílá požadavky, server poskytuje služby/data. Výhoda je centralizovaná správa, autentizace, zálohování. Nevýhoda je závislost na dostupnosti serveru (single point of failure bez redundance).</li>
+        <li><strong>P2P (Peer-to-Peer)</strong> — každý uzel je zároveň klient i server. Výhoda je decentralizace a škálování přidáváním uzlů. Nevýhoda je složitější bezpečnost, důvěra mezi uzly a koordinace.</li>
+        <li><strong>Hybridní model</strong> — kombinace obou přístupů (např. centrální registr + přímá P2P výměna dat).</li>
     </ul>
+    <p><strong>Příklady:</strong> klient-server (webové aplikace, e-mail, firemní IS), P2P (BitTorrent, blockchain sítě, některé VoIP systémy).</p>
 
     <h2>Ukázkový kód — MVC (Python)</h2>
 
@@ -167,4 +198,3 @@ def tcp_server():
     <script src="../assets/study.js"></script>
 </body>
 </html>
-
