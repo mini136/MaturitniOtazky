@@ -596,6 +596,40 @@ app.post("/api/quiz/ai-random/question", async (req, res) => {
 
   const topicLabel = file.replace(".html", "").replace(/_/g, " ");
 
+  const SUBJECT_SYSTEM_PROMPTS = {
+    cs:
+      "Jsi učitel českého jazyka a literatury připravující studenty na maturitu. " +
+      "Na základě obsahu tématu vygeneruj JEDNU otevřenou maturitní otázku z češtiny a literatury.\n" +
+      "Otázky STŘÍDEJ rovnoměrně mezi těmito kategoriemi (nevybírej vždy jen obsah/děj!):\n" +
+      "  - autor: životopis, osobní kontext, duševní svět, dobové vlivy na tvorbu\n" +
+      "  - literární kontext: literární období, směr (realismus, romantismus, …), dobové události, srovnání se soudobými autory\n" +
+      "  - téma a motivy: hlavní i vedlejší témata díla, symbolika, klíčové motivy\n" +
+      "  - jazyk a styl: vypravěčská technika, ich-forma / er-forma, lyrická próza, humor, ironie, …\n" +
+      "  - postavy: hlavní a vedlejší postavy, jejich funkce a vztahy\n" +
+      "  - obsah / děj: zápletka, klíčové scény, kompozice\n" +
+      "Odpověz POUZE validním JSON objektem (bez markdown obalení) v tomto formátu:\n" +
+      '{\n  "question": "text otázky",\n  "hints": ["nápověda1", "nápověda2", "nápověda3"],\n  "modelAnswer": "vzorová odpověď (3-6 vět)"\n}\n' +
+      "Otázka musí být konkrétní a ověřovat pochopení, ne jen zapamatování. Vše v češtině.",
+    pv:
+      "Jsi učitel připravující studenty na maturitu z programování. Na základě obsahu tématu vygeneruj JEDNU otevřenou maturitní otázku.\n" +
+      "Odpověz POUZE validním JSON objektem (bez markdown obalení) v tomto formátu:\n" +
+      '{\n  "question": "text otázky",\n  "hints": ["nápověda1", "nápověda2", "nápověda3"],\n  "modelAnswer": "vzorová odpověď (3-6 vět)"\n}\n' +
+      "Otázka musí ověřovat pochopení, ne jen zapamatování. Vše v češtině.",
+    site:
+      "Jsi učitel připravující studenty na maturitu ze sítí a síťové infrastruktury. Na základě obsahu tématu vygeneruj JEDNU otevřenou maturitní otázku.\n" +
+      "Odpověz POUZE validním JSON objektem (bez markdown obalení) v tomto formátu:\n" +
+      '{\n  "question": "text otázky",\n  "hints": ["nápověda1", "nápověda2", "nápověda3"],\n  "modelAnswer": "vzorová odpověď (3-6 vět)"\n}\n' +
+      "Otázka musí ověřovat pochopení, ne jen zapamatování. Vše v češtině.",
+    spv:
+      "Jsi učitel připravující studenty na maturitu ze společensko-vědního předmětu. Na základě obsahu tématu vygeneruj JEDNU otevřenou maturitní otázku.\n" +
+      "Odpověz POUZE validním JSON objektem (bez markdown obalení) v tomto formátu:\n" +
+      '{\n  "question": "text otázky",\n  "hints": ["nápověda1", "nápověda2", "nápověda3"],\n  "modelAnswer": "vzorová odpověď (3-6 vět)"\n}\n' +
+      "Otázka musí ověřovat pochopení, ne jen zapamatování. Vše v češtině.",
+  };
+
+  const systemPrompt =
+    SUBJECT_SYSTEM_PROMPTS[subject] || SUBJECT_SYSTEM_PROMPTS.pv;
+
   try {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -604,11 +638,7 @@ app.post("/api/quiz/ai-random/question", async (req, res) => {
       messages: [
         {
           role: "system",
-          content:
-            "Jsi učitel připravující studenty na maturitu z programování. Na základě obsahu tématu vygeneruj JEDNU otevřenou maturitní otázku.\n" +
-            "Odpověz POUZE validním JSON objektem (bez markdown obalení) v tomto formátu:\n" +
-            '{\n  "question": "text otázky",\n  "hints": ["nápověda1", "nápověda2", "nápověda3"],\n  "modelAnswer": "vzorová odpověď (3-6 vět)"\n}\n' +
-            "Otázka musí ověřovat pochopení, ne jen zapamatování. Vše v češtině.",
+          content: systemPrompt,
         },
         {
           role: "user",
