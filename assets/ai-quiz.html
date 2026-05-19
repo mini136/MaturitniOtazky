@@ -245,6 +245,19 @@
             font-size: 0.88rem;
             margin-bottom: 6px;
         }
+        .section-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.88rem;
+            margin-bottom: 4px;
+        }
+        .user-answer-display {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+        }
         .missing-list {
             display: flex;
             flex-wrap: wrap;
@@ -394,6 +407,10 @@
 
     <!-- Result card -->
     <div id="result-card" class="result-card hidden">
+        <div id="result-topic-badge" class="topic-badge"></div>
+        <p id="result-question-text" class="question-text"></p>
+        <div class="section-label">Tvoje odpověď:</div>
+        <p id="result-user-answer" class="feedback user-answer-display"></p>
         <div class="score-row">
             <div id="score-circle" class="score-circle"></div>
             <div>
@@ -416,6 +433,8 @@
 <script>
     let selectedSubject = 'pv';
     let currentQuestion = null;
+    let currentTopicLabel = '';
+    let lastUserAnswer = '';
     let recentTopics = [];   // posledních max 20 témat – AI je neopakuje
     let stats = { num: 0, ok: 0, partial: 0, bad: 0, totalScore: 0 };
 
@@ -464,6 +483,7 @@
             }
             const data = await res.json();
             currentQuestion = data.question;
+            currentTopicLabel = data.topicLabel;
             recentTopics.push(data.topic);
             if (recentTopics.length > 20) recentTopics.shift();
 
@@ -509,6 +529,7 @@
             document.getElementById('answer-input').focus();
             return;
         }
+        lastUserAnswer = answer;
         document.getElementById('submit-btn').disabled = true;
         showSpinner('Hodnotím odpověď…');
 
@@ -539,6 +560,11 @@
     function showResult(result) {
         const score = result.score || 0;
         const verdict = result.verdict || '';
+
+        // Topic and question context
+        document.getElementById('result-topic-badge').textContent = '📌 ' + currentTopicLabel;
+        document.getElementById('result-question-text').textContent = currentQuestion.question;
+        document.getElementById('result-user-answer').textContent = lastUserAnswer;
 
         // Score circle
         const circle = document.getElementById('score-circle');
