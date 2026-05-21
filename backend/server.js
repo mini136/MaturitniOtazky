@@ -36,12 +36,12 @@ const AI_PV_PSS_TOPICS = [
   "Strojové učení s využitím umělých neuronových sítí",
   "Testování, Unit testování a dokumentace zdrojového kódu",
   "Typy datových struktur - Pole, Spojový seznam, Strom, Fronta, Zásobník, Halda",
-  "Vlákna, Paralerní programování, Asynchronní metody, Concurrent design patterns",
+  "Vlákna, Paralelní programování, Asynchronní metody, Concurrent design patterns",
   "Vlastnosti datových struktur - Seřazenost a opakování prvků, Indexace, hashování a klíče prvků",
   "Výjimky a aserce, debugování a zpracování chyb",
   "Zpracování a parsování textových dat, regulární výrazy, kódování a stringy",
   "OS Linux - Charakteristika, struktura OS, start systému, služby, procesy, paměť, balíčkovací systém",
-  "OS Linux - Souborový sytém, formátování, dělení a připojování souborových systémů, účel základních adresářů",
+  "OS Linux - Souborový systém, formátování, dělení a připojování souborových systémů, účel základních adresářů",
   "OS Linux - Správa uživatelů, skupin, zabezpečení přístupu k souborům a službám (práva), SUDO",
   "OS Linux - SSH, CRON, procesy a služby, systémové logy, virtualizace",
   "OS Linux - Tvorba skriptů (BASH). Práce s textovými soubory, filtrace, regulární výrazy, kompilace, zálohování",
@@ -82,6 +82,30 @@ const ROOT_DIR = path.resolve(__dirname, "..");
 const ADMIN_PASS = process.env.ADMIN_PASSWORD || "admin123";
 
 app.use(express.json({ limit: "256kb" }));
+
+const RATE_LIMIT_BUCKETS = new Map();
+
+function isRateLimited(req, scope, maxRequests, windowMs) {
+  const forwardedFor = String(req.headers["x-forwarded-for"] || "")
+    .split(",")[0]
+    .trim();
+  const ip = forwardedFor || req.ip || "unknown";
+  const key = `${scope}:${ip}`;
+  const now = Date.now();
+  const current = RATE_LIMIT_BUCKETS.get(key);
+
+  if (!current || now - current.windowStart >= windowMs) {
+    RATE_LIMIT_BUCKETS.set(key, { count: 1, windowStart: now });
+    return false;
+  }
+
+  if (current.count >= maxRequests) {
+    return true;
+  }
+
+  current.count += 1;
+  return false;
+}
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "127.0.0.1",
@@ -794,6 +818,10 @@ app.post("/api/quiz/ai-pv-pss/topic", async (req, res) => {
 
 /* ── Public: AI PV+PSS random quiz – evaluate answer ── */
 app.post("/api/quiz/ai-pv-pss/evaluate", async (req, res) => {
+  if (isRateLimited(req, "ai-pv-pss-evaluate", 10, 60 * 1000)) {
+    return res.status(429).json({ error: "rate_limited" });
+  }
+
   const topic = String(req.body.topic || "")
     .trim()
     .slice(0, 500);
