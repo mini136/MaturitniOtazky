@@ -14,6 +14,59 @@ const SUBJECT_HTML_DIRS = {
   cs: "maturitniOtazkyCs_html",
 };
 
+const AI_PV_PSS_TOPICS = [
+  "Adresování a správa paměti - Garbage collecting, Reference/ukazatele, Struktura paměti programu",
+  "Algoritmizace - Grafy, Prohlédávání stavového prostoru, Řazení",
+  "Algoritmizace - Rekurze, Brute Force, Heuristiky, Nedeterministické algoritmy",
+  "Anonymní metody (Lambda), speciální (magické) metody, statické metody, ukazatel na metodu (delegát)",
+  "Architectural design patterns - MVC, Multitier, Monolithic, P2P, Client/Server",
+  "Asymptotické paměťové a časové složitosti",
+  "Datové typy, Generika, Výčtové datové typy, Struktury, Anotace, Operátory",
+  "Dědičnost, method overriding, function overloading",
+  "Integrita dat, bezpečnost, logování, kontrola vstupů, zpracování chyb",
+  "Komunikace s databázovým systémem - Připojení, Ukládání a načítání dat, Mapování entit v OOP",
+  "Komunikace v síti - tvorba síťových aplikací, Berkley socket a jeho rozhraní",
+  "Metodiky a životní cyklus vývoje softwaru",
+  "Návrhové vzory - creational design patterns, structural design patterns, behavioral patterns",
+  "Principy objektového programování, agregace a kompozice objektů",
+  "Programovací jazyky - vlastnosti, srovnání, popis způsobu tvorby i běhu programů",
+  "Soubory a serializace - Ukládání a načítání dat, formáty souborů",
+  "Strojové učení - Příprava dat, Chyby v datech a bias, Korelace a kauzalita",
+  "Strojové učení s využitím regrese a klasifikace",
+  "Strojové učení s využitím umělých neuronových sítí",
+  "Testování, Unit testování a dokumentace zdrojového kódu",
+  "Typy datových struktur - Pole, Spojový seznam, Strom, Fronta, Zásobník, Halda",
+  "Vlákna, Paralerní programování, Asynchronní metody, Concurrent design patterns",
+  "Vlastnosti datových struktur - Seřazenost a opakování prvků, Indexace, hashování a klíče prvků",
+  "Výjimky a aserce, debugování a zpracování chyb",
+  "Zpracování a parsování textových dat, regulární výrazy, kódování a stringy",
+  "OS Linux - Charakteristika, struktura OS, start systému, služby, procesy, paměť, balíčkovací systém",
+  "OS Linux - Souborový sytém, formátování, dělení a připojování souborových systémů, účel základních adresářů",
+  "OS Linux - Správa uživatelů, skupin, zabezpečení přístupu k souborům a službám (práva), SUDO",
+  "OS Linux - SSH, CRON, procesy a služby, systémové logy, virtualizace",
+  "OS Linux - Tvorba skriptů (BASH). Práce s textovými soubory, filtrace, regulární výrazy, kompilace, zálohování",
+  "OSI 1 - Fyzická vrstva - přenosová média, přenos bitů, signály, topologie sítí, kódování dat, přenosová rychlost, detekce chyb",
+  "OSI 1 - Fyzická vrstva - Ethernet základní principy, standardy, strukturovaná kabeláž, optika, konektory, přenosové rychlosti",
+  "OSI 2 - Linková vrstva - Přepínače, rámce, adresování, kolize, detekce a oprava chyb, MAC, řízení toku dat",
+  "OSI 2 - Linková vrstva - ARP, MAC, vztah mezi rámcem a paketem, zapouzdření",
+  "OSI 2 - Linková vrstva - VLAN - princip, použití. trunk/access porty, DTP, protokol 802.1q",
+  "OSI 3 - Síťová vrstva - IPv4, maska, podsíťování, porovnání s IPv6, fragmentace",
+  "OSI 3 - Síťová vrstva - IPv6, maska, podsíťování, porovnání s IPv4, fragmentace",
+  "OSI 3 - Síťová vrstva - Statické směrování, tabulky, statické vs. dynamické směrování, administrativní vzdálenost",
+  "OSI 3 - Síťová vrstva - Dynamické směrování (RIP, OSPF), konfigurace, metriky, administrativní vzdálenost",
+  "OSI 4 - Transportní vrstva - UDP, TCP, segmentace a znovusestavení, řízení přenosové rychlosti, kontrola chyb",
+  "OSI 5, 6, 7 - soketové programování, převod formátů dat, šifrování, komprese, autentizace",
+  "DHCP4 - funkce, možnosti konfigurace (rozsahy IP adres, dle MAC adresy), použití",
+  "DHCP6 - funkce, možnosti konfigurace (rozsahy IP adres, dle MAC adresy), použití",
+  "DNS - funkce, hierarchie (od souboru po globální DNS servery), konfigurace",
+  "Firewall - Principy fungování, typy firewallů (stateful, stateless, aplikační), konfigurace pravidel, NAT, DMZ, VPN",
+  "STP (Spanning Tree), Etherchannel a HSRP - principy, konfigurace, failover a redundance, BPDU",
+  "Bezdrátové sítě - šíření elektromagnetických vln, antény, druhy modulací, zabezpečení, autentifikace, frekveční pásma, přenosové kanály",
+  "Bezpečnost a šifrování přenosu: SSL/TLS, RSA - Symetrické a asymetrické šifrování, SSL/TLS handshake, certifikační autority, šiftry",
+  "IMAP a SMTP - odesílání a přijímání e-mailů, synchronizace poštovních schránek se serverem",
+  "Technologie, které přežily změny současného rozvoje ICT",
+];
+
 function stripHtmlContent(html) {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, "")
@@ -712,6 +765,82 @@ app.post("/api/quiz/ai-random/evaluate", async (req, res) => {
         [subject, topic, question, userAnswer, result.score || 0, result.verdict || ""]
       ).catch(() => {});
     }
+    return res.json({ result });
+  } catch (e) {
+    return res.status(500).json({ error: "evaluation_failed" });
+  }
+});
+
+/* ── Public: AI PV+PSS random quiz – get topic ── */
+app.post("/api/quiz/ai-pv-pss/topic", async (req, res) => {
+  const rawExclude = req.body.exclude;
+  const excludeSet = new Set(
+    Array.isArray(rawExclude)
+      ? rawExclude.map((v) => String(v || "").trim()).filter(Boolean)
+      : rawExclude
+        ? [String(rawExclude).trim()]
+        : [],
+  );
+
+  let candidates = AI_PV_PSS_TOPICS.filter((topic) => !excludeSet.has(topic));
+  if (candidates.length === 0) candidates = AI_PV_PSS_TOPICS;
+
+  const topic = candidates[Math.floor(Math.random() * candidates.length)];
+  return res.json({
+    topic,
+    question: `Popiš maturitní téma: ${topic}`,
+  });
+});
+
+/* ── Public: AI PV+PSS random quiz – evaluate answer ── */
+app.post("/api/quiz/ai-pv-pss/evaluate", async (req, res) => {
+  const topic = String(req.body.topic || "")
+    .trim()
+    .slice(0, 500);
+  const userAnswer = String(req.body.userAnswer || "")
+    .trim()
+    .slice(0, 3000);
+
+  if (!topic || !userAnswer) {
+    return res.status(400).json({ error: "missing_fields" });
+  }
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      temperature: 0.3,
+      max_tokens: 650,
+      messages: [
+        {
+          role: "system",
+          content:
+            "Jsi přísný ale spravedlivý maturitní zkoušející pro témata PV a počítačových sítí. " +
+            "Vyhodnoť odpověď studenta k zadanému tématu. " +
+            "Odpověz POUZE validním JSON objektem (bez markdown obalení):\n" +
+            '{\n  "score": <0-100>,\n  "verdict": "Správně" | "Částečně správně" | "Špatně",\n  "feedback": "konkrétní zpětná vazba (2-4 věty)",\n  "missing": ["co zásadního chybělo - krátká fráze"]\n}',
+        },
+        {
+          role: "user",
+          content:
+            "Téma: " +
+            topic +
+            "\n\nStudentova odpověď:\n" +
+            userAnswer +
+            "\n\nOvěř věcnou správnost, úplnost a použití správných termínů.",
+        },
+      ],
+    });
+    let json = (completion.choices[0].message.content || "").trim();
+    json = json.replace(/^```json?\n?/i, "").replace(/\n?```$/i, "");
+    const result = JSON.parse(json);
+
+    pool
+      .query(
+        "INSERT INTO ai_quiz_attempts (subject, topic, question, user_answer, score, verdict) VALUES (?, ?, ?, ?, ?, ?)",
+        ["pv-pss", topic, `Popiš maturitní téma: ${topic}`, userAnswer, result.score || 0, result.verdict || ""],
+      )
+      .catch(() => {});
+
     return res.json({ result });
   } catch (e) {
     return res.status(500).json({ error: "evaluation_failed" });
