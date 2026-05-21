@@ -861,14 +861,6 @@ app.post("/api/quiz/ai-pv-pss/evaluate", async (req, res) => {
     let json = (completion.choices[0].message.content || "").trim();
     json = json.replace(/^```json?\n?/i, "").replace(/\n?```$/i, "");
     const result = JSON.parse(json);
-
-    pool
-      .query(
-        "INSERT INTO ai_quiz_attempts (subject, topic, question, user_answer, score, verdict) VALUES (?, ?, ?, ?, ?, ?)",
-        ["pv-pss", topic, `Popiš maturitní téma: ${topic}`, userAnswer, result.score || 0, result.verdict || ""],
-      )
-      .catch(() => {});
-
     return res.json({ result });
   } catch (e) {
     return res.status(500).json({ error: "evaluation_failed" });
