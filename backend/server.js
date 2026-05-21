@@ -797,6 +797,10 @@ app.post("/api/quiz/ai-random/evaluate", async (req, res) => {
 
 /* ── Public: AI PV+PSS random quiz – get topic ── */
 app.post("/api/quiz/ai-pv-pss/topic", async (req, res) => {
+  if (isRateLimited(req, "ai-pv-pss-topic", 30, 60 * 1000)) {
+    return res.status(429).json({ error: "rate_limited" });
+  }
+
   const rawExclude = req.body.exclude;
   const excludeSet = new Set(
     Array.isArray(rawExclude)
@@ -810,10 +814,7 @@ app.post("/api/quiz/ai-pv-pss/topic", async (req, res) => {
   if (candidates.length === 0) candidates = AI_PV_PSS_TOPICS;
 
   const topic = candidates[Math.floor(Math.random() * candidates.length)];
-  return res.json({
-    topic,
-    question: `Popiš maturitní téma: ${topic}`,
-  });
+  return res.json({ topic });
 });
 
 /* ── Public: AI PV+PSS random quiz – evaluate answer ── */

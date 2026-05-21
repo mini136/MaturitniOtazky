@@ -53,6 +53,7 @@
 </div>
 
 <script>
+    const MAX_RECENT_TOPICS = 20;
     let currentTopic = '';
     let recentTopics = [];
 
@@ -93,7 +94,7 @@
             currentTopic = data.topic || '';
             if (!currentTopic) throw new Error('missing_topic');
             recentTopics.push(currentTopic);
-            if (recentTopics.length > 20) recentTopics.shift();
+            if (recentTopics.length > MAX_RECENT_TOPICS) recentTopics.shift();
 
             document.getElementById('topic-box').textContent = currentTopic;
             document.getElementById('answer-input').value = '';
