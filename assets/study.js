@@ -1,6 +1,15 @@
 (function () {
   var API_BASE = "/api";
 
+  function getAdminPassword() {
+    var pass = localStorage.getItem('adminPassword') || '';
+    if (!pass) {
+      pass = window.prompt('Zadej heslo pro AI funkce:') || '';
+      if (pass) localStorage.setItem('adminPassword', pass);
+    }
+    return pass;
+  }
+
   function safeText(value) {
     return String(value || "")
       .replace(/&/g, "&amp;")
@@ -685,7 +694,7 @@
 
         fetch("/api/explain", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", "X-Admin-Password": getAdminPassword() },
           body: JSON.stringify({
             text: lastSelection.slice(0, 1500),
             pageTitle: pageTitle.slice(0, 200),
@@ -693,6 +702,10 @@
           }),
         })
           .then(function (r) {
+            if (r.status === 401) {
+              localStorage.removeItem('adminPassword');
+              throw Object.assign(new Error('unauthorized'), { _unauth: true });
+            }
             return r.json();
           })
           .then(function (data) {
@@ -721,7 +734,7 @@
                   '<div class="explain-loading">⏳ Hledám jiné vysvětlení…</div>';
                 fetch("/api/explain", {
                   method: "POST",
-                  headers: { "Content-Type": "application/json" },
+                  headers: { "Content-Type": "application/json", "X-Admin-Password": getAdminPassword() },
                   body: JSON.stringify({
                     text: lastSelection.slice(0, 1500),
                     pageTitle: pageTitle.slice(0, 200),
@@ -729,6 +742,10 @@
                   }),
                 })
                   .then(function (r) {
+                    if (r.status === 401) {
+                      localStorage.removeItem('adminPassword');
+                      throw Object.assign(new Error('unauthorized'), { _unauth: true });
+                    }
                     return r.json();
                   })
                   .then(function (d) {
@@ -741,15 +758,17 @@
                       formatExplanation(d.explanation || "") +
                       "</div>";
                   })
-                  .catch(function () {
-                    body.innerHTML =
-                      '<div class="explain-error">Chyba při komunikaci s AI. Zkus to znovu.</div>';
+                  .catch(function (e) {
+                    body.innerHTML = e._unauth
+                      ? '<div class="explain-error">❌ Špatné heslo AI. Obnov stránku a zadej heslo znovu.</div>'
+                      : '<div class="explain-error">Chyba při komunikaci s AI. Zkus to znovu.</div>';
                   });
               });
           })
-          .catch(function () {
-            body.innerHTML =
-              '<div class="explain-error">Chyba při komunikaci s AI. Zkus to znovu.</div>';
+          .catch(function (e) {
+            body.innerHTML = e._unauth
+              ? '<div class="explain-error">❌ Špatné heslo AI. Obnov stránku a zadej heslo znovu.</div>'
+              : '<div class="explain-error">Chyba při komunikaci s AI. Zkus to znovu.</div>';
           });
       });
   }

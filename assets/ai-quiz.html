@@ -375,6 +375,11 @@
             </button>
         </div>
         <button class="start-btn" id="start-btn" onclick="startQuiz()">Spustit quiz ▶</button>
+        <div style="margin-top:14px;">
+            <label for="ai-pass" style="font-size:0.85rem;color:#64748b;display:block;margin-bottom:5px;">🔑 Heslo pro AI funkce:</label>
+            <input type="password" id="ai-pass" placeholder="Zadej heslo…" autocomplete="current-password"
+                style="width:100%;max-width:280px;padding:8px 12px;border:1px solid #c7dcff;border-radius:8px;font-size:0.95rem;">
+        </div>
     </div>
 
     <!-- Stats bar -->
@@ -438,6 +443,16 @@
     let recentTopics = [];   // posledních max 20 témat – AI je neopakuje
     let stats = { num: 0, ok: 0, partial: 0, bad: 0, totalScore: 0 };
 
+    // Restore saved password on load
+    document.addEventListener('DOMContentLoaded', () => {
+        const saved = localStorage.getItem('adminPassword');
+        if (saved) document.getElementById('ai-pass').value = saved;
+    });
+
+    function getAiPassword() {
+        return localStorage.getItem('adminPassword') || '';
+    }
+
     function selectSubject(btn) {
         document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
@@ -445,6 +460,15 @@
     }
 
     function startQuiz() {
+        const passInput = document.getElementById('ai-pass');
+        const pass = passInput.value.trim();
+        if (!pass) {
+            passInput.style.borderColor = '#ef4444';
+            passInput.placeholder = '⚠️ Heslo je povinné!';
+            return;
+        }
+        localStorage.setItem('adminPassword', pass);
+        passInput.style.borderColor = '';
         recentTopics = [];
         document.getElementById('picker').classList.add('hidden');
         document.getElementById('stats-bar').classList.remove('hidden');
@@ -468,15 +492,31 @@
         document.getElementById('result-card').classList.add('hidden');
     }
 
+    function showUnauthorized() {
+        localStorage.removeItem('adminPassword');
+        document.getElementById('picker').classList.remove('hidden');
+        document.getElementById('stats-bar').classList.add('hidden');
+        document.getElementById('spinner').classList.add('hidden');
+        document.getElementById('quiz-card').classList.add('hidden');
+        document.getElementById('result-card').classList.add('hidden');
+        document.getElementById('error-box').classList.add('hidden');
+        const passInput = document.getElementById('ai-pass');
+        passInput.value = '';
+        passInput.style.borderColor = '#ef4444';
+        passInput.placeholder = '❌ Špatné heslo, zadej znovu…';
+        passInput.focus();
+    }
+
     async function loadQuestion() {
         showSpinner('Generuji otázku…');
         try {
             const res = await fetch('/api/quiz/ai-random/question', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Password': getAiPassword() },
                 body: JSON.stringify({ subject: selectedSubject, exclude: recentTopics }),
             });
             if (!res.ok) {
+                if (res.status === 401) { showUnauthorized(); return; }
                 const err = await res.json().catch(() => ({}));
                 showError('Nepodařilo se vygenerovat otázku: ' + (err.error || res.status));
                 return;
@@ -536,7 +576,7 @@
         try {
             const res = await fetch('/api/quiz/ai-random/evaluate', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Password': getAiPassword() },
                 body: JSON.stringify({
                     question: currentQuestion.question,
                     modelAnswer: currentQuestion.modelAnswer,
@@ -546,6 +586,7 @@
                 }),
             });
             if (!res.ok) {
+                if (res.status === 401) { showUnauthorized(); return; }
                 const err = await res.json().catch(() => ({}));
                 showError('Hodnocení selhalo: ' + (err.error || res.status));
                 return;

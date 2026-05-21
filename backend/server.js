@@ -283,7 +283,9 @@ app.get("/api/admin/stats", requireAdmin, async (req, res) => {
 /* ── Admin: AI quiz attempt stats ── */
 app.get("/api/admin/quiz-attempts", requireAdmin, async (req, res) => {
   const limit = Math.min(parseInt(req.query.limit || "100", 10), 500);
-  const subject = req.query.subject ? String(req.query.subject).trim().slice(0, 20) : null;
+  const subject = req.query.subject
+    ? String(req.query.subject).trim().slice(0, 20)
+    : null;
   try {
     const where = subject ? "WHERE subject = ?" : "";
     const params = subject ? [subject, limit] : [limit];
@@ -294,7 +296,7 @@ app.get("/api/admin/quiz-attempts", requireAdmin, async (req, res) => {
        ${where}
        ORDER BY created_at DESC
        LIMIT ?`,
-      params
+      params,
     );
     const [totals] = await pool.query(
       `SELECT subject,
@@ -304,7 +306,7 @@ app.get("/api/admin/quiz-attempts", requireAdmin, async (req, res) => {
               SUM(verdict='Špatně') AS wrong
        FROM ai_quiz_attempts
        GROUP BY subject
-       ORDER BY total DESC`
+       ORDER BY total DESC`,
     );
     return res.json({ attempts: rows, totals });
   } catch (err) {
@@ -510,7 +512,7 @@ app.post("/api/quiz/live/evaluate", requireAdmin, async (req, res) => {
 });
 
 /* ── Public: AI explain selected text (student-facing) ── */
-app.post("/api/explain", async (req, res) => {
+app.post("/api/explain", requireAdmin, async (req, res) => {
   const text = String(req.body.text || "")
     .trim()
     .slice(0, 1500);
@@ -632,7 +634,7 @@ app.get("/api/chat-questions", async (req, res) => {
 });
 
 /* ── Public: AI random quiz – generate question ── */
-app.post("/api/quiz/ai-random/question", async (req, res) => {
+app.post("/api/quiz/ai-random/question", requireAdmin, async (req, res) => {
   const subject = String(req.body.subject || "pv")
     .trim()
     .toLowerCase();
@@ -738,7 +740,7 @@ app.post("/api/quiz/ai-random/question", async (req, res) => {
 });
 
 /* ── Public: AI random quiz – evaluate answer ── */
-app.post("/api/quiz/ai-random/evaluate", async (req, res) => {
+app.post("/api/quiz/ai-random/evaluate", requireAdmin, async (req, res) => {
   const question = String(req.body.question || "")
     .trim()
     .slice(0, 1000);
@@ -789,10 +791,19 @@ app.post("/api/quiz/ai-random/evaluate", async (req, res) => {
     const result = JSON.parse(json);
     // Save attempt to DB (fire-and-forget)
     if (subject && topic) {
-      pool.query(
-        "INSERT INTO ai_quiz_attempts (subject, topic, question, user_answer, score, verdict) VALUES (?, ?, ?, ?, ?, ?)",
-        [subject, topic, question, userAnswer, result.score || 0, result.verdict || ""]
-      ).catch(() => {});
+      pool
+        .query(
+          "INSERT INTO ai_quiz_attempts (subject, topic, question, user_answer, score, verdict) VALUES (?, ?, ?, ?, ?, ?)",
+          [
+            subject,
+            topic,
+            question,
+            userAnswer,
+            result.score || 0,
+            result.verdict || "",
+          ],
+        )
+        .catch(() => {});
     }
     return res.json({ result });
   } catch (e) {
