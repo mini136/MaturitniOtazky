@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quiz PV + PSS</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: #f5f8ff; color: #1f2937; }
+        .wrap { max-width: 860px; margin: 0 auto; padding: 20px; }
+        .card { background: #fff; border: 1px solid #dbe7ff; border-radius: 14px; padding: 18px; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08); }
+        nav a { color: #2563eb; text-decoration: none; font-weight: 600; }
+        nav a:hover { text-decoration: underline; }
+        h1 { margin: 12px 0 8px; color: #1e3a8a; }
+        .subtitle { color: #475569; margin-top: 0; }
+        .topic { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; border-radius: 10px; padding: 12px; font-weight: 600; margin: 14px 0; }
+        textarea { width: 100%; box-sizing: border-box; min-height: 180px; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px; font: inherit; }
+        .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        button { border: 1px solid #2563eb; background: #2563eb; color: #fff; border-radius: 10px; padding: 10px 14px; font: inherit; font-weight: 700; cursor: pointer; }
+        button.secondary { background: #fff; color: #2563eb; }
+        .hidden { display: none !important; }
+        .spinner { margin-top: 12px; color: #1d4ed8; font-weight: 600; }
+        .error { margin-top: 12px; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; border-radius: 10px; padding: 10px; }
+        .result { margin-top: 16px; border-top: 1px solid #e2e8f0; padding-top: 14px; }
+        .score { font-size: 1.2rem; font-weight: 800; color: #1e3a8a; margin-bottom: 6px; }
+        .missing { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .missing span { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; border-radius: 999px; padding: 4px 10px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="card">
+        <nav><a href="../index.html">⬅ Zpět na rozcestník</a></nav>
+        <h1>🤖 AI Quiz — PV + PSS</h1>
+        <p class="subtitle">Náhodně se vybere jedno maturitní téma (PV + PSS). Napiš vše, co o něm víš, a AI ti to ohodnotí.</p>
+
+        <div class="topic" id="topic-box">Načítám téma…</div>
+        <textarea id="answer-input" placeholder="Sem napiš svou odpověď..."></textarea>
+
+        <div class="actions">
+            <button id="submit-btn" type="button">Ohodnotit odpověď ✓</button>
+            <button id="next-btn" class="secondary" type="button">Další náhodné téma →</button>
+        </div>
+
+        <div class="spinner hidden" id="spinner">Pracuji…</div>
+        <div class="error hidden" id="error-box"></div>
+
+        <div class="result hidden" id="result-box">
+            <div class="score" id="score-line"></div>
+            <div id="feedback-line"></div>
+            <div class="missing hidden" id="missing-list"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const MAX_RECENT_TOPICS = 20;
+    let currentTopic = '';
+    let recentTopics = [];
+
+    function setLoading(isLoading, text) {
+        const spinner = document.getElementById('spinner');
+        spinner.textContent = text || 'Pracuji…';
+        spinner.classList.toggle('hidden', !isLoading);
+        document.getElementById('submit-btn').disabled = isLoading;
+        document.getElementById('next-btn').disabled = isLoading;
+    }
+
+    function showError(message) {
+        const box = document.getElementById('error-box');
+        if (!message) {
+            box.classList.add('hidden');
+            box.textContent = '';
+            return;
+        }
+        box.textContent = '⚠️ ' + message;
+        box.classList.remove('hidden');
+    }
+
+    async function loadTopic() {
+        setLoading(true, 'Generuji náhodné téma…');
+        showError('');
+        document.getElementById('result-box').classList.add('hidden');
+        try {
+            const res = await fetch('/api/quiz/ai-pv-pss/topic', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ exclude: recentTopics }),
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.error || String(res.status));
+            }
+            const data = await res.json();
+            currentTopic = data.topic || '';
+            if (!currentTopic) throw new Error('missing_topic');
+            recentTopics.push(currentTopic);
+            if (recentTopics.length > MAX_RECENT_TOPICS) recentTopics.shift();
+
+            document.getElementById('topic-box').textContent = currentTopic;
+            document.getElementById('answer-input').value = '';
+        } catch (e) {
+            showError('Nepodařilo se načíst téma: ' + e.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function submitAnswer() {
+        const answer = document.getElementById('answer-input').value.trim();
+        if (!answer) {
+            document.getElementById('answer-input').focus();
+            return;
+        }
+        if (!currentTopic) {
+            showError('Chybí téma, zkus načíst další.');
+            return;
+        }
+        setLoading(true, 'Hodnotím odpověď…');
+        showError('');
+        try {
+            const res = await fetch('/api/quiz/ai-pv-pss/evaluate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    topic: currentTopic,
+                    userAnswer: answer,
+                }),
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.error || String(res.status));
+            }
+            const data = await res.json();
+            showResult(data.result || {});
+        } catch (e) {
+            showError('Hodnocení selhalo: ' + e.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    function showResult(result) {
+        const score = Number(result.score || 0);
+        const verdict = result.verdict || '';
+        const feedback = result.feedback || '';
+        const missing = Array.isArray(result.missing) ? result.missing : [];
+
+        document.getElementById('score-line').textContent = `Výsledek: ${score}% — ${verdict}`;
+        document.getElementById('feedback-line').textContent = feedback;
+
+        const missingList = document.getElementById('missing-list');
+        missingList.innerHTML = '';
+        if (missing.length > 0) {
+            missing.forEach(item => {
+                const tag = document.createElement('span');
+                tag.textContent = item;
+                missingList.appendChild(tag);
+            });
+            missingList.classList.remove('hidden');
+        } else {
+            missingList.classList.add('hidden');
+        }
+        document.getElementById('result-box').classList.remove('hidden');
+    }
+
+    document.getElementById('submit-btn').addEventListener('click', submitAnswer);
+    document.getElementById('next-btn').addEventListener('click', loadTopic);
+    loadTopic();
+</script>
+</body>
+</html>
