@@ -86,13 +86,18 @@ app.use(express.json({ limit: "256kb" }));
 const RATE_LIMIT_BUCKETS = new Map();
 
 function isRateLimited(req, scope, maxRequests, windowMs) {
-  const forwardedFor = String(req.headers["x-forwarded-for"] || "")
-    .split(",")[0]
-    .trim();
-  const ip = forwardedFor || req.ip || "unknown";
+  const ip = req.ip || "unknown";
   const key = `${scope}:${ip}`;
   const now = Date.now();
   const current = RATE_LIMIT_BUCKETS.get(key);
+
+  if (RATE_LIMIT_BUCKETS.size > 1000) {
+    for (const [bucketKey, bucket] of RATE_LIMIT_BUCKETS.entries()) {
+      if (now - bucket.windowStart >= windowMs * 2) {
+        RATE_LIMIT_BUCKETS.delete(bucketKey);
+      }
+    }
+  }
 
   if (!current || now - current.windowStart >= windowMs) {
     RATE_LIMIT_BUCKETS.set(key, { count: 1, windowStart: now });
