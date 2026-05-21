@@ -2,10 +2,10 @@
   var API_BASE = "/api";
 
   function getAdminPassword() {
-    var pass = localStorage.getItem('adminPassword') || '';
+    var pass = localStorage.getItem("adminPassword") || "";
     if (!pass) {
-      pass = window.prompt('Zadej heslo pro AI funkce:') || '';
-      if (pass) localStorage.setItem('adminPassword', pass);
+      pass = window.prompt("Zadej heslo pro AI funkce:") || "";
+      if (pass) localStorage.setItem("adminPassword", pass);
     }
     return pass;
   }
@@ -694,7 +694,10 @@
 
         fetch("/api/explain", {
           method: "POST",
-          headers: { "Content-Type": "application/json", "X-Admin-Password": getAdminPassword() },
+          headers: {
+            "Content-Type": "application/json",
+            "X-Admin-Password": getAdminPassword(),
+          },
           body: JSON.stringify({
             text: lastSelection.slice(0, 1500),
             pageTitle: pageTitle.slice(0, 200),
@@ -703,8 +706,8 @@
         })
           .then(function (r) {
             if (r.status === 401) {
-              localStorage.removeItem('adminPassword');
-              throw Object.assign(new Error('unauthorized'), { _unauth: true });
+              localStorage.removeItem("adminPassword");
+              throw Object.assign(new Error("unauthorized"), { _unauth: true });
             }
             return r.json();
           })
@@ -734,7 +737,10 @@
                   '<div class="explain-loading">⏳ Hledám jiné vysvětlení…</div>';
                 fetch("/api/explain", {
                   method: "POST",
-                  headers: { "Content-Type": "application/json", "X-Admin-Password": getAdminPassword() },
+                  headers: {
+                    "Content-Type": "application/json",
+                    "X-Admin-Password": getAdminPassword(),
+                  },
                   body: JSON.stringify({
                     text: lastSelection.slice(0, 1500),
                     pageTitle: pageTitle.slice(0, 200),
@@ -743,8 +749,10 @@
                 })
                   .then(function (r) {
                     if (r.status === 401) {
-                      localStorage.removeItem('adminPassword');
-                      throw Object.assign(new Error('unauthorized'), { _unauth: true });
+                      localStorage.removeItem("adminPassword");
+                      throw Object.assign(new Error("unauthorized"), {
+                        _unauth: true,
+                      });
                     }
                     return r.json();
                   })
